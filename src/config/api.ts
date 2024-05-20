@@ -7,6 +7,7 @@ export const api = (
     | "portal-franquia"
     | "terminal-event"
     | "portal-event"
+    | "auth"
 ) => {
   switch (portal) {
     case "portal-franquia":
@@ -20,6 +21,10 @@ export const api = (
     case "portal-event":
       return axios.create({
         baseURL: envs.API.PORTAL_EVENT,
+      });
+    case "auth":
+      return axios.create({
+        baseURL: envs.COGNITO.AUTH_URL,
       });
     default:
     case "franqueadora":

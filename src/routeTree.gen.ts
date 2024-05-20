@@ -13,8 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as FranquiaLoginIndexImport } from './routes/_franquia/login/index'
-import { Route as FranqueadoraLoginIndexImport } from './routes/_franqueadora/login/index'
+import { Route as LoginIndexImport } from './routes/login/index'
 
 // Create Virtual Routes
 
@@ -27,12 +26,7 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const FranquiaLoginIndexRoute = FranquiaLoginIndexImport.update({
-  path: '/login/',
-  getParentRoute: () => rootRoute,
-} as any)
-
-const FranqueadoraLoginIndexRoute = FranqueadoraLoginIndexImport.update({
+const LoginIndexRoute = LoginIndexImport.update({
   path: '/login/',
   getParentRoute: () => rootRoute,
 } as any)
@@ -48,18 +42,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/_franqueadora/login/': {
-      id: '/_franqueadora/login/'
+    '/login/': {
+      id: '/login/'
       path: '/login'
       fullPath: '/login'
-      preLoaderRoute: typeof FranqueadoraLoginIndexImport
-      parentRoute: typeof rootRoute
-    }
-    '/_franquia/login/': {
-      id: '/_franquia/login/'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof FranquiaLoginIndexImport
+      preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -69,8 +56,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
-  FranqueadoraLoginIndexRoute,
-  FranquiaLoginIndexRoute,
+  LoginIndexRoute,
 })
 
 /* prettier-ignore-end */

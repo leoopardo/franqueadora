@@ -1,14 +1,13 @@
 import { createRootRoute, Outlet, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
-import secureLocalStorage from "react-secure-storage";
-import "./globalStyles.css";
-import { QueryClientProvider } from "react-query";
-import { queryClient } from "../services/queryClient";
 import { ConfigProvider, Layout } from "antd";
+import { useEffect } from "react";
+import { QueryClientProvider } from "react-query";
+import secureLocalStorage from "react-secure-storage";
 import { useTheme } from "../contexts/themeContext";
+import { queryClient } from "../services/queryClient";
 import Dark from "../styles/darkTheme";
 import Light from "../styles/lightTheme";
-import { useBreakpoints } from "../utils/useBreakpoints";
+import "./globalStyles.css";
 
 export const Route = createRootRoute({
   component: Root,
@@ -18,12 +17,11 @@ export const Route = createRootRoute({
 function Root(){
   const navigate = useNavigate();
   const { theme } = useTheme();
-  const { isSm } = useBreakpoints();
 
   useEffect(() => {
-    // if (!secureLocalStorage.getItem("token")) {
-    //   navigate({ to: "/login" });
-    // }
+    if (!secureLocalStorage.getItem("token")) {
+      navigate({ to: "/login" });
+    }
   }, []);
 
   return (
@@ -34,7 +32,7 @@ function Root(){
             width: "100%",
             height: "100vh",
             overflow: "auto",
-            paddingLeft: isSm ? 6 : 0,
+            paddingLeft:  0,
           }}
         >
           <Outlet />

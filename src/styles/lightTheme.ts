@@ -17,6 +17,7 @@ const Light: ThemeConfig = {
     Menu: {
       colorTextLightSolid: "#000",
     },
+    Typography: { colorTextHeading: "#272727", fontSize: 16 },
     Tooltip: {
       colorTextLightSolid: "#fff",
     },
@@ -56,6 +57,7 @@ const Light: ThemeConfig = {
     Badge: {
       colorError: import.meta.env.VITE_APP_COLOR_SECONDARY,
     },
+    Spin: {colorPrimary:defaultTheme.primary }
   },
 
   token: {
