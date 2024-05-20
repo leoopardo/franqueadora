@@ -7,7 +7,7 @@ export const Route = createLazyFileRoute('/')({
 function Index() {
   return (
     <div >
-      <h3>Welcome !</h3>
+      <h3>{window.location.host.split('.')[0]}</h3>
     </div>
   )
 }

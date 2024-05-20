@@ -4,9 +4,11 @@ import ReactDOM from "react-dom/client";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
+import { franchiseeTree } from "./franchiseeTree.gen";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
+const franchiseeRouter = createRouter({  });
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {

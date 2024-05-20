@@ -4,27 +4,42 @@ import secureLocalStorage from "react-secure-storage";
 import "./globalStyles.css";
 import { QueryClientProvider } from "react-query";
 import { queryClient } from "../services/queryClient";
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Layout } from "antd";
 import { useTheme } from "../contexts/themeContext";
 import Dark from "../styles/darkTheme";
 import Light from "../styles/lightTheme";
+import { useBreakpoints } from "../utils/useBreakpoints";
 
 export const Route = createRootRoute({
-  component: () => {
-    const navigate = useNavigate();
-    const { theme } = useTheme();
-    useEffect(() => {
-      // if (!secureLocalStorage.getItem("token")) {
-      //   navigate({ to: "/login" });
-      // }
-    }, []);
-
-    return (
-      <QueryClientProvider client={queryClient}>
-        <ConfigProvider theme={theme === "dark" ? Dark : Light}>
-          <Outlet />
-        </ConfigProvider>
-      </QueryClientProvider>
-    );
-  },
+  component: Root,
+  
 });
+
+function Root(){
+  const navigate = useNavigate();
+  const { theme } = useTheme();
+  const { isSm } = useBreakpoints();
+
+  useEffect(() => {
+    // if (!secureLocalStorage.getItem("token")) {
+    //   navigate({ to: "/login" });
+    // }
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ConfigProvider theme={theme === "dark" ? Dark : Light}>
+        <Layout
+          style={{
+            width: "100%",
+            height: "100vh",
+            overflow: "auto",
+            paddingLeft: isSm ? 6 : 0,
+          }}
+        >
+          <Outlet />
+        </Layout>
+      </ConfigProvider>
+    </QueryClientProvider>
+  );
+}
