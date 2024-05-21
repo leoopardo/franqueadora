@@ -1,20 +1,20 @@
+import { BuildingStorefrontIcon } from "@heroicons/react/24/outline";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button, Col, Input, Row } from "antd";
+import { useState } from "react";
 import { PageHeader } from "../../../components/header/pageHeader";
-import { BuildingStorefrontIcon } from "@heroicons/react/24/outline";
 import {
   ColumnInterface,
   TableComponent,
 } from "../../../components/table/table";
 import data from "./mock.json";
-import { useState } from "react";
 
 export const Route = createFileRoute("/_auth/franchises/")({
   component: Franchises,
 });
 
 function Franchises() {
-  const [franchises, setFranchises] = useState(data);
+  const [franchises] = useState(data);
   const [query, setQuery] = useState({
     page: 1,
     limit: 50,

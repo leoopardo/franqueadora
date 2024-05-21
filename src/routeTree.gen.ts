@@ -15,8 +15,18 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthImport } from './routes/_auth'
 import { Route as LoginIndexImport } from './routes/login/index'
+import { Route as AuthUsersIndexImport } from './routes/_auth/users/index'
+import { Route as AuthTerminalsIndexImport } from './routes/_auth/terminals/index'
+import { Route as AuthReportsIndexImport } from './routes/_auth/reports/index'
 import { Route as AuthPromotersIndexImport } from './routes/_auth/promoters/index'
 import { Route as AuthFranchisesIndexImport } from './routes/_auth/franchises/index'
+import { Route as AuthDashboardIndexImport } from './routes/_auth/dashboard/index'
+import { Route as AuthClientsIndexImport } from './routes/_auth/clients/index'
+import { Route as AuthUsersLogsIndexImport } from './routes/_auth/users/logs/index'
+import { Route as AuthTerminalsTrackingIndexImport } from './routes/_auth/terminals/tracking/index'
+import { Route as AuthTerminalsPendingIndexImport } from './routes/_auth/terminals/pending/index'
+import { Route as AuthTerminalsModelsIndexImport } from './routes/_auth/terminals/models/index'
+import { Route as AuthTerminalsAcquirersIndexImport } from './routes/_auth/terminals/acquirers/index'
 
 // Create Virtual Routes
 
@@ -39,6 +49,21 @@ const LoginIndexRoute = LoginIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthUsersIndexRoute = AuthUsersIndexImport.update({
+  path: '/users/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthTerminalsIndexRoute = AuthTerminalsIndexImport.update({
+  path: '/terminals/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthReportsIndexRoute = AuthReportsIndexImport.update({
+  path: '/reports/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
 const AuthPromotersIndexRoute = AuthPromotersIndexImport.update({
   path: '/promoters/',
   getParentRoute: () => AuthRoute,
@@ -48,6 +73,44 @@ const AuthFranchisesIndexRoute = AuthFranchisesIndexImport.update({
   path: '/franchises/',
   getParentRoute: () => AuthRoute,
 } as any)
+
+const AuthDashboardIndexRoute = AuthDashboardIndexImport.update({
+  path: '/dashboard/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthClientsIndexRoute = AuthClientsIndexImport.update({
+  path: '/clients/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthUsersLogsIndexRoute = AuthUsersLogsIndexImport.update({
+  path: '/users/logs/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthTerminalsTrackingIndexRoute = AuthTerminalsTrackingIndexImport.update(
+  {
+    path: '/terminals/tracking/',
+    getParentRoute: () => AuthRoute,
+  } as any,
+)
+
+const AuthTerminalsPendingIndexRoute = AuthTerminalsPendingIndexImport.update({
+  path: '/terminals/pending/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthTerminalsModelsIndexRoute = AuthTerminalsModelsIndexImport.update({
+  path: '/terminals/models/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthTerminalsAcquirersIndexRoute =
+  AuthTerminalsAcquirersIndexImport.update({
+    path: '/terminals/acquirers/',
+    getParentRoute: () => AuthRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -74,6 +137,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof rootRoute
     }
+    '/_auth/clients/': {
+      id: '/_auth/clients/'
+      path: '/clients'
+      fullPath: '/clients'
+      preLoaderRoute: typeof AuthClientsIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/dashboard/': {
+      id: '/_auth/dashboard/'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthDashboardIndexImport
+      parentRoute: typeof AuthImport
+    }
     '/_auth/franchises/': {
       id: '/_auth/franchises/'
       path: '/franchises'
@@ -88,6 +165,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthPromotersIndexImport
       parentRoute: typeof AuthImport
     }
+    '/_auth/reports/': {
+      id: '/_auth/reports/'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthReportsIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/terminals/': {
+      id: '/_auth/terminals/'
+      path: '/terminals'
+      fullPath: '/terminals'
+      preLoaderRoute: typeof AuthTerminalsIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/users/': {
+      id: '/_auth/users/'
+      path: '/users'
+      fullPath: '/users'
+      preLoaderRoute: typeof AuthUsersIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/terminals/acquirers/': {
+      id: '/_auth/terminals/acquirers/'
+      path: '/terminals/acquirers'
+      fullPath: '/terminals/acquirers'
+      preLoaderRoute: typeof AuthTerminalsAcquirersIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/terminals/models/': {
+      id: '/_auth/terminals/models/'
+      path: '/terminals/models'
+      fullPath: '/terminals/models'
+      preLoaderRoute: typeof AuthTerminalsModelsIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/terminals/pending/': {
+      id: '/_auth/terminals/pending/'
+      path: '/terminals/pending'
+      fullPath: '/terminals/pending'
+      preLoaderRoute: typeof AuthTerminalsPendingIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/terminals/tracking/': {
+      id: '/_auth/terminals/tracking/'
+      path: '/terminals/tracking'
+      fullPath: '/terminals/tracking'
+      preLoaderRoute: typeof AuthTerminalsTrackingIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/users/logs/': {
+      id: '/_auth/users/logs/'
+      path: '/users/logs'
+      fullPath: '/users/logs'
+      preLoaderRoute: typeof AuthUsersLogsIndexImport
+      parentRoute: typeof AuthImport
+    }
   }
 }
 
@@ -96,8 +229,18 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   AuthRoute: AuthRoute.addChildren({
+    AuthClientsIndexRoute,
+    AuthDashboardIndexRoute,
     AuthFranchisesIndexRoute,
     AuthPromotersIndexRoute,
+    AuthReportsIndexRoute,
+    AuthTerminalsIndexRoute,
+    AuthUsersIndexRoute,
+    AuthTerminalsAcquirersIndexRoute,
+    AuthTerminalsModelsIndexRoute,
+    AuthTerminalsPendingIndexRoute,
+    AuthTerminalsTrackingIndexRoute,
+    AuthUsersLogsIndexRoute,
   }),
   LoginIndexRoute,
 })

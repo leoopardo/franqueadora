@@ -78,7 +78,7 @@ export const SiderComponent = ({
           isMd && setIsMenuOpen(false);
         }}
         items={
-          MenuItens.filter(
+          MenuItens(100).filter(
             () => true
             //implementar aqui a lógica para permissão de cada menu *permissão de ver*
           ).map((item) => {
