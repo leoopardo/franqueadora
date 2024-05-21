@@ -7,7 +7,7 @@ import { useTheme } from "../contexts/themeContext";
 import { queryClient } from "../services/queryClient";
 import Dark from "../styles/darkTheme";
 import Light from "../styles/lightTheme";
-import "./globalStyles.css";
+import ptbr from 'antd/locale/pt_BR';
 
 export const Route = createRootRoute({
   component: Root,
@@ -19,14 +19,14 @@ function Root(){
   const { theme } = useTheme();
 
   useEffect(() => {
-    if (!secureLocalStorage.getItem("token")) {
-      navigate({ to: "/login" });
-    }
+    // if (!secureLocalStorage.getItem("token")) {
+    //   navigate({ to: "/login" });
+    // }
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ConfigProvider theme={theme === "dark" ? Dark : Light}>
+      <ConfigProvider locale={ptbr} theme={theme === "dark" ? Dark : Light}>
         <Layout
           style={{
             width: "100%",

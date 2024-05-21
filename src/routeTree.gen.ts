@@ -13,13 +13,21 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthImport } from './routes/_auth'
 import { Route as LoginIndexImport } from './routes/login/index'
+import { Route as AuthPromotersIndexImport } from './routes/_auth/promoters/index'
+import { Route as AuthFranchisesIndexImport } from './routes/_auth/franchises/index'
 
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
 
 // Create/Update Routes
+
+const AuthRoute = AuthImport.update({
+  id: '/_auth',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -29,6 +37,16 @@ const IndexLazyRoute = IndexLazyImport.update({
 const LoginIndexRoute = LoginIndexImport.update({
   path: '/login/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AuthPromotersIndexRoute = AuthPromotersIndexImport.update({
+  path: '/promoters/',
+  getParentRoute: () => AuthRoute,
+} as any)
+
+const AuthFranchisesIndexRoute = AuthFranchisesIndexImport.update({
+  path: '/franchises/',
+  getParentRoute: () => AuthRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -42,12 +60,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthImport
+      parentRoute: typeof rootRoute
+    }
     '/login/': {
       id: '/login/'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginIndexImport
       parentRoute: typeof rootRoute
+    }
+    '/_auth/franchises/': {
+      id: '/_auth/franchises/'
+      path: '/franchises'
+      fullPath: '/franchises'
+      preLoaderRoute: typeof AuthFranchisesIndexImport
+      parentRoute: typeof AuthImport
+    }
+    '/_auth/promoters/': {
+      id: '/_auth/promoters/'
+      path: '/promoters'
+      fullPath: '/promoters'
+      preLoaderRoute: typeof AuthPromotersIndexImport
+      parentRoute: typeof AuthImport
     }
   }
 }
@@ -56,6 +95,10 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
+  AuthRoute: AuthRoute.addChildren({
+    AuthFranchisesIndexRoute,
+    AuthPromotersIndexRoute,
+  }),
   LoginIndexRoute,
 })
 

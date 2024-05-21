@@ -1,0 +1,512 @@
+{
+  "items": [
+    {
+      "FranchiseAddres": {
+        "active": true,
+        "address": "SITIO NOSSA SENHORA APARECIDA",
+        "cep": "17650000",
+        "city": "Herculândia",
+        "complement": "",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "district": "IACRI",
+        "franchise_id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+        "id": "53d1c632-e56b-4a7a-9bd4-ff99e10ca15c",
+        "number": "SN",
+        "state": "SP",
+        "updated_at": "2024-05-17T17:10:24.862Z"
+      },
+      "FranchisePOSModule": [
+        {
+          "POSModule": {
+            "description": "Módulo de ingressos",
+            "id": "6546218d-b5f2-4441-bfd8-6294fc080d4a",
+            "name": "Ingressos"
+          }
+        },
+        {
+          "POSModule": {
+            "description": "Módulo de fichas",
+            "id": "38c40565-35c7-43f1-8334-93dea8296af6",
+            "name": "Ficha"
+          }
+        }
+      ],
+      "active": true,
+      "cnpj": "13548556000169",
+      "commercial_name": "fantasia",
+      "company_name": "aassasa",
+      "created_at": "2024-05-15T20:48:24.408Z",
+      "franchise_name": "edufranquia2222",
+      "id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+      "is_deleted": false,
+      "master": {
+        "active": true,
+        "client_id": null,
+        "cognito_id": "3a62cf00-feb5-4aef-85d3-2f30be27c1fb",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "document": "50077116089",
+        "email": "dazenttsebben55+edufranquia2@gmail.com",
+        "id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+        "id_auth": "efde0015-a472-41c6-b569-9736552f61cc",
+        "id_role": "6dc7dccf-27f2-44d3-bb4c-135caeee8a61",
+        "is_admin": false,
+        "is_blocked": false,
+        "is_deleted": false,
+        "is_report": false,
+        "modified_role": false,
+        "name": "edu franquia dois",
+        "phone": "45999889878",
+        "promoter_id": null,
+        "report_event_id": [],
+        "role": "Master",
+        "type": null,
+        "updated_at": "2024-05-17T17:10:24.862Z",
+        "user_id": 67317,
+        "username": "edufranquia2"
+      },
+      "master_id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+      "ref_id": "89714",
+      "state_registration": "11515515111",
+      "tenant_id": "5a51e116-614f-4f08-99a0-b1e4ebf0ae8e",
+      "updated_at": "2024-05-17T17:10:24.862Z",
+      "username": "edufranquia2"
+    },
+    {
+      "FranchiseAddres": {
+        "active": true,
+        "address": "SITIO NOSSA SENHORA APARECIDA",
+        "cep": "17650000",
+        "city": "Herculândia",
+        "complement": "",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "district": "IACRI",
+        "franchise_id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+        "id": "53d1c632-e56b-4a7a-9bd4-ff99e10ca15c",
+        "number": "SN",
+        "state": "SP",
+        "updated_at": "2024-05-17T17:10:24.862Z"
+      },
+      "FranchisePOSModule": [
+        {
+          "POSModule": {
+            "description": "Módulo de ingressos",
+            "id": "6546218d-b5f2-4441-bfd8-6294fc080d4a",
+            "name": "Ingressos"
+          }
+        },
+        {
+          "POSModule": {
+            "description": "Módulo de fichas",
+            "id": "38c40565-35c7-43f1-8334-93dea8296af6",
+            "name": "Ficha"
+          }
+        }
+      ],
+      "active": true,
+      "cnpj": "13548556000169",
+      "commercial_name": "fantasia",
+      "company_name": "aassasa",
+      "created_at": "2024-05-15T20:48:24.408Z",
+      "franchise_name": "edufranquia2222",
+      "id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+      "is_deleted": false,
+      "master": {
+        "active": true,
+        "client_id": null,
+        "cognito_id": "3a62cf00-feb5-4aef-85d3-2f30be27c1fb",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "document": "50077116089",
+        "email": "dazenttsebben55+edufranquia2@gmail.com",
+        "id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+        "id_auth": "efde0015-a472-41c6-b569-9736552f61cc",
+        "id_role": "6dc7dccf-27f2-44d3-bb4c-135caeee8a61",
+        "is_admin": false,
+        "is_blocked": false,
+        "is_deleted": false,
+        "is_report": false,
+        "modified_role": false,
+        "name": "edu franquia dois",
+        "phone": "45999889878",
+        "promoter_id": null,
+        "report_event_id": [],
+        "role": "Master",
+        "type": null,
+        "updated_at": "2024-05-17T17:10:24.862Z",
+        "user_id": 67317,
+        "username": "edufranquia2"
+      },
+      "master_id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+      "ref_id": "89714",
+      "state_registration": "11515515111",
+      "tenant_id": "5a51e116-614f-4f08-99a0-b1e4ebf0ae8e",
+      "updated_at": "2024-05-17T17:10:24.862Z",
+      "username": "edufranquia2"
+    },
+    {
+      "FranchiseAddres": {
+        "active": true,
+        "address": "SITIO NOSSA SENHORA APARECIDA",
+        "cep": "17650000",
+        "city": "Herculândia",
+        "complement": "",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "district": "IACRI",
+        "franchise_id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+        "id": "53d1c632-e56b-4a7a-9bd4-ff99e10ca15c",
+        "number": "SN",
+        "state": "SP",
+        "updated_at": "2024-05-17T17:10:24.862Z"
+      },
+      "FranchisePOSModule": [
+        {
+          "POSModule": {
+            "description": "Módulo de ingressos",
+            "id": "6546218d-b5f2-4441-bfd8-6294fc080d4a",
+            "name": "Ingressos"
+          }
+        },
+        {
+          "POSModule": {
+            "description": "Módulo de fichas",
+            "id": "38c40565-35c7-43f1-8334-93dea8296af6",
+            "name": "Ficha"
+          }
+        }
+      ],
+      "active": true,
+      "cnpj": "13548556000169",
+      "commercial_name": "fantasia",
+      "company_name": "aassasa",
+      "created_at": "2024-05-15T20:48:24.408Z",
+      "franchise_name": "edufranquia2222",
+      "id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+      "is_deleted": false,
+      "master": {
+        "active": true,
+        "client_id": null,
+        "cognito_id": "3a62cf00-feb5-4aef-85d3-2f30be27c1fb",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "document": "50077116089",
+        "email": "dazenttsebben55+edufranquia2@gmail.com",
+        "id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+        "id_auth": "efde0015-a472-41c6-b569-9736552f61cc",
+        "id_role": "6dc7dccf-27f2-44d3-bb4c-135caeee8a61",
+        "is_admin": false,
+        "is_blocked": false,
+        "is_deleted": false,
+        "is_report": false,
+        "modified_role": false,
+        "name": "edu franquia dois",
+        "phone": "45999889878",
+        "promoter_id": null,
+        "report_event_id": [],
+        "role": "Master",
+        "type": null,
+        "updated_at": "2024-05-17T17:10:24.862Z",
+        "user_id": 67317,
+        "username": "edufranquia2"
+      },
+      "master_id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+      "ref_id": "89714",
+      "state_registration": "11515515111",
+      "tenant_id": "5a51e116-614f-4f08-99a0-b1e4ebf0ae8e",
+      "updated_at": "2024-05-17T17:10:24.862Z",
+      "username": "edufranquia2"
+    },
+    {
+      "FranchiseAddres": {
+        "active": true,
+        "address": "SITIO NOSSA SENHORA APARECIDA",
+        "cep": "17650000",
+        "city": "Herculândia",
+        "complement": "",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "district": "IACRI",
+        "franchise_id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+        "id": "53d1c632-e56b-4a7a-9bd4-ff99e10ca15c",
+        "number": "SN",
+        "state": "SP",
+        "updated_at": "2024-05-17T17:10:24.862Z"
+      },
+      "FranchisePOSModule": [
+        {
+          "POSModule": {
+            "description": "Módulo de ingressos",
+            "id": "6546218d-b5f2-4441-bfd8-6294fc080d4a",
+            "name": "Ingressos"
+          }
+        },
+        {
+          "POSModule": {
+            "description": "Módulo de fichas",
+            "id": "38c40565-35c7-43f1-8334-93dea8296af6",
+            "name": "Ficha"
+          }
+        }
+      ],
+      "active": true,
+      "cnpj": "13548556000169",
+      "commercial_name": "fantasia",
+      "company_name": "aassasa",
+      "created_at": "2024-05-15T20:48:24.408Z",
+      "franchise_name": "edufranquia2222",
+      "id": "12343243",
+      "is_deleted": false,
+      "master": {
+        "active": true,
+        "client_id": null,
+        "cognito_id": "3a62cf00-feb5-4aef-85d3-2f30be27c1fb",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "document": "50077116089",
+        "email": "dazenttsebben55+edufranquia2@gmail.com",
+        "id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+        "id_auth": "efde0015-a472-41c6-b569-9736552f61cc",
+        "id_role": "6dc7dccf-27f2-44d3-bb4c-135caeee8a61",
+        "is_admin": false,
+        "is_blocked": false,
+        "is_deleted": false,
+        "is_report": false,
+        "modified_role": false,
+        "name": "edu franquia dois",
+        "phone": "45999889878",
+        "promoter_id": null,
+        "report_event_id": [],
+        "role": "Master",
+        "type": null,
+        "updated_at": "2024-05-17T17:10:24.862Z",
+        "user_id": 67317,
+        "username": "edufranquia2"
+      },
+      "master_id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+      "ref_id": "89714",
+      "state_registration": "11515515111",
+      "tenant_id": "5a51e116-614f-4f08-99a0-b1e4ebf0ae8e",
+      "updated_at": "2024-05-17T17:10:24.862Z",
+      "username": "edufranquia2"
+    },
+    {
+      "FranchiseAddres": {
+        "active": true,
+        "address": "SITIO NOSSA SENHORA APARECIDA",
+        "cep": "17650000",
+        "city": "Herculândia",
+        "complement": "",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "district": "IACRI",
+        "franchise_id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+        "id": "53d1c632-e56b-4a7a-9bd4-ff99e10ca15c",
+        "number": "SN",
+        "state": "SP",
+        "updated_at": "2024-05-17T17:10:24.862Z"
+      },
+      "FranchisePOSModule": [
+        {
+          "POSModule": {
+            "description": "Módulo de ingressos",
+            "id": "6546218d-b5f2-4441-bfd8-6294fc080d4a",
+            "name": "Ingressos"
+          }
+        },
+        {
+          "POSModule": {
+            "description": "Módulo de fichas",
+            "id": "38c40565-35c7-43f1-8334-93dea8296af6",
+            "name": "Ficha"
+          }
+        }
+      ],
+      "active": true,
+      "cnpj": "13548556000169",
+      "commercial_name": "fantasia",
+      "company_name": "aassasa",
+      "created_at": "2024-05-15T20:48:24.408Z",
+      "franchise_name": "edufranquia2222",
+      "id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+      "is_deleted": false,
+      "master": {
+        "active": true,
+        "client_id": null,
+        "cognito_id": "3a62cf00-feb5-4aef-85d3-2f30be27c1fb",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "document": "50077116089",
+        "email": "dazenttsebben55+edufranquia2@gmail.com",
+        "id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+        "id_auth": "efde0015-a472-41c6-b569-9736552f61cc",
+        "id_role": "6dc7dccf-27f2-44d3-bb4c-135caeee8a61",
+        "is_admin": false,
+        "is_blocked": false,
+        "is_deleted": false,
+        "is_report": false,
+        "modified_role": false,
+        "name": "edu franquia dois",
+        "phone": "45999889878",
+        "promoter_id": null,
+        "report_event_id": [],
+        "role": "Master",
+        "type": null,
+        "updated_at": "2024-05-17T17:10:24.862Z",
+        "user_id": 67317,
+        "username": "edufranquia2"
+      },
+      "master_id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+      "ref_id": "89714",
+      "state_registration": "11515515111",
+      "tenant_id": "5a51e116-614f-4f08-99a0-b1e4ebf0ae8e",
+      "updated_at": "2024-05-17T17:10:24.862Z",
+      "username": "edufranquia2"
+    },
+    {
+      "FranchiseAddres": {
+        "active": true,
+        "address": "SITIO NOSSA SENHORA APARECIDA",
+        "cep": "17650000",
+        "city": "Herculândia",
+        "complement": "",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "district": "IACRI",
+        "franchise_id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+        "id": "53d1c632-e56b-4a7a-9bd4-ff99e10ca15c",
+        "number": "SN",
+        "state": "SP",
+        "updated_at": "2024-05-17T17:10:24.862Z"
+      },
+      "FranchisePOSModule": [
+        {
+          "POSModule": {
+            "description": "Módulo de ingressos",
+            "id": "6546218d-b5f2-4441-bfd8-6294fc080d4a",
+            "name": "Ingressos"
+          }
+        },
+        {
+          "POSModule": {
+            "description": "Módulo de fichas",
+            "id": "38c40565-35c7-43f1-8334-93dea8296af6",
+            "name": "Ficha"
+          }
+        }
+      ],
+      "active": true,
+      "cnpj": "13548556000169",
+      "commercial_name": "fantasia",
+      "company_name": "aassasa",
+      "created_at": "2024-05-15T20:48:24.408Z",
+      "franchise_name": "edufranquia2222",
+      "id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+      "is_deleted": false,
+      "master": {
+        "active": true,
+        "client_id": null,
+        "cognito_id": "3a62cf00-feb5-4aef-85d3-2f30be27c1fb",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "document": "50077116089",
+        "email": "dazenttsebben55+edufranquia2@gmail.com",
+        "id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+        "id_auth": "efde0015-a472-41c6-b569-9736552f61cc",
+        "id_role": "6dc7dccf-27f2-44d3-bb4c-135caeee8a61",
+        "is_admin": false,
+        "is_blocked": false,
+        "is_deleted": false,
+        "is_report": false,
+        "modified_role": false,
+        "name": "edu franquia dois",
+        "phone": "45999889878",
+        "promoter_id": null,
+        "report_event_id": [],
+        "role": "Master",
+        "type": null,
+        "updated_at": "2024-05-17T17:10:24.862Z",
+        "user_id": 67317,
+        "username": "edufranquia2"
+      },
+      "master_id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+      "ref_id": "89714",
+      "state_registration": "11515515111",
+      "tenant_id": "5a51e116-614f-4f08-99a0-b1e4ebf0ae8e",
+      "updated_at": "2024-05-17T17:10:24.862Z",
+      "username": "edufranquia2"
+    },
+    {
+      "FranchiseAddres": {
+        "active": true,
+        "address": "SITIO NOSSA SENHORA APARECIDA",
+        "cep": "17650000",
+        "city": "Herculândia",
+        "complement": "",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "district": "IACRI",
+        "franchise_id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+        "id": "53d1c632-e56b-4a7a-9bd4-ff99e10ca15c",
+        "number": "SN",
+        "state": "SP",
+        "updated_at": "2024-05-17T17:10:24.862Z"
+      },
+      "FranchisePOSModule": [
+        {
+          "POSModule": {
+            "description": "Módulo de ingressos",
+            "id": "6546218d-b5f2-4441-bfd8-6294fc080d4a",
+            "name": "Ingressos"
+          }
+        },
+        {
+          "POSModule": {
+            "description": "Módulo de fichas",
+            "id": "38c40565-35c7-43f1-8334-93dea8296af6",
+            "name": "Ficha"
+          }
+        }
+      ],
+      "active": true,
+      "cnpj": "13548556000169",
+      "commercial_name": "fantasia",
+      "company_name": "aassasa",
+      "created_at": "2024-05-15T20:48:24.408Z",
+      "franchise_name": "edufranquia2222",
+      "id": "8106c181-1472-4cc3-b1d5-570dbd63dd12",
+      "is_deleted": false,
+      "master": {
+        "active": true,
+        "client_id": null,
+        "cognito_id": "3a62cf00-feb5-4aef-85d3-2f30be27c1fb",
+        "created_at": "2024-05-15T20:48:24.408Z",
+        "document": "50077116089",
+        "email": "dazenttsebben55+edufranquia2@gmail.com",
+        "id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+        "id_auth": "efde0015-a472-41c6-b569-9736552f61cc",
+        "id_role": "6dc7dccf-27f2-44d3-bb4c-135caeee8a61",
+        "is_admin": false,
+        "is_blocked": false,
+        "is_deleted": false,
+        "is_report": false,
+        "modified_role": false,
+        "name": "edu franquia dois",
+        "phone": "45999889878",
+        "promoter_id": null,
+        "report_event_id": [],
+        "role": "Master",
+        "type": null,
+        "updated_at": "2024-05-17T17:10:24.862Z",
+        "user_id": 67317,
+        "username": "edufranquia2"
+      },
+      "master_id": "605fc17a-1dd2-4fd9-9abb-46e94101bb67",
+      "ref_id": "89714",
+      "state_registration": "11515515111",
+      "tenant_id": "5a51e116-614f-4f08-99a0-b1e4ebf0ae8e",
+      "updated_at": "2024-05-17T17:10:24.862Z",
+      "username": "edufranquia2"
+    }
+  ],
+  "page": 1,
+  "size": 50,
+  "sortableColumns": [
+    { "key": "active", "value": "active" },
+    { "key": "ref_id", "value": "ref_id" },
+    { "key": "franchise_name", "value": "franchise_name" },
+    { "key": "username", "value": "username" },
+    { "key": "FranchiseAddress.city", "value": "FranchiseAddress.city" },
+    { "key": "FranchiseAddress.state", "value": "FranchiseAddress.state" }
+  ],
+  "totalItems": 1
+}

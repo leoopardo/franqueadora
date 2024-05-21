@@ -1,8 +1,8 @@
-import { BeakerIcon } from "@heroicons/react/24/solid";
+import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
 import { createFileRoute } from "@tanstack/react-router";
 import { Button, Checkbox, Col, Form, Input, Row, Typography } from "antd";
 import defaultTheme from "../../styles/default";
-import { useBreakpoints } from "../../utils/useBreakpoints";
+import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { useState } from "react";
 import { useLogin } from "../../services/auth/useLogin";
 import envs from "../../config/envs";
@@ -19,7 +19,7 @@ function Login() {
     PASSWORD: string;
     remember: boolean;
   }>({ USERNAME: "", PASSWORD: "", remember: true });
-  const { mutate, error, isLoading, isSuccess, reset } = useLogin({
+  const { mutate, error, isLoading, reset } = useLogin({
     AuthFlow: "USER_PASSWORD_AUTH",
     AuthParameters: {
       PASSWORD: credentials.PASSWORD,
@@ -160,10 +160,15 @@ function Login() {
               <Form.Item label="">
                 <Button
                   type="primary"
-                  style={{ width: "100%" }}
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
                   size="large"
                   shape="round"
-                  icon={<BeakerIcon />}
+                  icon={<ArrowRightEndOnRectangleIcon width={24}  />}
                   htmlType="submit"
                   loading={isLoading}
                 >
@@ -198,8 +203,14 @@ function Login() {
             }}
           >
             <img src={"/logo.svg"} alt="logo-pdv365" style={{ width: "50%" }} />
-            <Typography.Title level={3} style={{ color: "#fff" }}>
-              Backoffice Franqueadora
+            <Typography.Title
+              level={3}
+              style={{ color: "#fff", display: "flex", gap: 8 }}
+            >
+              <Typography.Title level={3} style={{ color: "#fff" }} italic>
+                Backoffice
+              </Typography.Title>{" "}
+              Franqueadora
             </Typography.Title>
           </div>
         </Col>

@@ -6,6 +6,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import { routeTree } from "./routeTree.gen";
 import { Col, Layout, Row, Spin } from "antd";
 import defaultTheme from "./styles/default";
+import "./globalStyles.css"
 
 // Create a new router instance
 const router = createRouter({ routeTree });
