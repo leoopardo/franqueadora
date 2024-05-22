@@ -1,13 +1,12 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { LoadingOutlined } from "@ant-design/icons";
 // Import the generated route tree
-import { routeTree } from "./routeTree.gen";
 import { Col, Layout, Row, Spin } from "antd";
-import defaultTheme from "./styles/default";
 import "./globalStyles.css";
-import { useTheme } from "./contexts/themeContext";
+import { routeTree } from "./routeTree.gen";
+import defaultTheme from "./styles/default";
 
 // Create a new router instance
 const router = createRouter({ routeTree });

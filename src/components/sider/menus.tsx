@@ -1,19 +1,16 @@
-import { FileImageOutlined } from "@ant-design/icons";
 import {
   BuildingStorefrontIcon,
   CalculatorIcon,
+  DocumentIcon,
   MegaphoneIcon,
   Squares2X2Icon,
   UserCircleIcon,
   UserGroupIcon,
-  DocumentIcon,
 } from "@heroicons/react/24/outline";
 import { Link } from "@tanstack/react-router";
-import { Badge, MenuProps } from "antd";
+import { Badge } from "antd";
 
-type MenuItem = Required<MenuProps>["items"][number];
-
-export const MenuItens = (pending?: number) => {
+export const MenuItens = (pending?: number, open?: boolean) => {
   return [
     {
       key: "DASHBOARD",
@@ -51,10 +48,17 @@ export const MenuItens = (pending?: number) => {
             paddingRight: 6,
           }}
         >
-          Terminais <Badge size="small" color="green" count={pending}></Badge>
+          Terminais{" "}
+          {open && <Badge size="small" color="green" count={pending}></Badge>}
         </div>
       ),
-      icon: <CalculatorIcon width={pending ? 20 : 24} />,
+      icon: open ? (
+        <CalculatorIcon width={pending ? 20 : 24} />
+      ) : (
+        <Badge size="small" color="green" count={pending}>
+          <CalculatorIcon width={pending ? 20 : 24} />
+        </Badge>
+      ),
       children: [
         {
           key: "TERMINAIS_GERAL",

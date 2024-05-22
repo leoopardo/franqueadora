@@ -1,18 +1,19 @@
 import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button, Checkbox, Col, Form, Input, Row, Typography } from "antd";
-import defaultTheme from "../../styles/default";
-import { useBreakpoints } from "../../hooks/useBreakpoints";
+import defaultTheme from "../styles/default";
+import { useBreakpoints } from "../hooks/useBreakpoints";
 import { useState } from "react";
-import { useLogin } from "../../services/auth/useLogin";
-import envs from "../../config/envs";
+import { useLogin } from "../services/auth/useLogin";
+import envs from "../config/envs";
 
-export const Route = createFileRoute("/login/")({
+export const Route = createFileRoute("/")({
   component: Login,
 });
 
 function Login() {
   const { isSm } = useBreakpoints();
+  const navigate = useNavigate();
   const logo = "/logo.svg";
   const [credentials, setCredentials] = useState<{
     USERNAME: string;
@@ -120,7 +121,10 @@ function Login() {
               layout="vertical"
               style={{ width: "100%" }}
               initialValues={credentials}
-              onFinish={mutate}
+              onFinish={() => {
+                //mutate()
+                navigate({to: "/franchises"})
+              }}
             >
               <Form.Item label="Usuário" name="USERNAME">
                 <Input
@@ -168,7 +172,7 @@ function Login() {
                   }}
                   size="large"
                   shape="round"
-                  icon={<ArrowRightEndOnRectangleIcon width={24}  />}
+                  icon={<ArrowRightEndOnRectangleIcon width={24} />}
                   htmlType="submit"
                   loading={isLoading}
                 >

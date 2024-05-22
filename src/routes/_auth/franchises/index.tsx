@@ -1,5 +1,5 @@
 import { BuildingStorefrontIcon } from "@heroicons/react/24/outline";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Button, Col, Input, Row } from "antd";
 import { useState } from "react";
 import { PageHeader } from "../../../components/header/pageHeader";
@@ -15,6 +15,7 @@ export const Route = createFileRoute("/_auth/franchises/")({
 
 function Franchises() {
   const [franchises] = useState(data);
+  const navigate = useNavigate()
   const [query, setQuery] = useState({
     page: 1,
     limit: 50,
@@ -49,6 +50,7 @@ function Franchises() {
             size="large"
             type="default"
             icon={<BuildingStorefrontIcon width={24} />}
+            onClick={() => navigate({to: "/franchises/create"})}
           >
             Cadastrar franquia
           </Button>
