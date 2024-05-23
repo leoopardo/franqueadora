@@ -1,6 +1,9 @@
 import { useQuery } from "react-query";
 import axios from "axios";
-import { DDDResponse } from "./ddd.interface";
+export interface DDDResponse {
+  state: string;
+  cities: string[]
+}
 
 export function useGetDDDs(ddds: string[]) {
   const { isLoading, error, data } = useQuery<DDDResponse[]>(
@@ -20,7 +23,7 @@ export function useGetDDDs(ddds: string[]) {
         })
       );
       return responses.filter((response) => response !== null);
-    }
+    }, 
   );
 
   const combinedData = data?.reduce(

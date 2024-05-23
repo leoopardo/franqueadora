@@ -12,7 +12,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
+import { Route as rootRoute } from './routes/~__root'
 import { Route as LoginIndexImport } from './routes/_franquia/login/index'
 
 // Create Virtual Routes

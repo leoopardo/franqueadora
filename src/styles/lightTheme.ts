@@ -34,9 +34,11 @@ const Light: ThemeConfig = {
         import.meta.env.VITE_APP_BUTTON === "dark"
           ? "rgba(0, 0, 0, 0.88)"
           : "#fff",
+      paddingBlockLG: 12,
     },
     Select: {
       controlItemBgActive: defaultTheme.primary,
+      paddingContentVerticalLG: 12
     },
     Table: {
       controlItemBgActive: defaultTheme.primary,
@@ -57,7 +59,8 @@ const Light: ThemeConfig = {
     Badge: {
       colorError: import.meta.env.VITE_APP_COLOR_SECONDARY,
     },
-    Spin: {colorPrimary:defaultTheme.primary }
+    Spin: { colorPrimary: defaultTheme.primary },
+    Input: { paddingBlockLG: 12 },
   },
 
   token: {

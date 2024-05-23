@@ -121,6 +121,7 @@ function Login() {
               layout="vertical"
               style={{ width: "100%" }}
               initialValues={credentials}
+              size="large"
               onFinish={() => {
                 //mutate()
                 navigate({to: "/franchises"})
@@ -131,7 +132,7 @@ function Login() {
                   name="USERNAME"
                   size="large"
                   placeholder="Informe seu usuário"
-                  style={{ width: "100%" }}
+                  style={{ width: "100%"}}
                   onChange={handleCredentialsChange}
                   status={error ? "error" : undefined}
                 />
