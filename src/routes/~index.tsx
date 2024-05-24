@@ -20,7 +20,7 @@ function Login() {
     PASSWORD: string;
     remember: boolean;
   }>({ USERNAME: "", PASSWORD: "", remember: true });
-  const { mutate, error, isLoading, reset } = useLogin({
+  const { error, isLoading, reset } = useLogin({
     AuthFlow: "USER_PASSWORD_AUTH",
     AuthParameters: {
       PASSWORD: credentials.PASSWORD,

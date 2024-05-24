@@ -34,7 +34,6 @@ const Light: ThemeConfig = {
         import.meta.env.VITE_APP_BUTTON === "dark"
           ? "rgba(0, 0, 0, 0.88)"
           : "#fff",
-      paddingBlockLG: 12,
     },
     Select: {
       controlItemBgActive: defaultTheme.primary,

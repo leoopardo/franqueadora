@@ -1,7 +1,11 @@
 import {
+  ArrowRightOutlined,
   LogoutOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
   MoonOutlined,
-  SunOutlined
+  SunOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { ProLayout } from "@ant-design/pro-components";
 import { Link, useNavigate } from "@tanstack/react-router";
@@ -9,6 +13,7 @@ import { Badge, Button } from "antd";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { useTheme } from "../../contexts/themeContext";
 import { MenuItens } from "./menus";
+import { useBreakpoints } from "../../hooks/useBreakpoints";
 
 interface SiderComponentI {
   isMenuOpen: boolean;
@@ -23,6 +28,7 @@ export const SiderComponent = ({
 }: SiderComponentI) => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
+  const { isSm } = useBreakpoints();
   return (
     <ProLayout
       fixSiderbar
@@ -30,8 +36,38 @@ export const SiderComponent = ({
       pageTitleRender={false}
       menuDataRender={() => MenuItens(100)}
       layout="mix"
+      collapsed={!isMenuOpen}
       onCollapse={(collapsed) => setIsMenuOpen(!collapsed)}
-      logo={theme === "light" ?"/logoDef.svg" : "/logoWhiteDef.svg"}
+      logo={theme === "light" ? "/logoDef.svg" : "/logoWhiteDef.svg"}
+      headerContentRender={
+        !isSm
+          ? () => {
+              return (
+                <div
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "16px",
+                    width: 50,
+                  }}
+                >
+                  {!isMenuOpen ? (
+                    <MenuUnfoldOutlined style={{ fontSize: 22 }} />
+                  ) : (
+                    <MenuFoldOutlined style={{ fontSize: 22 }} />
+                  )}
+                </div>
+              );
+            }
+          : undefined
+      }
+      collapsedButtonRender={
+        isSm
+          ? undefined
+          : () => {
+              return "";
+            }
+      }
       menuItemRender={(item, dom) => {
         if (item.name === "Pendentes" || item.name === "Terminais") {
           return (
@@ -72,6 +108,25 @@ export const SiderComponent = ({
           >
             <Button
               size="large"
+              type="text"
+              style={{ width: "100%" }}
+              icon={<ArrowRightOutlined />}
+              onClick={() => navigate({ to: "/" })}
+            >
+              {!props?.collapsed && "Acessar Franquia"}
+            </Button>
+            <Button
+              size="large"
+              type="text"
+              style={{ width: "100%" }}
+              icon={<UserOutlined />}
+              onClick={() => navigate({ to: "/" })}
+            >
+              {!props?.collapsed && "Acessar perfil"}
+            </Button>
+            <Button
+              size="large"
+              type="text"
               danger
               style={{ width: "100%" }}
               icon={<LogoutOutlined />}

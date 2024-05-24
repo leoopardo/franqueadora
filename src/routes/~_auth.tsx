@@ -1,18 +1,9 @@
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  SmileOutlined,
-} from "@ant-design/icons";
-import { Link, Outlet, createFileRoute } from "@tanstack/react-router";
-import { Badge, Button, Layout, Row } from "antd";
-import { Content, Header } from "antd/es/layout/layout";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
+import { Row } from "antd";
+import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
 import { SiderComponent } from "../components/sider";
 import { useBreakpoints } from "../hooks/useBreakpoints";
-import defaultTheme from "../styles/default";
-import { ProLayout } from "@ant-design/pro-components";
-import { MenuItens } from "../components/sider/menus";
-import { ArrowLeftCircleIcon } from "@heroicons/react/24/outline";
 
 export const Route = createFileRoute("/_auth")({
   component: AuthLayout,

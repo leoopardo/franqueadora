@@ -102,7 +102,7 @@ export const StepOne = () => {
       legal_name: string;
     }>
       name="base"
-      title="Informções da empresa"
+      title="Informações da empresa"
       onFinish={async () => {
         await waitTime(2000);
         return true;
