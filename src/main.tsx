@@ -7,6 +7,7 @@ import { Col, Layout, Row, Spin } from "antd";
 import "./globalStyles.css";
 import { routeTree } from "./routeTree.gen";
 import defaultTheme from "./styles/default";
+import { StyledThemeProvider } from "./contexts/themeContext";
 
 // Create a new router instance
 const router = createRouter({ routeTree });
@@ -25,44 +26,46 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <RouterProvider
-        router={router}
-        defaultPendingMinMs={2000}
-        defaultPendingComponent={() => (
-          <Layout>
-            <Row
-              style={{
-                height: "100vh",
-              }}
-            >
-              <Col
-                span={24}
+      <StyledThemeProvider>
+        <RouterProvider
+          router={router}
+          defaultPendingMinMs={2000}
+          defaultPendingComponent={() => (
+            <Layout>
+              <Row
                 style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  flexDirection: "column",
-                  gap: 16,
+                  height: "100vh",
                 }}
               >
-                <img
-                  src={"/logoDef.svg"}
-                  alt="logo-pdv365"
-                  style={{ width: "25%" }}
-                />
-                <Spin
-                  indicator={
-                    <LoadingOutlined
-                      style={{ fontSize: 48, color: defaultTheme.primary }}
-                      spin
-                    />
-                  }
-                />
-              </Col>
-            </Row>
-          </Layout>
-        )}
-      />
+                <Col
+                  span={24}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    gap: 16,
+                  }}
+                >
+                  <img
+                    src={"/logoDef.svg"}
+                    alt="logo-pdv365"
+                    style={{ width: "25%" }}
+                  />
+                  <Spin
+                    indicator={
+                      <LoadingOutlined
+                        style={{ fontSize: 48, color: defaultTheme.primary }}
+                        spin
+                      />
+                    }
+                  />
+                </Col>
+              </Row>
+            </Layout>
+          )}
+        />
+      </StyledThemeProvider>
     </StrictMode>
   );
 }

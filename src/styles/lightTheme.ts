@@ -60,7 +60,6 @@ const Light: ThemeConfig = {
       colorError: import.meta.env.VITE_APP_COLOR_SECONDARY,
     },
     Spin: { colorPrimary: defaultTheme.primary },
-    Input: { paddingBlockLG: 12 },
   },
 
   token: {

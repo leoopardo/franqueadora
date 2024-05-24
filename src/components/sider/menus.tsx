@@ -7,68 +7,60 @@ import {
   UserCircleIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
-import { Link } from "@tanstack/react-router";
 import { Badge } from "antd";
 
-export const MenuItens = (pending?: number, open?: boolean) => {
+export const MenuItens = (pending: number) => {
   return [
     {
-      key: "DASHBOARD",
-      title: "Dashboard",
-      label: <Link to="/dashboard">Dashboard</Link>,
+      key: "dashboard",
+      name: "Dashboard",
+      path: "/dashboard",
       icon: <Squares2X2Icon width={24} />,
     },
     {
-      key: "FRANQUIAS",
-      title: "Franquias",
-      label: <Link to="/franchises">Franquias</Link>,
+      key: "franquias",
+      name: "Franquias",
+      path: "/franchises",
       icon: <BuildingStorefrontIcon width={24} />,
     },
     {
-      key: "PROMOTORES",
-      title: "Promotores",
-      label: <Link to="/promoters">Promotores</Link>,
+      key: "promotores",
+      name: "Promotores",
+      path: "/promoters",
       icon: <MegaphoneIcon width={24} />,
     },
     {
-      key: "CLIENTES",
-      title: "Clientes",
-      label: <Link to="/clients">Clientes</Link>,
+      key: "clientes",
+      name: "Clientes",
+      path: "/clients",
       icon: <UserGroupIcon width={24} />,
     },
     {
-      key: "TERMINAIS",
-      title: "Terminais",
-      label: (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingRight: 6,
-          }}
+      key: "terminais",
+      name: "Terminais",
+      path: "/terminals",
+      icon: (
+        <Badge
+          size="small"
+          color="green"
+          count={pending}
         >
-          Terminais{" "}
-          {open && <Badge size="small" color="green" count={pending}></Badge>}
-        </div>
-      ),
-      icon: open ? (
-        <CalculatorIcon width={pending ? 20 : 24} />
-      ) : (
-        <Badge size="small" color="green" count={pending}>
           <CalculatorIcon width={pending ? 20 : 24} />
         </Badge>
       ),
+
       children: [
         {
-          key: "TERMINAIS_GERAL",
-          label: <Link to="/terminals">Geral</Link>,
+          key: "terminais-geral",
+          name: "Geral",
+          path: "/terminals",
         },
         {
-          key: "TERMINAIS_PENDENTES",
+          key: "terminais-pendentes",
+          name: "Pendentes",
+          path: "/terminals/pending",
           label: (
-            <Link
-              to="/terminals/pending"
+            <div
               style={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -78,43 +70,48 @@ export const MenuItens = (pending?: number, open?: boolean) => {
             >
               Pendentes{" "}
               <Badge size="small" color="green" count={pending}></Badge>
-            </Link>
+            </div>
           ),
         },
         {
-          key: "TERMINAIS_RASTREAMENTOS",
-          label: <Link to="/terminals/tracking">Rastreamento</Link>,
+          key: "terminais-rastreamentos",
+          name: "Rastreamento",
+          path: "/terminals/tracking",
         },
         {
-          key: "TERMINAIS_ADQUIRENTES",
-          label: <Link to="/terminals/acquirers">Adquirentes</Link>,
+          key: "terminais-adquirentes",
+          name: "Adquirentes",
+          path: "/terminals/acquirers",
         },
         {
-          key: "TERMINAIS_MODELOS",
-          label: <Link to="/terminals/models">Modelos</Link>,
+          key: "terminais-modelos",
+          name: "Modelos",
+          path: "/terminals/models",
         },
       ],
     },
     {
-      key: "USUARIOS",
-      title: "Usuários",
-      label: "Usuários",
+      key: "usuarios",
+      name: "Usuários",
+      path: "/users",
       icon: <UserCircleIcon width={24} />,
       children: [
         {
-          key: "USUARIOS_GERAL",
-          label: <Link to="/users">Geral</Link>,
+          key: "usuarios-geral",
+          name: "Geral",
+          path: "/users",
         },
         {
-          key: "LOGS",
-          label: <Link to="/users/logs">Central de logs</Link>,
+          key: "logs",
+          name: "Central de logs",
+          path: "/users/logs",
         },
       ],
     },
     {
-      key: "REPORTS",
-      title: "Relatórios",
-      label: <Link to="/reports">Relatórios</Link>,
+      key: "reports",
+      name: "Relatórios",
+      path: "/reports",
       icon: <DocumentIcon width={24} />,
     },
   ];

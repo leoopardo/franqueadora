@@ -1,24 +1,20 @@
-/* eslint-disable react-refresh/only-export-components */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createContext, useContext, useEffect, useState } from "react";
-import secureLocalStorage from "react-secure-storage"
+import React, { Dispatch, SetStateAction, createContext, useContext, useEffect, useState } from "react";
 
-interface ThemeContext {
-  setTheme(theme: "dark" | "light"): void;
+interface ThemeContextProps {
+  setTheme: Dispatch<SetStateAction<"light" | "dark">>;
   theme: "dark" | "light";
 }
 
-const ThemeContext = createContext<ThemeContext>({} as ThemeContext);
+const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 
-export const StyledThemeProvider = ({ children }: any) => {
-  const [theme, setTheme] = useState<"dark" | "light">("light");
+export const StyledThemeProvider = ({ children }: { children: React.ReactNode }) => {
+  const [theme, setTheme] = useState<"dark" | "light">(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme === "dark" ? "dark" : "light";
+  });
 
   useEffect(() => {
-    setTheme(secureLocalStorage.getItem("theme") === "dark" ? "dark" : "light");
-  }, []);
-
-  useEffect(() => {
-    secureLocalStorage.setItem("theme", theme);
+    localStorage.setItem("theme", theme);
   }, [theme]);
 
   return (
@@ -30,5 +26,8 @@ export const StyledThemeProvider = ({ children }: any) => {
 
 export function useTheme() {
   const context = useContext(ThemeContext);
+  if (context === undefined) {
+    throw new Error("useTheme must be used within a ThemeProvider");
+  }
   return context;
 }
