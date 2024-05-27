@@ -48,7 +48,7 @@ function Franchises() {
               justifyContent: "center",
             }}
             size="large"
-            type="default"
+            type="primary"
             icon={<BuildingStorefrontIcon width={24} />}
             onClick={() => navigate({to: "/franchises/create"})}
           >

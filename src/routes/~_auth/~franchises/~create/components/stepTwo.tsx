@@ -1,15 +1,30 @@
-import { ReloadOutlined } from "@ant-design/icons";
+import {
+  CheckCircleFilled,
+  CloseCircleFilled,
+  ReloadOutlined,
+} from "@ant-design/icons";
 import { ProFormText, StepsForm } from "@ant-design/pro-components";
-import { Col, Divider, Row } from "antd";
+import { Col, Divider, Row, Typography, message } from "antd";
 import { useEffect, useRef, useState } from "react";
-import { useGetCEP } from "../../../../../services/brasilApi/getCEP";
 import { useBreakpoints } from "../../../../../hooks/useBreakpoints";
+import { formatCPF, formatCellPhoneBR } from "../../../../../utils/regexFormat";
+import regexList from "../../../../../utils/regexList";
+import defaultTheme from "../../../../../styles/default";
 
 export const StepTwo = () => {
-  const [cep] = useState<string>("");
   const stepOneRef = useRef<any>(null);
-  const cepRequest = useGetCEP(cep);
   const { isXs } = useBreakpoints();
+  const [password, setPassWord] = useState<string>("");
+  const [confirmPassword, setConfirmPassWord] = useState<string>("");
+
+  const passwordRules = [
+    { rule: regexList.lowercarse, title: "Letra minúscula" },
+    { rule: regexList.uppercase, title: "Letra maiúscula" },
+    { rule: regexList.number, title: "Ao menos um número" },
+    { rule: regexList.especial, title: "Caractere especial" },
+    { rule: "minLength", title: "No mínimo 8 caracteres" },
+    { rule: "confirm", title: "As senhas coincidem" },
+  ];
 
   const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -20,49 +35,11 @@ export const StepTwo = () => {
   };
 
   useEffect(() => {
-    if (cepRequest.data)
-      stepOneRef.current.setFieldsValue({
-        state: cepRequest?.data.state,
-        city: cepRequest?.data.city,
-        address: cepRequest?.data.street,
-        neighborhood: cepRequest?.data.neighborhood,
-      });
-  }, [cepRequest.data]);
+    stepOneRef.current.setFieldsValue({
+      terminal_password: Math.floor(100000 + Math.random() * 900000),
+    });
+  }, []);
 
-  const formatCPF = (value: string) => {
-    if (!value) return value;
-    value = value.replace(/\D/g, ""); // Remove qualquer caractere que não seja dígito
-    value = value.substring(0, 11); // Garante que só há no máximo 11 dígitos
-    if (value.length <= 11) {
-      return value
-        .replace(/^(\d{3})(\d)/, "$1.$2")
-        .replace(/^(\d{3})\.(\d{3})(\d)/, "$1.$2.$3")
-        .replace(/\.(\d{3})(\d)/, ".$1-$2");
-    }
-    return value;
-  };
-
-  const formatCellPhoneBR = (value: string) => {
-    if (!value) return value;
-    value = value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
-    value = value.substring(0, 11); // Garante que só há no máximo 11 dígitos
-
-    if (value.length <= 10) {
-      // Formato (XX) XXXX-XXXX
-      return value
-        .replace(/^(\d{2})(\d)/, "($1) $2")
-        .replace(/(\d{4})(\d)/, "$1-$2");
-    } else if (value.length === 11) {
-      // Formato (XX) XXXXX-XXXX
-      return value
-        .replace(/^(\d{2})(\d)/, "($1) $2")
-        .replace(/(\d{5})(\d)/, "$1-$2");
-    }
-
-    return value;
-  };
-
-  console.log(stepOneRef.current);
   return (
     <StepsForm.StepForm<{
       name: string;
@@ -70,7 +47,7 @@ export const StepTwo = () => {
       legal_name: string;
     }>
       name="master"
-      title="Perfil master"
+      title="Perfil principal"
       onFinish={async () => {
         await waitTime(2000);
         return true;
@@ -79,7 +56,10 @@ export const StepTwo = () => {
       grid
       formRef={stepOneRef}
     >
-      <Row style={{ width: isXs ? "70%" : "100%" }} gutter={8}>
+      <Row
+        style={{ width: isXs ? "70%" : "100%", justifyContent: "center" }}
+        gutter={[8, 8]}
+      >
         {" "}
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
           <ProFormText
@@ -88,7 +68,14 @@ export const StepTwo = () => {
             placeholder="Digite o CPF"
             rules={[
               { required: true },
-              { len: 14, message: "CPF deve possuir 11 caracteres" },
+              ({}) => ({
+                validator(_, value) {
+                  if (!value || value.match(regexList.cpf)) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("Este não é um CPF válido"));
+                },
+              }),
             ]}
             fieldProps={{
               maxLength: 14,
@@ -120,7 +107,19 @@ export const StepTwo = () => {
             name="cellphone"
             label="Celular"
             placeholder="Digite número de celular"
-            rules={[{ required: true }]}
+            rules={[
+              { required: true },
+              ({}) => ({
+                validator(_, value) {
+                  if (!value || value.match(regexList.cellphone)) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error("Este não é um número válido")
+                  );
+                },
+              }),
+            ]}
             getValueFromEvent={(e) => formatCellPhoneBR(e.target.value)}
           />
         </Col>
@@ -136,31 +135,160 @@ export const StepTwo = () => {
           <Divider orientation="left">Senha do backoffice</Divider>
         </Col>
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
-          <ProFormText
+          <ProFormText.Password
             name="password"
             label="Senha"
             placeholder="Digite a senha"
-            rules={[{ required: true }]}
+            rules={[
+              { required: true },
+              ({}) => ({
+                validator(_, value) {
+                  if (!value || value.match(regexList.password)) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("A senha deve atender os critérios abaixo"));
+                },
+              }),
+            ]}
+            fieldProps={{
+              onChange: (e) => setPassWord(e.target.value),
+            }}
           />
         </Col>
         <Col md={{ span: 12 }}>
-          <ProFormText
+          <ProFormText.Password
             name="confirm_password"
             label="Confirmar senha"
             placeholder="Confirme a senha"
-            rules={[{ required: true }]}
+            rules={[
+              { required: true },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error(""));
+                },
+              }),
+              ({}) => ({
+                validator(_, value) {
+                  if (!value || value.match(regexList.password)) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("A senha deve atender os critérios abaixo"));
+                },
+              }),
+            ]}
+            fieldProps={{
+              onChange: (e) => setConfirmPassWord(e.target.value),
+            }}
           />
         </Col>
+        <>
+          {passwordRules.map((rule) => {
+            switch (rule.rule) {
+              case "confirm":
+                return (
+                  <Col
+                    md={{ span: 8 }}
+                    style={{
+                      display: "flex",
+                      gap: 8,
+                      justifyContent: "center",
+                    }}
+                  >
+                    {password === confirmPassword ? (
+                      <CheckCircleFilled
+                        style={{ fontSize: 24, color: defaultTheme.primary }}
+                      />
+                    ) : (
+                      <CloseCircleFilled
+                        style={{ fontSize: 24, color: "red" }}
+                      />
+                    )}
+                    <Typography.Text style={{ fontSize: 18 }}>
+                      {rule.title}
+                    </Typography.Text>
+                  </Col>
+                );
+
+              case "minLength":
+                return (
+                  <Col
+                    md={{ span: 8 }}
+                    style={{
+                      display: "flex",
+                      gap: 8,
+                      justifyContent: "center",
+                    }}
+                  >
+                    {password.length >= 8 ? (
+                      <CheckCircleFilled
+                        style={{ fontSize: 24, color: defaultTheme.primary }}
+                      />
+                    ) : (
+                      <CloseCircleFilled
+                        style={{ fontSize: 24, color: "red" }}
+                      />
+                    )}
+                    <Typography.Text style={{ fontSize: 18 }}>
+                      {rule.title}
+                    </Typography.Text>
+                  </Col>
+                );
+
+              default:
+                return (
+                  <Col
+                    md={{ span: 8 }}
+                    style={{
+                      display: "flex",
+                      gap: 8,
+                      justifyContent: "center",
+                    }}
+                  >
+                    {password.match(rule.rule) ? (
+                      <CheckCircleFilled
+                        style={{ fontSize: 24, color: defaultTheme.primary }}
+                      />
+                    ) : (
+                      <CloseCircleFilled
+                        style={{ fontSize: 24, color: "red" }}
+                      />
+                    )}
+                    <Typography.Text style={{ fontSize: 18 }}>
+                      {rule.title}
+                    </Typography.Text>
+                  </Col>
+                );
+            }
+          })}
+        </>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
           <Divider orientation="left">Senha do terminal</Divider>
         </Col>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
-          <ProFormText
+          <ProFormText.Password
             name="terminal_password"
             label="Senha do terminal"
             rules={[{ required: true }]}
             fieldProps={{
-              addonAfter: <ReloadOutlined />,
+              addonAfter: (
+                <ReloadOutlined
+                  style={{ cursor: "pointer" }}
+                  onClick={() =>
+                    stepOneRef.current.setFieldsValue({
+                      terminal_password: Math.floor(
+                        100000 + Math.random() * 900000
+                      ),
+                    })
+                  }
+                />
+              ),
+              readOnly: true,
+              onClick: () => {
+                message.success("Senha copiada para a área de transferência");
+              },
             }}
           />
         </Col>

@@ -5,6 +5,7 @@ import { PageHeader } from "../../../../components/header/pageHeader";
 import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { StepOne } from "./components/stepOne";
 import { StepTwo } from "./components/stepTwo";
+import { StepThree } from "./components/stepThree";
 
 export const Route = createLazyFileRoute("/_auth/franchises/create/")({
   component: CreateFranchise,
@@ -15,10 +16,10 @@ function CreateFranchise() {
   return (
     <Row
       gutter={[8, 8]}
-      style={{ width: "100%", paddingBottom: 48 }}
+      style={{ width: "100%" }}
       justify={"center"}
     >
-      <Col md={{ span: 20 }} lg={{ span: 16 }} xs={{ span: 24 }}>
+      <Col md={{ span: 20 }} xxl={{ span: 16 }} xs={{ span: 24 }}>
         <ProCard bordered style={{ borderRadius: 22, padding: isMd ? 0 : 16 }}>
           <Row
             gutter={[8, 8]}
@@ -32,6 +33,7 @@ function CreateFranchise() {
                 display: "flex",
                 justifyContent: "center",
                 textAlign: "center",
+                marginBottom: 16
               }}
             >
               <PageHeader
@@ -58,6 +60,7 @@ function CreateFranchise() {
               >
                 <StepOne />
                 <StepTwo />
+                <StepThree/>
               </StepsForm>
             </Col>
           </Row>

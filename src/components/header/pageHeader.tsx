@@ -11,14 +11,14 @@ export const PageHeader = ({ subtitle, title, color }: PageHeaderI) => {
     <div style={{ display: "flex", flexDirection: "column" }}>
       <Typography.Title
         style={{
-          color: color === "default" ? undefined : "#fff",
+          color: color === "default" ? undefined : undefined,
           fontWeight: "700",
           margin: 0,
         }}
       >
         {title}
       </Typography.Title>
-      <Typography.Text style={{ color: color === "default" ? undefined : "#fff", margin: 0 }}>
+      <Typography.Text style={{ color: color === "default" ? undefined : undefined, margin: 0 }}>
         {subtitle}
       </Typography.Text>
     </div>

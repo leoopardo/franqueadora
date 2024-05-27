@@ -1,5 +1,5 @@
 import { Outlet, createFileRoute } from "@tanstack/react-router";
-import { Row } from "antd";
+import { Row, message } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
 import { SiderComponent } from "../components/sider";
@@ -20,6 +20,7 @@ function AuthLayout() {
     // }
   }, []);
 
+
   return (
     <SiderComponent isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}>
       <Content
@@ -27,21 +28,13 @@ function AuthLayout() {
           minWidth: isMd
             ? "100vw"
             : isMenuOpen
-              ? `calc(100vw - 250px)`
+              ? `calc(100vw - 300px)`
               : `calc(100vw - 64px)`,
           marginLeft: -40,
           marginTop: -36,
         }}
       >
-        <Row
-          style={{
-            height: "40vh",
-            padding: isMd ? 0 : 16,
-            background:
-              "linear-gradient(180deg, rgba(18,85,45,1) 0%, rgba(18,171,75,1) 100%)",
-            width: "100%",
-          }}
-        >
+       
           <Row
             style={{
               padding: "20px",
@@ -54,7 +47,6 @@ function AuthLayout() {
           >
             <Outlet />
           </Row>
-        </Row>
       </Content>
     </SiderComponent>
   );

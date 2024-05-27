@@ -35,7 +35,7 @@ export const SiderComponent = ({
       fixedHeader
       pageTitleRender={false}
       menuDataRender={() => MenuItens(100)}
-      layout="mix"
+      layout="side"
       collapsed={!isMenuOpen}
       onCollapse={(collapsed) => setIsMenuOpen(!collapsed)}
       logo={theme === "light" ? "/logoDef.svg" : "/logoWhiteDef.svg"}
@@ -85,27 +85,34 @@ export const SiderComponent = ({
         }
         return <Link to={item.path}>{dom}</Link>;
       }}
-      siderWidth={isMenuOpen ? 250 : 80}
+      siderWidth={isMenuOpen ? 300 : 80}
       title=""
-      actionsRender={(props) => {
-        if (props.isMobile) return [];
-        if (typeof window === "undefined") return [];
-        return [
-          theme === "light" ? (
-            <Button onClick={() => setTheme("dark")} icon={<SunOutlined />} />
-          ) : (
-            <Button onClick={() => setTheme("light")} icon={<MoonOutlined />} />
-          ),
-        ];
-      }}
       menuFooterRender={(props) => {
         return (
           <div
             style={{
               textAlign: "center",
+              display: "flex",
+              flexDirection: "column",
               paddingBlockStart: 12,
+              gap: 8,
             }}
           >
+            {theme === "light" ? (
+              <Button
+                style={{ width: "100%" }}
+                onClick={() => setTheme("dark")}
+                icon={<SunOutlined />}
+                type="text"
+              />
+            ) : (
+              <Button
+                style={{ width: "100%" }}
+                onClick={() => setTheme("light")}
+                icon={<MoonOutlined />}
+                type="text"
+              />
+            )}
             <Button
               size="large"
               type="text"

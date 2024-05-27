@@ -44,8 +44,9 @@ export const StepOne = () => {
     if (cnpjRequest.data) {
       stepOneRef.current?.setFieldsValue({
         legal_name: cnpjRequest?.data.razao_social,
-        name: cnpjRequest?.data.nome_fantasia,
-        comercial_name: cnpjRequest?.data.nome_fantasia,
+        name: cnpjRequest?.data.nome_fantasia ?? cnpjRequest?.data.razao_social,
+        comercial_name:
+          cnpjRequest?.data.nome_fantasia ?? cnpjRequest?.data.razao_social,
         estadual_subscription: cnpjRequest?.data.cnae_fiscal,
         cep: `${cnpjRequest?.data?.cep}`?.replace(/^(\d{5})(\d{3})$/, "$1-$2"),
         state: cnpjRequest?.data.uf,
@@ -111,10 +112,7 @@ export const StepOne = () => {
       grid
       formRef={stepOneRef}
     >
-      <Row
-        style={{ width: isXs ? "70%" : "100%" }}
-        gutter={8}
-      >
+      <Row style={{ width: isXs ? "70%" : "100%" }} gutter={8}>
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
           <ProFormText
             name="cnpj"
@@ -248,7 +246,7 @@ export const StepOne = () => {
             options={DDDlist}
             rules={[{ required: true }]}
             onChange={(value: any) => setDDD(value)}
-            style={{ height: 50 }}
+            fieldProps={{ maxTagCount: 3 }}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
@@ -260,7 +258,7 @@ export const StepOne = () => {
             options={data?.cities}
             disabled={!data}
             rules={[{ required: true }]}
-            style={{ height: 50 }}
+            fieldProps={{ maxTagCount: 1 }}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
@@ -275,7 +273,7 @@ export const StepOne = () => {
               { label: "Ficha", value: "Ficha" },
             ]}
             rules={[{ required: true }]}
-            style={{ height: 50 }}
+            fieldProps={{ maxTagCount: 1 }}
           />
         </Col>
       </Row>

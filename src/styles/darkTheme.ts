@@ -47,7 +47,7 @@ const Dark: ThemeConfig = {
       boxShadowTertiary: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)",
     },
     Layout: {
-      colorBgHeader: "#222222",
+      colorBgHeader: "#18191B",
     },
     Segmented: {
       colorBgElevated: defaultTheme.primary,
@@ -61,16 +61,16 @@ const Dark: ThemeConfig = {
   token: {
     colorPrimary: defaultTheme.primary,
     colorBgTextHover: defaultTheme.primary,
-    colorBgContainer: "#222222",
+    colorBgContainer: "#18191B",
 
-    colorBgLayout: "#1a1a1a",
+    colorBgLayout: "#18191B",
     colorText: "#f5f5f5",
     colorTextHeading: "#f5f5f5",
     colorTextLightSolid: "#ffffff",
     colorTextBase: "#f5f5f5",
     colorTextLabel: "#f5f5f5",
 
-    colorBgElevated: "#1a1a1a",
+    colorBgElevated: "#18191B",
     colorBorder: "#ACACAC",
     colorInfoBorder: "#ACACAC",
     colorBorderSecondary: "#353535",
