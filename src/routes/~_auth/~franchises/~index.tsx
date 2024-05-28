@@ -8,6 +8,7 @@ import {
   TableComponent,
 } from "../../../components/table/table";
 import data from "./mock.json";
+import { ProCard } from "@ant-design/pro-components";
 
 export const Route = createFileRoute("/_auth/franchises/")({
   component: Franchises,
@@ -15,15 +16,20 @@ export const Route = createFileRoute("/_auth/franchises/")({
 
 function Franchises() {
   const [franchises] = useState(data);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [query, setQuery] = useState({
     page: 1,
     limit: 50,
   });
   const columns: ColumnInterface[] = [
-    { name: "active", type: "", head: "Status" },
+    { name: "active", type: "status", head: "Status" },
     { name: "id", type: "", head: "ID" },
-    { name: "company_name", type: "", head: "Franquia", filters: [{value:"aassasa", text: "aassasa"}] },
+    {
+      name: "company_name",
+      type: "",
+      head: "Franquia",
+      filters: [{ value: "aassasa", text: "aassasa" }],
+    },
   ];
 
   return (
@@ -50,13 +56,13 @@ function Franchises() {
             size="large"
             type="primary"
             icon={<BuildingStorefrontIcon width={24} />}
-            onClick={() => navigate({to: "/franchises/create"})}
+            onClick={() => navigate({ to: "/franchises/create" })}
           >
             Cadastrar franquia
           </Button>
         </Col>
-      </Row>
-      <Col span={24} style={{marginTop: 24}}>
+      </Row>{" "}
+      <Col span={24} style={{ marginTop: 24 }}>
         <TableComponent
           columns={columns}
           data={franchises}

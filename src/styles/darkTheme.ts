@@ -56,6 +56,7 @@ const Dark: ThemeConfig = {
     Badge: {
       colorError: import.meta.env.VITE_APP_COLOR_SECONDARY,
     },
+    
   },
 
   token: {
@@ -74,6 +75,7 @@ const Dark: ThemeConfig = {
     colorBorder: "#ACACAC",
     colorInfoBorder: "#ACACAC",
     colorBorderSecondary: "#353535",
+
   },
 };
 

@@ -1,11 +1,13 @@
 import { FooterToolbar, ProCard, StepsForm } from "@ant-design/pro-components";
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createLazyFileRoute, useNavigate } from "@tanstack/react-router";
 import { Col, Row, message } from "antd";
 import { PageHeader } from "../../../../components/header/pageHeader";
 import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { StepOne } from "./components/stepOne";
-import { StepTwo } from "./components/stepTwo";
 import { StepThree } from "./components/stepThree";
+import { StepTwo } from "./components/stepTwo";
+import { useState } from "react";
+import { TokenModal } from "../../../../components/token";
 
 export const Route = createLazyFileRoute("/_auth/franchises/create/")({
   component: CreateFranchise,
@@ -13,12 +15,12 @@ export const Route = createLazyFileRoute("/_auth/franchises/create/")({
 
 function CreateFranchise() {
   const { isMd } = useBreakpoints();
+  const [isTokenOpen, setIsTokenOpen] = useState<boolean>(false);
+  const [values, setValues] = useState<any>();
+  const navigate = useNavigate()
+
   return (
-    <Row
-      gutter={[8, 8]}
-      style={{ width: "100%" }}
-      justify={"center"}
-    >
+    <Row gutter={[8, 8]} style={{ width: "100%" }} justify={"center"}>
       <Col md={{ span: 20 }} xxl={{ span: 16 }} xs={{ span: 24 }}>
         <ProCard bordered style={{ borderRadius: 22, padding: isMd ? 0 : 16 }}>
           <Row
@@ -33,7 +35,7 @@ function CreateFranchise() {
                 display: "flex",
                 justifyContent: "center",
                 textAlign: "center",
-                marginBottom: 16
+                marginBottom: 16,
               }}
             >
               <PageHeader
@@ -46,8 +48,9 @@ function CreateFranchise() {
               <StepsForm<{
                 name: string;
               }>
-                onFinish={async () => {
-                  message.success("Franquia criada com sucesso!");
+                onFinish={async (value) => {
+                  setIsTokenOpen(true);
+                  setValues(value);
                 }}
                 formProps={{
                   validateMessages: {
@@ -57,15 +60,33 @@ function CreateFranchise() {
                 submitter={{
                   render: (_, dom) => <FooterToolbar>{dom}</FooterToolbar>,
                 }}
+                onCurrentChange={() =>
+                  window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: "smooth",
+                  })
+                }
               >
                 <StepOne />
                 <StepTwo />
-                <StepThree/>
+                <StepThree />
               </StepsForm>
             </Col>
           </Row>
         </ProCard>
       </Col>
+
+      <TokenModal
+        onOk={(token) => {
+          message.success("Franquia criada com sucesso");
+          console.log(values, token);
+          setIsTokenOpen(false);
+          navigate({to: "/franchises"})
+        }}
+        open={isTokenOpen}
+        setOpen={setIsTokenOpen}
+      />
     </Row>
   );
 }

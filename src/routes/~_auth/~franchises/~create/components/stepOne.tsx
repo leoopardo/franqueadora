@@ -44,9 +44,14 @@ export const StepOne = () => {
     if (cnpjRequest.data) {
       stepOneRef.current?.setFieldsValue({
         legal_name: cnpjRequest?.data.razao_social,
-        name: cnpjRequest?.data.nome_fantasia ?? cnpjRequest?.data.razao_social,
+        name:
+          cnpjRequest?.data.nome_fantasia === ""
+            ? cnpjRequest?.data.razao_social
+            : cnpjRequest?.data.nome_fantasia,
         comercial_name:
-          cnpjRequest?.data.nome_fantasia ?? cnpjRequest?.data.razao_social,
+          cnpjRequest?.data.nome_fantasia === ""
+            ? cnpjRequest?.data.razao_social
+            : cnpjRequest?.data.nome_fantasia,
         estadual_subscription: cnpjRequest?.data.cnae_fiscal,
         cep: `${cnpjRequest?.data?.cep}`?.replace(/^(\d{5})(\d{3})$/, "$1-$2"),
         state: cnpjRequest?.data.uf,

@@ -28,7 +28,7 @@ export const SiderComponent = ({
 }: SiderComponentI) => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
-  const { isSm } = useBreakpoints();
+  const { isSm, isMd } = useBreakpoints();
   return (
     <ProLayout
       fixSiderbar
@@ -38,7 +38,32 @@ export const SiderComponent = ({
       layout="side"
       collapsed={!isMenuOpen}
       onCollapse={(collapsed) => setIsMenuOpen(!collapsed)}
-      logo={theme === "light" ? "/logoDef.svg" : "/logoWhiteDef.svg"}
+      logo={
+        theme === "light" ? (
+          <Link to="/dashboard">
+            {" "}
+            <img
+              src="/logoDef.svg"
+              style={
+                !isMd || isSm
+                  ? { height: 45, width: 150 }
+                  : { height: 15, width: 50 }
+              }
+            />{" "}
+          </Link>
+        ) : (
+          <Link to="/dashboard">
+            <img
+              src="/logoWhiteDef.svg"
+              style={
+                !isMd || isSm
+                  ? { height: 45, width: 150 }
+                  : { height: 15, width: 50 }
+              }
+            />
+          </Link>
+        )
+      }
       headerContentRender={
         !isSm
           ? () => {
@@ -145,7 +170,10 @@ export const SiderComponent = ({
         );
       }}
     >
+      <div style={{padding: 0}}>
       {children}
+      </div>
+      
     </ProLayout>
   );
 };

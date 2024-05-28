@@ -1,8 +1,19 @@
-import { Col, Empty, Row, Tooltip, Typography } from "antd";
+import {
+  Button,
+  Col,
+  Dropdown,
+  Empty,
+  Row,
+  Switch,
+  Tooltip,
+  Typography,
+} from "antd";
 import { ColumnsType } from "antd/es/table";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { ProColumns, ProTable } from "@ant-design/pro-components";
+import { Table } from "antd";
+import { EllipsisOutlined, LoadingOutlined } from "@ant-design/icons";
 
 export interface ColumnInterface {
   name: string | any; // (nome da coluna caso não passe head) e chave do objeto a ser acessado nos items
@@ -10,6 +21,7 @@ export interface ColumnInterface {
   type:
     | "id" // exibe um botão de copiar contendo o id em um tooltip
     | "text"
+    | "status"
     | "franchise" // exibe nome da franquia e documento
     | "promoter" // exibe nome do promotor e documento
     | "boolean" // retorna sim para true e não para false
@@ -62,9 +74,7 @@ interface TableProps {
 }
 
 export const TableComponent = (props: TableProps) => {
-  const [columns, setColumns] = useState<ProColumns<ColumnInterface, "text">[]>(
-    []
-  );
+  const [columns, setColumns] = useState<any>([]);
   const { isSm } = useBreakpoints();
 
   const actions = useMemo(() => {
@@ -115,6 +125,122 @@ export const TableComponent = (props: TableProps) => {
     setColumns(
       props?.columns?.map((column) => {
         switch (column.type) {
+          case "action":
+            return {
+              title: props.refetch ? (
+                <Tooltip title="Recarregar dados">
+                  <Button
+                    data-test-id="refetch-button"
+                    type="link"
+                    onClick={() => {
+                      if (props?.refetch) props.refetch();
+                    }}
+                    loading={props.loading}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      margin: 0,
+                    }}
+                    icon={<LoadingOutlined style={{ fontSize: "28px" }} />}
+                  ></Button>
+                </Tooltip>
+              ) : (
+                ""
+              ),
+              key: column?.name,
+              dataIndex: column?.name,
+              width: 60,
+              style: { backgroudColor: "red" },
+              render: (_a: any, record: any) => (
+                <div
+                  style={{ width: "100%", textAlign: "center" }}
+                  ref={column.key}
+                >
+                  {!props.disableActions ? (
+                    <Dropdown
+                      data-test-id="action-button"
+                      trigger={["click"]}
+                      key={column?.name}
+                      disabled={props.disableActions}
+                      menu={{
+                        items: actions.map((action: actionsInterface) => {
+                          let disable = false;
+
+                          if (action.disabled) {
+                            disable = action.disabled(record);
+                          }
+
+                          return {
+                            ...action,
+                            disabled: disable,
+                            onClick: () => {
+                              if (action && action.onClick) {
+                                action.onClick(record);
+                              }
+                            },
+                          };
+                        }),
+                      }}
+                      arrow
+                    >
+                      <Button>
+                        <EllipsisOutlined />
+                      </Button>
+                    </Dropdown>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              ),
+            };
+
+          case "status":
+            return {
+              title: (
+                <Tooltip title={"Status"}>
+                  <Typography
+                    style={{
+                      width: "100%",
+                      maxHeight: "50px",
+                      overflow: "hidden",
+                      textAlign: "center",
+                      textOverflow: "ellipsis",
+                    }}
+                    ref={column.key}
+                  >
+                   Status
+                  </Typography>
+                </Tooltip>
+              ),
+              key: column?.sort_name
+                ? column.sort_name
+                : Array.isArray(column?.name)
+                  ? column?.name + `${Math.random()}`
+                  : column?.name,
+              dataIndex: column?.name,
+              render: (_a: any, record: any) => (
+                <Switch checked={record?.active} />
+              ),
+              sorter: column.sort
+                ? () => {
+                    props.setQuery((state: any) => ({
+                      ...state,
+                      sort_field: column?.sort_name
+                        ? column.sort_name
+                        : Array.isArray(column?.name)
+                          ? column?.name[1]
+                          : column?.name,
+                      sort_order:
+                        props.query.sort_order === "DESC" ? "ASC" : "DESC",
+                    }));
+
+                    return 0;
+                  }
+                : undefined,
+            };
+
           default:
             return {
               title: (
@@ -163,8 +289,9 @@ export const TableComponent = (props: TableProps) => {
   return (
     <Row gutter={[8, 8]}>
       <Col span={24}>
-        <ProTable
+        <Table
           size={"large"}
+
           locale={{
             emptyText: props.error ? (
               <div style={{ display: "flex", justifyContent: "center" }}>
@@ -238,6 +365,7 @@ export const TableComponent = (props: TableProps) => {
           scroll={{ x: "none" }}
           sticky
           bordered
+          tableLayout="auto"
         />
       </Col>
 

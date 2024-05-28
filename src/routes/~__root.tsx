@@ -20,8 +20,6 @@ function Root() {
         <Layout
           style={{
             width: "100%",
-            height: "100vh",
-            overflow: "auto",
             paddingLeft: 0,
           }}
         >
