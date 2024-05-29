@@ -8,7 +8,6 @@ import {
   TableComponent,
 } from "../../../components/table/table";
 import data from "./mock.json";
-import { ProCard } from "@ant-design/pro-components";
 
 export const Route = createFileRoute("/_auth/franchises/")({
   component: Franchises,
@@ -25,11 +24,15 @@ function Franchises() {
     { name: "active", type: "status", head: "Status" },
     { name: "id", type: "", head: "ID" },
     {
-      name: "company_name",
-      type: "",
+      name: "franchise_name",
+      type: "franchise",
       head: "Franquia",
       filters: [{ value: "aassasa", text: "aassasa" }],
     },
+    { name: "username", type: "", head: "Usuário" },
+    { name: ["FranchiseAddres", "city"], type: "", head: "Cidade" },
+    { name: ["FranchiseAddres", "state"], type: "", head: "Estado" },
+    { name: "FranchisePOSModule", type: "modules", head: "Modulos" },
   ];
 
   return (

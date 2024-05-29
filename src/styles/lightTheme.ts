@@ -17,7 +17,7 @@ const Light: ThemeConfig = {
     Menu: {
       colorTextLightSolid: "#000",
     },
-    Typography: { colorTextHeading: "#272727", fontSize: 16 },
+    Typography: { colorTextHeading: "#272727"},
     Tooltip: {
       colorTextLightSolid: "#fff",
     },
@@ -47,6 +47,7 @@ const Light: ThemeConfig = {
       boxShadow: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.144)",
       boxShadowSecondary: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.144)",
       boxShadowTertiary: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.144)",
+      colorBgContainer: "#F5F6F8"
     },
     Layout: {
       colorBgHeader: "#fdfdfd",
@@ -77,6 +78,7 @@ const Light: ThemeConfig = {
     colorBorder: "#ACACAC",
     colorInfoBorder: "#ACACAC",
     colorBorderSecondary: "#f5f5f5",
+    fontFamily: "Inter"
   },
 };
 

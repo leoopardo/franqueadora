@@ -45,6 +45,7 @@ const Dark: ThemeConfig = {
       boxShadow: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)",
       boxShadowSecondary: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)",
       boxShadowTertiary: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)",
+      colorBgContainer: "#1b1c1e"
     },
     Layout: {
       colorBgHeader: "#18191B",
@@ -75,6 +76,7 @@ const Dark: ThemeConfig = {
     colorBorder: "#ACACAC",
     colorInfoBorder: "#ACACAC",
     colorBorderSecondary: "#353535",
+    fontFamily: "Inter"
 
   },
 };

@@ -20,7 +20,7 @@ function CreateFranchise() {
   const navigate = useNavigate()
 
   return (
-    <Row gutter={[8, 8]} style={{ width: "100%" }} justify={"center"}>
+    <Row gutter={[8, 8]} style={{ width: "100%", paddingBottom: 16 }} justify={"center"}>
       <Col md={{ span: 20 }} xxl={{ span: 16 }} xs={{ span: 24 }}>
         <ProCard bordered style={{ borderRadius: 22, padding: isMd ? 0 : 16 }}>
           <Row
@@ -58,7 +58,7 @@ function CreateFranchise() {
                   },
                 }}
                 submitter={{
-                  render: (_, dom) => <FooterToolbar>{dom}</FooterToolbar>,
+                  render: (_, dom) => <FooterToolbar style={{padding: 14}}>{dom}</FooterToolbar>,
                 }}
                 onCurrentChange={() =>
                   window.scrollTo({

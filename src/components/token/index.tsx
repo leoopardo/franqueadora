@@ -37,7 +37,11 @@ export const TokenModal = ({ onOk, open, setOpen }: TokenModalI) => {
             <Button
               type="link"
               style={{ marginTop: -10 }}
-              onClick={() => setSelectedChannel("")}
+              onClick={() => {
+                setSelectedChannel("");
+                setChangeChannel("");
+                localStorage.setItem("tokenChannel", "");
+              }}
             >
               Alterar Canal ({selectedChannel.toUpperCase()})
             </Button>
@@ -50,8 +54,8 @@ export const TokenModal = ({ onOk, open, setOpen }: TokenModalI) => {
         channel
           ? () => onOk(token)
           : () => {
-              localStorage.setItem("tokenChannel", selectedChannel);
               setSelectedChannel(changeChannel);
+              localStorage.setItem("tokenChannel", changeChannel);
             }
       }
       onCancel={() => setOpen(false)}

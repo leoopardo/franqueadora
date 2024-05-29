@@ -20,7 +20,8 @@ function Root() {
         <Layout
           style={{
             width: "100%",
-            paddingLeft: 0,
+            minHeight: "100vh"
+            
           }}
         >
           <Outlet />

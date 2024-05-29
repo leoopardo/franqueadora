@@ -28,13 +28,14 @@ export const SiderComponent = ({
 }: SiderComponentI) => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
-  const { isSm, isMd } = useBreakpoints();
+  const { isSm, isMd, isXl, isLg } = useBreakpoints();
   return (
     <ProLayout
       fixSiderbar
       fixedHeader
       pageTitleRender={false}
       menuDataRender={() => MenuItens(100)}
+      contentStyle={{ padding: 0, backgroundColor: "red", margin: 0, display: "flex", justifyContent: "center" }}
       layout="side"
       collapsed={!isMenuOpen}
       onCollapse={(collapsed) => setIsMenuOpen(!collapsed)}
@@ -110,7 +111,7 @@ export const SiderComponent = ({
         }
         return <Link to={item.path}>{dom}</Link>;
       }}
-      siderWidth={isMenuOpen ? 300 : 80}
+      siderWidth={isXl ? 240 : isLg ? 200 : isMenuOpen ? 300 : 80}
       title=""
       menuFooterRender={(props) => {
         return (
@@ -170,10 +171,7 @@ export const SiderComponent = ({
         );
       }}
     >
-      <div style={{padding: 0}}>
       {children}
-      </div>
-      
     </ProLayout>
   );
 };

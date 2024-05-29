@@ -39,18 +39,18 @@ function Login() {
   return (
     <Row
       style={{
-        height: "100%",
+        height: "100vh",
         width: "100%",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        display: isSm ? undefined : "flex",
+        justifyContent: isSm ? undefined : "center",
+        alignItems: isSm ? undefined : "center",
       }}
     >
       {isSm && (
         <Col
           xs={{ span: 24 }}
           style={{
-            height: "250px",
+            height: "30%",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -85,34 +85,34 @@ function Login() {
         md={{ span: 12 }}
         style={{
           height: isSm ? "fit-content" : "100%",
-          marginTop: isSm ? "-2%" : undefined,
+          marginTop: isSm ? "-20%" : undefined,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}
       >
         <Row
-          gutter={[8, 8]}
+          gutter={[8, 4]}
           style={{
             height: "50%",
             maxHeight: "400px",
-            justifyContent: "center",
             padding: "0 15%",
             alignItems: "center",
             width: "100%",
             maxWidth: "850px",
+            marginTop: isSm ? 32 : 0,
           }}
         >
           <Col span={24}>
             <Typography.Title
-              level={isSm ? 2 : 1}
+              level={isSm ? 3 : 1}
               style={{ fontWeight: 700, margin: 0, textAlign: "center" }}
             >
               Bem-vindo
             </Typography.Title>
           </Col>
-          <Col span={24} style={{ textAlign: "center" }}>
-            <Typography.Text strong>
+          <Col span={24} style={{ textAlign: "center", marginBottom: 16 }}>
+            <Typography.Text strong style={{}}>
               Informe seus dados de acesso.
             </Typography.Text>
           </Col>
@@ -121,10 +121,9 @@ function Login() {
               layout="vertical"
               style={{ width: "100%" }}
               initialValues={credentials}
-              size="large"
               onFinish={() => {
                 //mutate()
-                navigate({to: "/franchises"})
+                navigate({ to: "/franchises" });
               }}
             >
               <Form.Item label="Usuário" name="USERNAME">
@@ -132,7 +131,7 @@ function Login() {
                   name="USERNAME"
                   size="large"
                   placeholder="Informe seu usuário"
-                  style={{ width: "100%"}}
+                  style={{ width: "100%" }}
                   onChange={handleCredentialsChange}
                   status={error ? "error" : undefined}
                 />

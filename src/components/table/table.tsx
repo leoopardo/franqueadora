@@ -1,3 +1,9 @@
+import { EllipsisOutlined, LoadingOutlined } from "@ant-design/icons";
+import {
+  CreditCardIcon,
+  DocumentMinusIcon,
+  TicketIcon,
+} from "@heroicons/react/24/outline";
 import {
   Button,
   Col,
@@ -5,28 +11,28 @@ import {
   Empty,
   Row,
   Switch,
+  Table,
   Tooltip,
   Typography,
 } from "antd";
-import { ColumnsType } from "antd/es/table";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
-import { ProColumns, ProTable } from "@ant-design/pro-components";
-import { Table } from "antd";
-import { EllipsisOutlined, LoadingOutlined } from "@ant-design/icons";
+import { formatCNPJ } from "../../utils/regexFormat";
+import { motion } from "framer-motion";
+import defaultTheme from "../../styles/default";
 
 export interface ColumnInterface {
   name: string | any; // (nome da coluna caso não passe head) e chave do objeto a ser acessado nos items
   head?: string; // nome da coluna (opcional) caso não seja passado, será usado o name
   type:
     | "id" // exibe um botão de copiar contendo o id em um tooltip
-    | "text"
     | "status"
     | "franchise" // exibe nome da franquia e documento
     | "promoter" // exibe nome do promotor e documento
     | "boolean" // retorna sim para true e não para false
     | "switch" // exibe switch para troca de status
     | "action"
+    | "modules"
     | "";
   sort?: boolean; // habilita ordenação
   key?: any;
@@ -210,7 +216,7 @@ export const TableComponent = (props: TableProps) => {
                     }}
                     ref={column.key}
                   >
-                   Status
+                    Status
                   </Typography>
                 </Tooltip>
               ),
@@ -241,7 +247,7 @@ export const TableComponent = (props: TableProps) => {
                 : undefined,
             };
 
-          default:
+          case "franchise":
             return {
               title: (
                 <Typography
@@ -259,8 +265,168 @@ export const TableComponent = (props: TableProps) => {
                   : column?.name,
               dataIndex: column?.name,
               render: (_a: any, record: any) => (
-                <Typography style={{ textAlign: "center" }}>
-                  {record[column?.name] ?? "-"}
+                <div
+                  style={{
+                    textAlign: "center",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <div
+                    style={{
+                      textAlign: "center",
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <Typography style={{ fontSize: "14px", fontWeight: "600" }}>
+                      {record["franchise_name"] ?? "-"}
+                    </Typography>
+                    <Typography.Text
+                      copyable
+                      style={{ fontSize: "14px", color: "#ACACAC" }}
+                    >
+                      {record["cnpj"] ? formatCNPJ(record["cnpj"]) : "-"}
+                    </Typography.Text>
+                  </div>
+                </div>
+              ),
+              sorter: column.sort
+                ? () => {
+                    props.setQuery((state: any) => ({
+                      ...state,
+                      sort_field: column?.sort_name
+                        ? column.sort_name
+                        : Array.isArray(column?.name)
+                          ? column?.name[1]
+                          : column?.name,
+                      sort_order:
+                        props.query.sort_order === "DESC" ? "ASC" : "DESC",
+                    }));
+
+                    return 0;
+                  }
+                : undefined,
+              filters: column.filters,
+            };
+
+          case "modules":
+            return {
+              title: (
+                <Typography
+                  style={{ width: "100%", textAlign: "center" }}
+                  ref={column.key}
+                >
+                  {column?.head ?? column?.name}
+                </Typography>
+              ),
+              fixed: "left",
+              key: column?.sort_name
+                ? column.sort_name
+                : Array.isArray(column?.name)
+                  ? column?.name + `${Math.random()}`
+                  : column?.name,
+              dataIndex: column?.name,
+              render: (_a: any, record: any) => (
+                <div
+                  style={{
+                    textAlign: "center",
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {record[column.name].map((module: any) => {
+                    if (module.POSModule.name === "Ingressos")
+                      return (
+                        <Tooltip title="Ingressos">
+                          <motion.div
+                            initial={{ color: "#969595" }}
+                            whileHover={{
+                              color: defaultTheme.primary,
+                            }}
+                          >
+                            <TicketIcon style={{ width: 24 }} />
+                          </motion.div>
+                        </Tooltip>
+                      );
+                    if (module.POSModule.name === "Ficha")
+                      return (
+                        <Tooltip title="Ficha">
+                          <motion.div
+                            initial={{ color: "#969595" }}
+                            whileHover={{
+                              color: defaultTheme.primary,
+                            }}
+                          >
+                            <DocumentMinusIcon style={{ width: 20 }} />
+                          </motion.div>
+                        </Tooltip>
+                      );
+                    if (module.POSModule.name === "Transação direta")
+                      return (
+                        <Tooltip title="Transação direta">
+                          <motion.div
+                            initial={{ color: "#969595" }}
+                            whileHover={{
+                              color: defaultTheme.primary,
+                            }}
+                          >
+                            <CreditCardIcon style={{ width: 24 }} />
+                          </motion.div>
+                        </Tooltip>
+                      );
+                  })}
+                </div>
+              ),
+              sorter: column.sort
+                ? () => {
+                    props.setQuery((state: any) => ({
+                      ...state,
+                      sort_field: column?.sort_name
+                        ? column.sort_name
+                        : Array.isArray(column?.name)
+                          ? column?.name[1]
+                          : column?.name,
+                      sort_order:
+                        props.query.sort_order === "DESC" ? "ASC" : "DESC",
+                    }));
+
+                    return 0;
+                  }
+                : undefined,
+              filters: column.filters,
+            };
+
+          default:
+            return {
+              title: (
+                <Typography
+                  style={{ width: "100%", textAlign: "center" }}
+                  ref={column.key}
+                >
+                  {column?.head ?? column?.name}
+                </Typography>
+              ),
+              fixed: "left",
+              key: column?.sort_name
+                ? column.sort_name
+                : Array.isArray(column?.name)
+                  ? column?.name + `${Math.random()}`
+                  : column?.name,
+              dataIndex: column?.name,
+              render: (text: any) => (
+                <Typography
+                  style={{
+                    textAlign: "center",
+                    color: "#969595",
+                    fontSize: "14px",
+                  }}
+                >
+                  {text ?? "-"}
                 </Typography>
               ),
               sorter: column.sort
@@ -290,8 +456,7 @@ export const TableComponent = (props: TableProps) => {
     <Row gutter={[8, 8]}>
       <Col span={24}>
         <Table
-          size={"large"}
-
+          size={"small"}
           locale={{
             emptyText: props.error ? (
               <div style={{ display: "flex", justifyContent: "center" }}>
