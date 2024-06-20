@@ -8,12 +8,13 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { ProLayout } from "@ant-design/pro-components";
-import { Link, useNavigate } from "@tanstack/react-router";
 import { Badge, Button } from "antd";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { useTheme } from "../../contexts/themeContext";
 import { MenuItens } from "./menus";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
+import { Link, useNavigate } from "react-router-dom";
+// import { signOut } from "@aws-amplify/auth";
 
 interface SiderComponentI {
   isMenuOpen: boolean;
@@ -35,7 +36,13 @@ export const SiderComponent = ({
       fixedHeader
       pageTitleRender={false}
       menuDataRender={() => MenuItens(100)}
-      contentStyle={{ padding: 0, backgroundColor: "red", margin: 0, display: "flex", justifyContent: "center" }}
+      contentStyle={{
+        padding: 0,
+        backgroundColor: "red",
+        margin: 0,
+        display: "flex",
+        justifyContent: "center",
+      }}
       layout="side"
       collapsed={!isMenuOpen}
       onCollapse={(collapsed) => setIsMenuOpen(!collapsed)}
@@ -98,7 +105,7 @@ export const SiderComponent = ({
         if (item.name === "Pendentes" || item.name === "Terminais") {
           return (
             <Link
-              to={item.path}
+              to={item.path ?? ""}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -109,7 +116,7 @@ export const SiderComponent = ({
             </Link>
           );
         }
-        return <Link to={item.path}>{dom}</Link>;
+        return <Link to={item.path ?? ""}>{dom}</Link>;
       }}
       siderWidth={isXl ? 240 : isLg ? 200 : isMenuOpen ? 300 : 80}
       title=""
@@ -144,7 +151,7 @@ export const SiderComponent = ({
               type="text"
               style={{ width: "100%" }}
               icon={<ArrowRightOutlined />}
-              onClick={() => navigate({ to: "/" })}
+              onClick={() => navigate("/")}
             >
               {!props?.collapsed && "Acessar Franquia"}
             </Button>
@@ -153,7 +160,7 @@ export const SiderComponent = ({
               type="text"
               style={{ width: "100%" }}
               icon={<UserOutlined />}
-              onClick={() => navigate({ to: "/" })}
+              onClick={() => navigate("/")}
             >
               {!props?.collapsed && "Acessar perfil"}
             </Button>
@@ -163,7 +170,7 @@ export const SiderComponent = ({
               danger
               style={{ width: "100%" }}
               icon={<LogoutOutlined />}
-              onClick={() => navigate({ to: "/" })}
+              onClick={() => {}}
             >
               {!props?.collapsed && "Sair do backoffice"}
             </Button>

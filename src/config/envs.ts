@@ -6,10 +6,18 @@ const envs = {
     PORTAL_EVENT: import.meta.env.VITE_API_PORTAL_EVENT_URL,
   },
   COGNITO: {
-    AUTH_URL: import.meta.env.VITE_COGNITO_AUTH_URL,
-    CLIENT_ID: import.meta.env.VITE_COGNITO_CLIENT_ID,
-    USER_POOL_ID: import.meta.env.VITE_COGNITO_USER_POOL_ID,
-    AWS_REGION: import.meta.env.VITE_AWS_REGION,
+    FRANCHISOR: {
+      AUTH_URL: import.meta.env.VITE_FRANCHISOR_COGNITO_AUTH_URL,
+      CLIENT_ID: import.meta.env.VITE_FRANCHISOR_COGNITO_CLIENT_ID,
+      USER_POOL_ID: import.meta.env.VITE_FRANCHISOR_COGNITO_USER_POOL_ID,
+      AWS_REGION: import.meta.env.VITE_FRANCHISOR_AWS_REGION,
+    },
+    FRANCHISE: {
+      AUTH_URL: import.meta.env.VITE_FRANCHISE_COGNITO_AUTH_URL,
+      CLIENT_ID: import.meta.env.VITE_FRANCHISE_COGNITO_CLIENT_ID,
+      USER_POOL_ID: import.meta.env.VITE_FRANCHISE_COGNITO_USER_POOL_ID,
+      AWS_REGION: import.meta.env.VITE_FRANCHISE_AWS_REGION,
+    },
   },
 };
 

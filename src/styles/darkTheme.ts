@@ -33,6 +33,7 @@ const Dark: ThemeConfig = {
         import.meta.env.VITE_APP_BUTTON === "dark"
           ? "rgba(0, 0, 0, 0.88)"
           : "#fff",
+          controlHeightLG: 42 
     },
     Select: {
       controlItemBgActive: "#303030",
@@ -45,7 +46,7 @@ const Dark: ThemeConfig = {
       boxShadow: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)",
       boxShadowSecondary: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)",
       boxShadowTertiary: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)",
-      colorBgContainer: "#1b1c1e"
+      colorBgContainer: "#1b1c1e",
     },
     Layout: {
       colorBgHeader: "#18191B",
@@ -57,7 +58,7 @@ const Dark: ThemeConfig = {
     Badge: {
       colorError: import.meta.env.VITE_APP_COLOR_SECONDARY,
     },
-    
+    Input: { controlHeightLG: 42 },
   },
 
   token: {
@@ -76,8 +77,7 @@ const Dark: ThemeConfig = {
     colorBorder: "#ACACAC",
     colorInfoBorder: "#ACACAC",
     colorBorderSecondary: "#353535",
-    fontFamily: "Inter"
-
+    fontFamily: "Inter",
   },
 };
 

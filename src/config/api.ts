@@ -22,10 +22,7 @@ export const api = (
       return axios.create({
         baseURL: envs.API.PORTAL_EVENT,
       });
-    case "auth":
-      return axios.create({
-        baseURL: envs.COGNITO.AUTH_URL,
-      });
+
     default:
     case "franqueadora":
       return axios.create({

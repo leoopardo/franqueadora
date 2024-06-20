@@ -1,11 +1,19 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'path';
 
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react({
-    include: "**/*.tsx",
-  }), TanStackRouterVite()],
-  
+  plugins: [react()],
+  resolve: {
+    alias: {
+      // Polyfill Buffer
+      'buffer': resolve(__dirname, 'node_modules/buffer/'),
+      // Add any other polyfills as needed
+      'stream': resolve(__dirname, 'node_modules/stream-browserify'),
+      'util': resolve(__dirname, 'node_modules/util/'),
+    },
+  },
+  optimizeDeps: {
+    include: ['buffer', 'stream', 'util'],
+  },
 });

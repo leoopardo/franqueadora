@@ -34,10 +34,11 @@ const Light: ThemeConfig = {
         import.meta.env.VITE_APP_BUTTON === "dark"
           ? "rgba(0, 0, 0, 0.88)"
           : "#fff",
+          controlHeightLG: 42
     },
     Select: {
       controlItemBgActive: defaultTheme.primary,
-      paddingContentVerticalLG: 12
+      paddingContentVerticalLG: 12,
     },
     Table: {
       controlItemBgActive: defaultTheme.primary,
@@ -60,6 +61,8 @@ const Light: ThemeConfig = {
       colorError: import.meta.env.VITE_APP_COLOR_SECONDARY,
     },
     Spin: { colorPrimary: defaultTheme.primary },
+    Input: {controlHeightLG: 42},
+    
   },
 
   token: {
