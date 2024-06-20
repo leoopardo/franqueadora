@@ -1,52 +1,59 @@
-import { ArrowRightEndOnRectangleIcon } from '@heroicons/react/24/outline';
-import { Button, Checkbox, Col, Form, Input, Row, Typography } from 'antd';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import envs from '../../../../config/envs';
-import { useBreakpoints } from '../../../../hooks/useBreakpoints';
-import defaultTheme from '../../../../styles/default';
-import { useLogin } from '../../../services/auth/useLogin';
+import { ArrowRightEndOnRectangleIcon } from "@heroicons/react/24/outline";
+import {
+  Button,
+  Checkbox,
+  Col,
+  Form,
+  Input,
+  Layout,
+  Row,
+  Typography,
+} from "antd";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import envs from "../../../../config/envs";
+import { useBreakpoints } from "../../../../hooks/useBreakpoints";
+import defaultTheme from "../../../../styles/default";
+import { useLogin } from "../../../services/auth/useLogin";
 
 export const Login = () => {
-    const { isSm } = useBreakpoints();
-    const navigate = useNavigate();
-    const logo = "/logo.svg";
-    const [credentials, setCredentials] = useState<{
-      USERNAME: string;
-      PASSWORD: string;
-      remember: boolean;
-    }>({ USERNAME: "", PASSWORD: "", remember: true });
-    const { error, loading, reset, mutate, isLoggedIn } = useLogin({
-      AuthFlow: "USER_PASSWORD_AUTH",
-      AuthParameters: {
-        USERNAME: credentials.USERNAME,
-        PASSWORD: credentials.PASSWORD,
-      },
-      ClientId: envs.COGNITO.FRANCHISOR.CLIENT_ID,
-      ClientMetadata: {},
-    });
-  
-    function handleCredentialsChange(e: any) {
-      if (error) {
-        reset();
-      }
-      setCredentials((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const { isSm } = useBreakpoints();
+  const navigate = useNavigate();
+  const logo = "/logo.svg";
+  const [credentials, setCredentials] = useState<{
+    USERNAME: string;
+    PASSWORD: string;
+    remember: boolean;
+  }>({ USERNAME: "", PASSWORD: "", remember: true });
+  const { error, loading, reset, mutate, isLoggedIn } = useLogin({
+    AuthFlow: "USER_PASSWORD_AUTH",
+    AuthParameters: {
+      USERNAME: credentials.USERNAME,
+      PASSWORD: credentials.PASSWORD,
+    },
+    ClientId: envs.COGNITO.FRANCHISOR.CLIENT_ID,
+    ClientMetadata: {},
+  });
+
+  function handleCredentialsChange(e: any) {
+    if (error) {
+      reset();
     }
-  
-    async function currentSession() {
-    
-    }
-  
-    useEffect(() => {
-      currentSession();
-    }, [loading]);
-  
-   
-    if(isLoggedIn){
-      navigate("/franchises")
-    }
-  
-    return (
+    setCredentials((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
+
+  async function currentSession() {}
+
+  useEffect(() => {
+    currentSession();
+  }, [loading]);
+
+  if (isLoggedIn) {
+    navigate("/franchises");
+  }
+
+  return (
+    <Layout>
       <Row
         style={{
           height: "100vh",
@@ -215,7 +222,11 @@ export const Login = () => {
                 gap: 36,
               }}
             >
-              <img src={"/logo.svg"} alt="logo-pdv365" style={{ width: "50%" }} />
+              <img
+                src={"/logo.svg"}
+                alt="logo-pdv365"
+                style={{ width: "50%" }}
+              />
               <Typography.Title
                 level={3}
                 style={{ color: "#fff", display: "flex", gap: 8 }}
@@ -229,6 +240,6 @@ export const Login = () => {
           </Col>
         )}
       </Row>
-    );
-  }
-  
+    </Layout>
+  );
+};

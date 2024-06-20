@@ -6,6 +6,7 @@ import { Outlet } from "react-router-dom";
 import { SiderComponent } from "../../../../components/sider";
 import { useTheme } from "../../../../contexts/themeContext";
 import { useBreakpoints } from "../../../../hooks/useBreakpoints";
+import { MenuItens } from "../../../components/sider_menus/menus";
 
 export const BaseLayout = () => {
   const { isMd } = useBreakpoints();
@@ -20,7 +21,11 @@ export const BaseLayout = () => {
   }, []);
 
   return (
-    <SiderComponent isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}>
+    <SiderComponent
+      isMenuOpen={isMenuOpen}
+      setIsMenuOpen={setIsMenuOpen}
+      menus={() => MenuItens(100)}
+    >
       <Content
         style={{
           width: "100%",

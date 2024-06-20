@@ -5,18 +5,18 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { congnitoAuthService } from "../franchisor/services/auth/CognitoAuthService";
+import { congnitoAuthService } from "../franchise/services/auth/CognitoAuthService";
 
-interface FranchisorAuthContextProps {
+interface FranchiseAuthContextProps {
   setToken: Dispatch<SetStateAction<string | undefined | null>>;
   token?: string | null;
 }
 
-const FranchisorAuthContext = createContext<
-  FranchisorAuthContextProps | undefined
+const FranchiseAuthContext = createContext<
+  FranchiseAuthContextProps | undefined
 >(undefined);
 
-export const FranchisorAuthProvider = ({
+export const FranchiseAuthProvider = ({
   children,
 }: {
   children: React.ReactNode;
@@ -27,14 +27,14 @@ export const FranchisorAuthProvider = ({
   });
 
   return (
-    <FranchisorAuthContext.Provider value={{ token, setToken }}>
+    <FranchiseAuthContext.Provider value={{ token, setToken }}>
       {children}
-    </FranchisorAuthContext.Provider>
+    </FranchiseAuthContext.Provider>
   );
 };
 
-export function useFranchisorAuth() {
-  const context = useContext(FranchisorAuthContext);
+export function useFranchiseAuth() {
+  const context = useContext(FranchiseAuthContext);
   if (context === undefined) {
     throw new Error("useToken must be used within a TokenProvider");
   }

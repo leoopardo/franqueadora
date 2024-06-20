@@ -7,38 +7,45 @@ import {
   SunOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { ProLayout } from "@ant-design/pro-components";
+import { MenuDataItem, ProLayout } from "@ant-design/pro-components";
 import { Badge, Button } from "antd";
 import { Dispatch, ReactNode, SetStateAction } from "react";
-import { useTheme } from "../../contexts/themeContext";
-import { MenuItens } from "./menus";
-import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "../../contexts/themeContext";
+import { logout } from "../../franchisor/services/auth/logout";
+import { useGetMe } from "../../franchisor/services/auth/useGetMe";
+import { useBreakpoints } from "../../hooks/useBreakpoints";
+import { queryClient } from "../../services/queryClient";
 // import { signOut } from "@aws-amplify/auth";
 
 interface SiderComponentI {
   isMenuOpen: boolean;
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
   children: ReactNode;
+  menus: (PendinCount: number) => MenuDataItem[];
+  franquia?: boolean;
 }
 
 export const SiderComponent = ({
   isMenuOpen,
   setIsMenuOpen,
   children,
+  menus,
+  franquia,
 }: SiderComponentI) => {
+  const { refetch } = useGetMe();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { isSm, isMd, isXl, isLg } = useBreakpoints();
+
   return (
     <ProLayout
       fixSiderbar
       fixedHeader
       pageTitleRender={false}
-      menuDataRender={() => MenuItens(100)}
+      menuDataRender={() => menus(100)}
       contentStyle={{
         padding: 0,
-        backgroundColor: "red",
         margin: 0,
         display: "flex",
         justifyContent: "center",
@@ -146,15 +153,17 @@ export const SiderComponent = ({
                 type="text"
               />
             )}
-            <Button
-              size="large"
-              type="text"
-              style={{ width: "100%" }}
-              icon={<ArrowRightOutlined />}
-              onClick={() => navigate("/")}
-            >
-              {!props?.collapsed && "Acessar Franquia"}
-            </Button>
+            {!franquia && (
+              <Button
+                size="large"
+                type="text"
+                style={{ width: "100%" }}
+                icon={<ArrowRightOutlined />}
+                onClick={() => navigate("/")}
+              >
+                {!props?.collapsed && "Acessar Franquia"}
+              </Button>
+            )}
             <Button
               size="large"
               type="text"
@@ -162,7 +171,9 @@ export const SiderComponent = ({
               icon={<UserOutlined />}
               onClick={() => navigate("/")}
             >
-              {!props?.collapsed && "Acessar perfil"}
+              {(!props?.collapsed &&
+                (queryClient?.getQueryData("getMe") as any)?.name) ||
+                "Perfil"}
             </Button>
             <Button
               size="large"
@@ -170,7 +181,10 @@ export const SiderComponent = ({
               danger
               style={{ width: "100%" }}
               icon={<LogoutOutlined />}
-              onClick={() => {}}
+              onClick={() => {
+                logout();
+                refetch();
+              }}
             >
               {!props?.collapsed && "Sair do backoffice"}
             </Button>

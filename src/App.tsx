@@ -10,13 +10,11 @@ import Light from "./styles/lightTheme";
 import Dark from "./styles/darkTheme";
 import { queryClient } from "./services/queryClient";
 import { FranchisorAuthProvider } from "./contexts/franchisorAuthContext";
+import { FranchiseAuthProvider } from "./contexts/franchiseAuthContext";
 
 export const App = () => {
   const PainelList = ["franquia", "promotor", "cliente"];
   const { theme } = useTheme();
-  console.log(window.location);
-  
-  
   const [Router, setRouter] = useState(
     <Routes>
       <Route
@@ -47,7 +45,7 @@ export const App = () => {
                 </Link>
               </Col>
               <Col span={4}>
-                <Link to={`http://framquia.${window.location.host}`}>
+                <Link to={`http://franquia.${window.location.host}`}>
                   <Button style={{ width: "100%" }} size="large">
                     Franquia
                   </Button>
@@ -73,7 +71,9 @@ export const App = () => {
     <QueryClientProvider client={queryClient}>
       <ConfigProvider locale={ptbr} theme={theme === "light" ? Light : Dark}>
         <FranchisorAuthProvider>
-          <BrowserRouter>{Router}</BrowserRouter>
+          <FranchiseAuthProvider>
+            <BrowserRouter>{Router}</BrowserRouter>
+          </FranchiseAuthProvider>
         </FranchisorAuthProvider>
       </ConfigProvider>
     </QueryClientProvider>
