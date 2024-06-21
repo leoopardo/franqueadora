@@ -20,7 +20,7 @@ export const MenuItens = (pending: number) => {
     {
       key: "franquias",
       name: "Franquias",
-      path: "/franchises",
+      path: "/franquias",
       icon: <BuildingStorefrontIcon width={24} />,
     },
     {

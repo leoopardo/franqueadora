@@ -33,7 +33,7 @@ const Dark: ThemeConfig = {
         import.meta.env.VITE_APP_BUTTON === "dark"
           ? "rgba(0, 0, 0, 0.88)"
           : "#fff",
-          controlHeightLG: 42 
+          controlHeightLG: 38 
     },
     Select: {
       controlItemBgActive: "#303030",
@@ -58,7 +58,7 @@ const Dark: ThemeConfig = {
     Badge: {
       colorError: import.meta.env.VITE_APP_COLOR_SECONDARY,
     },
-    Input: { controlHeightLG: 42 },
+    Input: { controlHeightLG: 38 },
   },
 
   token: {

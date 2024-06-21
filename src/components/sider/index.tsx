@@ -8,14 +8,15 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { MenuDataItem, ProLayout } from "@ant-design/pro-components";
-import { Badge, Button } from "antd";
+import { Badge, Button, Switch } from "antd";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../contexts/themeContext";
-import { logout } from "../../franchisor/services/auth/logout";
+import { congnitoAuthService } from "../../franchisor/services/auth/CognitoAuthService";
 import { useGetMe } from "../../franchisor/services/auth/useGetMe";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { queryClient } from "../../services/queryClient";
+import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
 // import { signOut } from "@aws-amplify/auth";
 
 interface SiderComponentI {
@@ -37,6 +38,7 @@ export const SiderComponent = ({
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { isSm, isMd, isXl, isLg } = useBreakpoints();
+  const { setHeader } = useFranchisorAuth();
 
   return (
     <ProLayout
@@ -138,26 +140,32 @@ export const SiderComponent = ({
               gap: 8,
             }}
           >
-            {theme === "light" ? (
-              <Button
-                style={{ width: "100%" }}
-                onClick={() => setTheme("dark")}
-                icon={<SunOutlined />}
-                type="text"
-              />
-            ) : (
-              <Button
-                style={{ width: "100%" }}
-                onClick={() => setTheme("light")}
-                icon={<MoonOutlined />}
-                type="text"
+            {!props?.collapsed && (
+              <Switch
+                style={{ width: 50, marginLeft: 14 }}
+                value={theme === "dark"}
+                checkedChildren={<SunOutlined />}
+                unCheckedChildren={<MoonOutlined />}
+                defaultChecked
+                onChange={(checked) =>
+                  checked ? setTheme("dark") : setTheme("light")
+                }
               />
             )}
+
             {!franquia && (
               <Button
-                size="large"
-                type="text"
-                style={{ width: "100%" }}
+                size="middle"
+                type="default"
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "transparent",
+                  border: "none",
+                  boxShadow: "none",
+                  fontSize: 15,
+                }}
                 icon={<ArrowRightOutlined />}
                 onClick={() => navigate("/")}
               >
@@ -165,24 +173,42 @@ export const SiderComponent = ({
               </Button>
             )}
             <Button
-              size="large"
-              type="text"
-              style={{ width: "100%" }}
+              size="middle"
+              type="default"
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "transparent",
+                border: "none",
+                boxShadow: "none",
+                fontSize: 15,
+              }}
               icon={<UserOutlined />}
               onClick={() => navigate("/")}
             >
-              {(!props?.collapsed &&
-                (queryClient?.getQueryData("getMe") as any)?.name) ||
-                "Perfil"}
+              {!props?.collapsed &&
+                `${
+                  (queryClient?.getQueryData("getMe") as any)?.name || "Perfil"
+                }`}
             </Button>
             <Button
-              size="large"
-              type="text"
+              size="middle"
               danger
-              style={{ width: "100%" }}
+              type="default"
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                backgroundColor: "transparent",
+                border: "none",
+                boxShadow: "none",
+                fontSize: 15,
+              }}
               icon={<LogoutOutlined />}
-              onClick={() => {
-                logout();
+              onClick={async () => {
+                await congnitoAuthService.signOut();
+                setHeader(null);
                 refetch();
               }}
             >

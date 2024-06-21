@@ -6,10 +6,13 @@ import React, {
   useState,
 } from "react";
 import { congnitoAuthService } from "../franchise/services/auth/CognitoAuthService";
+import { RawAxiosRequestHeaders } from "axios";
 
 interface FranchiseAuthContextProps {
   setToken: Dispatch<SetStateAction<string | undefined | null>>;
   token?: string | null;
+  headers: RawAxiosRequestHeaders;
+  setHeader: Dispatch<SetStateAction<RawAxiosRequestHeaders>>;
 }
 
 const FranchiseAuthContext = createContext<
@@ -23,11 +26,19 @@ export const FranchiseAuthProvider = ({
 }) => {
   const [token, setToken] = useState<string | undefined | null>(() => {
     const authToken = congnitoAuthService.getAuthToken();
-    return authToken
+    return authToken;
+  });
+  const [headers, setHeader] = useState<RawAxiosRequestHeaders>({
+    "ngrok-skip-browser-warning": false,
+    Authorization: "",
+    AuthToken: "",
+    Identity: "",
   });
 
   return (
-    <FranchiseAuthContext.Provider value={{ token, setToken }}>
+    <FranchiseAuthContext.Provider
+      value={{ setHeader, setToken, token, headers }}
+    >
       {children}
     </FranchiseAuthContext.Provider>
   );

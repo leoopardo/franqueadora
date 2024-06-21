@@ -8,7 +8,7 @@ interface PageHeaderI {
 
 export const PageHeader = ({ subtitle, title, color }: PageHeaderI) => {
   return (
-    <div style={{ display: "flex", flexDirection: "column" }}>
+    <div style={{ display: "flex", flexDirection: "column", marginBottom: 16 }}>
       <Typography.Title
         style={{
           color: color === "default" ? undefined : undefined,
