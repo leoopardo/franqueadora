@@ -1,19 +1,24 @@
-import { LoadingOutlined } from "@ant-design/icons";
 import { Layout, Spin } from "antd";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useTheme } from "../../contexts/themeContext";
-import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { useGetMe } from "../services/auth/useGetMe";
 import { PrivateRoutes } from "./private";
 import { PublicRoutes } from "./public";
+import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
+import { useTheme } from "../../contexts/themeContext";
+import { useBreakpoints } from "../../hooks/useBreakpoints";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export const FranchisorRoutes = (): React.ReactElement => {
-  const { isSuccess, isLoading, error } = useGetMe();
+  const { refetch, isSuccess, isLoading, error } = useGetMe();
   const navigate = useNavigate();
+  const { token } = useFranchisorAuth();
   const { theme } = useTheme();
   const { isMd, isSm } = useBreakpoints();
 
+  useEffect(() => {
+    refetch();
+  }, [token]);
 
   useEffect(() => {
     if (isSuccess) {
