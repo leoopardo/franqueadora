@@ -7,11 +7,16 @@ import { SiderComponent } from "../../../../components/sider";
 import { useTheme } from "../../../../contexts/themeContext";
 import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { MenuItens } from "../../../components/sider_menus/menus";
+import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
+import { useFranchiseAuth } from "../../../../contexts/franchiseAuthContext";
+import { useGetMe } from "../../../services/auth/useGetMe";
 
 export const BaseLayout = () => {
   const { isMd } = useBreakpoints();
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(isMd ? false : true);
   const { theme } = useTheme();
+  const { setHeader } = useFranchiseAuth();
+  const { refetch } = useGetMe();
 
   // const navigate = useNavigate();
   useEffect(() => {
@@ -25,7 +30,13 @@ export const BaseLayout = () => {
       isMenuOpen={isMenuOpen}
       setIsMenuOpen={setIsMenuOpen}
       menus={() => MenuItens(100)}
-      franquia
+      logout={async () => {
+        await congnitoAuthService.signOut();
+        setHeader(null);
+        setTimeout(() => {
+          refetch();
+        }, 500);
+      }}
     >
       <Content
         style={{

@@ -12,11 +12,8 @@ import { Badge, Button, Switch } from "antd";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "../../contexts/themeContext";
-import { congnitoAuthService } from "../../franchisor/services/auth/CognitoAuthService";
-import { useGetMe } from "../../franchisor/services/auth/useGetMe";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { queryClient } from "../../services/queryClient";
-import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
 // import { signOut } from "@aws-amplify/auth";
 
 interface SiderComponentI {
@@ -25,6 +22,7 @@ interface SiderComponentI {
   children: ReactNode;
   menus: (PendinCount: number) => MenuDataItem[];
   franquia?: boolean;
+  logout?: () => void
 }
 
 export const SiderComponent = ({
@@ -33,12 +31,11 @@ export const SiderComponent = ({
   children,
   menus,
   franquia,
+  logout,
 }: SiderComponentI) => {
-  const { refetch } = useGetMe();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { isSm, isMd, isXl, isLg } = useBreakpoints();
-  const { setHeader } = useFranchisorAuth();
 
   return (
     <ProLayout
@@ -192,7 +189,7 @@ export const SiderComponent = ({
                   (queryClient?.getQueryData("getMe") as any)?.name || "Perfil"
                 }`}
             </Button>
-            <Button
+           {logout && <Button
               size="middle"
               danger
               type="default"
@@ -206,14 +203,10 @@ export const SiderComponent = ({
                 fontSize: 15,
               }}
               icon={<LogoutOutlined />}
-              onClick={async () => {
-                await congnitoAuthService.signOut();
-                setHeader(null);
-                refetch();
-              }}
+              onClick={logout}
             >
               {!props?.collapsed && "Sair do backoffice"}
-            </Button>
+            </Button>}
           </div>
         );
       }}

@@ -10,7 +10,9 @@ export const amplifyConfig = {
   oauth: {
     domain: envs.COGNITO.FRANCHISE.AUTH_URL,
     scope: ['phone', 'email', 'openid', 'profile', 'aws.cognito.signin.user.admin'],
-    responseType: 'token'
+    responseType: 'token',
+    redirectSignIn: 'https://franqueadora.localhost:5173/,https://franquia.localhost:5173/',
+    redirectSignOut: 'https://franqueadora.localhost:5173/,https://franquia.localhost:5173/',
   }
 };
 
