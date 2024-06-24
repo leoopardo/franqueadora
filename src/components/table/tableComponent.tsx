@@ -49,7 +49,7 @@ function TableComponent<RowItemI>({
                 key: c.key,
                 dataIndex: c.key,
                 render: (_value: any, row: RowItemI) => (
-                  <div style={{ color: "#71717A" }}>{c.custom(row)}</div>
+                  <div style={{ color: "#919199" }}>{c.custom(row)}</div>
                 ),
                 width: c.width,
               }
@@ -59,7 +59,7 @@ function TableComponent<RowItemI>({
                 dataIndex: c.key,
                 width: c.width,
                 render: (value) => (
-                  <Typography.Text style={{ color: "#71717A" }}>
+                  <Typography.Text style={{ color: "#919199" }}>
                     {value}
                   </Typography.Text>
                 ),
