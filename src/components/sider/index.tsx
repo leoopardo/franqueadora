@@ -22,7 +22,7 @@ interface SiderComponentI {
   children: ReactNode;
   menus: (PendinCount: number) => MenuDataItem[];
   franquia?: boolean;
-  logout?: () => void
+  logout?: () => void;
 }
 
 export const SiderComponent = ({
@@ -111,18 +111,26 @@ export const SiderComponent = ({
         if (item.name === "Pendentes" || item.name === "Terminais") {
           return (
             <Link
-              to={item.path ?? ""}
+              to={item.disabled ? "#" : item.path ?? ""}
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
+                cursor: item.disabled ? "no-drop" : "pointer"
               }}
             >
               {dom} <Badge color="green" count={100}></Badge>
             </Link>
           );
         }
-        return <Link to={item.path ?? ""}>{dom}</Link>;
+        return (
+          <Link
+            to={item.disabled ? "#" : item.path ?? ""}
+            style={{ cursor: item.disabled ? "no-drop" : "pointer" }}
+          >
+            {dom}
+          </Link>
+        );
       }}
       siderWidth={isXl ? 240 : isLg ? 200 : isMenuOpen ? 300 : 80}
       title=""
@@ -186,27 +194,31 @@ export const SiderComponent = ({
             >
               {!props?.collapsed &&
                 `${
-                  (queryClient?.getQueryData("getMe") as any)?.name || "Perfil"
+                  (queryClient?.getQueryData("getMe") as any)?.name ||
+                  (queryClient?.getQueryData("getMeFranchise") as any)?.name ||
+                  "Perfil"
                 }`}
             </Button>
-           {logout && <Button
-              size="middle"
-              danger
-              type="default"
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                backgroundColor: "transparent",
-                border: "none",
-                boxShadow: "none",
-                fontSize: 15,
-              }}
-              icon={<LogoutOutlined />}
-              onClick={logout}
-            >
-              {!props?.collapsed && "Sair do backoffice"}
-            </Button>}
+            {logout && (
+              <Button
+                size="middle"
+                danger
+                type="default"
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "transparent",
+                  border: "none",
+                  boxShadow: "none",
+                  fontSize: 15,
+                }}
+                icon={<LogoutOutlined />}
+                onClick={logout}
+              >
+                {!props?.collapsed && "Sair do backoffice"}
+              </Button>
+            )}
           </div>
         );
       }}

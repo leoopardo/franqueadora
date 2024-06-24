@@ -13,6 +13,8 @@ export const FranchiseRoutes = (): React.ReactElement => {
   const navigate = useNavigate();
   const { token } = useFranchiseAuth();
 
+  document.title = `Painel ${window.location.host.split(".")[0]} - PDV365`;
+
   useEffect(() => {
     Amplify.configure({
       ...amplifyConfig,

@@ -16,6 +16,8 @@ export const FranchisorRoutes = (): React.ReactElement => {
   const { theme } = useTheme();
   const { isMd, isSm } = useBreakpoints();
 
+  document.title = `Franqueadora - PDV365`;
+
   useEffect(() => {
     refetch();
   }, [token]);
