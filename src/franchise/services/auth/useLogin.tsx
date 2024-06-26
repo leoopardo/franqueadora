@@ -1,11 +1,8 @@
-import axios from "axios";
-import { useState } from "react";
-import { congnitoAuthService } from "./CognitoAuthService";
-import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
 import { Auth } from "aws-amplify";
+import { useState } from "react";
 import { STORAGE_KEYS } from "../../../constants/storage_keys";
 import { useFranchiseAuth } from "../../../contexts/franchiseAuthContext";
-import { apiFranquia } from "../../../config/apiFranquia";
+import { congnitoAuthService } from "./CognitoAuthService";
 
 export function useLogin(body: {
   AuthFlow: string;
@@ -20,17 +17,18 @@ export function useLogin(body: {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isLoggedIn] = useState(false);
 
-  const { setToken } = useFranchiseAuth();
+  const { setToken, setHeader } = useFranchiseAuth();
 
   const getHeaders = async () => {
     const user = await congnitoAuthService.getToken();
-    const authToken = congnitoAuthService.getAuthToken();
     const token = user.accessToken.jwtToken;
     const idToken = user.idToken.jwtToken;
-    apiFranquia.defaults.headers.Authorization = `Bearer ${token}`;
-    apiFranquia.defaults.headers.Identity = `${idToken}`;
-    apiFranquia.defaults.headers.AuthToken = `${authToken}`;
-    apiFranquia.defaults.headers["ngrok-skip-browser-warning"] = true;
+    setHeader({
+      Authorization: `Bearer ${token}`,
+      Identity: `${idToken}`,
+      AuthToken: `${idToken}`,
+      "ngrok-skip-browser-warning": true,
+    });
   };
 
   async function mutate() {

@@ -11,8 +11,8 @@ import { RawAxiosRequestHeaders } from "axios";
 interface FranchiseAuthContextProps {
   setToken: Dispatch<SetStateAction<string | undefined | null>>;
   token?: string | null;
-  headers: RawAxiosRequestHeaders;
-  setHeader: Dispatch<SetStateAction<RawAxiosRequestHeaders>>;
+  headers: RawAxiosRequestHeaders | null;
+  setHeader: Dispatch<SetStateAction<RawAxiosRequestHeaders | null>>;
 }
 
 const FranchiseAuthContext = createContext<
@@ -28,7 +28,7 @@ export const FranchiseAuthProvider = ({
     const authToken = congnitoAuthService.getAuthToken();
     return authToken;
   });
-  const [headers, setHeader] = useState<RawAxiosRequestHeaders>({
+  const [headers, setHeader] = useState<RawAxiosRequestHeaders | null>({
     "ngrok-skip-browser-warning": false,
     Authorization: "",
     AuthToken: "",

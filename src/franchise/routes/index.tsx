@@ -5,11 +5,28 @@ import { useFranchiseAuth } from "../../contexts/franchiseAuthContext";
 import { useGetMe } from "../services/auth/useGetMe";
 import { PrivateRoutes } from "./private";
 import { PublicRoutes } from "./public";
+import { Amplify } from "aws-amplify";
+import { amplifyConfig } from "../services/auth/login.config";
 
 export const FranchiseRoutes = (): React.ReactElement => {
   const { refetch, isSuccess, isLoading, error } = useGetMe();
   const navigate = useNavigate();
   const { token } = useFranchiseAuth();
+
+  document.title = `Painel ${window.location.host.split(".")[0]} - PDV365`;
+
+  useEffect(() => {
+    Amplify.configure({
+      ...amplifyConfig,
+      oauth: {
+        ...amplifyConfig.oauth,
+        redirectSignIn:
+          "https://franqueadora.localhost:5173/,https://franquia.localhost:5173/",
+        redirectSignOut:
+          "https://franqueadora.localhost:5173/,https://franquia.localhost:5173/",
+      },
+    });
+  }, []);
 
   useEffect(() => {
     refetch();

@@ -1,6 +1,6 @@
 import { Amplify, Auth } from "aws-amplify";
+import { STORAGE_KEYS } from "../../constants/storage_keys";
 import { CognitoUserModel, amplifyConfig } from "./login.config";
-import { STORAGE_KEYS } from "../../../constants/storage_keys";
 
 export type FirstAccessData = {
   user: unknown;
@@ -26,7 +26,7 @@ class CognitoAuthService {
 
   getAuthToken() {
     return (
-      localStorage.getItem("AuthToken") || sessionStorage.getItem("AuthToken")
+      localStorage.getItem("franchise_AuthToken") || sessionStorage.getItem("franchise_AuthToken")
     );
   }
 
@@ -35,6 +35,8 @@ class CognitoAuthService {
       ...amplifyConfig,
       oauth: {
         ...amplifyConfig.oauth,
+        redirectSignIn: "https://franqueadora.localhost:5173/,https://franquia.localhost:5173/",
+        redirectSignOut: "https://franqueadora.localhost:5173/,https://franquia.localhost:5173/",
       },
     };
     return updatedAwsConfig;
