@@ -17,6 +17,7 @@ import {
   FranchisesI,
 } from "../../../services/franchises/interfaces/franchises.interface";
 import { useListFranchises } from "../../../services/franchises/listFranchises";
+import { Link } from "react-router-dom";
 
 export const Franchises = () => {
   const [params, setParams] = useState<FranchiseParams>({ page: 1, size: 15 });
@@ -55,13 +56,16 @@ export const Franchises = () => {
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>
-        <Button
+      <Link to={"cadastro"}>
+      <Button
           style={{ width: "100%", boxShadow: "none" }}
           size="large"
           type="primary"
         >
           Cadastrar franquia
         </Button>
+      </Link>
+       
       </Col>
       <Col span={24}>
         <TableComponent<FranchisesI>

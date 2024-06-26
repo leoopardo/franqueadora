@@ -36,7 +36,7 @@ export const BaseLayout = () => {
         setTimeout(() => {
           refetch();
         }, 500);
-      }}
+      }}franquia
     >
       <Content
         style={{

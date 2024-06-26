@@ -2,12 +2,16 @@ import { Route, Routes } from "react-router-dom";
 import { BaseLayout } from "./BaseLayout";
 import { Button, Result } from "antd";
 import { Franchises } from "./franchises";
+import { CreateFranchise } from "./franchises/create";
 
 export const PrivateRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<BaseLayout />}>
-        <Route path="/franquias" element={<Franchises />} />
+        <Route path="/franquias">
+          <Route index element={<Franchises />} />
+          <Route path="cadastro" element={<CreateFranchise />} />
+        </Route>
         <Route
           path="*"
           element={
