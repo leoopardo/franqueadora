@@ -4,6 +4,7 @@ import { Button, Col, Divider, Input, Row } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { CurrencyInput } from "react-currency-mask";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
+import { useGetAgreements } from "../../../../../../services/utils/getGreements";
 
 interface moduleType {
   name: string;
@@ -16,10 +17,16 @@ interface moduleType {
   credit_spread: boolean;
   emission_fee: boolean;
 }
-export const StepThree = () => {
+
+interface stepThreeI {
+  modules: string[];
+}
+export const StepThree = ({ modules }: stepThreeI) => {
   const stepOneRef = useRef<any>(null);
   const { isXs } = useBreakpoints();
   const [updateFees, setUpdateFees] = useState<boolean>(false);
+  const [activeModules, setActiveModules] = useState<any>([]);
+  const { AgreementsData } = useGetAgreements();
 
   const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -29,85 +36,135 @@ export const StepThree = () => {
     });
   };
 
-  const modules: moduleType[] = [
-    {
-      name: "ticket",
-      label: "Ingresso online",
-      antifraud: true,
-      transaction: true,
-      pay365fee: true,
-      franchisor_result: true,
-      credit_result: true,
-      credit_spread: true,
-      emission_fee: false,
-    },
-    {
-      name: "bar",
-      label: "Bar online",
-      antifraud: true,
-      transaction: true,
-      pay365fee: true,
-      franchisor_result: true,
-      credit_result: true,
-      credit_spread: true,
-      emission_fee: false,
-    },
-    {
-      name: "consumer_ticket",
-      label: "Ingresso físico (Consumidor)",
-      antifraud: false,
-      transaction: false,
-      emission_fee: true,
-      pay365fee: true,
-      franchisor_result: true,
-      credit_result: true,
-      credit_spread: true,
-    },
-    {
-      name: "producer_ticket",
-      label: "Ingresso físico (Produtor)",
-      antifraud: false,
-      transaction: false,
-      emission_fee: true,
-      pay365fee: true,
-      franchisor_result: true,
-      credit_result: false,
-      credit_spread: true,
-    },
-    {
-      name: "consumer_bar",
-      label: "Bar físico (Consumidor)",
-      antifraud: false,
-      transaction: false,
-      emission_fee: false,
-      pay365fee: true,
-      credit_result: true,
-      credit_spread: true,
-      franchisor_result: false,
-    },
-    {
-      name: "producer_bar",
-      label: "Bar físico (Produtor)",
-      antifraud: false,
-      transaction: false,
-      pay365fee: true,
-      credit_result: true,
-      credit_spread: true,
-      franchisor_result: false,
-      emission_fee: false,
-    },
-    {
-      name: "direct_transaction",
-      label: "Transação direta",
-      antifraud: false,
-      transaction: false,
-      pay365fee: true,
-      credit_result: true,
-      credit_spread: true,
-      franchisor_result: false,
-      emission_fee: false,
-    },
-  ];
+  useEffect(() => {
+    if (modules && AgreementsData) {
+      const ONLINE_TICKET = AgreementsData.items.filter(
+        (i) => i.type === "ONLINE_TICKET"
+      );
+      const ONLINE_PUB = AgreementsData.items.filter(
+        (i) => i.type === "ONLINE_PUB"
+      );
+      const PHYSICAL_TICKET_CONSUMER = AgreementsData.items.filter(
+        (i) => i.type === "PHYSICAL_TICKET_CONSUMER"
+      );
+      const PHYSICAL_TICKET_PRODUCER = AgreementsData.items.filter(
+        (i) => i.type === "PHYSICAL_TICKET_PRODUCER"
+      );
+      const PHYSICAL_PUB_CONSUMER = AgreementsData.items.filter(
+        (i) => i.type === "PHYSICAL_PUB_CONSUMER"
+      );
+      const PHYSICAL_PUB_PRODUCER = AgreementsData.items.filter(
+        (i) => i.type === "PHYSICAL_PUB_PRODUCER"
+      );
+      const DIRECT_TRANSACTION = AgreementsData.items.filter(
+        (i) => i.type === "DIRECT_TRANSACTION"
+      );
+      if (modules.includes("Ingressos")) {
+        if (ONLINE_TICKET.length) {
+          setActiveModules((modules) => [
+            ...modules,
+            {
+              name: "ONLINE_TICKET",
+              label: "Ingresso online",
+              ANTIFRAUD: ONLINE_TICKET.find(
+                (value) => value.key === "ANTIFRAUD"
+              ),
+              TRANSACTION: ONLINE_TICKET.find(
+                (value) => value.key === "TRANSACTION"
+              ),
+              FEE_PAY365: ONLINE_TICKET.find(
+                (value) => value.key === "FEE_PAY365"
+              ),
+              RESULT_FRANCHISOR: ONLINE_TICKET.find(
+                (value) => value.key === "RESULT_FRANCHISOR"
+              ),
+              RESULT_CREDIT_ADVANCE: ONLINE_TICKET.find(
+                (value) => value.key === "RESULT_CREDIT_ADVANCE"
+              ),
+              SPREAD_CREDIT_ADVANCE: ONLINE_TICKET.find(
+                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
+              ),
+            },
+          ]);
+        }
+        if (PHYSICAL_TICKET_CONSUMER.length) {
+          setActiveModules((modules) => [
+            ...modules,
+            {
+              name: "PHYSICAL_TICKET_CONSUMER",
+              label: "Ingresso fisico (Consumidor)",
+              TRANSACTION: PHYSICAL_TICKET_CONSUMER.find(
+                (value) => value.key === "TRANSACTION"
+              ),
+              FEE_PAY365: PHYSICAL_TICKET_CONSUMER.find(
+                (value) => value.key === "FEE_PAY365"
+              ),
+              RESULT_FRANCHISOR: PHYSICAL_TICKET_CONSUMER.find(
+                (value) => value.key === "RESULT_FRANCHISOR"
+              ),
+              RESULT_CREDIT_ADVANCE: PHYSICAL_TICKET_CONSUMER.find(
+                (value) => value.key === "RESULT_CREDIT_ADVANCE"
+              ),
+              SPREAD_CREDIT_ADVANCE: PHYSICAL_TICKET_CONSUMER.find(
+                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
+              ),
+            },
+          ]);
+        }
+        if (PHYSICAL_TICKET_PRODUCER.length) {
+          setActiveModules((modules) => [
+            ...modules,
+            {
+              name: "PHYSICAL_TICKET_PRODUCER",
+              label: "Ingresso fisico (Produtor)",
+              TRANSACTION: PHYSICAL_TICKET_PRODUCER.find(
+                (value) => value.key === "TRANSACTION"
+              ),
+              FEE_PAY365: PHYSICAL_TICKET_PRODUCER.find(
+                (value) => value.key === "FEE_PAY365"
+              ),
+              RESULT_FRANCHISOR: PHYSICAL_TICKET_PRODUCER.find(
+                (value) => value.key === "RESULT_FRANCHISOR"
+              ),
+              RESULT_CREDIT_ADVANCE: PHYSICAL_TICKET_PRODUCER.find(
+                (value) => value.key === "RESULT_CREDIT_ADVANCE"
+              ),
+              SPREAD_CREDIT_ADVANCE: PHYSICAL_TICKET_PRODUCER.find(
+                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
+              ),
+            },
+          ]);
+        }
+      }
+      if (modules.includes("Fichas")) {
+        if (ONLINE_PUB.length) {
+          setActiveModules((modules) => [
+            ...modules,
+            {
+              name: "ONLINE_PUB",
+              label: "Bar online",
+              ANTIFRAUD: ONLINE_PUB.find((value) => value.key === "ANTIFRAUD"),
+              TRANSACTION: ONLINE_PUB.find(
+                (value) => value.key === "TRANSACTION"
+              ),
+              FEE_PAY365: ONLINE_PUB.find(
+                (value) => value.key === "FEE_PAY365"
+              ),
+              RESULT_FRANCHISOR: ONLINE_PUB.find(
+                (value) => value.key === "RESULT_FRANCHISOR"
+              ),
+              RESULT_CREDIT_ADVANCE: ONLINE_PUB.find(
+                (value) => value.key === "RESULT_CREDIT_ADVANCE"
+              ),
+              SPREAD_CREDIT_ADVANCE: ONLINE_PUB.find(
+                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
+              ),
+            },
+          ]);
+        }
+      }
+    }
+  }, [modules, AgreementsData]);
 
   const initialValues = {
     ticket_antifraude: 0,
@@ -193,7 +250,7 @@ export const StepThree = () => {
             onClick={() => setUpdateFees((prev) => !prev)}
           />
         </Col>
-        {modules.map((module) => (
+        {activeModules.map((module: any) => (
           <>
             <Col md={{ span: 24 }} xs={{ span: 24 }}>
               <Divider orientation="left">{module.label}</Divider>

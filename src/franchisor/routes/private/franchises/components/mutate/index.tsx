@@ -1,5 +1,5 @@
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
-import { Dispatch, SetStateAction, useRef } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { createFranchiseI } from "../../../../../services/franchises/interfaces/create_franchise.interface";
 import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
@@ -16,6 +16,7 @@ interface mutateI {
 
 export const MutateFranchise = ({ mutate, setBody }: mutateI) => {
   const formRef = useRef<ProFormInstance>();
+  const [modules, setModules] = useState<string[]>([]);
 
   const waitTime = (values: any) => {
     return new Promise<boolean>((resolve) => {
@@ -63,9 +64,9 @@ export const MutateFranchise = ({ mutate, setBody }: mutateI) => {
       onFinish={waitTime}
       onCurrentChange={() => window.scrollTo({ top: 0, behavior: "smooth" })}
     >
-      <StepOne />
+      <StepOne setModules={setModules} />
       <StepTwo />
-      <StepThree />
+      <StepThree modules={modules} />
     </StepsForm>
   );
 };

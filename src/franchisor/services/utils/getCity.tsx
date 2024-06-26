@@ -15,7 +15,8 @@ export function useGetCityCode(area_code_id: string[]) {
     ["getCityCode", area_code_id],
     async () => {
       const response = await apiFranquia.get(`county`, {
-        headers: { ...headers, area_code_id },
+        headers: { ...headers },
+        params: { area_code_id },
       });
       return response.data;
     }

@@ -3,17 +3,23 @@ import {
   ProFormText,
   StepsForm,
 } from "@ant-design/pro-components";
-import { Col, Divider, Row } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { Col, Divider, Form, Row } from "antd";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
 import useDebounce from "../../../../../../../hooks/useDebounce";
-import { useGetAreaCode } from "../../../../../../services/areaCode/getAreaCode";
-import { useGetCityCode } from "../../../../../../services/areaCode/getCity";
+import { useGetAreaCode } from "../../../../../../services/utils/getAreaCode";
+import { useGetCityCode } from "../../../../../../services/utils/getCity";
 import { useGetCEP } from "../../../../../../services/brasilApi/getCEP";
 import { useGetCNPJ } from "../../../../../../services/brasilApi/getCNPJ";
 import { useGetDDDs } from "../../../../../../services/brasilApi/getDDD";
+import { useGetPosModules } from "../../../../../../services/utils/getPosModules";
+import { useValidateStepOne } from "../../../../../../services/franchises/validation/validateStepOne";
 
-export const StepOne = () => {
+interface stepOneI {
+  setModules: Dispatch<SetStateAction<string[]>>;
+}
+
+export const StepOne = ({ setModules }: stepOneI) => {
   const [ddd, setDDD] = useState<string[]>([]);
   const [cep, setCep] = useState<string>("");
   const [cnpj, setCnpj] = useState<string>("");
@@ -24,6 +30,13 @@ export const StepOne = () => {
   const { isXs } = useBreakpoints();
   const { AreaCodeData } = useGetAreaCode();
   const { CityCodeData } = useGetCityCode(ddd);
+  const { PosModulesData } = useGetPosModules();
+  const [bodyValidate, setBodyValidate] = useState({
+    cnpj: "",
+    franchise_name: "",
+  });
+  const validateStepOne = useValidateStepOne({ body: bodyValidate });
+  const [form] = Form.useForm();
 
   const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -99,37 +112,34 @@ export const StepOne = () => {
     setCep(value);
   }, 500);
 
+  const handleValidate = useDebounce((key, value) => {
+    setBodyValidate((state) => ({ ...state, [key]: value }));
+  }, 500);
+
   useEffect(() => {
     if (cnpj && cnpjRequest.error) stepOneRef.current.validateFields(["cnpj"]);
   }, [cnpjRequest]);
 
-  console.log(stepOneRef.current);
+  useEffect(() => {
+    form.validateFields(["cnpj"]);
+  }, [validateStepOne.error]);
+
+  const handleFinish = async () => {
+    try {
+      await form.validateFields();
+      await waitTime(2000);
+      return true;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <StepsForm.StepForm<{
-      cnpj: number;
-      franchise_name: string;
-      company_name: string;
-      commercial_name: string;
-      state_registration: string;
-      address: {
-        address: string;
-        cep: string;
-        city: string;
-        complement: string;
-        district: string;
-        number: string;
-        state: string;
-      };
-      modules: string[];
-      area_code: string[];
-      contacts: any[];
-    }>
+    <StepsForm.StepForm
       name="base"
       title="Informações da empresa"
-      onFinish={async () => {
-        await waitTime(2000);
-        return true;
-      }}
+      onFinish={handleFinish}
+      
       size="large"
       grid
       formRef={stepOneRef}
@@ -140,6 +150,7 @@ export const StepOne = () => {
             name="cnpj"
             label="CNPJ"
             placeholder="Digite o CNPJ"
+            validateTrigger={["onChange", "onBlur", "onPaste"]}
             rules={[
               { required: true, len: 18 },
               {
@@ -152,9 +163,25 @@ export const StepOne = () => {
                   return Promise.resolve();
                 },
               },
+              {
+                validator: () => {
+                  if (validateStepOne.error) {
+                    return Promise.reject(
+                      (validateStepOne.error as any)?.response?.data?.message
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              },
             ]}
             fieldProps={{
-              onChange: (e) => handleChangeCnpj(e.target.value),
+              onChange: (e) => {
+                if (!e.target.value) {
+                  validateStepOne.reset();
+                }
+                handleChangeCnpj(e.target.value),
+                  handleValidate("cnpj", e?.target?.value?.replace(/\D/g, ""));
+              },
               maxLength: 18,
             }}
             getValueFromEvent={(e) => formatCNPJ(e.target.value)}
@@ -166,6 +193,14 @@ export const StepOne = () => {
             label="Nome da franquia"
             placeholder="Digite o nome da franquia"
             rules={[{ required: true }]}
+            fieldProps={{
+              onChange: (e) => {
+                setBodyValidate((state) => ({
+                  ...state,
+                  franchise_name: e.target.value,
+                }));
+              },
+            }}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
@@ -265,7 +300,10 @@ export const StepOne = () => {
             label="Código(s) de área(s)"
             placeholder="Selecione o DDD"
             mode="multiple"
-            options={AreaCodeData?.map((a) => ({ label: `${a.code}`, value: a.id }))}
+            options={AreaCodeData?.map((a) => ({
+              label: `${a.code}`,
+              value: a.id,
+            }))}
             rules={[{ required: true }]}
             onChange={(value: any) => setDDD(value)}
             fieldProps={{ maxTagCount: 3 }}
@@ -289,13 +327,20 @@ export const StepOne = () => {
             label="Módulos"
             placeholder="Selecione os módulos utilizados"
             mode="multiple"
-            options={[
-              { label: "Transação direta", value: "Transação direta" },
-              { label: "Ingressos", value: "Ingressos" },
-              { label: "Ficha", value: "Ficha" },
-            ]}
+            options={PosModulesData?.items.map((value) => ({
+              label: value.name,
+              value: value.id,
+            }))}
             rules={[{ required: true }]}
             fieldProps={{ maxTagCount: 1 }}
+            onChange={(value) =>
+              setModules(
+                (value as any)?.map(
+                  (v: string) =>
+                    PosModulesData?.items.find((i) => i.id === v)?.name
+                )
+              )
+            }
           />
         </Col>
       </Row>
