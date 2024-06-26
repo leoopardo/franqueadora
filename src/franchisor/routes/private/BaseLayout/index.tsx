@@ -35,7 +35,6 @@ export const BaseLayout = () => {
         setHeader(null);
         refetch();
       }}
-      
     >
       <Content
         style={{
