@@ -3,17 +3,17 @@ import {
   ProFormText,
   StepsForm,
 } from "@ant-design/pro-components";
-import { Col, Divider, Form, Row } from "antd";
+import { Col, Divider, Row } from "antd";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
 import useDebounce from "../../../../../../../hooks/useDebounce";
-import { useGetAreaCode } from "../../../../../../services/utils/getAreaCode";
-import { useGetCityCode } from "../../../../../../services/utils/getCity";
 import { useGetCEP } from "../../../../../../services/brasilApi/getCEP";
 import { useGetCNPJ } from "../../../../../../services/brasilApi/getCNPJ";
 import { useGetDDDs } from "../../../../../../services/brasilApi/getDDD";
-import { useGetPosModules } from "../../../../../../services/utils/getPosModules";
 import { useValidateStepOne } from "../../../../../../services/franchises/validation/validateStepOne";
+import { useGetAreaCode } from "../../../../../../services/utils/getAreaCode";
+import { useGetCityCode } from "../../../../../../services/utils/getCity";
+import { useGetPosModules } from "../../../../../../services/utils/getPosModules";
 
 interface stepOneI {
   setModules: Dispatch<SetStateAction<string[]>>;
@@ -36,7 +36,6 @@ export const StepOne = ({ setModules }: stepOneI) => {
     franchise_name: "",
   });
   const validateStepOne = useValidateStepOne({ body: bodyValidate });
-  const [form] = Form.useForm();
 
   const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -120,29 +119,45 @@ export const StepOne = ({ setModules }: stepOneI) => {
     if (cnpj && cnpjRequest.error) stepOneRef.current.validateFields(["cnpj"]);
   }, [cnpjRequest]);
 
-  useEffect(() => {
-    form.validateFields(["cnpj"]);
-  }, [validateStepOne.error]);
-
-  const handleFinish = async () => {
-    try {
-      await form.validateFields();
-      await waitTime(2000);
-      return true;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
-    <StepsForm.StepForm
+    <StepsForm.StepForm<{
+      cnpj: number;
+      franchise_name: string;
+      company_name: string;
+      commercial_name: string;
+      state_registration: string;
+      address: {
+        address: string;
+        cep: string;
+        city: string;
+        complement: string;
+        district: string;
+        number: string;
+        state: string;
+      };
+      modules: string[];
+      area_code: string[];
+      contacts: any[];
+    }>
       name="base"
       title="Informações da empresa"
-      onFinish={handleFinish}
-      
+      onFinish={async () => {
+        await waitTime(2000);
+        return true;
+      }}
       size="large"
       grid
       formRef={stepOneRef}
+      onFinishFailed={() => {
+        const fields = stepOneRef.current.getFieldsError();
+        const firstErrorField = fields.find((field: any) => field.errors.length > 0);
+        if (firstErrorField) {
+          stepOneRef.current.scrollToField(firstErrorField.name[0], {
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }}
     >
       <Row style={{ width: isXs ? "70%" : "100%" }} gutter={8}>
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
@@ -165,7 +180,10 @@ export const StepOne = ({ setModules }: stepOneI) => {
               },
               {
                 validator: () => {
-                  if (validateStepOne.error) {
+                  if (
+                    (validateStepOne.error as any)?.response?.data?.message ===
+                    "Esse CNPJ já está em uso. Por favor, informe um outro e tente novamente."
+                  ) {
                     return Promise.reject(
                       (validateStepOne.error as any)?.response?.data?.message
                     );
@@ -179,8 +197,8 @@ export const StepOne = ({ setModules }: stepOneI) => {
                 if (!e.target.value) {
                   validateStepOne.reset();
                 }
-                handleChangeCnpj(e.target.value),
-                  handleValidate("cnpj", e?.target?.value?.replace(/\D/g, ""));
+                handleChangeCnpj(e.target.value);
+                handleValidate("cnpj", e?.target?.value?.replace(/\D/g, ""));
               },
               maxLength: 18,
             }}
@@ -192,13 +210,30 @@ export const StepOne = ({ setModules }: stepOneI) => {
             name="franchise_name"
             label="Nome da franquia"
             placeholder="Digite o nome da franquia"
-            rules={[{ required: true }]}
+            validateTrigger={["onChange", "onBlur", "onPaste"]}
+            rules={[
+              { required: true },
+              {
+                validator: () => {
+                  if (
+                    (validateStepOne.error as any)?.response?.data?.message ===
+                    "Nome da franquia já existente no sistema."
+                  ) {
+                    return Promise.reject(
+                      (validateStepOne.error as any)?.response?.data?.message
+                    );
+                  }
+                  return Promise.resolve();
+                },
+              },
+            ]}
             fieldProps={{
               onChange: (e) => {
-                setBodyValidate((state) => ({
-                  ...state,
-                  franchise_name: e.target.value,
-                }));
+                if (!e.target.value) {
+                  validateStepOne.reset();
+                  return;
+                }
+                handleValidate("franchise_name", e?.target?.value);
               },
             }}
           />

@@ -23,9 +23,7 @@ export const FranchisorRoutes = (): React.ReactElement => {
   }, [token]);
 
   useEffect(() => {
-    if (isSuccess) {
-      navigate("/franquias");
-    }
+   
     if (error) {
       navigate("/");
     }

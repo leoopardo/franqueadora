@@ -8,14 +8,21 @@ import { Col, Divider, Row, Typography, message } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
 import regexList from "../../../../../../../utils/regexList";
-import { formatCPF, formatCellPhoneBR } from "../../../../../../../utils/regexFormat";
+import {
+  formatCPF,
+  formatCellPhoneBR,
+} from "../../../../../../../utils/regexFormat";
 import defaultTheme from "../../../../../../../styles/default";
+import { useValidateStepTwo } from "../../../../../../services/franchises/validation/validateStepTwo";
+import useDebounce from "../../../../../../../hooks/useDebounce";
 
 export const StepTwo = () => {
-  const stepOneRef = useRef<any>(null);
+  const stepTwoRef = useRef<any>(null);
   const { isXs } = useBreakpoints();
   const [password, setPassWord] = useState<string>("");
   const [confirmPassword, setConfirmPassWord] = useState<string>("");
+  const [bodyValidate, setBodyValidate] = useState({});
+  const validateStepOne = useValidateStepTwo({ body: bodyValidate });
 
   const passwordRules = [
     { rule: regexList.lowercarse, title: "Letra minúscula" },
@@ -35,10 +42,14 @@ export const StepTwo = () => {
   };
 
   useEffect(() => {
-    stepOneRef.current.setFieldsValue({
+    stepTwoRef.current.setFieldsValue({
       terminal_password: Math.floor(100000 + Math.random() * 900000),
     });
   }, []);
+
+  const handleValidate = useDebounce((key, value) => {
+    setBodyValidate((state) => ({ ...state, [key]: value }));
+  }, 500);
 
   return (
     <StepsForm.StepForm<{
@@ -54,7 +65,19 @@ export const StepTwo = () => {
       }}
       size="large"
       grid
-      formRef={stepOneRef}
+      formRef={stepTwoRef}
+      onFinishFailed={() => {
+        const fields = stepTwoRef.current.getFieldsError();
+        const firstErrorField = fields.find(
+          (field: any) => field.errors.length > 0
+        );
+        if (firstErrorField) {
+          stepTwoRef.current.scrollToField(firstErrorField.name[0], {
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }}
     >
       <Row
         style={{ width: isXs ? "70%" : "100%", justifyContent: "center" }}
@@ -66,6 +89,7 @@ export const StepTwo = () => {
             name="cpf"
             label="CPF"
             placeholder="Digite o CPF"
+            validateTrigger={["onChange", "onBlur", "onPaste"]}
             rules={[
               { required: true },
               ({}) => ({
@@ -76,16 +100,33 @@ export const StepTwo = () => {
                   return Promise.reject(new Error("Este não é um CPF válido"));
                 },
               }),
+              // ({}) => ({
+              //   validator(_, value) {
+              //     if (
+              //       !(validateStepOne.error as any)?.response?.data?.message
+              //         .split("\n")
+              //         .includes(
+              //           "Esse cpf já está em uso em outra conta. Por favor, insira um cpf diferente e tente novamente."
+              //         )
+              //     ) {
+              //       return Promise.resolve();
+              //     }
+              //     return Promise.reject(new Error("CPF ja está em uso"));
+              //   },
+              // }),
             ]}
             fieldProps={{
               maxLength: 14,
+              onChange(e) {
+                handleValidate("cpf", e.target.value);
+              },
             }}
             getValueFromEvent={(e) => formatCPF(e.target.value)}
           />
         </Col>
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
           <ProFormText
-            name="person_name"
+            name="name"
             label="Nome completo"
             placeholder="Digite o nome completo"
             rules={[{ required: true }]}
@@ -96,10 +137,30 @@ export const StepTwo = () => {
             name="email"
             label="Email"
             placeholder="Digite o email"
+            validateTrigger={["onChange", "onBlur", "onPaste"]}
             rules={[
               { required: true },
               { type: "email", message: "Este não é um email válido" },
+              // ({}) => ({
+              //   validator() {
+              //     if (
+              //       !(validateStepOne.error as any)?.response?.data?.message
+              //         .split("\n")
+              //         .includes(
+              //           "Esse email já está em uso em outra conta. Por favor, insira um email diferente e tente novamente."
+              //         )
+              //     ) {
+              //       return Promise.resolve();
+              //     }
+              //     return Promise.reject(new Error("CPF ja está em uso"));
+              //   },
+              // }),
             ]}
+            fieldProps={{
+              onChange(e) {
+                handleValidate("email", e.target.value);
+              },
+            }}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
@@ -107,6 +168,7 @@ export const StepTwo = () => {
             name="cellphone"
             label="Celular"
             placeholder="Digite número de celular"
+            validateTrigger={["onChange", "onBlur", "onPaste"]}
             rules={[
               { required: true },
               ({}) => ({
@@ -119,7 +181,26 @@ export const StepTwo = () => {
                   );
                 },
               }),
+              // ({}) => ({
+              //   validator() {
+              //     if (
+              //       !(validateStepOne.error as any)?.response?.data?.message
+              //         .split("\n")
+              //         .includes(
+              //           "Esse celular já está em uso em outra conta. Por favor, utilize um celular diferente e tente novamente."
+              //         )
+              //     ) {
+              //       return Promise.resolve();
+              //     }
+              //     return Promise.reject(new Error("Celular ja está em uso"));
+              //   },
+              // }),
             ]}
+            fieldProps={{
+              onChange(e) {
+                handleValidate("cellphone", e.target.value.replace(/\D/g, ""));
+              },
+            }}
             getValueFromEvent={(e) => formatCellPhoneBR(e.target.value)}
           />
         </Col>
@@ -146,7 +227,9 @@ export const StepTwo = () => {
                   if (!value || value.match(regexList.password)) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error("A senha deve atender os critérios abaixo"));
+                  return Promise.reject(
+                    new Error("A senha deve atender os critérios abaixo")
+                  );
                 },
               }),
             ]}
@@ -155,7 +238,7 @@ export const StepTwo = () => {
             }}
           />
         </Col>
-        <Col md={{ span: 12 }}  xs={{ span: 24 }}>
+        <Col md={{ span: 12 }} xs={{ span: 24 }}>
           <ProFormText.Password
             name="confirm_password"
             label="Confirmar senha"
@@ -175,7 +258,9 @@ export const StepTwo = () => {
                   if (!value || value.match(regexList.password)) {
                     return Promise.resolve();
                   }
-                  return Promise.reject(new Error("A senha deve atender os critérios abaixo"));
+                  return Promise.reject(
+                    new Error("A senha deve atender os critérios abaixo")
+                  );
                 },
               }),
             ]}
@@ -277,7 +362,7 @@ export const StepTwo = () => {
                 <ReloadOutlined
                   style={{ cursor: "pointer" }}
                   onClick={() =>
-                    stepOneRef.current.setFieldsValue({
+                    stepTwoRef.current.setFieldsValue({
                       terminal_password: Math.floor(
                         100000 + Math.random() * 900000
                       ),

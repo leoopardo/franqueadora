@@ -7,6 +7,7 @@ import {
 import { Button, Col, Input, Row, Tooltip, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { PageHeader } from "../../../../components/header/pageHeader";
 import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
@@ -17,7 +18,6 @@ import {
   FranchisesI,
 } from "../../../services/franchises/interfaces/franchises.interface";
 import { useListFranchises } from "../../../services/franchises/listFranchises";
-import { Link } from "react-router-dom";
 
 export const Franchises = () => {
   const [params, setParams] = useState<FranchiseParams>({ page: 1, size: 15 });
@@ -38,6 +38,8 @@ export const Franchises = () => {
       f: ["franchise_name", "cnpj", "ref_id", "username"],
     }));
   }, 500);
+
+  
 
   return (
     <Row style={{ width: "100%" }} align="middle" gutter={[8, 8]}>
