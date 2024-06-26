@@ -214,7 +214,7 @@ export const Landing = () => {
             zIndex: 0,
           }}
         >
-          <source src="/src/assets/banner2.mov" type="video/mp4" />
+          <source src="src/assets/banner2.mov" type="video/mp4" />
         </video>
         {/* <div style={{ minHeight: 1000, marginTop: 650 }}>ftyfytf</div> */}
       </Content>
