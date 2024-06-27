@@ -1,5 +1,5 @@
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { createFranchiseI } from "../../../../../services/franchises/interfaces/create_franchise.interface";
 import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
@@ -57,6 +57,7 @@ export const MutateFranchise = ({ mutate, setBody }: mutateI) => {
       resolve(true);
     });
   };
+
   return (
     <StepsForm<createFranchiseI>
       formRef={formRef}
