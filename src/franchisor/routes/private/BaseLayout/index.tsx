@@ -1,15 +1,15 @@
 // import { cognitoUserPoolsTokenProvider } from "@aws-amplify/auth/cognito";
+import { SiderComponent } from "@components/sider";
+import { useGetMe } from "@franchisor/services/auth/useGetMe";
+import { MenuItens } from "@franchisor/components/sider_menus/menus";
+import { congnitoAuthService } from "@franchisor/services/auth/CognitoAuthService";
+import { useBreakpoints } from "@hooks/useBreakpoints";
 import { Row } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
-import { SiderComponent } from "../../../../components/sider";
-import { useTheme } from "../../../../contexts/themeContext";
-import { useBreakpoints } from "../../../../hooks/useBreakpoints";
-import { MenuItens } from "../../../components/sider_menus/menus";
-import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
-import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
-import { useGetMe } from "../../../services/auth/useGetMe";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useFranchisorAuth } from "@contexts/franchisorAuthContext";
+import { useTheme } from "@contexts/themeContext";
 
 export const BaseLayout = () => {
   const { isMd } = useBreakpoints();
@@ -17,12 +17,11 @@ export const BaseLayout = () => {
   const { theme } = useTheme();
   const { setHeader } = useFranchisorAuth();
   const { refetch } = useGetMe();
+  const location = useLocation();
+  const navigate = useNavigate()
 
-  // const navigate = useNavigate();
   useEffect(() => {
-    // if (!secureLocalStorage.getItem("token")) {
-    //   navigate({ to: "/" });
-    // }
+    if(location.pathname === "/"){navigate("/franquias")}
   }, []);
 
   return (

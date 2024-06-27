@@ -4,7 +4,7 @@ import { Landing } from "./landing";
 export const LandingRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Landing />} />
+      <Route path="*" element={<Landing />} />
     </Routes>
   );
 };
