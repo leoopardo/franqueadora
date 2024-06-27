@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
-import { BaseLayout } from "./BaseLayout";
 import { Button, Result } from "antd";
-import { Franchises } from "./franchises";
+import { BaseLayout } from "@franchise/routes/private/BaseLayout";
+import { FranchiseRoutes } from "@franchise/routes";
 import { CreateFranchise } from "./franchises/create";
 
 export const PrivateRoutes = () => {
@@ -9,7 +9,7 @@ export const PrivateRoutes = () => {
     <Routes>
       <Route path="/" element={<BaseLayout />}>
         <Route path="/franquias">
-          <Route index element={<Franchises />} />
+          <Route index element={<FranchiseRoutes />} />
           <Route path="cadastro" element={<CreateFranchise />} />
         </Route>
         <Route

@@ -1,12 +1,12 @@
 import { Spin } from "antd";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useFranchiseAuth } from "../../contexts/franchiseAuthContext";
-import { useGetMe } from "../services/auth/useGetMe";
 import { PrivateRoutes } from "./private";
 import { PublicRoutes } from "./public";
 import { Amplify } from "aws-amplify";
-import { amplifyConfig } from "../services/auth/login.config";
+import { amplifyConfig } from "@franchisor/services/auth/login.config";
+import { useFranchiseAuth } from "@contexts/franchiseAuthContext";
+import { useGetMe } from "../services/auth/useGetMe";
 
 export const FranchiseRoutes = (): React.ReactElement => {
   const { refetch, isSuccess, isLoading, error } = useGetMe();
