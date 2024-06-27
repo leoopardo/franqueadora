@@ -1,11 +1,11 @@
 import { ProCard } from "@ant-design/pro-components";
 import { MutateFranchise } from "../components/mutate";
 import { Col, Row, message } from "antd";
+import { PageHeader } from "../../../../../components/header/pageHeader";
 import { useEffect, useState } from "react";
+import { useCreateFranchise } from "../../../../services/franchises/createFranchise";
+import { createFranchiseI } from "../../../../services/franchises/interfaces/create_franchise.interface";
 import { useNavigate } from "react-router-dom";
-import { createFranchiseI } from "@franchisor/services/franchises/interfaces/create_franchise.interface";
-import { useCreateFranchise } from "@franchisor/services/franchises/createFranchise";
-import { PageHeader } from "@components/header/pageHeader";
 
 export const CreateFranchise = () => {
   const [body, setBody] = useState<createFranchiseI>({});
