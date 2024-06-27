@@ -3,6 +3,7 @@ import { BaseLayout } from "./BaseLayout";
 import { Button, Result } from "antd";
 import { Franchises } from "./franchises";
 import { CreateFranchise } from "./franchises/create";
+import { Promoters } from "./promoters";
 
 export const PrivateRoutes = () => {
   return (
@@ -11,6 +12,9 @@ export const PrivateRoutes = () => {
         <Route path="/franquias">
           <Route index element={<Franchises />} />
           <Route path="cadastro" element={<CreateFranchise />} />
+        </Route>
+        <Route path="/promotores">
+          <Route index element={<Promoters />} />
         </Route>
         <Route
           path="*"

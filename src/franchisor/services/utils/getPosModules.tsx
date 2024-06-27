@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
-import ResponseI from "../interfaces/response.interface";
+import ResponseI from "../__interfaces/response.interface";
 
 export interface PosModulesI {
   id: string;

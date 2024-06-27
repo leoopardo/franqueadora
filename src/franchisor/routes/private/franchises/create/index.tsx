@@ -4,7 +4,7 @@ import { Col, Row, message } from "antd";
 import { PageHeader } from "../../../../../components/header/pageHeader";
 import { useEffect, useState } from "react";
 import { useCreateFranchise } from "../../../../services/franchises/createFranchise";
-import { createFranchiseI } from "../../../../services/franchises/interfaces/create_franchise.interface";
+import { createFranchiseI } from "../../../../services/franchises/__interfaces/create_franchise.interface";
 import { useNavigate } from "react-router-dom";
 
 export const CreateFranchise = () => {

@@ -3,18 +3,19 @@ import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
 import ResponseI from "../__interfaces/response.interface";
 import {
-  FranchiseParams,
-  FranchisesI,
-} from "./__interfaces/franchises.interface";
+  PromotersI,
+  PromotersParams,
+} from "./__interfaces/promoters.interface";
+import { QueryKeys } from "../queryKeys";
 
-export const useListFranchises = (params: FranchiseParams) => {
+export const useListPromoters = (params: PromotersParams) => {
   const { headers } = useFranchisorAuth();
   const { data, error, isLoading, refetch } = useQuery<
-    ResponseI<FranchisesI> | null | undefined
+    ResponseI<PromotersI> | null | undefined
   >(
-    ["listFranchises", params],
+    [QueryKeys.LIST_PROMOTERS, params],
     async () => {
-      const response = await apiFranquia.get(`/franchise/all`, {
+      const response = await apiFranquia.get(`/promoter/all`, {
         headers: headers ?? {},
         params,
       });

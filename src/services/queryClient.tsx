@@ -5,5 +5,5 @@ export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (_err: any) => {},
   }),
-  defaultOptions: { queries: { retry: false,  } },
+  defaultOptions: { queries: { retry: false, keepPreviousData: true } },
 });

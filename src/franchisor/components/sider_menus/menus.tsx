@@ -26,7 +26,7 @@ export const MenuItens = (pending: number) => {
     {
       key: "promotores",
       name: "Promotores",
-      path: "/promoters",
+      path: "/promotores",
       icon: <MegaphoneIcon width={24} />,
     },
     {

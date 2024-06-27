@@ -1,6 +1,6 @@
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
-import { createFranchiseI } from "../../../../../services/franchises/interfaces/create_franchise.interface";
+import { createFranchiseI } from "../../../../../services/franchises/__interfaces/create_franchise.interface";
 import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
