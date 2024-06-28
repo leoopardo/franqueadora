@@ -39,12 +39,14 @@ export const Promoters = () => {
     setParams((state) => ({
       ...state,
       s: value,
-      f: ["promoter_name", "franchise_name", "cnpj", "ref_id", "username"],
+      f: `ref_id,PromoterPerson.name,PromoterJuridic.company_name,PromoterPerson.cpf,PromoterJuridic.cnpj,Master.username,PromoterAddress.city,PromoterAddress.state,PromoterPOSModule.POSModule.name,Franchise.franchise_name,Franchise.cnpj`.split(
+        ","
+      ),
     }));
   }, 500);
 
   return (
-    <Row style={{ width: "100%" }} align="middle" gutter={[8, 8]}>
+    <Row style={{ width: "100%", padding: 40 }} align="middle" gutter={[8, 8]}>
       <Col xs={{ span: 24 }} md={{ span: 12 }}>
         <PageHeader
           title="Promotores"
@@ -56,7 +58,7 @@ export const Promoters = () => {
           size="large"
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
-          placeholder="Pesquisar franquia"
+          placeholder="Pesquisar promotor"
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>
@@ -65,8 +67,9 @@ export const Promoters = () => {
             style={{ width: "100%", boxShadow: "none" }}
             size="large"
             type="primary"
+            shape="round"
           >
-            Cadastrar franquia
+            Cadastrar promotor
           </Button>
         </Link>
       </Col>

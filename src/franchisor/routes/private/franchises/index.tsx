@@ -44,7 +44,7 @@ export const Franchises = () => {
   }, 500);
 
   return (
-    <Row style={{ width: "100%" }} align="middle" gutter={[8, 8]}>
+    <Row style={{ width: "100%", padding: 40 }} align="middle" gutter={[8, 8]}>
       <Col xs={{ span: 24 }} md={{ span: 12 }}>
         <PageHeader
           title="Franquias"
@@ -57,6 +57,7 @@ export const Franchises = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar franquia"
+  
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>
@@ -65,6 +66,7 @@ export const Franchises = () => {
             style={{ width: "100%", boxShadow: "none" }}
             size="large"
             type="primary"
+            shape="round"
           >
             Cadastrar franquia
           </Button>

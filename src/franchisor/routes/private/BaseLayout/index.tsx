@@ -72,7 +72,6 @@ export const BaseLayout = () => {
       >
         <Row
           style={{
-            padding: "20px",
             top: 0,
             display: "flex",
             flexDirection: "column",

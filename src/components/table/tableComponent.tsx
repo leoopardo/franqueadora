@@ -78,7 +78,7 @@ function TableComponent<RowItemI>({
           key: "actions",
           title: "Ações",
           render: (_value: any, row: any) => (
-            <div style={{ minWidth: isSm ? 48 : undefined }}>
+            <div style={{ minWidth:  48 }}>
               <Dropdown
                 menu={{
                   items:

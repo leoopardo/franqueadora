@@ -25,103 +25,8 @@ export const StepThree = ({ modules }: stepThreeI) => {
   const stepOneRef = useRef<any>(null);
   const { isXs } = useBreakpoints();
   const [updateFees, setUpdateFees] = useState<boolean>(false);
-  const [activeModules, setActiveModules] = useState<
-    {
-      label: string;
-      name: string;
-      antifraud?: boolean;
-      pay365_fee?: boolean;
-      transaction?: boolean;
-      franchisor_result?: boolean;
-      credit_result?: boolean;
-      emission_fee?: boolean;
-    }[]
-  >([]);
-  const { AgreementsData, parsedData } = useGetAgreements();
-
-  useEffect(() => {
-    let m: {
-      label: string;
-      name: string;
-      antifraud?: boolean;
-      pay365_fee?: boolean;
-      transaction?: boolean;
-      franchisor_result?: boolean;
-      credit_result?: boolean;
-      emission_fee?: boolean;
-      credid_spread?: boolean;
-    }[] = [];
-    if (modules.includes("Ingresso")) {
-      m.push(
-        {
-          label: "Ingresso online",
-          name: "online_ticket",
-          antifraud: true,
-          transaction: true,
-          pay365_fee: true,
-          credit_result: true,
-          franchisor_result: true,
-        },
-        {
-          label: "Ingresso físico (produtor)",
-          name: "physical_producer_ticket",
-          emission_fee: true,
-          pay365_fee: true,
-          credit_result: true,
-          franchisor_result: true,
-        },
-        {
-          label: "Ingresso físico (consumidor)",
-          name: "physical_consumer_ticket",
-          emission_fee: true,
-          pay365_fee: true,
-          credit_result: true,
-          franchisor_result: true,
-        }
-      );
-    }
-    if (modules.includes("Ficha")) {
-      m.push(
-        {
-          label: "Bar online",
-          name: "online_bar",
-          antifraud: true,
-          transaction: true,
-          pay365_fee: true,
-          franchisor_result: true,
-          credit_result: true,
-          credid_spread: true,
-        },
-        {
-          label: "Bar físico (produtor)",
-          name: "physical_producer_bar",
-          pay365_fee: true,
-          credit_result: true,
-          credid_spread: true,
-        },
-        {
-          label: "Bar físico (consumidor)",
-          name: "physical_consumer_bar",
-          pay365_fee: true,
-          credit_result: true,
-          credid_spread: true,
-        }
-      );
-    }
-    if (modules.includes("Transação direta")) {
-      m.push({
-        label: "Transação direta",
-        name: "direct_transaction",
-        pay365_fee: true,
-        credit_result: true,
-        credid_spread: true,
-      });
-    }
-
-    setActiveModules(m);
-  }, [modules]);
-
-  console.log(activeModules);
+  const [activeModules, setActiveModules] = useState<any>([]);
+  const { AgreementsData } = useGetAgreements();
 
   const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -132,7 +37,170 @@ export const StepThree = ({ modules }: stepThreeI) => {
   };
 
   useEffect(() => {
-    stepOneRef.current.setFieldsValue(parsedData);
+    if (modules && AgreementsData) {
+      const ONLINE_TICKET = AgreementsData.items.filter(
+        (i) => i.type === "ONLINE_TICKET"
+      );
+      const ONLINE_PUB = AgreementsData.items.filter(
+        (i) => i.type === "ONLINE_PUB"
+      );
+      const PHYSICAL_TICKET_CONSUMER = AgreementsData.items.filter(
+        (i) => i.type === "PHYSICAL_TICKET_CONSUMER"
+      );
+      const PHYSICAL_TICKET_PRODUCER = AgreementsData.items.filter(
+        (i) => i.type === "PHYSICAL_TICKET_PRODUCER"
+      );
+      const PHYSICAL_PUB_CONSUMER = AgreementsData.items.filter(
+        (i) => i.type === "PHYSICAL_PUB_CONSUMER"
+      );
+      const PHYSICAL_PUB_PRODUCER = AgreementsData.items.filter(
+        (i) => i.type === "PHYSICAL_PUB_PRODUCER"
+      );
+      const DIRECT_TRANSACTION = AgreementsData.items.filter(
+        (i) => i.type === "DIRECT_TRANSACTION"
+      );
+      if (modules.includes("Ingressos")) {
+        if (ONLINE_TICKET.length) {
+          setActiveModules((modules) => [
+            ...modules,
+            {
+              name: "ONLINE_TICKET",
+              label: "Ingresso online",
+              ANTIFRAUD: ONLINE_TICKET.find(
+                (value) => value.key === "ANTIFRAUD"
+              ),
+              TRANSACTION: ONLINE_TICKET.find(
+                (value) => value.key === "TRANSACTION"
+              ),
+              FEE_PAY365: ONLINE_TICKET.find(
+                (value) => value.key === "FEE_PAY365"
+              ),
+              RESULT_FRANCHISOR: ONLINE_TICKET.find(
+                (value) => value.key === "RESULT_FRANCHISOR"
+              ),
+              RESULT_CREDIT_ADVANCE: ONLINE_TICKET.find(
+                (value) => value.key === "RESULT_CREDIT_ADVANCE"
+              ),
+              SPREAD_CREDIT_ADVANCE: ONLINE_TICKET.find(
+                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
+              ),
+            },
+          ]);
+        }
+        if (PHYSICAL_TICKET_CONSUMER.length) {
+          setActiveModules((modules) => [
+            ...modules,
+            {
+              name: "PHYSICAL_TICKET_CONSUMER",
+              label: "Ingresso fisico (Consumidor)",
+              TRANSACTION: PHYSICAL_TICKET_CONSUMER.find(
+                (value) => value.key === "TRANSACTION"
+              ),
+              FEE_PAY365: PHYSICAL_TICKET_CONSUMER.find(
+                (value) => value.key === "FEE_PAY365"
+              ),
+              RESULT_FRANCHISOR: PHYSICAL_TICKET_CONSUMER.find(
+                (value) => value.key === "RESULT_FRANCHISOR"
+              ),
+              RESULT_CREDIT_ADVANCE: PHYSICAL_TICKET_CONSUMER.find(
+                (value) => value.key === "RESULT_CREDIT_ADVANCE"
+              ),
+              SPREAD_CREDIT_ADVANCE: PHYSICAL_TICKET_CONSUMER.find(
+                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
+              ),
+            },
+          ]);
+        }
+        if (PHYSICAL_TICKET_PRODUCER.length) {
+          setActiveModules((modules) => [
+            ...modules,
+            {
+              name: "PHYSICAL_TICKET_PRODUCER",
+              label: "Ingresso fisico (Produtor)",
+              TRANSACTION: PHYSICAL_TICKET_PRODUCER.find(
+                (value) => value.key === "TRANSACTION"
+              ),
+              FEE_PAY365: PHYSICAL_TICKET_PRODUCER.find(
+                (value) => value.key === "FEE_PAY365"
+              ),
+              RESULT_FRANCHISOR: PHYSICAL_TICKET_PRODUCER.find(
+                (value) => value.key === "RESULT_FRANCHISOR"
+              ),
+              RESULT_CREDIT_ADVANCE: PHYSICAL_TICKET_PRODUCER.find(
+                (value) => value.key === "RESULT_CREDIT_ADVANCE"
+              ),
+              SPREAD_CREDIT_ADVANCE: PHYSICAL_TICKET_PRODUCER.find(
+                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
+              ),
+            },
+          ]);
+        }
+      }
+      if (modules.includes("Fichas")) {
+        if (ONLINE_PUB.length) {
+          setActiveModules((modules) => [
+            ...modules,
+            {
+              name: "ONLINE_PUB",
+              label: "Bar online",
+              ANTIFRAUD: ONLINE_PUB.find((value) => value.key === "ANTIFRAUD"),
+              TRANSACTION: ONLINE_PUB.find(
+                (value) => value.key === "TRANSACTION"
+              ),
+              FEE_PAY365: ONLINE_PUB.find(
+                (value) => value.key === "FEE_PAY365"
+              ),
+              RESULT_FRANCHISOR: ONLINE_PUB.find(
+                (value) => value.key === "RESULT_FRANCHISOR"
+              ),
+              RESULT_CREDIT_ADVANCE: ONLINE_PUB.find(
+                (value) => value.key === "RESULT_CREDIT_ADVANCE"
+              ),
+              SPREAD_CREDIT_ADVANCE: ONLINE_PUB.find(
+                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
+              ),
+            },
+          ]);
+        }
+      }
+    }
+  }, [modules, AgreementsData]);
+
+  const initialValues = {
+    ticket_antifraude: 0,
+    ticket_transaction: 0.2,
+    ticket_pay365_fee: 0.25,
+    ticket_franchisor_result: 60,
+    ticket_credit_result: 60,
+    ticket_credit_spread: 1.0,
+    bar_antifraude: 0,
+    bar_transaction: 0.2,
+    bar_pay365_fee: 0.25,
+    bar_franchisor_result: 60,
+    bar_credit_result: 60,
+    bar_credit_spread: 1.0,
+    consumer_ticket_emission: 0.3,
+    consumer_ticket_pay365_fee: 0.25,
+    consumer_ticket_franchisor_result: 60,
+    consumer_ticket_credit_result: 60,
+    consumer_ticket_credit_spread: 1.0,
+    producer_ticket_emission: 0.3,
+    producer_ticket_pay365_fee: 0.25,
+    producer_ticket_franchisor_result: 60,
+    producer_ticket_credit_spread: 1.0,
+    consumer_bar_pay365_fee: 0.25,
+    consumer_bar_credit_result: 60,
+    consumer_bar_credit_spread: 1.0,
+    producer_bar_pay365_fee: 0.25,
+    producer_bar_credit_result: 60,
+    producer_bar_credit_spread: 1.0,
+    direct_transaction_pay365_fee: 0.25,
+    direct_transaction_credit_result: 60,
+    direct_transaction_credit_spread: 1.0,
+  };
+
+  useEffect(() => {
+    stepOneRef.current.setFieldsValue(initialValues);
   }, []);
 
   return (

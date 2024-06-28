@@ -59,14 +59,18 @@ export const MutateFranchise = ({ mutate, setBody }: mutateI) => {
   };
 
   return (
-    <StepsForm<createFranchiseI>
-      formRef={formRef}
-      onFinish={waitTime}
-      onCurrentChange={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-    >
-      <StepOne setModules={setModules} />
-      <StepTwo />
-      <StepThree modules={modules} />
-    </StepsForm>
+    <>
+      
+      <StepsForm<createFranchiseI>
+        formRef={formRef}
+        onFinish={waitTime}
+        stepsProps={{}}
+        onCurrentChange={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
+        <StepOne setModules={setModules} />
+        <StepTwo />
+        <StepThree modules={modules} />
+      </StepsForm>
+    </>
   );
 };

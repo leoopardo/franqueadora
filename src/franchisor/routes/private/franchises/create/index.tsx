@@ -1,6 +1,6 @@
 import { ProCard } from "@ant-design/pro-components";
 import { MutateFranchise } from "../components/mutate";
-import { Col, Row, message } from "antd";
+import { Col, Row, message, notification } from "antd";
 import { PageHeader } from "../../../../../components/header/pageHeader";
 import { useEffect, useState } from "react";
 import { useCreateFranchise } from "../../../../services/franchises/createFranchise";
@@ -14,11 +14,14 @@ export const CreateFranchise = () => {
 
   useEffect(() => {
     if (isSuccess) {
-      message.success("Franquia criada cadastrada!");
+      notification.success({ message: "Franquia cadastrada com sucesso!" });
       navigate(-1);
     }
     if (error) {
-      message.error((error as any)?.response?.data?.message, 4000);
+      notification.error({
+        message: "Erro ao cadastrar franquia.",
+        description: (error as any)?.response?.data?.message,
+      });
     }
   }, [error, isSuccess]);
   return (

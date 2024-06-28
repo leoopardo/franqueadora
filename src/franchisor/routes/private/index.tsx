@@ -4,6 +4,7 @@ import { Button, Result } from "antd";
 import { Franchises } from "./franchises";
 import { CreateFranchise } from "./franchises/create";
 import { Promoters } from "./promoters";
+import { CreatePromoter } from "./promoters/create";
 
 export const PrivateRoutes = () => {
   return (
@@ -15,6 +16,7 @@ export const PrivateRoutes = () => {
         </Route>
         <Route path="/promotores">
           <Route index element={<Promoters />} />
+          <Route path="cadastro" element={<CreatePromoter />} />
         </Route>
         <Route
           path="*"
