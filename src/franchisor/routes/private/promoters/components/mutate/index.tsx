@@ -7,7 +7,6 @@ import { createFranchiseI } from "../../../../../services/franchises/__interface
 import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
-import { PageHeader } from "../../../../../../components/header/pageHeader";
 
 interface mutateI {
   body: createFranchiseI;
@@ -87,7 +86,7 @@ export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
             <Typography.Text style={{ lineHeight: 0 }}>
               Passo {step} de 3
             </Typography.Text>
-            <Typography.Title level={2} style={{  margin: 0 }}>
+            <Typography.Title level={3} style={{  margin: 0 }}>
               Cadastro de promotores
             </Typography.Title>
             <Typography.Text style={{ lineHeight: 0 }}>
