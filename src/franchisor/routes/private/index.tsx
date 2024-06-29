@@ -5,6 +5,7 @@ import { Franchises } from "./franchises";
 import { CreateFranchise } from "./franchises/create";
 import { Promoters } from "./promoters";
 import { CreatePromoter } from "./promoters/create";
+import { Terminals } from "./terminals";
 
 export const PrivateRoutes = () => {
   return (
@@ -17,6 +18,9 @@ export const PrivateRoutes = () => {
         <Route path="/promotores">
           <Route index element={<Promoters />} />
           <Route path="cadastro" element={<CreatePromoter />} />
+        </Route>
+        <Route path="/terminais">
+          <Route index element={<Terminals />} />
         </Route>
         <Route
           path="*"

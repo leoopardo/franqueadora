@@ -53,7 +53,7 @@ export const MenuItens = (pending: number) => {
         {
           key: "terminais-geral",
           name: "Geral",
-          path: "/terminals",
+          path: "/terminais",
         },
         {
           key: "terminais-pendentes",

@@ -1,13 +1,13 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { Layout, Spin } from "antd";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useGetMe } from "../services/auth/useGetMe";
-import { PrivateRoutes } from "./private";
-import { PublicRoutes } from "./public";
 import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
 import { useTheme } from "../../contexts/themeContext";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
-import { LoadingOutlined } from "@ant-design/icons";
+import { useGetMe } from "../services/auth/useGetMe";
+import { PrivateRoutes } from "./private";
+import { PublicRoutes } from "./public";
 
 export const FranchisorRoutes = (): React.ReactElement => {
   const { refetch, isSuccess, isLoading, error } = useGetMe();
@@ -23,7 +23,6 @@ export const FranchisorRoutes = (): React.ReactElement => {
   }, [token]);
 
   useEffect(() => {
-   
     if (error) {
       navigate("/");
     }

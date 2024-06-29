@@ -1,69 +1,91 @@
+import { z } from "zod";
+import { createResponseSchema } from "../../__interfaces/response.interface";
 import ParamsI from "../../__interfaces/queryParams.interface";
 
-export interface FranchisesI {
-    id?: string;
-    franchise_name?: string;
-    cnpj?: string;
-    active?: boolean;
-    is_deleted?: boolean;
-    created_at?: string;
-    updated_at?: string;
-    tenant_id?: string;
-    ref_id?: string;
-    master_id?: string;
-    username?: string;
-    state_registration?: string;
-    commercial_name?: string;
-    company_name?: string;
-    master?: {
-      id?: string;
-      user_id?: number;
-      name?: string;
-      role?: string;
-      type?: null;
-      phone?: string;
-      email?: string;
-      username?: string;
-      cognito_id?: string;
-      active?: boolean;
-      created_at?: string;
-      updated_at?: string;
-      document?: string;
-      is_deleted?: boolean;
-      is_admin?: boolean;
-      id_role?: string;
-      id_auth?: string;
-      modified_role?: boolean;
-      is_blocked?: boolean;
-      client_id?: string;
-      promoter_id?: string;
-      is_report?: boolean;
-      report_event_id?: [];
-    };
-    FranchisePOSModule?: {
-      POSModule?: {
-        id?: string;
-        name?: string;
-        description?: string;
-      };
-    }[];
-    FranchiseAddress?: {
-      id?: string;
-      franchise_id?: string;
-      cep?: string;
-      address?: string;
-      number?: string;
-      state?: string;
-      city?: string;
-      district?: string;
-      complement?: string;
-      active?: true;
-      created_at?: string;
-      updated_at?: string;
-    };
-  }
-  
-  export interface FranchiseParams extends ParamsI {
-    s?: string;
-    f?: string[];
-  }
+const POSModuleSchema = z
+  .object({
+    id: z.string(),
+    name: z.string(),
+    description: z.string(),
+  })
+  .optional();
+
+const FranchiseAddressSchema = z
+  .object({
+    id: z.string(),
+    franchise_id: z.string(),
+    cep: z.string(),
+    address: z.string(),
+    number: z.string(),
+    state: z.string(),
+    city: z.string(),
+    district: z.string(),
+    complement: z.string(),
+    active: z.boolean(),
+    created_at: z.string(),
+    updated_at: z.string(),
+  })
+  .optional();
+
+const MasterSchema = z
+  .object({
+    id: z.string(),
+    user_id: z.number(),
+    name: z.string(),
+    role: z.string(),
+    type: z.string().nullable(),
+    phone: z.string(),
+    email: z.string(),
+    username: z.string(),
+    cognito_id: z.string(),
+    active: z.boolean(),
+    created_at: z.string(),
+    updated_at: z.string(),
+    document: z.string(),
+    is_deleted: z.boolean(),
+    is_admin: z.boolean(),
+    id_role: z.string(),
+    id_auth: z.string(),
+    modified_role: z.boolean(),
+    is_blocked: z.boolean(),
+    client_id: z.string().nullable(),
+    promoter_id: z.string().nullable(),
+    is_report: z.boolean(),
+    report_event_id: z.any(),
+  })
+  .optional();
+
+export const FranchiseSchema = z.object({
+  id: z.string().optional(),
+  franchise_name: z.string().optional(),
+  cnpj: z.string().optional(),
+  active: z.boolean().optional(),
+  is_deleted: z.boolean().optional(),
+  created_at: z.string().optional(),
+  updated_at: z.string().optional(),
+  tenant_id: z.string().optional(),
+  ref_id: z.string().optional(),
+  master_id: z.string().optional(),
+  username: z.string().optional(),
+  state_registration: z.string().optional(),
+  commercial_name: z.string().optional(),
+  company_name: z.string().optional(),
+  master: MasterSchema,
+  FranchisePOSModule: z
+    .array(
+      z.object({
+        POSModule: POSModuleSchema,
+      })
+    )
+    .optional(),
+  FranchiseAddress: FranchiseAddressSchema,
+});
+
+export const franchiseResponseSchema = createResponseSchema(FranchiseSchema);
+
+export type Franchise = z.infer<typeof FranchiseSchema>;
+
+export interface FranchiseParams extends ParamsI {
+  s?: string;
+  f?: string[];
+}

@@ -3,7 +3,6 @@ import { Dropdown, Table, Typography } from "antd";
 import { Dispatch, SetStateAction } from "react";
 import ParamsI from "../../franchisor/services/__interfaces/queryParams.interface";
 import ResponseI from "../../franchisor/services/__interfaces/response.interface";
-import { useBreakpoints } from "../../hooks/useBreakpoints";
 
 interface ActionsI<RowItemI> {
   label?: string;
@@ -40,7 +39,6 @@ function TableComponent<RowItemI>({
   setParams,
   total,
 }: TableComponentI<RowItemI>) {
-  const { isSm } = useBreakpoints();
   return (
     <Table
       sticky

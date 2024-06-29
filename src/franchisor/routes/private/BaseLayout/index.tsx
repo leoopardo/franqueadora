@@ -1,14 +1,14 @@
 // import { cognitoUserPoolsTokenProvider } from "@aws-amplify/auth/cognito";
 import { Row } from "antd";
 import { Content } from "antd/es/layout/layout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { SiderComponent } from "../../../../components/sider";
+import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
 import { useTheme } from "../../../../contexts/themeContext";
 import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { MenuItens } from "../../../components/sider_menus/menus";
 import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
-import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
 import { useGetMe } from "../../../services/auth/useGetMe";
 
 export const BaseLayout = () => {
@@ -17,13 +17,6 @@ export const BaseLayout = () => {
   const { theme } = useTheme();
   const { setHeader } = useFranchisorAuth();
   const { refetch } = useGetMe();
-
-  // const navigate = useNavigate();
-  useEffect(() => {
-    // if (!secureLocalStorage.getItem("token")) {
-    //   navigate({ to: "/" });
-    // }
-  }, []);
 
   return (
     <SiderComponent

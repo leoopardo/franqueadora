@@ -26,7 +26,6 @@ const types = {
   transaction: "TRANSACTION",
 };
 
-const modules = ["ONLINE_TICKET"]
 
 function parseAgreement(data?: AgreementsI[]) {
   if(!data) return undefined

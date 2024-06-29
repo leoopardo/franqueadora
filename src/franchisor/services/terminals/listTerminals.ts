@@ -1,32 +1,34 @@
 import { useQuery } from "react-query";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
-import ResponseI from "../__interfaces/response.interface";
 import {
-  Franchise,
-  FranchiseParams,
-  franchiseResponseSchema
-} from "./__interfaces/franchises.interface";
+  Terminal,
+  terminalParams,
+  terminalResponseSchema,
+} from "./__interfaces/terminals.interface";
+import { QueryKeys } from "../queryKeys";
+import ResponseI from "../__interfaces/response.interface";
 
-export const useListFranchises = (params: FranchiseParams) => {
+export const useListTerminals = (params: terminalParams) => {
   const { headers } = useFranchisorAuth();
   const { data, error, isLoading, refetch } = useQuery<
-    ResponseI<Franchise> | null | undefined
+    ResponseI<Terminal> | null | undefined
   >(
-    ["listFranchises", params],
+    [QueryKeys.LIST_PROMOTERS, params],
     async () => {
-      const response = await apiFranquia.get(`/franchise/all`, {
+      const response = await apiFranquia.get(`/terminal/all`, {
         headers: headers ?? {},
         params,
       });
-      const parsedResponse = franchiseResponseSchema.safeParse(response.data);
+
+      const parsedResponse = terminalResponseSchema.safeParse(response.data);
       if (!parsedResponse.success) {
         throw new Error((parsedResponse.error as any));
       }
 
       return parsedResponse.data;
     },
-    { enabled: headers && headers["AuthToken"] ? true : false }
+    { enabled: !!headers?.["AuthToken"] }
   );
 
   return {

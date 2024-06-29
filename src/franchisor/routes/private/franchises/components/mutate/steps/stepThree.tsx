@@ -37,7 +37,7 @@ export const StepThree = ({ modules }: stepThreeI) => {
       emission_fee?: boolean;
     }[]
   >([]);
-  const { AgreementsData, parsedData } = useGetAgreements();
+  const { parsedData } = useGetAgreements();
 
   useEffect(() => {
     let m: {

@@ -329,7 +329,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
           <Divider orientation="left">Abrangência</Divider>
         </Col>
-        <Col md={{ span: 8 }} xs={{ span: 24 }}>
+        <Col md={{ span: 6 }} xs={{ span: 24 }}>
           <ProFormSelect
             name="area_code"
             label="Código(s) de área(s)"
@@ -341,7 +341,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
             }))}
             rules={[{ required: true }]}
             onChange={(value: any) => setDDD(value)}
-            fieldProps={{ maxTagCount: 3 }}
+            fieldProps={{ maxTagCount: 1}}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
@@ -356,7 +356,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
             fieldProps={{ maxTagCount: 1, disabled: !ddd.length }}
           />
         </Col>
-        <Col md={{ span: 8 }} xs={{ span: 24 }}>
+        <Col md={{ span: 10 }} xs={{ span: 24 }}>
           <ProFormSelect
             name="module"
             label="Módulos"
