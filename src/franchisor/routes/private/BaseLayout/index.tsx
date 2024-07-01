@@ -10,6 +10,7 @@ import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { MenuItens } from "../../../components/sider_menus/menus";
 import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
 import { useGetMe } from "../../../services/auth/useGetMe";
+import { useGetPendingNumber } from "../../../services/terminals/getPendingNumber";
 
 export const BaseLayout = () => {
   const { isMd } = useBreakpoints();
@@ -17,22 +18,23 @@ export const BaseLayout = () => {
   const { theme } = useTheme();
   const { setHeader } = useFranchisorAuth();
   const { refetch } = useGetMe();
-
+  const pendingNumber = useGetPendingNumber();
   return (
     <SiderComponent
       isMenuOpen={isMenuOpen}
       setIsMenuOpen={setIsMenuOpen}
-      menus={() => MenuItens(100)}
+      menus={() => MenuItens(pendingNumber.data || 0)}
+      pending={pendingNumber.data || 0}
       logout={async () => {
         await congnitoAuthService.signOut();
         setHeader(null);
         refetch();
       }}
+      onChange={() => pendingNumber.refetch()}
     >
       <Content
         style={{
           width: "100%",
-          maxWidth: "92vw",
           height: "100%",
           minHeight: "100vh",
           backgroundSize: "cover",

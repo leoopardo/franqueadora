@@ -1,5 +1,6 @@
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { Dropdown, Table, Typography } from "antd";
+import { TableRowSelection } from "antd/es/table/interface";
 import { Dispatch, SetStateAction } from "react";
 import ParamsI from "../../franchisor/services/__interfaces/queryParams.interface";
 import ResponseI from "../../franchisor/services/__interfaces/response.interface";
@@ -28,6 +29,7 @@ interface TableComponentI<RowItemI> {
   params?: ParamsI;
   setParams?: Dispatch<SetStateAction<ParamsI>>;
   total?: number;
+  rowSelection?: TableRowSelection<RowItemI>;
 }
 
 function TableComponent<RowItemI>({
@@ -38,13 +40,24 @@ function TableComponent<RowItemI>({
   params,
   setParams,
   total,
+  rowSelection,
 }: TableComponentI<RowItemI>) {
   return (
     <Table
-      sticky
+      sticky={{ offsetHeader: 64 }}
       tableLayout="auto"
+      rowKey={"id" || "ref_id"}
       style={{ borderRadius: 8, border: "1px solid rgba(200, 200, 200, 0.3)" }}
       loading={loading}
+      rowSelection={
+        rowSelection
+          ? {
+              type: rowSelection ? "checkbox" : undefined,
+
+              ...rowSelection,
+            }
+          : undefined
+      }
       columns={[
         ...(columns?.map((c: any) =>
           c.custom
@@ -58,6 +71,9 @@ function TableComponent<RowItemI>({
                   </div>
                 ),
                 width: c.width,
+                ellipsis: {
+                  showTitle: false,
+                },
               }
             : {
                 title: c.head ?? c.key,
@@ -70,13 +86,23 @@ function TableComponent<RowItemI>({
                     </Typography.Text>
                   </div>
                 ),
+                ellipsis: {
+                  showTitle: false,
+                },
               }
         ) as any),
         {
           key: "actions",
           title: "Ações",
           render: (_value: any, row: any) => (
-            <div style={{ minWidth:  48 }}>
+            <div
+              style={{
+                minWidth: 48,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <Dropdown
                 menu={{
                   items:
@@ -101,6 +127,7 @@ function TableComponent<RowItemI>({
               </Dropdown>
             </div>
           ),
+          fixed: "right",
         },
       ]}
       dataSource={data ? (data.items as any) : []}
@@ -110,6 +137,7 @@ function TableComponent<RowItemI>({
         showSizeChanger: true,
         total: data?.totalItems ?? total,
         current: (data?.page || 0) + 1,
+        style: { paddingRight: 16 },
         onShowSizeChange: (_current, size) =>
           setParams && setParams((state) => ({ ...state, size })),
         onChange(page) {

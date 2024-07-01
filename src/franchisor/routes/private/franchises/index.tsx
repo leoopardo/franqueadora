@@ -20,10 +20,12 @@ import {
 import { useListFranchises } from "../../../services/franchises/listFranchises";
 import { useActivateFranchise } from "../../../services/franchises/activateFranchise.ts";
 import { useInactivateFranchise } from "../../../services/franchises/inactivateFranchise";
+import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 
 export const Franchises = () => {
   const [params, setParams] = useState<FranchiseParams>({ page: 1, size: 15 });
   const { data, isLoading } = useListFranchises(params);
+  const {isSm} = useBreakpoints()
   const activate = useActivateFranchise();
   const inactivate = useInactivateFranchise();
 
@@ -44,7 +46,7 @@ export const Franchises = () => {
   }, 500);
 
   return (
-    <Row style={{ width: "100%", padding: 40 }} align="middle" gutter={[8, 8]}>
+    <Row style={{ width: "100%", padding: isSm ? 12 : 40 }} align="middle" gutter={[8, 8]}>
       <Col xs={{ span: 24 }} md={{ span: 12 }}>
         <PageHeader
           title="Franquias"
@@ -63,7 +65,7 @@ export const Franchises = () => {
       <Col xs={{ span: 24 }} md={{ span: 5 }}>
         <Link to={"cadastro"}>
           <Button
-            style={{ width: "100%", boxShadow: "none" }}
+            style={{ width: "100%", }}
             size="large"
             type="primary"
             shape="round"

@@ -1,27 +1,26 @@
 import { useQuery } from "react-query";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
-import {
-  Terminal,
-  terminalParams,
-  terminalResponseSchema,
-} from "./__interfaces/terminals.interface";
 import { QueryKeys } from "../queryKeys";
-import ResponseI from "../__interfaces/response.interface";
+import {
+  Total,
+  terminalTotalParams,
+  terminalTotalSchema,
+} from "./__interfaces/totalizers.interface";
 
-export const useListTerminals = (params: terminalParams) => {
+export const useTerminalTotals = (params: terminalTotalParams) => {
   const { headers } = useFranchisorAuth();
   const { data, error, isLoading, refetch } = useQuery<
-    ResponseI<Terminal> | null | undefined
+    Total | null | undefined
   >(
-    [QueryKeys.LIST_TERMINALS, params],
+    [QueryKeys.GET_TERMINAL_TOTALS, params],
     async () => {
-      const response = await apiFranquia.get(`/terminal/all`, {
+      const response = await apiFranquia.get(`/terminal/totalizers`, {
         headers: headers ?? {},
         params,
       });
 
-      const parsedResponse = terminalResponseSchema.safeParse(response.data);
+      const parsedResponse = terminalTotalSchema.safeParse(response.data);
       if (!parsedResponse.success) {
         throw new Error(parsedResponse.error as any);
       }

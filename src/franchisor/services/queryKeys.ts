@@ -9,4 +9,12 @@ export enum QueryKeys {
   ACTIVATE_PROMOTER = "activatePromoter",
   CREATE_PROMOTER = "createPromoter",
   UPDATE_PROMOTER = "updatePromoter",
+  LIST_TERMINALS = "listTerminals",
+  GET_TERMINAL_TOTALS = "getTerminalTotals",
+  ACTIVATE_TERMINAL = "activateTerminal",
+  INACTIVATE_TERMINAL = "inactivateTerminal",
+  APPROVE_TERMINALS = "approveTerminals",
+  REPROVE_TERMINAL = "reproveTerminals",
+  PENDING_NUMBER = "pendingNumber",
+  LIST_PENDING_TERMINALS = "listPendingTerminals",
 }

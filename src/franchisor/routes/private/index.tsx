@@ -6,6 +6,7 @@ import { CreateFranchise } from "./franchises/create";
 import { Promoters } from "./promoters";
 import { CreatePromoter } from "./promoters/create";
 import { Terminals } from "./terminals";
+import { Pending } from "./terminals/pending";
 
 export const PrivateRoutes = () => {
   return (
@@ -21,6 +22,7 @@ export const PrivateRoutes = () => {
         </Route>
         <Route path="/terminais">
           <Route index element={<Terminals />} />
+          <Route path="pendentes" element={<Pending />} />
         </Route>
         <Route
           path="*"

@@ -21,8 +21,10 @@ interface SiderComponentI {
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
   children: ReactNode;
   menus: (PendinCount: number) => MenuDataItem[];
+  pending?: number;
   franquia?: boolean;
   logout?: () => void;
+  onChange?: (item: any) => void;
 }
 
 export const SiderComponent = ({
@@ -32,6 +34,8 @@ export const SiderComponent = ({
   menus,
   franquia,
   logout,
+  onChange,
+  pending,
 }: SiderComponentI) => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
@@ -39,17 +43,14 @@ export const SiderComponent = ({
 
   return (
     <ProLayout
-      fixSiderbar
-      fixedHeader
       pageTitleRender={false}
-      menuDataRender={() => menus(100)}
+      menuDataRender={() => menus(pending || 0)}
       contentStyle={{
         padding: 0,
         margin: 0,
         display: "flex",
         justifyContent: "center",
       }}
-      layout="side"
       collapsed={!isMenuOpen}
       onCollapse={(collapsed) => setIsMenuOpen(!collapsed)}
       logo={
@@ -116,10 +117,16 @@ export const SiderComponent = ({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                cursor: item.disabled ? "no-drop" : "pointer"
+                cursor: item.disabled ? "no-drop" : "pointer",
               }}
+              onClick={onChange ? () => onChange(item) : undefined}
             >
-              {dom} <Badge color="green" count={100}></Badge>
+              {dom}{" "}
+              {pending && pending >= 1 ? (
+                <Badge color="green" count={pending || 0}></Badge>
+              ) : (
+                <></>
+              )}
             </Link>
           );
         }
@@ -127,6 +134,7 @@ export const SiderComponent = ({
           <Link
             to={item.disabled ? "#" : item.path ?? ""}
             style={{ cursor: item.disabled ? "no-drop" : "pointer" }}
+            onClick={onChange ? () => onChange(item) : undefined}
           >
             {dom}
           </Link>
@@ -168,7 +176,6 @@ export const SiderComponent = ({
                   alignItems: "center",
                   backgroundColor: "transparent",
                   border: "none",
-                  boxShadow: "none",
                   fontSize: 15,
                 }}
                 icon={<ArrowRightOutlined />}
@@ -186,7 +193,6 @@ export const SiderComponent = ({
                 alignItems: "center",
                 backgroundColor: "transparent",
                 border: "none",
-                boxShadow: "none",
                 fontSize: 15,
               }}
               icon={<UserOutlined />}
@@ -210,7 +216,6 @@ export const SiderComponent = ({
                   alignItems: "center",
                   backgroundColor: "transparent",
                   border: "none",
-                  boxShadow: "none",
                   fontSize: 15,
                 }}
                 icon={<LogoutOutlined />}

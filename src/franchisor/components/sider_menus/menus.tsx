@@ -40,11 +40,7 @@ export const MenuItens = (pending: number) => {
       name: "Terminais",
       path: "/terminals",
       icon: (
-        <Badge
-          size="small"
-          color="green"
-          count={pending}
-        >
+        <Badge size="small" color="green" count={pending}>
           <CalculatorIcon width={pending ? 20 : 24} />
         </Badge>
       ),
@@ -58,7 +54,7 @@ export const MenuItens = (pending: number) => {
         {
           key: "terminais-pendentes",
           name: "Pendentes",
-          path: "/terminals/pending",
+          path: "/terminais/pendentes",
           label: (
             <div
               style={{
@@ -69,7 +65,9 @@ export const MenuItens = (pending: number) => {
               }}
             >
               Pendentes{" "}
-              <Badge size="small" color="green" count={pending}></Badge>
+              {pending && (
+                <Badge size="small" color="green" count={pending}></Badge>
+              )}
             </div>
           ),
         },

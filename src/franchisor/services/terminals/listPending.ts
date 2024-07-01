@@ -1,27 +1,23 @@
 import { useQuery } from "react-query";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
-import {
-  Terminal,
-  terminalParams,
-  terminalResponseSchema,
-} from "./__interfaces/terminals.interface";
-import { QueryKeys } from "../queryKeys";
 import ResponseI from "../__interfaces/response.interface";
+import { QueryKeys } from "../queryKeys";
+import { PendingType, pendingTerminalParams, pendingTerminalResponseSchema } from "./__interfaces/pending.interface";
 
-export const useListTerminals = (params: terminalParams) => {
+export const useListPending = (params: pendingTerminalParams) => {
   const { headers } = useFranchisorAuth();
   const { data, error, isLoading, refetch } = useQuery<
-    ResponseI<Terminal> | null | undefined
+    ResponseI<PendingType> | null | undefined
   >(
-    [QueryKeys.LIST_TERMINALS, params],
+    [QueryKeys.LIST_PENDING_TERMINALS, params],
     async () => {
-      const response = await apiFranquia.get(`/terminal/all`, {
+      const response = await apiFranquia.get(`/terminal/pending`, {
         headers: headers ?? {},
         params,
       });
 
-      const parsedResponse = terminalResponseSchema.safeParse(response.data);
+      const parsedResponse = pendingTerminalResponseSchema.safeParse(response.data);
       if (!parsedResponse.success) {
         throw new Error(parsedResponse.error as any);
       }

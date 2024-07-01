@@ -5,17 +5,17 @@ import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
 import { queryClient } from "../../../services/queryClient";
 import ResponseI from "../__interfaces/response.interface";
 import { QueryKeys } from "../queryKeys";
-import { PromotersI } from "./__interfaces/promoters.interface";
+import { Promoter } from "./__interfaces/promoters.interface";
 
 interface InactivatePromoterArgs {
-  body: PromotersI;
+  body: Promoter;
   id: string;
 }
 
 export const useInactivatePromoter = () => {
   const { headers } = useFranchisorAuth();
   const mutation = useMutation<
-    ResponseI<PromotersI> | null | undefined,
+    ResponseI<Promoter> | null | undefined,
     unknown,
     InactivatePromoterArgs
   >({

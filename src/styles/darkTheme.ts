@@ -29,18 +29,19 @@ const Dark: ThemeConfig = {
     FloatButton: { colorBgElevated: "#e4e4e4" },
 
     Button: {
-      colorTextLightSolid:
-        import.meta.env.VITE_APP_BUTTON === "dark"
-          ? "rgba(0, 0, 0, 0.88)"
-          : "#fff",
-          controlHeightLG: 38 
+      colorTextLightSolid: "rgba(0, 0, 0, 0.88)",
+      fontWeight: 500,
+      controlHeightLG: 38,
+      boxShadowSecondary: "none",
+      primaryShadow: "none",
+      dangerShadow: "none",
     },
     Select: {
       controlItemBgActive: "#303030",
     },
     Table: {
-      controlItemBgActive: defaultTheme.primary,
-      controlItemBgActiveHover: "#c0c0c09f",
+      controlItemBgActive: defaultTheme["primary-200"],
+      controlItemBgActiveHover: defaultTheme["primary-300"],
     },
     Card: {
       boxShadow: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)",

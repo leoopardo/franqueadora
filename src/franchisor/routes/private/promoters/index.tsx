@@ -14,18 +14,20 @@ import useDebounce from "../../../../hooks/useDebounce";
 import defaultTheme from "../../../../styles/default";
 import { formatCNPJ, formatCpfCnpj } from "../../../../utils/regexFormat";
 import {
-  PromotersI,
+  Promoter,
   PromotersParams,
 } from "../../../services/promoters/__interfaces/promoters.interface";
 import { useActivatePromoter } from "../../../services/promoters/activatePromoter";
 import { useInactivatePromoter } from "../../../services/promoters/inactivatePromoter";
 import { useListPromoters } from "../../../services/promoters/listPromoters";
+import { useBreakpoints } from "@hooks/useBreakpoints";
 
 export const Promoters = () => {
   const [params, setParams] = useState<PromotersParams>({ page: 1, size: 15 });
   const inactivate = useInactivatePromoter();
   const activate = useActivatePromoter();
   const { data, isLoading } = useListPromoters(params);
+  const { isSm } = useBreakpoints();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -46,7 +48,11 @@ export const Promoters = () => {
   }, 500);
 
   return (
-    <Row style={{ width: "100%", padding: 40 }} align="middle" gutter={[8, 8]}>
+    <Row
+      style={{ width: "100%", padding: isSm ? 12 : 40 }}
+      align="middle"
+      gutter={[8, 8]}
+    >
       <Col xs={{ span: 24 }} md={{ span: 12 }}>
         <PageHeader
           title="Promotores"
@@ -74,7 +80,7 @@ export const Promoters = () => {
         </Link>
       </Col>
       <Col span={24}>
-        <TableComponent<PromotersI>
+        <TableComponent<Promoter>
           loading={isLoading}
           data={data}
           params={params}

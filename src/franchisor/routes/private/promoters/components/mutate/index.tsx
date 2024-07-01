@@ -164,7 +164,6 @@ export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
           shape="round"
           size="large"
           type="primary"
-          style={{ boxShadow: "none" }}
         >
           Próxima etapa
         </Button>

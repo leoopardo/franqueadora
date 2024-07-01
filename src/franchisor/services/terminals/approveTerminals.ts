@@ -5,41 +5,36 @@ import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
 import { queryClient } from "../../../services/queryClient";
 import ResponseI from "../__interfaces/response.interface";
 import { QueryKeys } from "../queryKeys";
-import { Promoter } from "./__interfaces/promoters.interface";
+import { Terminal } from "./__interfaces/terminals.interface";
 
-interface ActivatePromoterArgs {
-  body: Promoter;
-  id: string;
-}
-
-export const useActivatePromoter = () => {
+export const useApproveTerminals = () => {
   const { headers } = useFranchisorAuth();
   const mutation = useMutation<
-    ResponseI<Promoter> | null | undefined,
+    ResponseI<Terminal> | null | undefined,
     unknown,
-    ActivatePromoterArgs
+    string[]
   >({
-    mutationFn: async ({ body, id }) => {
-      const response = await apiFranquia.put(`/promoter/enable/${id}`, body, {
+    mutationFn: async (terminals) => {
+      const response = await apiFranquia.put(`/terminal/pending/approve`, terminals, {
         headers: { ...headers },
       });
       await queryClient.refetchQueries({
-        queryKey: [QueryKeys.LIST_PROMOTERS],
+        queryKey: [QueryKeys.LIST_PENDING_TERMINALS],
       });
       return response.data;
     },
-    mutationKey: QueryKeys.ACTIVATE_PROMOTER,
+    mutationKey: QueryKeys.APPROVE_TERMINALS,
   });
 
   const { data, error, isLoading, mutate, reset, isSuccess } = mutation;
 
   if (isSuccess) {
-    notification.success({ message: "Promotor habilitado com sucesso!" });
+    notification.success({ message: "Terminalis aprovados com sucesso!" });
     reset();
   }
   if (error) {
     notification.error({
-      message: "Não foi possível habilitar promotor.",
+      message: "Não foi possível aprovar os terminais.",
       description: (error as any)?.response?.data?.message,
     });
     reset();

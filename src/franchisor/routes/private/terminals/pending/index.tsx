@@ -1,35 +1,32 @@
-import { Bars3BottomLeftIcon, PencilIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
-import { Button, Col, Input, Row, Switch, Typography } from "antd";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { PageHeader } from "../../../../components/header/pageHeader";
-import TableComponent from "../../../../components/table/tableComponent";
-import useDebounce from "../../../../hooks/useDebounce";
-import { formatCNPJ, formatCpfCnpj } from "../../../../utils/regexFormat";
+import { CloseOutlined } from "@ant-design/icons";
+import { PageHeader } from "@components/header/pageHeader";
+import TableComponent from "@components/table/tableComponent";
 import {
-  Terminal,
-  terminalParams,
-} from "../../../services/terminals/__interfaces/terminals.interface.ts";
-import { useActivateTerminal } from "../../../services/terminals/activateTerminals.ts";
-import { useTerminalTotals } from "../../../services/terminals/getTerminalTotals.ts";
-import { useInactivateTerminal } from "../../../services/terminals/inactivateTerminals.ts";
-import { useListTerminals } from "../../../services/terminals/listTerminals.ts";
-import { Totalizer } from "./components/Totalizer.tsx";
-import { useBreakpoints } from "@hooks/useBreakpoints.ts";
+  PendingType,
+  pendingTerminalParams,
+} from "@franchisor/services/terminals/__interfaces/pending.interface";
+import { useApproveTerminals } from "@franchisor/services/terminals/approveTerminals";
+import { useListPending } from "@franchisor/services/terminals/listPending";
+import {
+  Bars3BottomLeftIcon,
+  CheckIcon,
+  PencilIcon,
+} from "@heroicons/react/24/outline";
+import { useBreakpoints } from "@hooks/useBreakpoints";
+import useDebounce from "@hooks/useDebounce";
+import { formatCNPJ, formatCpfCnpj } from "@utils/regexFormat";
+import { Button, Col, Input, Row, Typography } from "antd";
+import { useState } from "react";
 
-export const Terminals = () => {
-  const [params, setParams] = useState<terminalParams>({ page: 1, size: 15 });
-  const { data, isLoading } = useListTerminals(params);
-  const activate = useActivateTerminal();
-  const inactivate = useInactivateTerminal();
-  const totals = useTerminalTotals({
+export const Pending = () => {
+  const [params, setParams] = useState<pendingTerminalParams>({
     page: 1,
-    size: 50,
-    f: params.f,
-    s: params.s,
+    size: 15,
   });
-  const [selectedRows, setSelectedRows] = useState<Terminal[]>([]);
+  const { data, isLoading } = useListPending(params);
+  const [selectedRows, setSelectedRows] = useState<PendingType[]>([]);
   const { isSm } = useBreakpoints();
+  const approveTerminals = useApproveTerminals();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -55,10 +52,10 @@ export const Terminals = () => {
       align="middle"
       gutter={[8, 16]}
     >
-      <Col xs={{ span: 24 }} md={{ span: 10 }}>
+      <Col xs={{ span: 24 }} md={{ span: 15 }}>
         <PageHeader
-          title="Terminais"
-          subtitle="Visualize e gerencie todas os terminais cadastrados."
+          title="Terminais pendentes"
+          subtitle="Visualize e gerencie todos os terminais pendentes de aprovação."
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 6 }}>
@@ -70,7 +67,7 @@ export const Terminals = () => {
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 3 }}>
-      <Button
+        <Button
           style={{
             width: "100%",
             display: "flex",
@@ -84,52 +81,70 @@ export const Terminals = () => {
           Filtros
         </Button>
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 5 }}>
-        <Link to={"cadastro"}>
-          <Button
-            style={{ width: "100%" }}
-            size="large"
-            type="primary"
-            shape="round"
-          >
-            Cadastrar franquia
-          </Button>
-        </Link>
-      </Col>
-      <Col span={24}>
-        <Totalizer
-          content={totals?.data?.content}
-          setParams={setParams}
-          params={params}
-          loading={totals.isLoading}
-        />
-      </Col>
+
       {selectedRows.length >= 1 && (
-        <Col
-          span={24}
+        <Row
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            width: "100%",
           }}
-          hidden
         >
-          <Typography>
-            {selectedRows.length} item{selectedRows.length >= 2 && "s"}{" "}
-            selecionado{selectedRows.length >= 2 && "s"}
-          </Typography>
-          <Button
-            size="large"
-            shape="round"
-            icon={<PencilSquareIcon style={{ width: 16 }} />}
-            style={{ display: "flex", alignItems: "center" }}
-          >
-            Editar em lote
-          </Button>
-        </Col>
+          <Col span={4}>
+            <Typography>
+              {selectedRows.length} item{selectedRows.length >= 2 && "s"}{" "}
+              selecionado{selectedRows.length >= 2 && "s"}
+            </Typography>
+          </Col>
+          <Col span={9}>
+            <Row style={{ width: "100%" }} gutter={8}>
+              <Col span={12}>
+                <Button
+                  size="large"
+                  shape="round"
+                  type="primary"
+                  danger
+                  icon={<CloseOutlined style={{ height: 22 }} />}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                  }}
+                >
+                  Reprovar selecionados
+                </Button>
+              </Col>
+              <Col span={12}>
+                <Button
+                  size="large"
+                  shape="round"
+                  type="primary"
+                  icon={<CheckIcon style={{ height: 22 }} />}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: "100%",
+                  }}
+                  loading={approveTerminals.isLoading}
+                  onClick={() =>
+                    selectedRows.length >= 1 &&
+                    approveTerminals.mutate(
+                      selectedRows?.map((t) => t.id ?? "")
+                    )
+                  }
+                >
+                  Aprovar selecionados
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
       )}
       <Col span={24}>
-        <TableComponent<Terminal>
+        <TableComponent<PendingType>
           rowSelection={{ onChange: (_rowKeys, rows) => setSelectedRows(rows) }}
           loading={isLoading}
           data={data}
@@ -141,29 +156,13 @@ export const Terminals = () => {
               onClick: (row) => console.log(row),
               icon: <PencilIcon style={{ width: 16 }} />,
             },
+            {
+              label: "Aprovar",
+              onClick: (row) => approveTerminals.mutate([row?.id ?? ""]),
+              icon: <CheckIcon style={{ height: 16 }} />,
+            },
           ]}
           columns={[
-            {
-              key: "active",
-              head: "Status",
-              custom: (row) => (
-                <Switch
-                  checked={row.active}
-                  loading={inactivate.isLoading || activate.isLoading}
-                  onChange={(checked) => {
-                    !checked
-                      ? inactivate.mutate({
-                          body: { active: checked },
-                          id: row.id ?? "",
-                        })
-                      : activate.mutate({
-                          body: { active: checked },
-                          id: row.id ?? "",
-                        });
-                  }}
-                />
-              ),
-            },
             { key: "ref_id", head: "ID" },
             { key: "serial_number", head: "Número de serial", width: 80 },
             {

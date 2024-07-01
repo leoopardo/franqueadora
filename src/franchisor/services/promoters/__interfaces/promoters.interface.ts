@@ -1,23 +1,29 @@
+import { z } from "zod";
 import ParamsI from "../../__interfaces/queryParams.interface";
+import { createResponseSchema } from "../../__interfaces/response.interface";
 
-export interface PromotersI {
-  active?: boolean;
-  city?: string;
-  client_manage?: boolean;
-  franchise_cnpj?: string;
-  franchise_id?: string;
-  franchise_name?: string;
-  id?: string;
-  is_physical_person?: boolean;
-  missing_agreements?: boolean;
-  modules?: string[];
-  promoter_document?: string;
-  promoter_name?: string;
-  ref_id?: string;
-  state?: string;
-  use_products_database?: boolean;
-  username?: string
-}
+const PromoterSchema = z.object({
+  active: z.boolean().optional(),
+  city: z.string().optional(),
+  client_manage: z.boolean().optional(),
+  franchise_cnpj: z.string().optional(),
+  franchise_id: z.string().optional(),
+  franchise_name: z.string().optional(),
+  id: z.string().optional(),
+  is_physical_person: z.boolean().optional(),
+  missing_agreements: z.boolean().optional(),
+  modules: z.array(z.any()).optional(),
+  promoter_document: z.string().optional(),
+  promoter_name: z.string().optional(),
+  ref_id: z.string().optional(),
+  state: z.string().optional(),
+  use_products_database: z.boolean().optional(),
+  username: z.string().optional(),
+});
+
+export const peomoterResponseSchema = createResponseSchema(PromoterSchema);
+
+export type Promoter = z.infer<typeof PromoterSchema>;
 
 export interface PromotersParams extends ParamsI {
   s?: string;

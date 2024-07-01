@@ -5,41 +5,41 @@ import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
 import { queryClient } from "../../../services/queryClient";
 import ResponseI from "../__interfaces/response.interface";
 import { QueryKeys } from "../queryKeys";
-import { Promoter } from "./__interfaces/promoters.interface";
+import { Terminal } from "./__interfaces/terminals.interface";
 
-interface ActivatePromoterArgs {
-  body: Promoter;
+interface InactivateTerminalArgs {
+  body: Terminal;
   id: string;
 }
 
-export const useActivatePromoter = () => {
+export const useInactivateTerminal = () => {
   const { headers } = useFranchisorAuth();
   const mutation = useMutation<
-    ResponseI<Promoter> | null | undefined,
+    ResponseI<Terminal> | null | undefined,
     unknown,
-    ActivatePromoterArgs
+    InactivateTerminalArgs
   >({
     mutationFn: async ({ body, id }) => {
-      const response = await apiFranquia.put(`/promoter/enable/${id}`, body, {
+      const response = await apiFranquia.put(`/terminal/disable/${id}`, body, {
         headers: { ...headers },
       });
       await queryClient.refetchQueries({
-        queryKey: [QueryKeys.LIST_PROMOTERS],
+        queryKey: [QueryKeys.LIST_TERMINALS],
       });
       return response.data;
     },
-    mutationKey: QueryKeys.ACTIVATE_PROMOTER,
+    mutationKey: QueryKeys.INACTIVATE_TERMINAL,
   });
 
   const { data, error, isLoading, mutate, reset, isSuccess } = mutation;
 
   if (isSuccess) {
-    notification.success({ message: "Promotor habilitado com sucesso!" });
+    notification.success({ message: "Terminal desabilitado com sucesso!" });
     reset();
   }
   if (error) {
     notification.error({
-      message: "Não foi possível habilitar promotor.",
+      message: "Não foi possível desabilitar o terminal.",
       description: (error as any)?.response?.data?.message,
     });
     reset();
