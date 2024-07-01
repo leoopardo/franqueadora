@@ -10,7 +10,7 @@ import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { MenuItens } from "../../../components/sider_menus/menus";
 import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
 import { useGetMe } from "../../../services/auth/useGetMe";
-import { useGetPendingNumber } from "../../../services/terminals/getPendingNumber";
+import { useGetPendingNumber } from "@franchisor/services/terminals/pending/getPendingNumber";
 
 export const BaseLayout = () => {
   const { isMd } = useBreakpoints();

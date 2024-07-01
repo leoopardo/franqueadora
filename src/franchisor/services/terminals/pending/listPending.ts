@@ -1,10 +1,13 @@
 import { useQuery } from "react-query";
-import { apiFranquia } from "../../../config/apiFranquia";
-import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
-import ResponseI from "../__interfaces/response.interface";
-import { QueryKeys } from "../queryKeys";
-import { PendingType, pendingTerminalParams, pendingTerminalResponseSchema } from "./__interfaces/pending.interface";
-
+import {
+  PendingType,
+  pendingTerminalParams,
+  pendingTerminalResponseSchema,
+} from "../__interfaces/pending.interface";
+import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
+import ResponseI from "@franchisor/services/__interfaces/response.interface";
+import { QueryKeys } from "@franchisor/services/queryKeys";
+import { apiFranquia } from "@config/apiFranquia";
 export const useListPending = (params: pendingTerminalParams) => {
   const { headers } = useFranchisorAuth();
   const { data, error, isLoading, refetch } = useQuery<
@@ -17,7 +20,9 @@ export const useListPending = (params: pendingTerminalParams) => {
         params,
       });
 
-      const parsedResponse = pendingTerminalResponseSchema.safeParse(response.data);
+      const parsedResponse = pendingTerminalResponseSchema.safeParse(
+        response.data
+      );
       if (!parsedResponse.success) {
         throw new Error(parsedResponse.error as any);
       }

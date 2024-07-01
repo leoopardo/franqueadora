@@ -1,11 +1,11 @@
 import { notification } from "antd";
 import { useMutation } from "react-query";
-import { apiFranquia } from "../../../config/apiFranquia";
-import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
-import { queryClient } from "../../../services/queryClient";
-import ResponseI from "../__interfaces/response.interface";
-import { QueryKeys } from "../queryKeys";
-import { Terminal } from "./__interfaces/terminals.interface";
+import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
+import ResponseI from "@franchisor/services/__interfaces/response.interface";
+import { Terminal } from "../__interfaces/terminals.interface";
+import { apiFranquia } from "@config/apiFranquia";
+import { queryClient } from "../../../../services/queryClient";
+import { QueryKeys } from "@franchisor/services/queryKeys";
 
 export const useApproveTerminals = () => {
   const { headers } = useFranchisorAuth();

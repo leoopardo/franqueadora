@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
-import { apiFranquia } from "../../../config/apiFranquia";
-import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
-import { QueryKeys } from "../queryKeys";
+import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
+import { QueryKeys } from "@franchisor/services/queryKeys";
+import { apiFranquia } from "@config/apiFranquia";
 
 export const useGetPendingNumber = () => {
   const { headers } = useFranchisorAuth();

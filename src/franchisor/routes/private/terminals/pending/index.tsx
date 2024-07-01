@@ -5,8 +5,9 @@ import {
   PendingType,
   pendingTerminalParams,
 } from "@franchisor/services/terminals/__interfaces/pending.interface";
-import { useApproveTerminals } from "@franchisor/services/terminals/approveTerminals";
-import { useListPending } from "@franchisor/services/terminals/listPending";
+import { useApproveTerminals } from "@franchisor/services/terminals/pending/approveTerminals";
+import { useListPending } from "@franchisor/services/terminals/pending/listPending";
+import { useReproveTerminals } from "@franchisor/services/terminals/pending/reproveTerminals";
 import {
   Bars3BottomLeftIcon,
   CheckIcon,
@@ -27,6 +28,7 @@ export const Pending = () => {
   const [selectedRows, setSelectedRows] = useState<PendingType[]>([]);
   const { isSm } = useBreakpoints();
   const approveTerminals = useApproveTerminals();
+  const reproveTerminals = useReproveTerminals();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -112,6 +114,12 @@ export const Pending = () => {
                     justifyContent: "center",
                     width: "100%",
                   }}
+                  onClick={() =>
+                    selectedRows.length >= 1 &&
+                    reproveTerminals.mutate(
+                      selectedRows?.map((t) => t.id ?? "")
+                    )
+                  }
                 >
                   Reprovar selecionados
                 </Button>
@@ -159,6 +167,11 @@ export const Pending = () => {
             {
               label: "Aprovar",
               onClick: (row) => approveTerminals.mutate([row?.id ?? ""]),
+              icon: <CheckIcon style={{ height: 16 }} />,
+            },
+            {
+              label: "Reprovar",
+              onClick: (row) => reproveTerminals.mutate([row?.id ?? ""]),
               icon: <CheckIcon style={{ height: 16 }} />,
             },
           ]}
