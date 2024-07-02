@@ -16,6 +16,7 @@ export const MenuItens = (pending: number) => {
       name: "Dashboard",
       path: "/dashboard",
       icon: <Squares2X2Icon width={24} />,
+      disabled: true,
     },
     {
       key: "franquias",
@@ -32,7 +33,7 @@ export const MenuItens = (pending: number) => {
     {
       key: "clientes",
       name: "Clientes",
-      path: "/clients",
+      path: "/clientes",
       icon: <UserGroupIcon width={24} />,
     },
     {
@@ -75,6 +76,7 @@ export const MenuItens = (pending: number) => {
           key: "terminais-rastreamentos",
           name: "Rastreamento",
           path: "/terminals/tracking",
+          disabled: true,
         },
         {
           key: "terminais-adquirentes",
@@ -103,6 +105,7 @@ export const MenuItens = (pending: number) => {
           key: "logs",
           name: "Central de logs",
           path: "/users/logs",
+          disabled: true,
         },
       ],
     },
@@ -111,6 +114,7 @@ export const MenuItens = (pending: number) => {
       name: "Relatórios",
       path: "/reports",
       icon: <DocumentIcon width={24} />,
+      disabled: true,
     },
   ];
 };
