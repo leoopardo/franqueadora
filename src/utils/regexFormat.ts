@@ -18,10 +18,10 @@ export const formatCellPhoneBR = (value: string) => {
   return value;
 };
 
-export const formatCPF = (value: string) => {
-  if (!value) return value;
-  value = value.replace(/\D/g, ""); // Remove qualquer caractere que não seja dígito
-  value = value.substring(0, 11); // Garante que só há no máximo 11 dígitos
+export const formatCPF = (value: string | number) => {
+  if (!value) return "-";
+  value = `${value}`.replace(/\D/g, ""); // Remove qualquer caractere que não seja dígito
+  value = `${value}`.substring(0, 11); // Garante que só há no máximo 11 dígitos
   if (value.length <= 11) {
     return value
       .replace(/^(\d{3})(\d)/, "$1.$2")
@@ -31,8 +31,9 @@ export const formatCPF = (value: string) => {
   return value;
 };
 
-export function formatCNPJ(CNPJ: string | '') {
-  const cleanedCNPJ = CNPJ?.replace(/\D/g, '');
+export function formatCNPJ(CNPJ?: string | number) {
+  if(!CNPJ) return "-"
+  const cleanedCNPJ = `${CNPJ}`?.replace(/\D/g, '');
   if (!cleanedCNPJ || cleanedCNPJ.length !== 14) {
     return '-';
   }
@@ -41,4 +42,16 @@ export function formatCNPJ(CNPJ: string | '') {
     /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
     "$1.$2.$3/$4-$5"
   );
+}
+
+export function formatCpfCnpj(value: string | number) {
+  let cleanValue: string | number = `${value}`.replace(/\D/g, '')
+
+  if (cleanValue.length < 12) {
+    cleanValue = formatCPF(value);
+  } else {
+    cleanValue = formatCNPJ(value);
+  }
+
+  return cleanValue;
 }

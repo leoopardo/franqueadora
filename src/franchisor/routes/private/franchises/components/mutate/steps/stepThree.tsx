@@ -4,6 +4,7 @@ import { Button, Col, Divider, Input, Row } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { CurrencyInput } from "react-currency-mask";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
+import { useGetAgreements } from "../../../../../../services/utils/getAgreements";
 
 interface moduleType {
   name: string;
@@ -16,10 +17,111 @@ interface moduleType {
   credit_spread: boolean;
   emission_fee: boolean;
 }
-export const StepThree = () => {
+
+interface stepThreeI {
+  modules: string[];
+}
+export const StepThree = ({ modules }: stepThreeI) => {
   const stepOneRef = useRef<any>(null);
   const { isXs } = useBreakpoints();
   const [updateFees, setUpdateFees] = useState<boolean>(false);
+  const [activeModules, setActiveModules] = useState<
+    {
+      label: string;
+      name: string;
+      antifraud?: boolean;
+      pay365_fee?: boolean;
+      transaction?: boolean;
+      franchisor_result?: boolean;
+      credit_result?: boolean;
+      emission_fee?: boolean;
+    }[]
+  >([]);
+  const { parsedData } = useGetAgreements();
+
+  useEffect(() => {
+    let m: {
+      label: string;
+      name: string;
+      antifraud?: boolean;
+      pay365_fee?: boolean;
+      transaction?: boolean;
+      franchisor_result?: boolean;
+      credit_result?: boolean;
+      emission_fee?: boolean;
+      credid_spread?: boolean;
+    }[] = [];
+    if (modules.includes("Ingresso")) {
+      m.push(
+        {
+          label: "Ingresso online",
+          name: "online_ticket",
+          antifraud: true,
+          transaction: true,
+          pay365_fee: true,
+          credit_result: true,
+          franchisor_result: true,
+        },
+        {
+          label: "Ingresso físico (produtor)",
+          name: "physical_producer_ticket",
+          emission_fee: true,
+          pay365_fee: true,
+          credit_result: true,
+          franchisor_result: true,
+        },
+        {
+          label: "Ingresso físico (consumidor)",
+          name: "physical_consumer_ticket",
+          emission_fee: true,
+          pay365_fee: true,
+          credit_result: true,
+          franchisor_result: true,
+        }
+      );
+    }
+    if (modules.includes("Ficha")) {
+      m.push(
+        {
+          label: "Bar online",
+          name: "online_bar",
+          antifraud: true,
+          transaction: true,
+          pay365_fee: true,
+          franchisor_result: true,
+          credit_result: true,
+          credid_spread: true,
+        },
+        {
+          label: "Bar físico (produtor)",
+          name: "physical_producer_bar",
+          pay365_fee: true,
+          credit_result: true,
+          credid_spread: true,
+        },
+        {
+          label: "Bar físico (consumidor)",
+          name: "physical_consumer_bar",
+          pay365_fee: true,
+          credit_result: true,
+          credid_spread: true,
+        }
+      );
+    }
+    if (modules.includes("Transação direta")) {
+      m.push({
+        label: "Transação direta",
+        name: "direct_transaction",
+        pay365_fee: true,
+        credit_result: true,
+        credid_spread: true,
+      });
+    }
+
+    setActiveModules(m);
+  }, [modules]);
+
+  console.log(activeModules);
 
   const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -29,121 +131,8 @@ export const StepThree = () => {
     });
   };
 
-  const modules: moduleType[] = [
-    {
-      name: "ticket",
-      label: "Ingresso online",
-      antifraud: true,
-      transaction: true,
-      pay365fee: true,
-      franchisor_result: true,
-      credit_result: true,
-      credit_spread: true,
-      emission_fee: false,
-    },
-    {
-      name: "bar",
-      label: "Bar online",
-      antifraud: true,
-      transaction: true,
-      pay365fee: true,
-      franchisor_result: true,
-      credit_result: true,
-      credit_spread: true,
-      emission_fee: false,
-    },
-    {
-      name: "consumer_ticket",
-      label: "Ingresso físico (Consumidor)",
-      antifraud: false,
-      transaction: false,
-      emission_fee: true,
-      pay365fee: true,
-      franchisor_result: true,
-      credit_result: true,
-      credit_spread: true,
-    },
-    {
-      name: "producer_ticket",
-      label: "Ingresso físico (Produtor)",
-      antifraud: false,
-      transaction: false,
-      emission_fee: true,
-      pay365fee: true,
-      franchisor_result: true,
-      credit_result: false,
-      credit_spread: true,
-    },
-    {
-      name: "consumer_bar",
-      label: "Bar físico (Consumidor)",
-      antifraud: false,
-      transaction: false,
-      emission_fee: false,
-      pay365fee: true,
-      credit_result: true,
-      credit_spread: true,
-      franchisor_result: false,
-    },
-    {
-      name: "producer_bar",
-      label: "Bar físico (Produtor)",
-      antifraud: false,
-      transaction: false,
-      pay365fee: true,
-      credit_result: true,
-      credit_spread: true,
-      franchisor_result: false,
-      emission_fee: false,
-    },
-    {
-      name: "direct_transaction",
-      label: "Transação direta",
-      antifraud: false,
-      transaction: false,
-      pay365fee: true,
-      credit_result: true,
-      credit_spread: true,
-      franchisor_result: false,
-      emission_fee: false,
-    },
-  ];
-
-  const initialValues = {
-    ticket_antifraude: 0,
-    ticket_transaction: 0.2,
-    ticket_pay365_fee: 0.25,
-    ticket_franchisor_result: 60,
-    ticket_credit_result: 60,
-    ticket_credit_spread: 1.0,
-    bar_antifraude: 0,
-    bar_transaction: 0.2,
-    bar_pay365_fee: 0.25,
-    bar_franchisor_result: 60,
-    bar_credit_result: 60,
-    bar_credit_spread: 1.0,
-    consumer_ticket_emission: 0.3,
-    consumer_ticket_pay365_fee: 0.25,
-    consumer_ticket_franchisor_result: 60,
-    consumer_ticket_credit_result: 60,
-    consumer_ticket_credit_spread: 1.0,
-    producer_ticket_emission: 0.3,
-    producer_ticket_pay365_fee: 0.25,
-    producer_ticket_franchisor_result: 60,
-    producer_ticket_credit_spread: 1.0,
-    consumer_bar_pay365_fee: 0.25,
-    consumer_bar_credit_result: 60,
-    consumer_bar_credit_spread: 1.0,
-    producer_bar_pay365_fee: 0.25,
-    producer_bar_credit_result: 60,
-    producer_bar_credit_spread: 1.0,
-    direct_transaction_pay365_fee: 0.25,
-    direct_transaction_credit_result: 60,
-    direct_transaction_credit_spread: 1.0,
-  };
-
   useEffect(() => {
-    stepOneRef.current.setFieldsValue(initialValues);
+    stepOneRef.current.setFieldsValue(parsedData);
   }, []);
 
   return (
@@ -193,7 +182,7 @@ export const StepThree = () => {
             onClick={() => setUpdateFees((prev) => !prev)}
           />
         </Col>
-        {modules.map((module) => (
+        {activeModules.map((module: any) => (
           <>
             <Col md={{ span: 24 }} xs={{ span: 24 }}>
               <Divider orientation="left">{module.label}</Divider>

@@ -25,7 +25,7 @@ export const Login = () => {
     PASSWORD: string;
     remember: boolean;
   }>({ USERNAME: "", PASSWORD: "", remember: true });
-  const { error, loading, reset, mutate, isLoggedIn } = useLogin({
+  const { error, loading, reset, mutate, isSuccess } = useLogin({
     AuthFlow: "USER_PASSWORD_AUTH",
     AuthParameters: {
       USERNAME: credentials.USERNAME,
@@ -46,11 +46,12 @@ export const Login = () => {
 
   useEffect(() => {
     currentSession();
+    if (isSuccess) {
+      setTimeout(() => {
+        navigate("/franquias");
+      }, 1000);
+    }
   }, [loading]);
-
-  if (isLoggedIn) {
-    navigate("/franchises");
-  }
 
   return (
     <Layout>

@@ -1,4 +1,4 @@
-import { ConfigProvider } from "antd";
+import { ConfigProvider, notification } from "antd";
 import ptbr from "antd/locale/pt_BR";
 import { QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
@@ -15,10 +15,15 @@ import Light from "./styles/lightTheme";
 export const App = () => {
   const PainelList = ["franquia", "promotor", "cliente"];
   const { theme } = useTheme();
+  const [_api, contextHolder] = notification.useNotification({
+    placement: "topRight",
+    duration: 3000,
+  });
 
   return (
     <QueryClientProvider client={queryClient}>
       <ConfigProvider locale={ptbr} theme={theme === "light" ? Light : Dark}>
+        {contextHolder}
         <FranchisorAuthProvider>
           <FranchiseAuthProvider>
             <BrowserRouter>

@@ -15,6 +15,7 @@ export const PageHeader = ({ subtitle, title, color }: PageHeaderI) => {
           fontWeight: "700",
           margin: 0,
         }}
+        level={2}
       >
         {title}
       </Typography.Title>

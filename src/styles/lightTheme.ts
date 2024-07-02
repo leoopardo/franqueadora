@@ -41,8 +41,8 @@ const Light: ThemeConfig = {
       paddingContentVerticalLG: 12,
     },
     Table: {
-      controlItemBgActive: defaultTheme.primary,
-      controlItemBgActiveHover: "#c0c0c09f",
+      controlItemBgActive: defaultTheme["primary-200"],
+      controlItemBgActiveHover: defaultTheme["primary-300"],
     },
     Card: {
       boxShadow: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.144)",

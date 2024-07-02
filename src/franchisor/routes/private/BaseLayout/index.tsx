@@ -1,15 +1,16 @@
 // import { cognitoUserPoolsTokenProvider } from "@aws-amplify/auth/cognito";
 import { Row } from "antd";
 import { Content } from "antd/es/layout/layout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import { SiderComponent } from "../../../../components/sider";
+import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
 import { useTheme } from "../../../../contexts/themeContext";
 import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { MenuItens } from "../../../components/sider_menus/menus";
 import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
-import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
 import { useGetMe } from "../../../services/auth/useGetMe";
+import { useGetPendingNumber } from "@franchisor/services/terminals/pending/getPendingNumber";
 
 export const BaseLayout = () => {
   const { isMd } = useBreakpoints();
@@ -17,29 +18,23 @@ export const BaseLayout = () => {
   const { theme } = useTheme();
   const { setHeader } = useFranchisorAuth();
   const { refetch } = useGetMe();
-
-  // const navigate = useNavigate();
-  useEffect(() => {
-    // if (!secureLocalStorage.getItem("token")) {
-    //   navigate({ to: "/" });
-    // }
-  }, []);
-
+  const pendingNumber = useGetPendingNumber();
   return (
     <SiderComponent
       isMenuOpen={isMenuOpen}
       setIsMenuOpen={setIsMenuOpen}
-      menus={() => MenuItens(100)}
+      menus={() => MenuItens(pendingNumber.data || 0)}
+      pending={pendingNumber.data || 0}
       logout={async () => {
         await congnitoAuthService.signOut();
         setHeader(null);
         refetch();
       }}
+      onChange={() => pendingNumber.refetch()}
     >
       <Content
         style={{
           width: "100%",
-          maxWidth: "92vw",
           height: "100%",
           minHeight: "100vh",
           backgroundSize: "cover",
@@ -72,7 +67,6 @@ export const BaseLayout = () => {
       >
         <Row
           style={{
-            padding: "20px",
             top: 0,
             display: "flex",
             flexDirection: "column",

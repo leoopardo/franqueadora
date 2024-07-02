@@ -1,16 +1,17 @@
 import { useQuery } from "react-query";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
-import ResponseI from "../interfaces/response.interface";
+import ResponseI from "../__interfaces/response.interface";
 import {
+  Franchise,
   FranchiseParams,
-  FranchisesI,
-} from "./interfaces/franchises.interface";
+  franchiseResponseSchema
+} from "./__interfaces/franchises.interface";
 
 export const useListFranchises = (params: FranchiseParams) => {
   const { headers } = useFranchisorAuth();
   const { data, error, isLoading, refetch } = useQuery<
-    ResponseI<FranchisesI> | null | undefined
+    ResponseI<Franchise> | null | undefined
   >(
     ["listFranchises", params],
     async () => {
@@ -18,7 +19,12 @@ export const useListFranchises = (params: FranchiseParams) => {
         headers: headers ?? {},
         params,
       });
-      return response.data;
+      const parsedResponse = franchiseResponseSchema.safeParse(response.data);
+      if (!parsedResponse.success) {
+        throw new Error((parsedResponse.error as any));
+      }
+
+      return parsedResponse.data;
     },
     { enabled: headers && headers["AuthToken"] ? true : false }
   );
