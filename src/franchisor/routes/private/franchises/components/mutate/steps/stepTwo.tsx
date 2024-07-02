@@ -7,22 +7,21 @@ import { ProFormText, StepsForm } from "@ant-design/pro-components";
 import { Col, Divider, Row, Typography, message } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
-import regexList from "../../../../../../../utils/regexList";
+import useDebounce from "../../../../../../../hooks/useDebounce";
+import defaultTheme from "../../../../../../../styles/default";
 import {
   formatCPF,
   formatCellPhoneBR,
 } from "../../../../../../../utils/regexFormat";
-import defaultTheme from "../../../../../../../styles/default";
-import { useValidateStepTwo } from "../../../../../../services/franchises/validation/validateStepTwo";
-import useDebounce from "../../../../../../../hooks/useDebounce";
+import regexList from "../../../../../../../utils/regexList";
 
 export const StepTwo = () => {
   const stepTwoRef = useRef<any>(null);
   const { isXs } = useBreakpoints();
   const [password, setPassWord] = useState<string>("");
   const [confirmPassword, setConfirmPassWord] = useState<string>("");
-  const [bodyValidate, setBodyValidate] = useState({});
-  const validateStepOne = useValidateStepTwo({ body: bodyValidate });
+  const [, setBodyValidate] = useState({});
+  // const validateStepOne = useValidateStepTwo({ body: bodyValidate });
 
   const passwordRules = [
     { rule: regexList.lowercarse, title: "Letra minúscula" },

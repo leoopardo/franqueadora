@@ -6,17 +6,17 @@ import { CurrencyInput } from "react-currency-mask";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
 import { useGetAgreements } from "../../../../../../services/utils/getAgreements";
 
-interface moduleType {
-  name: string;
-  label: string;
-  antifraud: boolean;
-  transaction: boolean;
-  pay365fee: boolean;
-  franchisor_result: boolean;
-  credit_result: boolean;
-  credit_spread: boolean;
-  emission_fee: boolean;
-}
+// interface moduleType {
+//   name: string;
+//   label: string;
+//   antifraud: boolean;
+//   transaction: boolean;
+//   pay365fee: boolean;
+//   franchisor_result: boolean;
+//   credit_result: boolean;
+//   credit_spread: boolean;
+//   emission_fee: boolean;
+// }
 
 interface stepThreeI {
   modules: string[];
@@ -50,18 +50,18 @@ export const StepThree = ({ modules }: stepThreeI) => {
       const PHYSICAL_TICKET_PRODUCER = AgreementsData.items.filter(
         (i) => i.type === "PHYSICAL_TICKET_PRODUCER"
       );
-      const PHYSICAL_PUB_CONSUMER = AgreementsData.items.filter(
-        (i) => i.type === "PHYSICAL_PUB_CONSUMER"
-      );
-      const PHYSICAL_PUB_PRODUCER = AgreementsData.items.filter(
-        (i) => i.type === "PHYSICAL_PUB_PRODUCER"
-      );
-      const DIRECT_TRANSACTION = AgreementsData.items.filter(
-        (i) => i.type === "DIRECT_TRANSACTION"
-      );
+      // const PHYSICAL_PUB_CONSUMER = AgreementsData.items.filter(
+      //   (i) => i.type === "PHYSICAL_PUB_CONSUMER"
+      // );
+      // const PHYSICAL_PUB_PRODUCER = AgreementsData.items.filter(
+      //   (i) => i.type === "PHYSICAL_PUB_PRODUCER"
+      // );
+      // const DIRECT_TRANSACTION = AgreementsData.items.filter(
+      //   (i) => i.type === "DIRECT_TRANSACTION"
+      // );
       if (modules.includes("Ingressos")) {
         if (ONLINE_TICKET.length) {
-          setActiveModules((modules) => [
+          setActiveModules((modules: any) => [
             ...modules,
             {
               name: "ONLINE_TICKET",
@@ -88,7 +88,7 @@ export const StepThree = ({ modules }: stepThreeI) => {
           ]);
         }
         if (PHYSICAL_TICKET_CONSUMER.length) {
-          setActiveModules((modules) => [
+          setActiveModules((modules: any) => [
             ...modules,
             {
               name: "PHYSICAL_TICKET_CONSUMER",
@@ -112,7 +112,7 @@ export const StepThree = ({ modules }: stepThreeI) => {
           ]);
         }
         if (PHYSICAL_TICKET_PRODUCER.length) {
-          setActiveModules((modules) => [
+          setActiveModules((modules: any) => [
             ...modules,
             {
               name: "PHYSICAL_TICKET_PRODUCER",
@@ -138,7 +138,7 @@ export const StepThree = ({ modules }: stepThreeI) => {
       }
       if (modules.includes("Fichas")) {
         if (ONLINE_PUB.length) {
-          setActiveModules((modules) => [
+          setActiveModules((modules: any) => [
             ...modules,
             {
               name: "ONLINE_PUB",

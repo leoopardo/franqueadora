@@ -6,17 +6,17 @@ import { CurrencyInput } from "react-currency-mask";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
 import { useGetAgreements } from "../../../../../../services/utils/getAgreements";
 
-interface moduleType {
-  name: string;
-  label: string;
-  antifraud: boolean;
-  transaction: boolean;
-  pay365fee: boolean;
-  franchisor_result: boolean;
-  credit_result: boolean;
-  credit_spread: boolean;
-  emission_fee: boolean;
-}
+// interface moduleType {
+//   name: string;
+//   label: string;
+//   antifraud: boolean;
+//   transaction: boolean;
+//   pay365fee: boolean;
+//   franchisor_result: boolean;
+//   credit_result: boolean;
+//   credit_spread: boolean;
+//   emission_fee: boolean;
+// }
 
 interface stepThreeI {
   modules: string[];

@@ -17,4 +17,7 @@ export enum QueryKeys {
   REPROVE_TERMINAL = "reproveTerminals",
   PENDING_NUMBER = "pendingNumber",
   LIST_PENDING_TERMINALS = "listPendingTerminals",
+  LIST_CLIENTS = "listClients",
+  ACTIVATE_CLIENT = "activateClient",
+  INACTIVATE_CLIENT = "inactivateClient",
 }

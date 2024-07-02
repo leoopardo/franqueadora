@@ -1,9 +1,10 @@
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
-import { Dropdown, Table, Typography } from "antd";
+import { Dropdown, Spin, Table, Typography } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 import { Dispatch, SetStateAction } from "react";
 import ParamsI from "../../franchisor/services/__interfaces/queryParams.interface";
 import ResponseI from "../../franchisor/services/__interfaces/response.interface";
+import { LoadingOutlined } from "@ant-design/icons";
 
 interface ActionsI<RowItemI> {
   label?: string;
@@ -44,11 +45,10 @@ function TableComponent<RowItemI>({
 }: TableComponentI<RowItemI>) {
   return (
     <Table
-      sticky={{ offsetHeader: 64 }}
       tableLayout="auto"
       rowKey={"id" || "ref_id"}
       style={{ borderRadius: 8, border: "1px solid rgba(200, 200, 200, 0.3)" }}
-      loading={loading}
+      loading={loading ? {indicator: <Spin size="large" indicator={<LoadingOutlined size={40} spin />} />} : false}
       rowSelection={
         rowSelection
           ? {
