@@ -11,10 +11,10 @@ import { MenuDataItem, ProLayout } from "@ant-design/pro-components";
 import { Badge, Button, Switch } from "antd";
 import { Dispatch, ReactNode, SetStateAction } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
 import { useTheme } from "../../contexts/themeContext";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { queryClient } from "../../services/queryClient";
-// import { signOut } from "@aws-amplify/auth";
 
 interface SiderComponentI {
   isMenuOpen: boolean;
@@ -40,6 +40,7 @@ export const SiderComponent = ({
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
   const { isSm, isMd, isXl, isLg } = useBreakpoints();
+  const { headers } = useFranchisorAuth();
 
   return (
     <ProLayout
@@ -167,22 +168,25 @@ export const SiderComponent = ({
             )}
 
             {!franquia && (
-              <Button
-                size="middle"
-                type="default"
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  backgroundColor: "transparent",
-                  border: "none",
-                  fontSize: 15,
-                }}
-                icon={<ArrowRightOutlined />}
-                onClick={() => navigate("/")}
+              <Link
+                to={`http://franquia.${window.location.host.split(".")[1]}/cross-auth/${JSON.stringify({ ...headers, master: true })}`}
               >
-                {!props?.collapsed && "Acessar Franquia"}
-              </Button>
+                <Button
+                  size="middle"
+                  type="default"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    backgroundColor: "transparent",
+                    border: "none",
+                    fontSize: 15,
+                  }}
+                  icon={<ArrowRightOutlined />}
+                >
+                  {!props?.collapsed && "Acessar Franquia"}
+                </Button>
+              </Link>
             )}
             <Button
               size="middle"

@@ -1,8 +1,9 @@
 // import { cognitoUserPoolsTokenProvider } from "@aws-amplify/auth/cognito";
+import { useGetPendingNumber } from "@franchisor/services/terminals/pending/getPendingNumber";
 import { Row } from "antd";
 import { Content } from "antd/es/layout/layout";
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { SiderComponent } from "../../../../components/sider";
 import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
 import { useTheme } from "../../../../contexts/themeContext";
@@ -10,7 +11,6 @@ import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { MenuItens } from "../../../components/sider_menus/menus";
 import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
 import { useGetMe } from "../../../services/auth/useGetMe";
-import { useGetPendingNumber } from "@franchisor/services/terminals/pending/getPendingNumber";
 
 export const BaseLayout = () => {
   const { isMd } = useBreakpoints();
@@ -19,6 +19,14 @@ export const BaseLayout = () => {
   const { setHeader } = useFranchisorAuth();
   const { refetch } = useGetMe();
   const pendingNumber = useGetPendingNumber();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("/franquias");
+    }
+  }, []);
+  
   return (
     <SiderComponent
       isMenuOpen={isMenuOpen}

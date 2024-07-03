@@ -1,14 +1,15 @@
 // import { cognitoUserPoolsTokenProvider } from "@aws-amplify/auth/cognito";
 import { Row } from "antd";
 import { Content } from "antd/es/layout/layout";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 import { SiderComponent } from "../../../../components/sider";
+import { useFranchiseAuth } from "../../../../contexts/franchiseAuthContext";
 import { useTheme } from "../../../../contexts/themeContext";
 import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { MenuItens } from "../../../components/sider_menus/menus";
 import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
-import { useFranchiseAuth } from "../../../../contexts/franchiseAuthContext";
 import { useGetMe } from "../../../services/auth/useGetMe";
 
 export const BaseLayout = () => {
@@ -18,13 +19,6 @@ export const BaseLayout = () => {
   const { setHeader } = useFranchiseAuth();
   const { refetch } = useGetMe();
 
-  // const navigate = useNavigate();
-  useEffect(() => {
-    // if (!secureLocalStorage.getItem("token")) {
-    //   navigate({ to: "/" });
-    // }
-  }, []);
-
   return (
     <SiderComponent
       isMenuOpen={isMenuOpen}
@@ -33,10 +27,13 @@ export const BaseLayout = () => {
       logout={async () => {
         await congnitoAuthService.signOut();
         setHeader(null);
+        secureLocalStorage.clear();
+        localStorage.removeItem("master");
         setTimeout(() => {
           refetch();
         }, 500);
-      }}franquia
+      }}
+      franquia
     >
       <Content
         style={{

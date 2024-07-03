@@ -139,6 +139,7 @@ export const Login = () => {
                 style={{ width: "100%" }}
                 initialValues={credentials}
                 onFinish={() => {
+                  localStorage.removeItem("master");
                   mutate();
                 }}
               >
