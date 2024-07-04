@@ -2,12 +2,12 @@ import { useQuery } from "react-query";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
 import ResponseI from "../__interfaces/response.interface";
+import { QueryKeys } from "../queryKeys";
 import {
   Franchise,
   FranchiseParams,
-  franchiseResponseSchema
+  franchiseResponseSchema,
 } from "./__interfaces/franchises.interface";
-import { QueryKeys } from "../queryKeys";
 
 export const useListFranchises = (params: FranchiseParams) => {
   const { headers } = useFranchisorAuth();
@@ -17,12 +17,12 @@ export const useListFranchises = (params: FranchiseParams) => {
     [QueryKeys.LIST_FRANCHISES, params],
     async () => {
       const response = await apiFranquia.get(`/franchise/all`, {
-        headers: headers ?? {},
-        params,
+        headers: { ...headers },
+        params: { ...params, orderBy: "created_at", orderDirection: "desc" },
       });
       const parsedResponse = franchiseResponseSchema.safeParse(response.data);
       if (!parsedResponse.success) {
-        throw new Error((parsedResponse.error as any));
+        throw new Error(parsedResponse.error as any);
       }
 
       return parsedResponse.data;

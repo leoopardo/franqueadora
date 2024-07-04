@@ -62,7 +62,7 @@ export const SiderComponent = ({
               src="/logoDef.svg"
               style={
                 !isMd || isSm
-                  ? { height: 45, width: 150 }
+                  ? { height: "100%", width: "100%" }
                   : { height: 15, width: 50 }
               }
             />{" "}
@@ -73,7 +73,7 @@ export const SiderComponent = ({
               src="/logoWhiteDef.svg"
               style={
                 !isMd || isSm
-                  ? { height: 45, width: 150 }
+                  ? { height: "100%", width: "100%" }
                   : { height: 15, width: 50 }
               }
             />
@@ -101,13 +101,6 @@ export const SiderComponent = ({
               );
             }
           : undefined
-      }
-      collapsedButtonRender={
-        isSm
-          ? undefined
-          : () => {
-              return "";
-            }
       }
       menuItemRender={(item, dom) => {
         if (item.name === "Pendentes" || item.name === "Terminais") {

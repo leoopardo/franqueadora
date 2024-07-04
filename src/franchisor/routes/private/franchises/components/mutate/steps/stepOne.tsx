@@ -48,10 +48,12 @@ export const StepOne = ({ setModules }: stepOneI) => {
   useEffect(() => {
     if (cepRequest.data)
       stepOneRef.current.setFieldsValue({
-        state: cepRequest?.data.state,
-        city: cepRequest?.data.city,
-        address: cepRequest?.data.street,
-        district: cepRequest?.data.neighborhood,
+        address: {
+          state: cepRequest?.data.state,
+          city: cepRequest?.data.city,
+          address: cepRequest?.data.street,
+          district: cepRequest?.data.neighborhood,
+        },
       });
   }, [cepRequest.data]);
 
@@ -68,12 +70,17 @@ export const StepOne = ({ setModules }: stepOneI) => {
             ? cnpjRequest?.data.razao_social
             : cnpjRequest?.data.nome_fantasia,
         state_registration: cnpjRequest?.data.cnae_fiscal,
-        cep: `${cnpjRequest?.data?.cep}`?.replace(/^(\d{5})(\d{3})$/, "$1-$2"),
-        state: cnpjRequest?.data.uf,
-        city: cnpjRequest?.data.municipio,
-        address: cnpjRequest?.data.logradouro,
-        district: cnpjRequest?.data.bairro,
-        number: cnpjRequest?.data.numero,
+        address: {
+          cep: `${cnpjRequest?.data?.cep}`?.replace(
+            /^(\d{5})(\d{3})$/,
+            "$1-$2"
+          ),
+          state: cnpjRequest?.data.uf,
+          city: cnpjRequest?.data.municipio,
+          address: cnpjRequest?.data.logradouro,
+          district: cnpjRequest?.data.bairro,
+          number: cnpjRequest?.data.numero,
+        },
       });
     }
   }, [cnpjRequest.data]);
@@ -136,7 +143,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
         state: string;
       };
       modules: string[];
-      area_code: string[];
+      area_codes: string[];
       contacts: any[];
     }>
       name="base"
@@ -150,7 +157,9 @@ export const StepOne = ({ setModules }: stepOneI) => {
       formRef={stepOneRef}
       onFinishFailed={() => {
         const fields = stepOneRef.current.getFieldsError();
-        const firstErrorField = fields.find((field: any) => field.errors.length > 0);
+        const firstErrorField = fields.find(
+          (field: any) => field.errors.length > 0
+        );
         if (firstErrorField) {
           stepOneRef.current.scrollToField(firstErrorField.name[0], {
             behavior: "smooth",
@@ -267,7 +276,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name="cep"
+            name={["address", "cep"]}
             label="CEP"
             placeholder="Digite o CEP"
             fieldProps={{
@@ -281,7 +290,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name="address"
+            name={["address", "address"]}
             label="Endereço"
             placeholder="Digite o Endereço"
             rules={[{ required: true }]}
@@ -289,7 +298,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }}>
           <ProFormText
-            name="number"
+            name={["address", "number"]}
             label="Número"
             placeholder="000"
             rules={[{ required: true }]}
@@ -297,7 +306,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name="state"
+            name={["address", "state"]}
             label="Estado"
             placeholder="Digite o estado"
             rules={[{ required: true }]}
@@ -305,7 +314,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name="city"
+            name={["address", "city"]}
             label="Cidade"
             placeholder="Digite a cidade"
             rules={[{ required: true }]}
@@ -313,7 +322,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name="district"
+            name={["address", "district"]}
             label="Bairro"
             placeholder="Digite o bairro"
             rules={[{ required: true }]}
@@ -321,7 +330,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
         </Col>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
           <ProFormText
-            name="complement"
+            name={["address", "complement"]}
             label="Complemento"
             placeholder="Digite algum complemento"
           />
@@ -331,7 +340,7 @@ export const StepOne = ({ setModules }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormSelect
-            name="area_code"
+            name="area_codes"
             label="Código(s) de área(s)"
             placeholder="Selecione o DDD"
             mode="multiple"

@@ -18,7 +18,7 @@ export const useListTerminals = (params: terminalParams) => {
     async () => {
       const response = await apiFranquia.get(`/terminal/all`, {
         headers: headers ?? {},
-        params,
+        params: { ...params, orderBy: "created_at", orderDirection: "desc" }
       });
 
       const parsedResponse = terminalResponseSchema.safeParse(response.data);

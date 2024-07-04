@@ -17,7 +17,7 @@ export const useListPending = (params: pendingTerminalParams) => {
     async () => {
       const response = await apiFranquia.get(`/terminal/pending`, {
         headers: headers ?? {},
-        params,
+        params: { ...params, orderBy: "created_at", orderDirection: "desc" }
       });
 
       const parsedResponse = pendingTerminalResponseSchema.safeParse(

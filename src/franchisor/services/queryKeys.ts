@@ -20,4 +20,5 @@ export enum QueryKeys {
   LIST_CLIENTS = "listClients",
   ACTIVATE_CLIENT = "activateClient",
   INACTIVATE_CLIENT = "inactivateClient",
+  LIST_AGREEMENTS = "listAgreements"
 }

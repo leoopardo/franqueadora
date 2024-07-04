@@ -2,7 +2,7 @@ import { Col, Row } from "antd";
 import { useCreateFranchise } from "../../../../services/franchises/createFranchise";
 import { MutateFranchise } from "../components/mutate";
 
-export const CreateFranchise = () => {
+export const UpdateFranchise = () => {
   const { mutate, isLoading, isSuccess, error } = useCreateFranchise();
 
   return (

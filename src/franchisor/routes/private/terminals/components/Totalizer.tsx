@@ -1,10 +1,9 @@
+import { EyeIcon } from "@heroicons/react/24/outline";
 import { Button, Card, List, Statistic } from "antd";
 import { Dispatch, SetStateAction } from "react";
+import defaultTheme from "../../../../../styles/default";
 import { terminalParams } from "../../../../services/terminals/__interfaces/terminals.interface";
 import { TotalizerContent } from "../../../../services/terminals/__interfaces/totalizers.interface";
-import defaultTheme from "../../../../../styles/default";
-import { useBreakpoints } from "../../../../../hooks/useBreakpoints";
-import { EyeIcon } from "@heroicons/react/24/outline";
 
 interface Totalizer {
   content?: TotalizerContent;
@@ -28,8 +27,7 @@ export const Totalizer = ({
     stock: "Estoque",
     total: "Total de terminais",
   };
-  const { isSm } = useBreakpoints();
-  const hideTotals = ["free", "monthly"]
+  const hideTotals = ["free", "monthly"];
 
   return (
     <Card style={{ width: "100%" }} bodyStyle={{ padding: 8 }}>
@@ -52,7 +50,8 @@ export const Totalizer = ({
                 value: (content as any)[i],
                 label: i,
               }))
-              .filter((i) => i.value && !hideTotals.includes(i.label)).length / 1.5,
+              .filter((i) => i.value && !hideTotals.includes(i.label)).length /
+              1.5,
           md:
             content &&
             Object.keys(content)
@@ -60,7 +59,8 @@ export const Totalizer = ({
                 value: (content as any)[i],
                 label: i,
               }))
-              .filter((i) => i.value && !hideTotals.includes(i.label)).length / 2,
+              .filter((i) => i.value && !hideTotals.includes(i.label)).length /
+              2,
           sm: 1,
           xs: 1,
         }}
@@ -72,6 +72,7 @@ export const Totalizer = ({
               label: i,
             }))
             .filter((i) => i.value && !hideTotals.includes(i.label))
+            .sort(() => -1)
         }
         renderItem={(item) =>
           item.value ? (
@@ -82,7 +83,9 @@ export const Totalizer = ({
                 backgroundColor:
                   params.w === `situation=[${item.label.toUpperCase()}]`
                     ? defaultTheme["primary-200"]
-                    : undefined,
+                    : !params.w && item.label == "total"
+                      ? defaultTheme["primary-200"]
+                      : undefined,
                 padding: 8,
                 borderRadius: 8,
                 transition: "background-color 0.5s",
@@ -92,9 +95,10 @@ export const Totalizer = ({
               <div
                 style={{
                   display: "flex",
-                  flexDirection: isSm ? "row" : "column",
+                  flexDirection: "row",
                   justifyContent: "space-between",
-                  alignItems: isSm ? "center" : "start",
+                  flexWrap: "wrap",
+                  alignItems: "center",
                   height: "100%",
                   width: "100%",
                 }}

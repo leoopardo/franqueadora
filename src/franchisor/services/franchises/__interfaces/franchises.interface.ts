@@ -34,7 +34,7 @@ const MasterSchema = z
     name: z.string(),
     role: z.string(),
     type: z.string().nullable(),
-    phone: z.string(),
+    phone: z.string().nullable(),
     email: z.string(),
     username: z.string(),
     cognito_id: z.string(),
