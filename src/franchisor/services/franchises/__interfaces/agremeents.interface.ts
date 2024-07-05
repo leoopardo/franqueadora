@@ -9,7 +9,7 @@ export const FranchiseAgreementTypeSchema = z.enum([
   "ONLINE_TICKET",
   "PHYSICAL_TICKET_CONSUMER",
   "PHYSICAL_TICKET_PRODUCER",
-]);
+]).optional();
 export type TFranchiseAgreementType = z.infer<
   typeof FranchiseAgreementTypeSchema
 >;
@@ -22,24 +22,24 @@ const FranchiseAgreementKeySchema = z.enum([
   "RESULT_FRANCHISOR",
   "RESULT_CREDIT_ADVANCE",
   "SPREAD_CREDIT_ADVANCE",
-]);
+]).optional();
 export type TFranchiseAgreementKey = z.infer<
   typeof FranchiseAgreementKeySchema
 >;
 
-const FranchiseAgreementValueTypeSchema = z.enum(["PERCENTAGE", "CURRENCY"]);
+const FranchiseAgreementValueTypeSchema = z.enum(["PERCENTAGE", "CURRENCY"]).optional();
 export type TFranchiseAgreementValueType = z.infer<
   typeof FranchiseAgreementValueTypeSchema
 >;
 
 export const FranchiseAgreementTamplateSchema = z.object({
-  id: z.string().uuid(),
+  id: z.string().uuid().optional(),
   type: FranchiseAgreementTypeSchema,
   key: FranchiseAgreementKeySchema,
-  name: z.string(),
-  value: z.string(),
+  name: z.string().optional(),
+  value: z.string().optional().nullable().optional(),
   value_type: FranchiseAgreementValueTypeSchema,
-  active: z.boolean(),
+  active: z.boolean().optional().nullable().optional(),
 });
 
 export const agreementResponseSchema = createResponseSchema(

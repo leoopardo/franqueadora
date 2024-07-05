@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { createResponseSchema } from "../../__interfaces/response.interface";
 import ParamsI from "../../__interfaces/queryParams.interface";
+import { FranchiseAgreementTamplateSchema } from "./agremeents.interface";
 
 const POSModuleSchema = z
   .object({
@@ -10,10 +11,18 @@ const POSModuleSchema = z
   })
   .optional();
 
+const FranchiseAgreementSchema = z
+  .object({
+    id: z.string(),
+    value: z.string(),
+    AgreementTemplate: FranchiseAgreementTamplateSchema,
+  })
+  .nullable();
+
 const FranchiseAddressSchema = z
   .object({
     id: z.string(),
-    franchise_id: z.string(),
+    franchise_id: z.string().optional().nullable(),
     cep: z.string(),
     address: z.string(),
     number: z.string(),
@@ -22,10 +31,26 @@ const FranchiseAddressSchema = z
     district: z.string(),
     complement: z.string(),
     active: z.boolean(),
-    created_at: z.string(),
-    updated_at: z.string(),
+    created_at: z.string().optional().nullable(),
+    updated_at: z.string().optional().nullable(),
   })
   .optional();
+
+const TenantSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  active: z.boolean().optional(),
+  UserTenant: z.array(
+    z.object({
+      User: z.object({
+        name: z.string(),
+        document: z.string(),
+        email: z.string(),
+        phone: z.string().nullable(),
+      }),
+    })
+  ),
+});
 
 const MasterSchema = z
   .object({
@@ -79,6 +104,8 @@ export const FranchiseSchema = z.object({
     )
     .optional(),
   FranchiseAddress: FranchiseAddressSchema,
+  FranchiseAgreement: z.array(FranchiseAgreementSchema).optional().nullable(),
+  Tenant: TenantSchema.optional(),
 });
 
 export const franchiseResponseSchema = createResponseSchema(FranchiseSchema);

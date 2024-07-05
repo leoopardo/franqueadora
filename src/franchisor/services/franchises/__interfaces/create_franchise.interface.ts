@@ -18,13 +18,13 @@ export interface createFranchiseI {
   franchise_name?: string;
   state_registration?: string;
   master?: {
-    cpf: string;
-    email: string;
-    name: string;
-    password: string;
-    phone: string;
-    terminal_password: string;
-    username: string;
+    cpf?: string;
+    email?: string;
+    name?: string;
+    password?: string;
+    phone?: string;
+    terminal_password?: string;
+    username?: string;
   };
   module?: string[];
 }

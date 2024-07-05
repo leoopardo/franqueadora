@@ -13,6 +13,8 @@ export const CreateFranchise = () => {
           error={error}
           loading={isLoading}
           success={isSuccess}
+          title="Cadastro de franquias"
+          subtitle="Preencha todos os campos para adicionar uma nova franquia"
         />
       </Col>
     </Row>

@@ -1,8 +1,9 @@
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
-import { Button, Col, Row, Typography } from "antd";
+import { Button, Card, Col, Row, Tabs, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,26 +11,40 @@ import { createFranchiseI } from "../../../../../services/franchises/__interface
 import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
+import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 
 interface mutateI {
   mutate: (body: createFranchiseI) => void;
   loading?: boolean;
   success?: boolean;
   error?: any;
+  title?: string;
+  subtitle?: string;
+  initialValues?: createFranchiseI;
+  update?: boolean;
+  agreements?: AgreementType[];
 }
 
-export const MutateFranchise = ({ mutate }: mutateI) => {
+export const MutateFranchise = ({
+  mutate,
+  loading,
+  title,
+  subtitle,
+  initialValues,
+  update,
+  agreements,
+}: mutateI) => {
   const formRef = useRef<ProFormInstance>();
-  const divRef = useRef(null);
   const [modules, setModules] = useState<string[]>([]);
   const [width, setWidth] = useState<number>((100 / 3) * 1);
   const [step, setStep] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingStep, setLoadingStep] = useState<boolean>(false);
   const navigate = useNavigate();
   const { data } = useListFranchiseAgreements();
+  const { isSm } = useBreakpoints();
 
   const waitTime = (values: any) => {
-    const agreements: { template_id: string; value: string }[] = [];
+    const agreements: { template_id?: string; value: string }[] = [];
 
     const keysOrganization = [
       "ANTIFRAUD",
@@ -41,8 +56,6 @@ export const MutateFranchise = ({ mutate }: mutateI) => {
       "SPREAD_CREDIT_ADVANCE",
     ];
     Object?.keys(values.agreements)?.forEach((section) => {
-      console.log(section);
-
       keysOrganization?.forEach((key) => {
         const ag = data?.items?.find(
           (i) => i.type === section && i.key === key
@@ -76,8 +89,7 @@ export const MutateFranchise = ({ mutate }: mutateI) => {
       resolve(true);
     });
   };
-
-  const initialFormValues: createFranchiseI = {
+  const initialFormValues: createFranchiseI = initialValues ?? {
     address: {
       address: "",
       cep: "",
@@ -109,7 +121,7 @@ export const MutateFranchise = ({ mutate }: mutateI) => {
   };
 
   return (
-    <Row justify="center">
+    <Row justify="center" style={{ width: "100%" }}>
       <Col
         style={{
           width: "100%",
@@ -126,15 +138,15 @@ export const MutateFranchise = ({ mutate }: mutateI) => {
           justify="center"
           align="middle"
         >
-          <Col span={10}>
+          <Col xs={{ span: 20 }} md={{ span: 10 }}>
             <Typography.Text style={{ lineHeight: 0 }}>
               Passo {step} de 3
             </Typography.Text>
-            <Typography.Title level={3} style={{ margin: 0 }}>
-              Cadastro de franquias
+            <Typography.Title level={isSm ? 5 : 3} style={{ margin: 0 }}>
+              {title}
             </Typography.Title>
             <Typography.Text style={{ lineHeight: 0 }}>
-              Preencha todos os campos para adicionar uma nova franquia
+              {subtitle}
             </Typography.Text>
           </Col>
         </Row>
@@ -164,34 +176,58 @@ export const MutateFranchise = ({ mutate }: mutateI) => {
           />
         </div>
       </Col>
-      <Col
-        span={24}
+      <Card
         style={{
-          maxHeight: "70vh",
-          overflow: "auto",
-          display: "flex",
-          justifyContent: "center",
+          maxHeight: isSm ? undefined : "70vh",
+          overflowY: "auto",
+          overflowX: "hidden",
+          minWidth: "100%",
         }}
       >
-        <div ref={divRef} style={{ width: "calc(60% - 15px)", paddingTop: 16 }}>
-          <StepsForm<createFranchiseI>
-            formRef={formRef}
-            onFinish={waitTime}
-            stepsRender={() => null}
-            submitter={false}
-            current={step - 1}
-            onCurrentChange={(current) => {
-              setWidth((100 / 3) * (current + 1));
-              setStep(current + 1);
-            }}
-            formProps={{ initialValues: initialFormValues }}
-          >
-            <StepOne setModules={setModules} />
-            <StepTwo />
-            <StepThree modules={modules} />
-          </StepsForm>
-        </div>
-      </Col>
+        <Row
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Col xs={{ span: 24 }} md={{ span: 16 }}>
+            <StepsForm<createFranchiseI>
+              formRef={formRef}
+              onFinish={waitTime}
+              stepsRender={(steps) =>
+                update ? (
+                  <Tabs
+                    centered
+                    onChange={(key) => {
+                      setStep(+key + 1);
+                      setWidth((100 / 3) * (+key + 1));
+                    }}
+                    items={steps.map((step) => ({
+                      label: step.title,
+                      key: step.key,
+                    }))}
+                  />
+                ) : null
+              }
+              submitter={false}
+              current={step - 1}
+              onCurrentChange={(current) => {
+                setWidth((100 / 3) * (current + 1));
+                setStep(current + 1);
+              }}
+              formProps={{ initialValues: initialFormValues }}
+            >
+              <StepOne setModules={setModules} update={update} />
+              <StepTwo update={update} />
+              <StepThree
+                modules={modules}
+                update={update}
+                agreements={agreements}
+              />
+            </StepsForm>
+          </Col>
+        </Row>
+      </Card>
 
       <Col
         style={{
@@ -231,13 +267,23 @@ export const MutateFranchise = ({ mutate }: mutateI) => {
           size="large"
           type="primary"
           onClick={() => {
+            if (update) {
+              setStep(3);
+              setWidth((100 / 3) * 3);
+              setTimeout(() => {
+                formRef.current?.submit();
+              }, 500);
+              setLoadingStep(true);
+              setTimeout(() => setLoadingStep(false), 2000);
+              return;
+            }
             formRef.current?.submit();
-            setLoading(true);
-            setTimeout(() => setLoading(false), 2000);
+            setLoadingStep(true);
+            setTimeout(() => setLoadingStep(false), 2000);
           }}
-          loading={loading}
+          loading={loadingStep || loading}
         >
-          Próxima etapa
+          {update ? "Salvar dados" : "Próxima etapa"}
         </Button>
       </Col>
     </Row>

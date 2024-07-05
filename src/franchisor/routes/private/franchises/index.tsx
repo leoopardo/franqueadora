@@ -7,7 +7,7 @@ import {
 import { Button, Col, Input, Row, Switch, Tooltip, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PageHeader } from "../../../../components/header/pageHeader";
 import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
@@ -25,9 +25,10 @@ import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 export const Franchises = () => {
   const [params, setParams] = useState<FranchiseParams>({ page: 1, size: 15 });
   const { data, isLoading } = useListFranchises(params);
-  const {isSm} = useBreakpoints()
+  const { isSm } = useBreakpoints();
   const activate = useActivateFranchise();
   const inactivate = useInactivateFranchise();
+  const navigate = useNavigate();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -46,7 +47,11 @@ export const Franchises = () => {
   }, 500);
 
   return (
-    <Row style={{ width: "100%", padding: isSm ? 12 : 40 }} align="middle" gutter={[8, 8]}>
+    <Row
+      style={{ width: "100%", padding: isSm ? 12 : 40 }}
+      align="middle"
+      gutter={[8, 8]}
+    >
       <Col xs={{ span: 24 }} md={{ span: 12 }}>
         <PageHeader
           title="Franquias"
@@ -59,13 +64,12 @@ export const Franchises = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar franquia"
-  
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>
         <Link to={"cadastro"}>
           <Button
-            style={{ width: "100%", }}
+            style={{ width: "100%" }}
             size="large"
             type="primary"
             shape="round"
@@ -83,7 +87,7 @@ export const Franchises = () => {
           actions={[
             {
               label: "Editar",
-              onClick: (row) => console.log(row),
+              onClick: (row) => navigate(`edição/${row?.id}`, { state: row }),
               icon: <PencilIcon style={{ width: 16 }} />,
             },
           ]}

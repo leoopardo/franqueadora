@@ -4,7 +4,10 @@ import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
 import { Button, Col, Divider, Input, Row } from "antd";
 import { useRef, useState } from "react";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
-import { TFranchiseAgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
+import {
+  AgreementType,
+  TFranchiseAgreementType,
+} from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 import { CurrencyInput } from "react-currency-mask";
 
 // interface moduleType {
@@ -21,8 +24,10 @@ import { CurrencyInput } from "react-currency-mask";
 
 interface stepThreeI {
   modules: string[];
+  update?: boolean;
+  agreements?: AgreementType[];
 }
-export const StepThree = ({ modules }: stepThreeI) => {
+export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
   const stepOneRef = useRef<any>(null);
   const { isXs } = useBreakpoints();
   const [updateFees, setUpdateFees] = useState<boolean>(false);
@@ -41,9 +46,86 @@ export const StepThree = ({ modules }: stepThreeI) => {
 
     const components: JSX.Element[] = [];
     keysOrganization.forEach((type) => {
-      const item = data?.items.find(
-        (item) => item.type === section && item.key === type
-      );
+      if (agreements) {
+        const item = agreements.find(
+          (item) => item.type === section && item.key === type
+        );
+        if (item) {
+          const valueType = item.value_type;
+          const name = item.name;
+          const value = item.value;
+
+          stepOneRef.current.setFieldValue(
+            ["agreements", section, type],
+            value
+          );
+
+          valueType === "CURRENCY"
+            ? components.push(
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                  <ProForm.Item
+                    name={["agreements", section, type]}
+                    label={name}
+                    rules={[
+                      {
+                        required: !update,
+                      },
+                    ]}
+                  >
+                    <CurrencyInput
+                      onChangeValue={(_event) => {
+                        return;
+                      }}
+                      hideSymbol
+                      max={100}
+                      InputElement={
+                        <Input
+                          size="large"
+                          style={{ width: "100%" }}
+                          disabled={!updateFees}
+                          placeholder="Digite o resultado da franqueadora"
+                          addonAfter="%"
+                        />
+                      }
+                    />
+                  </ProForm.Item>
+                </Col>
+              )
+            : components.push(
+                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                  <ProForm.Item
+                    name={["agreements", section, type]}
+                    label={name}
+                    rules={[
+                      {
+                        required: !update,
+                      },
+                    ]}
+                  >
+                    <CurrencyInput
+                      onChangeValue={(_event) => {
+                        return;
+                      }}
+                      hideSymbol
+                      max={100}
+                      InputElement={
+                        <Input
+                          size="large"
+                          style={{ width: "100%" }}
+                          disabled={!updateFees}
+                          placeholder="Digite a taxa da PAY356"
+                          addonAfter="%"
+                        />
+                      }
+                    />
+                  </ProForm.Item>
+                </Col>
+              );
+        }
+      }
+      const item = data?.items
+        .filter((i) => !agreements?.find((a) => a.id === i.id))
+        .find((item) => item.type === section && item.key === type);
 
       if (item) {
         const valueType = item.value_type;
@@ -60,7 +142,7 @@ export const StepThree = ({ modules }: stepThreeI) => {
                   label={name}
                   rules={[
                     {
-                      required: true,
+                      required: !update,
                     },
                   ]}
                 >
@@ -90,7 +172,7 @@ export const StepThree = ({ modules }: stepThreeI) => {
                   label={name}
                   rules={[
                     {
-                      required: true,
+                      required: !update,
                     },
                   ]}
                 >
@@ -179,30 +261,31 @@ export const StepThree = ({ modules }: stepThreeI) => {
         )}
         {modules.includes("Ingresso") && (
           <>
-          <Row gutter={[8, 0]}>
-            <Col span={24}>
-              <Divider orientation="left">Ingresso físico (Consumidor)</Divider>
-            </Col>
-            {renderFeeSection("PHYSICAL_TICKET_CONSUMER").map((x) => x)}
-          </Row>{" "}
-          <Row gutter={[8, 8]}>
-            <Col span={24}>
-              <Divider orientation="left">Ingresso físico (Produtor)</Divider>
-            </Col>
-            {renderFeeSection("PHYSICAL_TICKET_PRODUCER").map((x) => x)}
-          </Row>
-        </>
+            <Row gutter={[8, 0]}>
+              <Col span={24}>
+                <Divider orientation="left">
+                  Ingresso físico (Consumidor)
+                </Divider>
+              </Col>
+              {renderFeeSection("PHYSICAL_TICKET_CONSUMER").map((x) => x)}
+            </Row>{" "}
+            <Row gutter={[8, 8]}>
+              <Col span={24}>
+                <Divider orientation="left">Ingresso físico (Produtor)</Divider>
+              </Col>
+              {renderFeeSection("PHYSICAL_TICKET_PRODUCER").map((x) => x)}
+            </Row>
+          </>
         )}
         {modules.includes("Transação direta") && (
           <>
-          <Row gutter={[8, 0]}>
-            <Col span={24}>
-              <Divider orientation="left">Transação</Divider>
-            </Col>
-            {renderFeeSection("DIRECT_TRANSACTION").map((x) => x)}
-          </Row>{" "}
-        
-        </>
+            <Row gutter={[8, 0]}>
+              <Col span={24}>
+                <Divider orientation="left">Transação</Divider>
+              </Col>
+              {renderFeeSection("DIRECT_TRANSACTION").map((x) => x)}
+            </Row>{" "}
+          </>
         )}
       </Row>
     </StepsForm.StepForm>
