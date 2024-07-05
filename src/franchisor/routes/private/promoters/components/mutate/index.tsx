@@ -7,6 +7,8 @@ import { createFranchiseI } from "../../../../../services/franchises/__interface
 import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 
 interface mutateI {
   body: createFranchiseI;
@@ -23,6 +25,8 @@ export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
   const [modules, setModules] = useState<string[]>([]);
   const [width, setWidth] = useState<number>((100 / 3) * 1);
   const [step, setStep] = useState<number>(1);
+  const navigate = useNavigate();
+
 
   const waitTime = (values: any) => {
     return new Promise<boolean>((resolve) => {
@@ -86,11 +90,11 @@ export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
             <Typography.Text style={{ lineHeight: 0 }}>
               Passo {step} de 3
             </Typography.Text>
-            <Typography.Title level={3} style={{  margin: 0 }}>
+            <Typography.Title level={3} style={{ margin: 0 }}>
               Cadastro de promotores
             </Typography.Title>
             <Typography.Text style={{ lineHeight: 0 }}>
-              Preencha todos os campos para adicionar uma nova franquia
+              Preencha todos os campos para adicionar um novo promotor
             </Typography.Text>
           </Col>
         </Row>
@@ -135,6 +139,7 @@ export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
             onFinish={waitTime}
             stepsRender={() => null}
             submitter={false}
+            current={step - 1}
             onCurrentChange={(current) => {
               setWidth((100 / 3) * (current + 1));
               setStep(current + 1);
@@ -156,14 +161,32 @@ export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
           justifyContent: "space-between",
           alignItems: "center",
           padding: 34,
-          flexDirection: "row-reverse",
         }}
         span={24}
       >
         <Button
           shape="round"
           size="large"
+          danger
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          icon={<ChevronLeftIcon style={{ height: 20 }} />}
+          onClick={() =>
+            step === 1 ? navigate(-1) : setStep((curr) => curr - 1)
+          }
+        >
+          Voltar
+        </Button>
+        <Button
+          shape="round"
+          size="large"
           type="primary"
+          onClick={() => {
+            formRef.current?.submit();
+          }}
         >
           Próxima etapa
         </Button>

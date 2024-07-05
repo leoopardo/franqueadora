@@ -48,7 +48,7 @@ const Light: ThemeConfig = {
       boxShadow: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.144)",
       boxShadowSecondary: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.144)",
       boxShadowTertiary: "0px 4px 15.7px -3px rgba(0, 0, 0, 0.144)",
-      colorBgContainer: "#F5F6F8"
+      colorBgContainer: "#ffffff"
     },
     Layout: {
       colorBgHeader: "#fdfdfd",

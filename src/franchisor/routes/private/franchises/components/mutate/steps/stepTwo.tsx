@@ -15,7 +15,7 @@ import {
 } from "../../../../../../../utils/regexFormat";
 import regexList from "../../../../../../../utils/regexList";
 
-export const StepTwo = () => {
+export const StepTwo = ({update}: {update?: boolean}) => {
   const stepTwoRef = useRef<any>(null);
   const { isXs } = useBreakpoints();
   const [password, setPassWord] = useState<string>("");
@@ -85,12 +85,12 @@ export const StepTwo = () => {
         {" "}
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
           <ProFormText
-            name="cpf"
+            name={["master", "cpf"]}
             label="CPF"
             placeholder="Digite o CPF"
             validateTrigger={["onChange", "onBlur", "onPaste"]}
             rules={[
-              { required: true },
+              { required: !update },
               ({}) => ({
                 validator(_, value) {
                   if (!value || value.match(regexList.cpf)) {
@@ -125,20 +125,20 @@ export const StepTwo = () => {
         </Col>
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
           <ProFormText
-            name="name"
+            name={["master", "name"]}
             label="Nome completo"
             placeholder="Digite o nome completo"
-            rules={[{ required: true }]}
+            rules={[{ required: !update }]}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name="email"
+            name={["master", "email"]}
             label="Email"
             placeholder="Digite o email"
             validateTrigger={["onChange", "onBlur", "onPaste"]}
             rules={[
-              { required: true },
+              { required: !update },
               { type: "email", message: "Este não é um email válido" },
               // ({}) => ({
               //   validator() {
@@ -164,12 +164,12 @@ export const StepTwo = () => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name="cellphone"
+            name={["master", "cellphone"]}
             label="Celular"
             placeholder="Digite número de celular"
             validateTrigger={["onChange", "onBlur", "onPaste"]}
             rules={[
-              { required: true },
+              { required: !update },
               ({}) => ({
                 validator(_, value) {
                   if (!value || value.match(regexList.cellphone)) {
@@ -205,10 +205,10 @@ export const StepTwo = () => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name="username"
+            name={["master", "username"]}
             label="Nome de usuário"
             placeholder="Digite o nome de usuário"
-            rules={[{ required: true }]}
+            rules={[{ required: !update }]}
           />
         </Col>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
@@ -216,11 +216,11 @@ export const StepTwo = () => {
         </Col>
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
           <ProFormText.Password
-            name="password"
+            name={["master", "password"]}
             label="Senha"
             placeholder="Digite a senha"
             rules={[
-              { required: true },
+              { required: !update },
               ({}) => ({
                 validator(_, value) {
                   if (!value || value.match(regexList.password)) {
@@ -239,14 +239,14 @@ export const StepTwo = () => {
         </Col>
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
           <ProFormText.Password
-            name="confirm_password"
+            name={["master", "confirm_password"]}
             label="Confirmar senha"
             placeholder="Confirme a senha"
             rules={[
-              { required: true },
+              { required: !update },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
+                  if (!value || getFieldValue(["master", "password"]) === value) {
                     return Promise.resolve();
                   }
                   return Promise.reject(new Error(""));
@@ -353,19 +353,19 @@ export const StepTwo = () => {
         </Col>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
           <ProFormText.Password
-            name="terminal_password"
+            name={["master", "terminal_password"]}
             label="Senha do terminal"
-            rules={[{ required: true }]}
+            rules={[{ required: !update }]}
             fieldProps={{
               addonAfter: (
                 <ReloadOutlined
                   style={{ cursor: "pointer" }}
                   onClick={() =>
-                    stepTwoRef.current.setFieldsValue({
+                    stepTwoRef.current.setFieldsValue({master: {
                       terminal_password: Math.floor(
                         100000 + Math.random() * 900000
                       ),
-                    })
+                    }})
                   }
                 />
               ),

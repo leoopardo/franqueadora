@@ -1,26 +1,23 @@
 import { useQuery } from "react-query";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
-import ResponseI from "../__interfaces/response.interface";
 import { QueryKeys } from "../queryKeys";
 import {
   Franchise,
-  FranchiseParams,
-  franchiseResponseSchema,
+  FranchiseSchema
 } from "./__interfaces/franchises.interface";
 
-export const useListFranchises = (params: FranchiseParams) => {
+export const useGetFranchiseById = (id: string) => {
   const { headers } = useFranchisorAuth();
-  const { data, error, isLoading, refetch } = useQuery<
-    ResponseI<Franchise> | null | undefined
+  const { data, error, isLoading, refetch, isSuccess } = useQuery<
+    Franchise | null | undefined
   >(
-    [QueryKeys.LIST_FRANCHISES, params],
+    [QueryKeys.LIST_FRANCHISES, id],
     async () => {
-      const response = await apiFranquia.get(`/franchise/all`, {
-        headers: { ...headers },
-        params: { ...params, orderBy: "created_at", orderDirection: "desc" },
+      const response = await apiFranquia.get(`/franchise/${id}`, {
+        headers: { ...headers }
       });
-      const parsedResponse = franchiseResponseSchema.safeParse(response.data);
+      const parsedResponse = FranchiseSchema.safeParse(response.data);
       if (!parsedResponse.success) {
         throw new Error(parsedResponse.error as any);
       }
@@ -34,6 +31,6 @@ export const useListFranchises = (params: FranchiseParams) => {
     data,
     error,
     isLoading,
-    refetch,
+    refetch,isSuccess
   };
 };

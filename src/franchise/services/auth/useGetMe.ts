@@ -1,12 +1,14 @@
+import { apiFranqueadora } from "@config/api";
 import { useEffect } from "react";
 import { QueryFunction, useQuery } from "react-query";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchiseAuth } from "../../../contexts/franchiseAuthContext";
 import { congnitoAuthService } from "./CognitoAuthService";
+import secureLocalStorage from "react-secure-storage";
 
 export interface getMeI {
   id: string;
-  user_id: 43817;
+  user_id: number;
   name: string;
   avatar: string;
   role: string;
@@ -58,34 +60,60 @@ export function useGetMe() {
 
   useEffect(() => {
     const getHeaders = async () => {
-      const user = await congnitoAuthService.getToken();
-      const token = user.accessToken.jwtToken;
-      const idToken = user.idToken.jwtToken;
-      setHeader({
-        Authorization: `Bearer ${token}`,
-        Identity: `${idToken}`,
-        "ngrok-skip-browser-warning": true,
-      });
+      if (secureLocalStorage.getItem("Authorization")) {
+        setHeader({
+          Authorization: `${secureLocalStorage.getItem("Authorization")}`,
+          Identity: `${secureLocalStorage.getItem("Identity")}`,
+          AuthToken: `${secureLocalStorage.getItem("AuthToken")}`,
+        });
+      } else {
+        const user = await congnitoAuthService.getToken();
+        const token = user.accessToken.jwtToken;
+        const idToken = user.idToken.jwtToken;
+        setHeader({
+          Authorization: `Bearer ${token}`,
+          Identity: `${idToken}`,
+          "ngrok-skip-browser-warning": true,
+        });
+      }
     };
 
-    getHeaders();
-  }, [setHeader]);
+    if (!headers) {
+      getHeaders();
+    }
+  }, [headers, setHeader]);
 
   const fetchMe: QueryFunction<getMeI> = async () => {
-    const user = await congnitoAuthService.getToken();
-    const authToken = await congnitoAuthService.getAuthToken();
+    let user;
+    let authToken;
 
-    const token = user.accessToken.jwtToken;
-    const idToken = user.idToken.jwtToken;
-    const response = await apiFranquia.get("/user/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        Identity: `${idToken}`,
-        AuthToken: `${authToken}`,
-        "ngrok-skip-browser-warning": true,
-      },
-    });
-    setHeader((state) => ({ ...state, AuthToken: data?.AuthToken }));
+    if (!secureLocalStorage.getItem("Authorization")) {
+      user = await congnitoAuthService.getToken();
+      authToken = await congnitoAuthService.getAuthToken();
+    }
+
+    const token = user?.accessToken?.jwtToken;
+    const idToken = user?.idToken?.jwtToken;
+
+    const response =
+      localStorage.getItem("master") === "true"
+        ? await apiFranqueadora.get("/user/me", {
+            headers:
+              headers ?? {
+                Authorization: `${secureLocalStorage.getItem("Authorization")}`,
+                Identity: `${secureLocalStorage.getItem("Identity")}`,
+                AuthToken: `${secureLocalStorage.getItem("AuthToken")}`,
+                "ngrok-skip-browser-warning": true,
+              },
+          })
+        : await apiFranquia.get("/user/me", {
+            headers: headers ?? {
+              Authorization: `Bearer ${token}`,
+              Identity: `${idToken}`,
+              AuthToken: `${authToken}`,
+              "ngrok-skip-browser-warning": true,
+            },
+          });
 
     return response.data;
   };
@@ -94,9 +122,17 @@ export function useGetMe() {
     "getMeFranchise",
     fetchMe,
     {
-      enabled: headers !== undefined, // Habilita a query somente quando o header Authorization estiver definido
+      enabled: !!headers,
     }
   );
+
+  useEffect(() => {
+    if (error) {
+      setHeader(null);
+      secureLocalStorage.clear();
+      localStorage.removeItem("master")
+    }
+  }, [error, setHeader]);
 
   return {
     data,

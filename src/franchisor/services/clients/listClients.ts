@@ -14,7 +14,7 @@ export const useListClients = (params: ClientParams) => {
     async () => {
       const response = await apiFranquia.get(`/client/all`, {
         headers: headers ?? {},
-        params,
+        params: { ...params, orderBy: "created_at", orderDirection: "desc" }
       });
       const parsedResponse = clientResponseSchema.safeParse(response.data);
       if (!parsedResponse.success) {

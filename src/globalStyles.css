@@ -10,7 +10,8 @@
 }
 
 ::-webkit-scrollbar-track {
-  background-color: #ebebeb; /* Removed duplicate line */
+  background-color: #68686844; /* Removed duplicate line */
+  border-radius: 20px;
 }
 
 /* Customizing the scrollbar thumb */
