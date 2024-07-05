@@ -1,4 +1,5 @@
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
+import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
@@ -11,7 +12,6 @@ import { createFranchiseI } from "../../../../../services/franchises/__interface
 import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
-import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 
 interface mutateI {
   mutate: (body: createFranchiseI) => void;
@@ -45,7 +45,7 @@ export const MutateFranchise = ({
 
   const waitTime = (values: any) => {
     const agreements: { template_id?: string; value: string }[] = [];
-
+    
     const keysOrganization = [
       "ANTIFRAUD",
       "TRANSACTION",
@@ -70,18 +70,27 @@ export const MutateFranchise = ({
       });
     });
 
+    console.log("values", values);
+
     return new Promise<boolean>((resolve) => {
       mutate({
+        ...initialValues,
         ...values,
-        cnpj: values.cnpj.replace(/\D/g, ""),
+        cnpj: values?.cnpj ? values?.cnpj?.replace(/\D/g, "") : initialValues?.cnpj?.replace(/\D/g, ""),
         master: {
-          ...values?.master,
-          cpf: values?.master?.cpf?.replace(/\D/g, ""),
-          phone: values?.master?.phone?.replace(/\D/g, ""),
-          terminal_password: `${values?.master?.terminal_password}`,
-          consfirm_password: undefined,
+          ...values?.master, ...initialValues?.master,
+          cpf: values?.master?.cpf
+            ? values?.master?.cpf?.replace(/\D/g, "")
+            : undefined,
+          phone: values?.master?.phone
+            ? values?.master?.phone?.replace(/\D/g, "")
+            : undefined,
+          terminal_password: values?.master?.terminal_password
+            ? `${values?.master?.terminal_password}`
+            : undefined,
+          confirm_password: undefined,
         },
-        state_registration: `${values?.state_registration}`,
+        state_registration: values?.state_registration ? `${values?.state_registration}` : undefined,
         contacts: [],
         agreement: agreements,
         agreements: undefined,
@@ -267,16 +276,6 @@ export const MutateFranchise = ({
           size="large"
           type="primary"
           onClick={() => {
-            if (update) {
-              setStep(3);
-              setWidth((100 / 3) * 3);
-              setTimeout(() => {
-                formRef.current?.submit();
-              }, 500);
-              setLoadingStep(true);
-              setTimeout(() => setLoadingStep(false), 2000);
-              return;
-            }
             formRef.current?.submit();
             setLoadingStep(true);
             setTimeout(() => setLoadingStep(false), 2000);

@@ -18,7 +18,7 @@ export const useListFranchises = (params: FranchiseParams) => {
     async () => {
       const response = await apiFranquia.get(`/franchise/all`, {
         headers: { ...headers },
-        params: { ...params, orderBy: "created_at", orderDirection: "desc" },
+        params: { orderBy: "created_at", orderDirection: "desc", ...params },
       });
       const parsedResponse = franchiseResponseSchema.safeParse(response.data);
       if (!parsedResponse.success) {

@@ -7,7 +7,7 @@ export const useValidateStepOne = ({
   body,
 }: {
   body: {
-    franchise_name: string;
+    franchise_name?: string;
     cnpj: string;
   };
 }) => {

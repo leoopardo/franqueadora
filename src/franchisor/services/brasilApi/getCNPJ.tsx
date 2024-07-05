@@ -29,7 +29,7 @@ export function useGetCNPJ(cnpj: string) {
         `https://brasilapi.com.br/api/cnpj/v1/${cnpj.replace(/\D/g, '')}`
       );
       return response.data;
-    }
+    }, {enabled: cnpj ? true : false}
   );
 
   return {

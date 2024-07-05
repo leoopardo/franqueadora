@@ -274,6 +274,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               case "confirm":
                 return (
                   <Col
+                  key={rule.title}
                     md={{ span: 8 }}
                     style={{
                       display: "flex",
@@ -299,6 +300,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               case "minLength":
                 return (
                   <Col
+                  key={rule.title}
                     md={{ span: 8 }}
                     style={{
                       display: "flex",
@@ -324,6 +326,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               default:
                 return (
                   <Col
+                  key={rule.title}
                     md={{ span: 8 }}
                     style={{
                       display: "flex",

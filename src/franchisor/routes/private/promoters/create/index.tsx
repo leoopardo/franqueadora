@@ -1,13 +1,11 @@
+import { useCreatePromoter } from "@franchisor/services/promoters/createPromoter";
 import { Col, Row, notification } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createFranchiseI } from "../../../../services/franchises/__interfaces/create_franchise.interface";
-import { useCreateFranchise } from "../../../../services/franchises/createFranchise";
 import { MutatePromoter } from "../components/mutate";
 
 export const CreatePromoter = () => {
-  const [body, setBody] = useState<createFranchiseI>({});
-  const { mutate, isLoading, isSuccess, error } = useCreateFranchise(body);
+  const { mutate, isLoading, isSuccess, error } = useCreatePromoter();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,12 +24,12 @@ export const CreatePromoter = () => {
     <Row style={{ width: "100%" }} justify="center">
       <Col xs={{ span: 24 }} md={{ span: 24 }}>
         <MutatePromoter
-          body={body}
-          setBody={setBody}
           mutate={mutate}
           error={error}
           loading={isLoading}
           success={isSuccess}
+          title="Cadastro de promotor"
+          subtitle="Preencha todos os campos para adicionar um novo promotor"
         />
       </Col>
     </Row>

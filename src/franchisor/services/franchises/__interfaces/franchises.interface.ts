@@ -52,6 +52,21 @@ const TenantSchema = z.object({
   ),
 });
 
+const FranchiseOccuppationCounties = z.object({
+  active: z.boolean().optional(),
+  id: z.string().optional(),
+  County: z.object({
+    AreaCode: z
+      .object({
+        id: z.string().optional(),
+      })
+      .optional(),
+    active: z.boolean().optional(),
+    id: z.string().optional(),
+    name: z.string().optional(),
+  }),
+});
+
 const MasterSchema = z
   .object({
     id: z.string(),
@@ -106,6 +121,9 @@ export const FranchiseSchema = z.object({
   FranchiseAddress: FranchiseAddressSchema,
   FranchiseAgreement: z.array(FranchiseAgreementSchema).optional().nullable(),
   Tenant: TenantSchema.optional(),
+  FranchiseOccuppationCounties: z
+    .array(FranchiseOccuppationCounties)
+    .optional(),
 });
 
 export const franchiseResponseSchema = createResponseSchema(FranchiseSchema);

@@ -1,10 +1,18 @@
-import { ProForm, StepsForm } from "@ant-design/pro-components";
+import {
+  ProForm,
+  ProFormInstance,
+  StepsForm,
+} from "@ant-design/pro-components";
+import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
 import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
 import { Button, Col, Divider, Input, Row } from "antd";
-import { useEffect, useRef, useState } from "react";
-import { CurrencyInput } from "react-currency-mask";
+import { useRef, useState } from "react";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
-import { useGetAgreements } from "../../../../../../services/utils/getAgreements";
+import {
+  AgreementType,
+  TFranchiseAgreementType,
+} from "@franchisor/services/franchises/__interfaces/agremeents.interface";
+import { CurrencyInput } from "react-currency-mask";
 
 // interface moduleType {
 //   name: string;
@@ -20,188 +28,202 @@ import { useGetAgreements } from "../../../../../../services/utils/getAgreements
 
 interface stepThreeI {
   modules: string[];
+  update?: boolean;
+  agreements?: AgreementType[];
 }
-export const StepThree = ({ modules }: stepThreeI) => {
-  const stepOneRef = useRef<any>(null);
+export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
+  const stepTrhreeRef = useRef<ProFormInstance>(null);
   const { isXs } = useBreakpoints();
   const [updateFees, setUpdateFees] = useState<boolean>(false);
-  const [activeModules, setActiveModules] = useState<any>([]);
-  const { AgreementsData } = useGetAgreements();
+  const { data } = useListFranchiseAgreements();
 
-  const waitTime = (time: number = 100) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-      }, time);
+  function renderFeeSection(section: TFranchiseAgreementType) {
+    const keysOrganization = [
+      "ANTIFRAUD",
+      "TRANSACTION",
+      "FEE_EMISSION",
+      "FEE_PAY365",
+      "RESULT_FRANCHISOR",
+      "RESULT_CREDIT_ADVANCE",
+      "SPREAD_CREDIT_ADVANCE",
+    ];
+
+    const components: JSX.Element[] = [];
+
+    keysOrganization.forEach((type) => {
+      if (agreements) {
+        const item = agreements.find(
+          (item) => item.type === section && item.key === type
+        );
+        if (item) {
+          const valueType = item.value_type;
+          const name = item.name;
+          const value = item.value;
+
+          stepTrhreeRef?.current?.setFieldValue(
+            ["agreements", section, type],
+            value
+          );
+
+          valueType === "CURRENCY"
+            ? components.push(
+                <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
+                  <ProForm.Item
+                    name={["agreements", section, type]}
+                    label={name}
+                    rules={[
+                      {
+                        required: !update,
+                      },
+                    ]}
+                  >
+                    <CurrencyInput
+                      onChangeValue={(event) => {
+                        stepTrhreeRef?.current?.setFieldValue(
+                          ["agreements", section, type],
+                          event.target.value
+                        );
+                        console.log(stepTrhreeRef?.current?.getFieldsValue());
+                      }}
+                      hideSymbol
+                      max={100}
+                      InputElement={
+                        <Input
+                          size="large"
+                          style={{ width: "100%" }}
+                          disabled={!updateFees}
+                          placeholder="Digite o resultado da franqueadora"
+                          addonAfter="%"
+                        />
+                      }
+                    />
+                  </ProForm.Item>
+                </Col>
+              )
+            : components.push(
+                <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
+                  <ProForm.Item
+                    name={["agreements", section, type]}
+                    label={name}
+                    rules={[
+                      {
+                        required: !update,
+                      },
+                    ]}
+                  >
+                    <CurrencyInput
+                      onChangeValue={(event) => {
+                        stepTrhreeRef?.current?.setFieldValue(
+                          ["agreements", section, type],
+                          event.target.value
+                        );
+
+                        console.log(stepTrhreeRef?.current?.getFieldsValue());
+                      }}
+                      hideSymbol
+                      max={100}
+                      InputElement={
+                        <Input
+                          size="large"
+                          style={{ width: "100%" }}
+                          disabled={!updateFees}
+                          placeholder="Digite a taxa da PAY356"
+                          addonAfter="%"
+                        />
+                      }
+                    />
+                  </ProForm.Item>
+                </Col>
+              );
+        }
+      }
+      const item = data?.items
+        .filter((i) => !agreements?.find((a) => a.id === i.id))
+        .find((item) => item.type === section && item.key === type);
+
+      if (item) {
+        const valueType = item.value_type;
+        const name = item.name;
+        const value = item.value;
+
+        stepTrhreeRef?.current?.setFieldValue(
+          ["agreements", section, type],
+          value
+        );
+
+        valueType === "CURRENCY"
+          ? components.push(
+              <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
+                <ProForm.Item
+                  name={["agreements", section, type]}
+                  label={name}
+                  rules={[
+                    {
+                      required: !update,
+                    },
+                  ]}
+                >
+                  <CurrencyInput
+                    onChangeValue={(event) => {
+                      stepTrhreeRef?.current?.setFieldValue(
+                        ["agreements", section, type],
+                        event.target.value
+                      );
+                      console.log(stepTrhreeRef?.current?.getFieldsValue());
+                    }}
+                    hideSymbol
+                    max={100}
+                    InputElement={
+                      <Input
+                        size="large"
+                        style={{ width: "100%" }}
+                        disabled={!updateFees}
+                        placeholder="Digite o resultado da franqueadora"
+                        addonAfter="%"
+                      />
+                    }
+                  />
+                </ProForm.Item>
+              </Col>
+            )
+          : components.push(
+              <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
+                <ProForm.Item
+                  name={["agreements", section, type]}
+                  label={name}
+                  rules={[
+                    {
+                      required: !update,
+                    },
+                  ]}
+                >
+                  <CurrencyInput
+                    onChangeValue={(event) => {
+                      stepTrhreeRef?.current?.setFieldValue(
+                        ["agreements", section, type],
+                        event.target.value
+                      );
+                      console.log(stepTrhreeRef?.current?.getFieldsValue());
+                    }}
+                    hideSymbol
+                    max={100}
+                    InputElement={
+                      <Input
+                        size="large"
+                        style={{ width: "100%" }}
+                        disabled={!updateFees}
+                        placeholder="Digite a taxa da PAY356"
+                        addonAfter="%"
+                      />
+                    }
+                  />
+                </ProForm.Item>
+              </Col>
+            );
+      }
     });
-  };
-
-  useEffect(() => {
-    if (modules && AgreementsData) {
-      const ONLINE_TICKET = AgreementsData.items.filter(
-        (i) => i.type === "ONLINE_TICKET"
-      );
-      const ONLINE_PUB = AgreementsData.items.filter(
-        (i) => i.type === "ONLINE_PUB"
-      );
-      const PHYSICAL_TICKET_CONSUMER = AgreementsData.items.filter(
-        (i) => i.type === "PHYSICAL_TICKET_CONSUMER"
-      );
-      const PHYSICAL_TICKET_PRODUCER = AgreementsData.items.filter(
-        (i) => i.type === "PHYSICAL_TICKET_PRODUCER"
-      );
-      // const PHYSICAL_PUB_CONSUMER = AgreementsData.items.filter(
-      //   (i) => i.type === "PHYSICAL_PUB_CONSUMER"
-      // );
-      // const PHYSICAL_PUB_PRODUCER = AgreementsData.items.filter(
-      //   (i) => i.type === "PHYSICAL_PUB_PRODUCER"
-      // );
-      // const DIRECT_TRANSACTION = AgreementsData.items.filter(
-      //   (i) => i.type === "DIRECT_TRANSACTION"
-      // );
-      if (modules.includes("Ingressos")) {
-        if (ONLINE_TICKET.length) {
-          setActiveModules((modules: any) => [
-            ...modules,
-            {
-              name: "ONLINE_TICKET",
-              label: "Ingresso online",
-              ANTIFRAUD: ONLINE_TICKET.find(
-                (value) => value.key === "ANTIFRAUD"
-              ),
-              TRANSACTION: ONLINE_TICKET.find(
-                (value) => value.key === "TRANSACTION"
-              ),
-              FEE_PAY365: ONLINE_TICKET.find(
-                (value) => value.key === "FEE_PAY365"
-              ),
-              RESULT_FRANCHISOR: ONLINE_TICKET.find(
-                (value) => value.key === "RESULT_FRANCHISOR"
-              ),
-              RESULT_CREDIT_ADVANCE: ONLINE_TICKET.find(
-                (value) => value.key === "RESULT_CREDIT_ADVANCE"
-              ),
-              SPREAD_CREDIT_ADVANCE: ONLINE_TICKET.find(
-                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
-              ),
-            },
-          ]);
-        }
-        if (PHYSICAL_TICKET_CONSUMER.length) {
-          setActiveModules((modules: any) => [
-            ...modules,
-            {
-              name: "PHYSICAL_TICKET_CONSUMER",
-              label: "Ingresso fisico (Consumidor)",
-              TRANSACTION: PHYSICAL_TICKET_CONSUMER.find(
-                (value) => value.key === "TRANSACTION"
-              ),
-              FEE_PAY365: PHYSICAL_TICKET_CONSUMER.find(
-                (value) => value.key === "FEE_PAY365"
-              ),
-              RESULT_FRANCHISOR: PHYSICAL_TICKET_CONSUMER.find(
-                (value) => value.key === "RESULT_FRANCHISOR"
-              ),
-              RESULT_CREDIT_ADVANCE: PHYSICAL_TICKET_CONSUMER.find(
-                (value) => value.key === "RESULT_CREDIT_ADVANCE"
-              ),
-              SPREAD_CREDIT_ADVANCE: PHYSICAL_TICKET_CONSUMER.find(
-                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
-              ),
-            },
-          ]);
-        }
-        if (PHYSICAL_TICKET_PRODUCER.length) {
-          setActiveModules((modules: any) => [
-            ...modules,
-            {
-              name: "PHYSICAL_TICKET_PRODUCER",
-              label: "Ingresso fisico (Produtor)",
-              TRANSACTION: PHYSICAL_TICKET_PRODUCER.find(
-                (value) => value.key === "TRANSACTION"
-              ),
-              FEE_PAY365: PHYSICAL_TICKET_PRODUCER.find(
-                (value) => value.key === "FEE_PAY365"
-              ),
-              RESULT_FRANCHISOR: PHYSICAL_TICKET_PRODUCER.find(
-                (value) => value.key === "RESULT_FRANCHISOR"
-              ),
-              RESULT_CREDIT_ADVANCE: PHYSICAL_TICKET_PRODUCER.find(
-                (value) => value.key === "RESULT_CREDIT_ADVANCE"
-              ),
-              SPREAD_CREDIT_ADVANCE: PHYSICAL_TICKET_PRODUCER.find(
-                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
-              ),
-            },
-          ]);
-        }
-      }
-      if (modules.includes("Fichas")) {
-        if (ONLINE_PUB.length) {
-          setActiveModules((modules: any) => [
-            ...modules,
-            {
-              name: "ONLINE_PUB",
-              label: "Bar online",
-              ANTIFRAUD: ONLINE_PUB.find((value) => value.key === "ANTIFRAUD"),
-              TRANSACTION: ONLINE_PUB.find(
-                (value) => value.key === "TRANSACTION"
-              ),
-              FEE_PAY365: ONLINE_PUB.find(
-                (value) => value.key === "FEE_PAY365"
-              ),
-              RESULT_FRANCHISOR: ONLINE_PUB.find(
-                (value) => value.key === "RESULT_FRANCHISOR"
-              ),
-              RESULT_CREDIT_ADVANCE: ONLINE_PUB.find(
-                (value) => value.key === "RESULT_CREDIT_ADVANCE"
-              ),
-              SPREAD_CREDIT_ADVANCE: ONLINE_PUB.find(
-                (value) => value.key === "SPREAD_CREDIT_ADVANCE"
-              ),
-            },
-          ]);
-        }
-      }
-    }
-  }, [modules, AgreementsData]);
-
-  const initialValues = {
-    ticket_antifraude: 0,
-    ticket_transaction: 0.2,
-    ticket_pay365_fee: 0.25,
-    ticket_franchisor_result: 60,
-    ticket_credit_result: 60,
-    ticket_credit_spread: 1.0,
-    bar_antifraude: 0,
-    bar_transaction: 0.2,
-    bar_pay365_fee: 0.25,
-    bar_franchisor_result: 60,
-    bar_credit_result: 60,
-    bar_credit_spread: 1.0,
-    consumer_ticket_emission: 0.3,
-    consumer_ticket_pay365_fee: 0.25,
-    consumer_ticket_franchisor_result: 60,
-    consumer_ticket_credit_result: 60,
-    consumer_ticket_credit_spread: 1.0,
-    producer_ticket_emission: 0.3,
-    producer_ticket_pay365_fee: 0.25,
-    producer_ticket_franchisor_result: 60,
-    producer_ticket_credit_spread: 1.0,
-    consumer_bar_pay365_fee: 0.25,
-    consumer_bar_credit_result: 60,
-    consumer_bar_credit_spread: 1.0,
-    producer_bar_pay365_fee: 0.25,
-    producer_bar_credit_result: 60,
-    producer_bar_credit_spread: 1.0,
-    direct_transaction_pay365_fee: 0.25,
-    direct_transaction_credit_result: 60,
-    direct_transaction_credit_spread: 1.0,
-  };
-
-  useEffect(() => {
-    stepOneRef.current.setFieldsValue(initialValues);
-  }, []);
+    return components;
+  }
 
   return (
     <StepsForm.StepForm<{
@@ -214,13 +236,9 @@ export const StepThree = ({ modules }: stepThreeI) => {
     }>
       name="base"
       title="Acordo comercial"
-      onFinish={async () => {
-        await waitTime(2000);
-        return true;
-      }}
       size="large"
       grid
-      formRef={stepOneRef}
+      formRef={stepTrhreeRef}
     >
       <Row
         style={{ width: isXs ? "70%" : "100%" }}
@@ -250,214 +268,50 @@ export const StepThree = ({ modules }: stepThreeI) => {
             onClick={() => setUpdateFees((prev) => !prev)}
           />
         </Col>
-        {activeModules.map((module: any) => (
+        {modules.includes("Ficha") && (
           <>
-            <Col md={{ span: 24 }} xs={{ span: 24 }}>
-              <Divider orientation="left">{module.label}</Divider>
-            </Col>
-            {module.antifraud && (
-              <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                <ProForm.Item
-                  name={`${module.name}_antifraude`}
-                  label="Antifraude"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <CurrencyInput
-                    onChangeValue={(_event) => {
-                      return;
-                    }}
-                    InputElement={
-                      <Input
-                        size="large"
-                        style={{ width: "100%" }}
-                        disabled={!updateFees}
-                        placeholder="R$ 0,00"
-                      />
-                    }
-                  />
-                </ProForm.Item>
+            <Row gutter={[8, 0]}>
+              <Col span={24}>
+                <Divider orientation="left">Bar físico (Consumidor)</Divider>
               </Col>
-            )}
-            {module.transaction && (
-              <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                <ProForm.Item
-                  name={`${module.name}_transaction`}
-                  label="Transação"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <CurrencyInput
-                    onChangeValue={(_event) => {
-                      return;
-                    }}
-                    InputElement={
-                      <Input
-                        size="large"
-                        style={{ width: "100%" }}
-                        disabled={!updateFees}
-                        placeholder="R$ 0,00"
-                      />
-                    }
-                  />
-                </ProForm.Item>
+              {renderFeeSection("PHYSICAL_PUB_CONSUMER").map((x) => x)}
+            </Row>{" "}
+            <Row gutter={[8, 8]}>
+              <Col span={24}>
+                <Divider orientation="left">Bar físico (Produtor)</Divider>
               </Col>
-            )}
-            {module.emission_fee && (
-              <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                <ProForm.Item
-                  name={`${module.name}_emission`}
-                  label="Taxa de emissão"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <CurrencyInput
-                    onChangeValue={(_event) => {
-                      return;
-                    }}
-                    InputElement={
-                      <Input
-                        size="large"
-                        style={{ width: "100%" }}
-                        disabled={!updateFees}
-                        placeholder="R$ 0,00"
-                      />
-                    }
-                  />
-                </ProForm.Item>
-              </Col>
-            )}
-            {module.pay365fee && (
-              <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                <ProForm.Item
-                  name={`${module.name}_pay365_fee`}
-                  label="Taxa PAY365"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <CurrencyInput
-                    onChangeValue={(_event) => {
-                      return;
-                    }}
-                    hideSymbol
-                    max={100}
-                    InputElement={
-                      <Input
-                        size="large"
-                        style={{ width: "100%" }}
-                        disabled={!updateFees}
-                        placeholder="Digite a taxa da PAY356"
-                        addonAfter="%"
-                      />
-                    }
-                  />
-                </ProForm.Item>
-              </Col>
-            )}
-            {module.franchisor_result && (
-              <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                <ProForm.Item
-                  name={`${module.name}_franchisor_result`}
-                  label="Resultado franqueadora"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <CurrencyInput
-                    onChangeValue={(_event) => {
-                      return;
-                    }}
-                    hideSymbol
-                    max={100}
-                    InputElement={
-                      <Input
-                        size="large"
-                        style={{ width: "100%" }}
-                        disabled={!updateFees}
-                        placeholder="Digite o resultado da franqueadora"
-                        addonAfter="%"
-                      />
-                    }
-                  />
-                </ProForm.Item>
-              </Col>
-            )}
-            {module.credit_result && (
-              <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                <ProForm.Item
-                  name={`${module.name}_credit_result`}
-                  label="Resultado antecipação de crédito"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <CurrencyInput
-                    onChangeValue={(_event) => {
-                      return;
-                    }}
-                    hideSymbol
-                    max={100}
-                    InputElement={
-                      <Input
-                        size="large"
-                        style={{ width: "100%" }}
-                        disabled={!updateFees}
-                        placeholder="Digite o resultado da antecipação de crédito"
-                        addonAfter="%"
-                      />
-                    }
-                  />
-                </ProForm.Item>
-              </Col>
-            )}
-            {module.credit_spread && (
-              <Col md={{ span: 12 }} xs={{ span: 24 }}>
-                <ProForm.Item
-                  name={`${module.name}_credit_spread`}
-                  label="Spread antecipação de crédito"
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
-                >
-                  <CurrencyInput
-                    onChangeValue={(_event) => {
-                      return;
-                    }}
-                    hideSymbol
-                    max={100}
-                    InputElement={
-                      <Input
-                        size="large"
-                        style={{ width: "100%" }}
-                        disabled={!updateFees}
-                        placeholder="Digite o spread da antecipação de crédito"
-                        addonAfter="%"
-                      />
-                    }
-                  />
-                </ProForm.Item>
-              </Col>
-            )}
+              {renderFeeSection("PHYSICAL_PUB_PRODUCER").map((x) => x)}
+            </Row>
           </>
-        ))}
+        )}
+        {modules.includes("Ingresso") && (
+          <>
+            <Row gutter={[8, 0]}>
+              <Col span={24}>
+                <Divider orientation="left">
+                  Ingresso físico (Consumidor)
+                </Divider>
+              </Col>
+              {renderFeeSection("PHYSICAL_TICKET_CONSUMER").map((x) => x)}
+            </Row>{" "}
+            <Row gutter={[8, 8]}>
+              <Col span={24}>
+                <Divider orientation="left">Ingresso físico (Produtor)</Divider>
+              </Col>
+              {renderFeeSection("PHYSICAL_TICKET_PRODUCER").map((x) => x)}
+            </Row>
+          </>
+        )}
+        {modules.includes("Transação direta") && (
+          <>
+            <Row gutter={[8, 0]}>
+              <Col span={24}>
+                <Divider orientation="left">Transação</Divider>
+              </Col>
+              {renderFeeSection("DIRECT_TRANSACTION").map((x) => x)}
+            </Row>{" "}
+          </>
+        )}
       </Row>
     </StepsForm.StepForm>
   );

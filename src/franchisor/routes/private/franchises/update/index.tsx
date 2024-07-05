@@ -1,18 +1,18 @@
-import { Col, Row } from "antd";
-import { useCreateFranchise } from "../../../../services/franchises/createFranchise";
-import { MutateFranchise } from "../components/mutate";
-import { useLocation } from "react-router-dom";
-import { formatCNPJ, formatCPF } from "@utils/regexFormat";
-import { useGetFranchiseById } from "@franchisor/services/franchises/getFranchiseById";
-import { Franchise } from "@franchisor/services/franchises/__interfaces/franchises.interface";
-import { useEffect, useState } from "react";
-import { createFranchiseI } from "@franchisor/services/franchises/__interfaces/create_franchise.interface";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
+import { createFranchiseI } from "@franchisor/services/franchises/__interfaces/create_franchise.interface";
+import { Franchise } from "@franchisor/services/franchises/__interfaces/franchises.interface";
+import { useGetFranchiseById } from "@franchisor/services/franchises/getFranchiseById";
+import { useUpdateFranchise } from "@franchisor/services/franchises/updateFranchise";
+import { formatCNPJ, formatCPF } from "@utils/regexFormat";
+import { Col, Row } from "antd";
+import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { MutateFranchise } from "../components/mutate";
 
 export const UpdateFranchise = () => {
-  const { mutate, isLoading, isSuccess, error } = useCreateFranchise();
   const { state } = useLocation();
-  const franchise = useGetFranchiseById(state.id);
+  const { mutate, isLoading, isSuccess, error } = useUpdateFranchise(state.id); 
+  const franchise = useGetFranchiseById(state.id);                                    
   const [parsed, setParsed] = useState<createFranchiseI | null>(null);
   const [agreements, setAgreements] = useState<AgreementType[]>([]);
 
@@ -21,7 +21,7 @@ export const UpdateFranchise = () => {
       const address = data.FranchiseAddress;
       const module: string[] =
         data?.FranchisePOSModule?.map(
-          (module) => module?.POSModule?.name || ""
+          (module) => module?.POSModule?.id || ""
         ) || [];
 
       if (data.FranchiseAgreement) {
@@ -53,11 +53,15 @@ export const UpdateFranchise = () => {
           phone: data?.Tenant?.UserTenant[0].User.phone || "",
           username: data.username,
         },
+        area_codes: data?.FranchiseOccuppationCounties?.map(
+          (c) => c.County.AreaCode?.id || ""
+        ),
+        counties: data?.FranchiseOccuppationCounties?.map(
+          (c) => c.County.id || ""
+        ),
       });
     }
     if (franchise.data) parseData(franchise.data);
-
-    console.log(franchise.data);
   }, [franchise.data]);
 
   return (
