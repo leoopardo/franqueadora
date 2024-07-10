@@ -11,7 +11,7 @@ To get started, ensure that Git and Yarn are installed on your machine. Then, fo
 2. **Navigate to the Directory**: Move into the project folder by running:
 
     ```
-    cd pb-v6-dashboard
+    cd franqueadora
     ```
 
 3. **Install Dependencies**: Install all necessary dependencies by executing:
