@@ -214,7 +214,14 @@ export const Landing = () => {
             zIndex: 0,
           }}
         >
-          <source src="src/assets/banner2.mov" type="video/mp4" />
+          <source
+            src={
+              import.meta.env.VITE_ENV === "local"
+                ? "src/assets/banner2.mov"
+                : "https://v.ftcdn.net/02/98/00/57/700_F_298005744_YHTLirkrwEbE1ee2v4z5O5kRUL7YVsmt_ST.mp4"
+            }
+            type="video/mp4"
+          />
         </video>
         {/* <div style={{ minHeight: 1000, marginTop: 650 }}>ftyfytf</div> */}
       </Content>
