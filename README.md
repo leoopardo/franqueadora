@@ -5,7 +5,7 @@ To get started, ensure that Git and Yarn are installed on your machine. Then, fo
 1. **Clone the Project**: Use the following command to clone the repository to your local machine:
 
     ```
-    git clone https://github.com/leoopardo/dashboard.git
+    git clone https://github.com/leoopardo/franqueadora.git
     ```
 
 2. **Navigate to the Directory**: Move into the project folder by running:
