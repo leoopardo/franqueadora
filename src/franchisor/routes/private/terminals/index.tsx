@@ -92,7 +92,7 @@ export const Terminals = () => {
             type="primary"
             shape="round"
           >
-            Cadastrar franquia
+            Cadastrar terminal
           </Button>
         </Link>
       </Col>

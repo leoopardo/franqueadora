@@ -11,7 +11,7 @@ const pendingTerminalSchema = z.object({
   last_use: z.string().optional(),
   last_use_module: z.string().optional(),
   license_expiration_date: z.string().optional().nullable(),
-  license_type: z.string().optional(),
+  license_type: z.string().optional().nullable(),
   modules: z.array(z.string()).optional(),
   promoter_document: z.string().optional(),
   promoter_name: z.string().optional(),
