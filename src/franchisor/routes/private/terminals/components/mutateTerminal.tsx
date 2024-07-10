@@ -11,7 +11,7 @@ interface MutateTerminalI {
 
 export const MutateTerminal = ({ subtitle, title }: MutateTerminalI) => {
   const { isSm } = useBreakpoints();
-  const [width, setWidth] = useState<number>((100 / 1) * 1);
+  const [width] = useState<number>((100 / 1) * 1);
   return (
     <Row justify="center" style={{ width: "100%" }}>
       <Col
