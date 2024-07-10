@@ -103,7 +103,7 @@ export const SiderComponent = ({
           : undefined
       }
       menuItemRender={(item, dom) => {
-        if (item.name === "Pendentes" || item.name === "Terminais") {
+        if (item?.name === "Pendentes" || item?.name === "Terminais") {
           return (
             <Link
               key={item.key}
