@@ -15,6 +15,7 @@ import envs from "../../../../config/envs";
 import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import defaultTheme from "../../../../styles/default";
 import { useLogin } from "../../../services/auth/useLogin";
+import { getSubdomain } from "@utils/getSubdomain";
 
 export const Login = () => {
   const { isSm } = useBreakpoints();
@@ -235,7 +236,7 @@ export const Login = () => {
                 <Typography.Title level={3} style={{ color: "#fff" }} italic>
                   Painel
                 </Typography.Title>{" "}
-                {window.location.host.split(".")[0]}
+                {getSubdomain()}
               </Typography.Title>
             </div>
           </Col>
