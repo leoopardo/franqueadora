@@ -173,7 +173,6 @@ export const SiderComponent = ({
                     ).length
                   )
                   .join()}/cross-auth/${JSON.stringify({ ...headers, master: true })}`}
-                target="_blank"
               >
                 <Button
                   size="middle"
