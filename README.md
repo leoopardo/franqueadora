@@ -1,30 +1,35 @@
-# React + TypeScript + Vite
+## How to Run the Project
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+To get started, ensure that Git and Yarn are installed on your machine. Then, follow these simple steps:
 
-Currently, two official plugins are available:
+1. **Clone the Project**: Use the following command to clone the repository to your local machine:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+    ```
+    git clone https://github.com/leoopardo/dashboard.git
+    ```
 
-## Expanding the ESLint configuration
+2. **Navigate to the Directory**: Move into the project folder by running:
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+    ```
+    cd pb-v6-dashboard
+    ```
 
-- Configure the top-level `parserOptions` property like this:
+3. **Install Dependencies**: Install all necessary dependencies by executing:
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+    ```
+    yarn install
+    ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+4. **Run the Project**: Start the project with the command:
+
+    ```
+    yarn start
+    ```
+
+5. **Test the Build**: To ensure everything is set up correctly, run:
+
+    ```
+    yarn build
+    ```
+
+That's it! You should now be able to access and interact with the dashboard. Enjoy exploring the functionalities and managing your transactions effortlessly.
