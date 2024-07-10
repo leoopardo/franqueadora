@@ -164,8 +164,10 @@ export const SiderComponent = ({
 
             {!franquia && (
               <Link
-                to={`http://franquia.${window.location.host.split(".")[1]}/cross-auth/${JSON.stringify({ ...headers, master: true })}`}
+                to={`http://franquia.${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}/cross-auth/${JSON.stringify({ ...headers, master: true })}`}
+                target="_blank"
               >
+
                 <Button
                   size="middle"
                   type="default"
