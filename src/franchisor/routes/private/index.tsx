@@ -9,6 +9,7 @@ import { Terminals } from "./terminals";
 import { Pending } from "./terminals/pending";
 import { Clients } from "./clients";
 import { UpdateFranchise } from "./franchises/update";
+import { CreateTerminals } from "./terminals/create";
 
 export const PrivateRoutes = () => {
   return (
@@ -28,6 +29,7 @@ export const PrivateRoutes = () => {
         </Route>
         <Route path="/terminais">
           <Route index element={<Terminals />} />
+          <Route path="cadastro" element={<CreateTerminals />} />
           <Route path="pendentes" element={<Pending />} />
         </Route>
         <Route

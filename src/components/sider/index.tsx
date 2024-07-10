@@ -106,6 +106,7 @@ export const SiderComponent = ({
         if (item.name === "Pendentes" || item.name === "Terminais") {
           return (
             <Link
+              key={item.key}
               to={item.disabled ? "#" : item.path ?? ""}
               style={{
                 display: "flex",
@@ -126,6 +127,7 @@ export const SiderComponent = ({
         }
         return (
           <Link
+          key={item.key}
             to={item.disabled ? "#" : item.path ?? ""}
             style={{ cursor: item.disabled ? "no-drop" : "pointer" }}
             onClick={onChange ? () => onChange(item) : undefined}

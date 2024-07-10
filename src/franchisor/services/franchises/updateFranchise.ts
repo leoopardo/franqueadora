@@ -1,24 +1,23 @@
+import { notification } from "antd";
 import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
-import ResponseI from "../__interfaces/response.interface";
-import { createFranchiseI } from "./__interfaces/create_franchise.interface";
-import { Franchise } from "./__interfaces/franchises.interface";
 import { queryClient } from "../../../services/queryClient";
+import ResponseI from "../__interfaces/response.interface";
 import { QueryKeys } from "../queryKeys";
-import { notification } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Franchise } from "./__interfaces/franchises.interface";
 
-export const useCreateFranchise = () => {
+export const useUpdateFranchise = (id: string) => {
   const { headers } = useFranchisorAuth();
   const navigate = useNavigate();
   const mutation = useMutation<
     ResponseI<Franchise> | null | undefined,
     unknown,
-    createFranchiseI
+    any
   >({
     mutationFn: async (body) => {
-      const response = await apiFranquia.post(`/franchise`, body, {
+      const response = await apiFranquia.put(`/franchise/${id}`, {franchise: body}, {
         headers: { ...headers },
       });
       await queryClient.refetchQueries({
@@ -26,19 +25,19 @@ export const useCreateFranchise = () => {
       });
       return response.data;
     },
-    mutationKey: QueryKeys.CREATE_FRANCHISE,
+    mutationKey: QueryKeys.UPDATE_FRANCHISE,
   });
 
   const { data, error, isLoading, mutate, reset, isSuccess } = mutation;
 
   if (isSuccess) {
-    notification.success({ message: "Franquia criada com sucesso!" });
+    notification.success({ message: "Franquia atualizada com sucesso!" });
     reset();
     navigate(-1);
   }
   if (error) {
     notification.error({
-      message: "Não foi possível criar a franquia.",
+      message: "Não foi possível atualizar a franquia.",
       description: (error as any)?.response?.data?.message,
     });
     reset();

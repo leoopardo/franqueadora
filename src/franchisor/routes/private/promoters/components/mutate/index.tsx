@@ -1,75 +1,137 @@
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
-import { Button, Col, Row, Typography } from "antd";
+import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
+import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { useBreakpoints } from "@hooks/useBreakpoints";
+import defaultTheme from "@styles/default";
+import { Button, Card, Col, Row, Tabs, Typography } from "antd";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
-import defaultTheme from "../../../../../../styles/default";
+import { useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createFranchiseI } from "../../../../../services/franchises/__interfaces/create_franchise.interface";
 import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
-import { useNavigate } from "react-router-dom";
+import { createPromoterI } from "@franchisor/services/promoters/__interfaces/create_promoter.interface";
 
 interface mutateI {
-  body: createFranchiseI;
-  setBody: Dispatch<SetStateAction<createFranchiseI>>;
-  mutate: () => void;
+  mutate: (body: createPromoterI) => void;
   loading?: boolean;
   success?: boolean;
   error?: any;
+  title?: string;
+  subtitle?: string;
+  initialValues?: createFranchiseI;
+  update?: boolean;
+  agreements?: AgreementType[];
 }
 
-export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
+export const MutatePromoter = ({
+  mutate,
+  loading,
+  title,
+  subtitle,
+  initialValues,
+  update,
+  agreements,
+}: mutateI) => {
   const formRef = useRef<ProFormInstance>();
-  const divRef = useRef(null);
   const [modules, setModules] = useState<string[]>([]);
   const [width, setWidth] = useState<number>((100 / 3) * 1);
   const [step, setStep] = useState<number>(1);
+  const [loadingStep, setLoadingStep] = useState<boolean>(false);
   const navigate = useNavigate();
-
+  const { data } = useListFranchiseAgreements();
+  const { isSm } = useBreakpoints();
 
   const waitTime = (values: any) => {
-    return new Promise<boolean>((resolve) => {
-      setBody({
-        address: {
-          address: values.address,
-          cep: values.cep,
-          city: values.city,
-          complement: values.complement,
-          district: values.district,
-          number: values.number,
-          state: values.state,
-        },
-        agreement: [],
-        area_codes: values.area_code,
-        cnpj: values.cnpj.replace(/\D/g, ""),
-        commercial_name: values.company_name,
-        company_name: values.company_name,
-        contacts: [],
-        counties: values.counties,
-        franchise_name: values.franchise_name,
-        master: {
-          cpf: values.cpf,
-          email: values.email,
-          name: values.name,
-          password: values.password,
-          phone: values.phone,
-          terminal_password: values.terminal_password,
-          username: values.username,
-        },
-        module: values.module,
-        state_registration: `${values.state_registration}`,
+    const agreements: { template_id?: string; value: string }[] = [];
+    
+    const keysOrganization = [
+      "ANTIFRAUD",
+      "TRANSACTION",
+      "FEE_EMISSION",
+      "FEE_PAY365",
+      "RESULT_FRANCHISOR",
+      "RESULT_CREDIT_ADVANCE",
+      "SPREAD_CREDIT_ADVANCE",
+    ];
+    Object?.keys(values.agreements)?.forEach((section) => {
+      keysOrganization?.forEach((key) => {
+        const ag = data?.items?.find(
+          (i) => i.type === section && i.key === key
+        );
+
+        if (ag) {
+          agreements?.push({
+            template_id: ag.id,
+            value: values?.agreements[section][key],
+          });
+        }
       });
-      setTimeout(() => {
-        mutate();
-        resolve(true);
-      }, 500);
+    });
+
+    console.log("values", values);
+
+    return new Promise<boolean>((resolve) => {
+      mutate({
+        ...initialValues,
+        ...values,
+        cnpj: values?.cnpj ? values?.cnpj?.replace(/\D/g, "") : initialValues?.cnpj?.replace(/\D/g, ""),
+        master: {
+          ...values?.master, ...initialValues?.master,
+          cpf: values?.master?.cpf
+            ? values?.master?.cpf?.replace(/\D/g, "")
+            : undefined,
+          phone: values?.master?.phone
+            ? values?.master?.phone?.replace(/\D/g, "")
+            : undefined,
+          terminal_password: values?.master?.terminal_password
+            ? `${values?.master?.terminal_password}`
+            : undefined,
+          confirm_password: undefined,
+        },
+        state_registration: values?.state_registration ? `${values?.state_registration}` : undefined,
+        contacts: [],
+        agreement: agreements,
+        agreements: undefined,
+      });
       resolve(true);
     });
   };
+  const initialFormValues: createFranchiseI = initialValues ?? {
+    address: {
+      address: "",
+      cep: "",
+      city: "",
+      complement: "",
+      district: "",
+      number: "",
+      state: "",
+    },
+    agreement: [],
+    area_codes: [],
+    cnpj: "",
+    commercial_name: "",
+    company_name: "",
+    contacts: [],
+    counties: [],
+    franchise_name: "",
+    state_registration: "",
+    master: {
+      cpf: "",
+      email: "",
+      name: "",
+      password: "",
+      phone: "",
+      terminal_password: "",
+      username: "",
+    },
+    module: [],
+  };
 
   return (
-    <Row justify="center">
+    <Row justify="center" style={{ width: "100%" }}>
       <Col
         style={{
           width: "100%",
@@ -86,15 +148,15 @@ export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
           justify="center"
           align="middle"
         >
-          <Col span={10}>
+          <Col xs={{ span: 20 }} md={{ span: 10 }}>
             <Typography.Text style={{ lineHeight: 0 }}>
               Passo {step} de 3
             </Typography.Text>
-            <Typography.Title level={3} style={{ margin: 0 }}>
-              Cadastro de promotores
+            <Typography.Title level={isSm ? 5 : 3} style={{ margin: 0 }}>
+              {title}
             </Typography.Title>
             <Typography.Text style={{ lineHeight: 0 }}>
-              Preencha todos os campos para adicionar um novo promotor
+              {subtitle}
             </Typography.Text>
           </Col>
         </Row>
@@ -124,33 +186,58 @@ export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
           />
         </div>
       </Col>
-      <Col
-        span={24}
+      <Card
         style={{
-          maxHeight: "70vh",
-          overflow: "auto",
-          display: "flex",
-          justifyContent: "center",
+          maxHeight: isSm ? undefined : "70vh",
+          overflowY: "auto",
+          overflowX: "hidden",
+          minWidth: "100%",
         }}
       >
-        <div ref={divRef} style={{ width: "calc(60% - 15px)", paddingTop: 16 }}>
-          <StepsForm<createFranchiseI>
-            formRef={formRef}
-            onFinish={waitTime}
-            stepsRender={() => null}
-            submitter={false}
-            current={step - 1}
-            onCurrentChange={(current) => {
-              setWidth((100 / 3) * (current + 1));
-              setStep(current + 1);
-            }}
-          >
-            <StepOne setModules={setModules} />
-            <StepTwo />
-            <StepThree modules={modules} />
-          </StepsForm>
-        </div>
-      </Col>
+        <Row
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <Col xs={{ span: 24 }} md={{ span: 16 }}>
+            <StepsForm<createFranchiseI>
+              formRef={formRef}
+              onFinish={waitTime}
+              stepsRender={(steps) =>
+                update ? (
+                  <Tabs
+                    centered
+                    onChange={(key) => {
+                      setStep(+key + 1);
+                      setWidth((100 / 3) * (+key + 1));
+                    }}
+                    items={steps.map((step) => ({
+                      label: step.title,
+                      key: step.key,
+                    }))}
+                  />
+                ) : null
+              }
+              submitter={false}
+              current={step - 1}
+              onCurrentChange={(current) => {
+                setWidth((100 / 3) * (current + 1));
+                setStep(current + 1);
+              }}
+              formProps={{ initialValues: initialFormValues }}
+            >
+              <StepOne setModules={setModules} update={update} />
+              <StepTwo update={update} />
+              <StepThree
+                modules={modules}
+                update={update}
+                agreements={agreements}
+              />
+            </StepsForm>
+          </Col>
+        </Row>
+      </Card>
 
       <Col
         style={{
@@ -174,9 +261,14 @@ export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
             justifyContent: "center",
           }}
           icon={<ChevronLeftIcon style={{ height: 20 }} />}
-          onClick={() =>
-            step === 1 ? navigate(-1) : setStep((curr) => curr - 1)
-          }
+          onClick={() => {
+            if (step === 1) {
+              navigate(-1);
+              return;
+            }
+            setWidth((100 / 3) * (step - 1));
+            setStep((curr) => curr - 1);
+          }}
         >
           Voltar
         </Button>
@@ -186,9 +278,12 @@ export const MutatePromoter = ({ mutate, setBody }: mutateI) => {
           type="primary"
           onClick={() => {
             formRef.current?.submit();
+            setLoadingStep(true);
+            setTimeout(() => setLoadingStep(false), 2000);
           }}
+          loading={loadingStep || loading}
         >
-          Próxima etapa
+          {update ? "Salvar dados" : "Próxima etapa"}
         </Button>
       </Col>
     </Row>

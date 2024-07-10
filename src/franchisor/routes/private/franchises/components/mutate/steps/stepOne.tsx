@@ -1,8 +1,10 @@
 import {
+  ProFormInstance,
   ProFormSelect,
   ProFormText,
-  StepsForm,
+  StepsForm
 } from "@ant-design/pro-components";
+import { formatCNPJ } from "@utils/regexFormat";
 import { Col, Divider, Row } from "antd";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import useDebounce from "../../../../../../../hooks/useDebounce";
@@ -25,7 +27,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
   const [cnpj, setCnpj] = useState<string>("");
   const { data } = useGetDDDs(ddd);
   const cnpjRequest = useGetCNPJ(cnpj);
-  const stepOneRef = useRef<any>(null);
+  const stepOneRef = useRef<ProFormInstance>(null);
   const cepRequest = useGetCEP(cep);
   const { AreaCodeData } = useGetAreaCode();
   const { CityCodeData } = useGetCityCode(ddd);
@@ -46,7 +48,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
 
   useEffect(() => {
     if (cepRequest.data)
-      stepOneRef.current.setFieldsValue({
+      stepOneRef?.current?.setFieldsValue({
         address: {
           state: cepRequest?.data.state,
           city: cepRequest?.data.city,
@@ -84,20 +86,6 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
     }
   }, [cnpjRequest.data]);
 
-  const formatCNPJ = (value: string) => {
-    if (!value) return value;
-    value = value.replace(/\D/g, "");
-    value = value.substring(0, 14); // Garante que só há no máximo 14 dígitos
-    if (value.length <= 14) {
-      return value
-        .replace(/^(\d{2})(\d)/, "$1.$2")
-        .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
-        .replace(/\.(\d{3})(\d)/, ".$1/$2")
-        .replace(/(\d{4})(\d)/, "$1-$2");
-    }
-    return value;
-  };
-
   const formatCEP = (value: string) => {
     if (!value) return value;
     value = value.replace(/\D/g, ""); // Remove todos os caracteres não numéricos
@@ -122,29 +110,25 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
   }, 500);
 
   useEffect(() => {
-    if (cnpj && cnpjRequest.error) stepOneRef.current.validateFields(["cnpj"]);
+    if (cnpj && cnpjRequest.error)
+      stepOneRef?.current?.validateFields(["cnpj"]);
   }, [cnpjRequest]);
 
+  useEffect(() => {
+    setModules(
+      stepOneRef?.current
+        ?.getFieldValue("module")
+        .map(
+          (id: string) =>
+            (PosModulesData?.items as any)?.find(
+              (module: any) => module.id === id
+            ).name
+        )
+    );
+  }, [stepOneRef?.current?.getFieldValue("module")]);
+
   return (
-    <StepsForm.StepForm<{
-      cnpj: number;
-      franchise_name: string;
-      company_name: string;
-      commercial_name: string;
-      state_registration: string;
-      address: {
-        address: string;
-        cep: string;
-        city: string;
-        complement: string;
-        district: string;
-        number: string;
-        state: string;
-      };
-      modules: string[];
-      area_codes: string[];
-      contacts: any[];
-    }>
+    <StepsForm.StepForm
       name="base"
       title="Informações da empresa"
       onFinish={async () => {
@@ -155,12 +139,12 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
       grid
       formRef={stepOneRef}
       onFinishFailed={() => {
-        const fields = stepOneRef.current.getFieldsError();
-        const firstErrorField = fields.find(
+        const fields = stepOneRef?.current?.getFieldsError();
+        const firstErrorField = fields?.find(
           (field: any) => field.errors.length > 0
         );
         if (firstErrorField) {
-          stepOneRef.current.scrollToField(firstErrorField.name[0], {
+          stepOneRef?.current?.scrollToField(firstErrorField.name[0], {
             behavior: "smooth",
             block: "center",
           });
@@ -347,6 +331,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             placeholder="Selecione o DDD"
             mode="multiple"
             options={AreaCodeData?.map((a) => ({
+              key: a.code,
               label: `${a.code}`,
               value: a.id,
             }))}
@@ -361,7 +346,11 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             label="Município(s)"
             placeholder="Selecione o município"
             mode="multiple"
-            options={CityCodeData?.map((c) => ({ label: c.name, value: c.id }))}
+            options={CityCodeData?.map((c) => ({
+              key: c.id,
+              label: c.name,
+              value: c.id,
+            }))}
             disabled={!data}
             rules={[{ required: !update }]}
             fieldProps={{ maxTagCount: 1, disabled: !ddd.length }}
@@ -374,6 +363,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             placeholder="Selecione os módulos utilizados"
             mode="multiple"
             options={PosModulesData?.items.map((value) => ({
+              kay: value.id,
               label: value.name,
               value: value.id,
             }))}

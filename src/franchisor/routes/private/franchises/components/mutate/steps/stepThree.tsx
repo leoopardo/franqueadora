@@ -1,4 +1,8 @@
-import { ProForm, StepsForm } from "@ant-design/pro-components";
+import {
+  ProForm,
+  ProFormInstance,
+  StepsForm,
+} from "@ant-design/pro-components";
 import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
 import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
 import { Button, Col, Divider, Input, Row } from "antd";
@@ -28,7 +32,7 @@ interface stepThreeI {
   agreements?: AgreementType[];
 }
 export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
-  const stepOneRef = useRef<any>(null);
+  const stepTrhreeRef = useRef<ProFormInstance>(null);
   const { isXs } = useBreakpoints();
   const [updateFees, setUpdateFees] = useState<boolean>(false);
   const { data } = useListFranchiseAgreements();
@@ -45,6 +49,7 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
     ];
 
     const components: JSX.Element[] = [];
+
     keysOrganization.forEach((type) => {
       if (agreements) {
         const item = agreements.find(
@@ -55,14 +60,14 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
           const name = item.name;
           const value = item.value;
 
-          stepOneRef.current.setFieldValue(
+          stepTrhreeRef?.current?.setFieldValue(
             ["agreements", section, type],
             value
           );
 
           valueType === "CURRENCY"
             ? components.push(
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
                   <ProForm.Item
                     name={["agreements", section, type]}
                     label={name}
@@ -73,8 +78,12 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                     ]}
                   >
                     <CurrencyInput
-                      onChangeValue={(_event) => {
-                        return;
+                      onChangeValue={(event) => {
+                        stepTrhreeRef?.current?.setFieldValue(
+                          ["agreements", section, type],
+                          event.target.value
+                        );
+                        console.log(stepTrhreeRef?.current?.getFieldsValue());
                       }}
                       hideSymbol
                       max={100}
@@ -92,7 +101,7 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                 </Col>
               )
             : components.push(
-                <Col md={{ span: 12 }} xs={{ span: 24 }}>
+                <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
                   <ProForm.Item
                     name={["agreements", section, type]}
                     label={name}
@@ -103,8 +112,13 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                     ]}
                   >
                     <CurrencyInput
-                      onChangeValue={(_event) => {
-                        return;
+                      onChangeValue={(event) => {
+                        stepTrhreeRef?.current?.setFieldValue(
+                          ["agreements", section, type],
+                          event.target.value
+                        );
+
+                        console.log(stepTrhreeRef?.current?.getFieldsValue());
                       }}
                       hideSymbol
                       max={100}
@@ -132,11 +146,14 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
         const name = item.name;
         const value = item.value;
 
-        stepOneRef.current.setFieldValue(["agreements", section, type], value);
+        stepTrhreeRef?.current?.setFieldValue(
+          ["agreements", section, type],
+          value
+        );
 
         valueType === "CURRENCY"
           ? components.push(
-              <Col md={{ span: 12 }} xs={{ span: 24 }}>
+              <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
                 <ProForm.Item
                   name={["agreements", section, type]}
                   label={name}
@@ -147,8 +164,12 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                   ]}
                 >
                   <CurrencyInput
-                    onChangeValue={(_event) => {
-                      return;
+                    onChangeValue={(event) => {
+                      stepTrhreeRef?.current?.setFieldValue(
+                        ["agreements", section, type],
+                        event.target.value
+                      );
+                      console.log(stepTrhreeRef?.current?.getFieldsValue());
                     }}
                     hideSymbol
                     max={100}
@@ -166,7 +187,7 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
               </Col>
             )
           : components.push(
-              <Col md={{ span: 12 }} xs={{ span: 24 }}>
+              <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
                 <ProForm.Item
                   name={["agreements", section, type]}
                   label={name}
@@ -177,8 +198,12 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                   ]}
                 >
                   <CurrencyInput
-                    onChangeValue={(_event) => {
-                      return;
+                    onChangeValue={(event) => {
+                      stepTrhreeRef?.current?.setFieldValue(
+                        ["agreements", section, type],
+                        event.target.value
+                      );
+                      console.log(stepTrhreeRef?.current?.getFieldsValue());
                     }}
                     hideSymbol
                     max={100}
@@ -213,7 +238,7 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
       title="Acordo comercial"
       size="large"
       grid
-      formRef={stepOneRef}
+      formRef={stepTrhreeRef}
     >
       <Row
         style={{ width: isXs ? "70%" : "100%" }}

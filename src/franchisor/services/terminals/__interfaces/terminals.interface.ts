@@ -19,7 +19,7 @@ const terminalSchema = z.object({
   last_use_module: z.string().optional(),
   latitude: z.string().optional(),
   license_expiration_date: z.string().optional().nullable(),
-  license_type: z.string().optional(),
+  license_type: z.string().optional().nullable(),
   longitude: z.string().optional(),
   promoter_document: z.string().optional(),
   promoter_id: z.string().optional(),
