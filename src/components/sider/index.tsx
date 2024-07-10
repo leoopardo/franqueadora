@@ -127,7 +127,7 @@ export const SiderComponent = ({
         }
         return (
           <Link
-          key={item.key}
+            key={item.key}
             to={item.disabled ? "#" : item.path ?? ""}
             style={{ cursor: item.disabled ? "no-drop" : "pointer" }}
             onClick={onChange ? () => onChange(item) : undefined}
@@ -164,10 +164,17 @@ export const SiderComponent = ({
 
             {!franquia && (
               <Link
-                to={`http://franquia.${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}/cross-auth/${JSON.stringify({ ...headers, master: true })}`}
+                to={`http://franquia${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host
+                  .split(import.meta.env.VITE_ENV === "local" ? "." : "-")
+                  .slice(
+                    1,
+                    window.location.host.split(
+                      import.meta.env.VITE_ENV === "local" ? "." : "-"
+                    ).length
+                  )
+                  .join()}/cross-auth/${JSON.stringify({ ...headers, master: true })}`}
                 target="_blank"
               >
-
                 <Button
                   size="middle"
                   type="default"
