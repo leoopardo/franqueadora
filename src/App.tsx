@@ -11,6 +11,7 @@ import { LandingRoutes } from "./public";
 import { queryClient } from "./services/queryClient";
 import Dark from "./styles/darkTheme";
 import Light from "./styles/lightTheme";
+import { getSubdomain } from "@utils/getSubdomain";
 
 export const App = () => {
   const PainelList = ["franquia", "promotor", "cliente"];
@@ -28,10 +29,10 @@ export const App = () => {
           <FranchiseAuthProvider>
             <BrowserRouter>
               {PainelList.includes(
-                window.location.host.split(".")[0].toLowerCase()
+                getSubdomain()
               ) ? (
                 <FranchiseRoutes />
-              ) : window.location.host.split(".")[0] == "franqueadora" ? (
+              ) : getSubdomain() == "franqueadora" ? (
                 <FranchisorRoutes />
               ) : (
                 <LandingRoutes />

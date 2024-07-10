@@ -106,7 +106,7 @@ export const Landing = () => {
               {
                 label: (
                   <Link
-                    to={`http://franqueadora.${window.location.host}`}
+                    to={`http://franqueadora${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
                     target="_blank"
                   >
                     Franqueadora
@@ -117,7 +117,7 @@ export const Landing = () => {
               {
                 label: (
                   <Link
-                    to={`http://franquia.${window.location.host}`}
+                    to={`http://franquia${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
                     target="_blank"
                   >
                     Franquia
@@ -128,7 +128,7 @@ export const Landing = () => {
               {
                 label: (
                   <Link
-                    to={`http://promotor.${window.location.host}`}
+                    to={`http://promotor${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
                     target="_blank"
                   >
                     Promotor
@@ -139,7 +139,7 @@ export const Landing = () => {
               {
                 label: (
                   <Link
-                    to={`http://cliente.${window.location.host}`}
+                    to={`http://cliente${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
                     target="_blank"
                   >
                     Cliente
