@@ -118,11 +118,11 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
     setModules(
       stepOneRef?.current
         ?.getFieldValue("module")
-        .map(
+        ?.map(
           (id: string) =>
             (PosModulesData?.items as any)?.find(
               (module: any) => module.id === id
-            ).name
+            )?.name
         )
     );
   }, [stepOneRef?.current?.getFieldValue("module")]);
@@ -332,8 +332,8 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             mode="multiple"
             options={AreaCodeData?.map((a) => ({
               key: a.code,
-              label: `${a.code}`,
-              value: a.id,
+              label: `${a?.code}`,
+              value: a?.id,
             }))}
             rules={[{ required: !update }]}
             onChange={(value: any) => setDDD(value)}
@@ -347,9 +347,9 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             placeholder="Selecione o município"
             mode="multiple"
             options={CityCodeData?.map((c) => ({
-              key: c.id,
-              label: c.name,
-              value: c.id,
+              key: c?.id,
+              label: c?.name,
+              value: c?.id,
             }))}
             disabled={!data}
             rules={[{ required: !update }]}
@@ -363,9 +363,9 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             placeholder="Selecione os módulos utilizados"
             mode="multiple"
             options={PosModulesData?.items.map((value) => ({
-              kay: value.id,
-              label: value.name,
-              value: value.id,
+              kay: value?.id,
+              label: value?.name,
+              value: value?.id,
             }))}
             rules={[{ required: !update }]}
             fieldProps={{ maxTagCount: 1 }}
@@ -373,7 +373,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
               setModules(
                 (value as any)?.map(
                   (v: string) =>
-                    PosModulesData?.items.find((i) => i.id === v)?.name
+                    PosModulesData?.items?.find((i) => i.id === v)?.name
                 )
               )
             }

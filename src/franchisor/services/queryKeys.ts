@@ -1,24 +1,38 @@
 export enum QueryKeys {
   LIST_FRANCHISES = "listFranchises",
-  INACTIVATE_FRANCHISE = "inactivateFranchise",
-  ACTIVATE_FRANCHISE = "activateFranchise",
-  CREATE_FRANCHISE = "createFranchise",
-  UPDATE_FRANCHISE = "updateFranchise",
   LIST_PROMOTERS = "listPromoters",
-  INACTIVATE_PROMOTER = "inactivatePromoter",
-  ACTIVATE_PROMOTER = "activatePromoter",
-  CREATE_PROMOTER = "createPromoter",
-  UPDATE_PROMOTER = "updatePromoter",
   LIST_TERMINALS = "listTerminals",
-  GET_TERMINAL_TOTALS = "getTerminalTotals",
-  ACTIVATE_TERMINAL = "activateTerminal",
-  INACTIVATE_TERMINAL = "inactivateTerminal",
-  APPROVE_TERMINALS = "approveTerminals",
-  REPROVE_TERMINAL = "reproveTerminals",
-  PENDING_NUMBER = "pendingNumber",
   LIST_PENDING_TERMINALS = "listPendingTerminals",
   LIST_CLIENTS = "listClients",
-  ACTIVATE_CLIENT = "activateClient",
+  LIST_AGREEMENTS = "listAgreements",
+
+  GET_TERMINAL_SELECTS = "getTerminalSelects",
+  GET_TERMINAL_TOTALS = "getTerminalTotals",
+  GET_ME = "getMeFranchisor",
+
+  INACTIVATE_FRANCHISE = "inactivateFranchise",
+  INACTIVATE_PROMOTER = "inactivatePromoter",
+  INACTIVATE_TERMINAL = "inactivateTerminal",
   INACTIVATE_CLIENT = "inactivateClient",
-  LIST_AGREEMENTS = "listAgreements"
+
+  ACTIVATE_FRANCHISE = "activateFranchise",
+  ACTIVATE_PROMOTER = "activatePromoter",
+  ACTIVATE_TERMINAL = "activateTerminal",
+  ACTIVATE_CLIENT = "activateClient",
+
+  APPROVE_TERMINALS = "approveTerminals",
+  REPROVE_TERMINAL = "reproveTerminals",
+
+  CREATE_FRANCHISE = "createFranchise",
+  CREATE_PROMOTER = "createPromoter",
+
+  UPDATE_FRANCHISE = "updateFranchise",
+  UPDATE_FRANCHISE_AGREEMENTS = "updateFranchiseAgreements",
+  
+  UPDATE_PROMOTER = "updatePromoter",
+  
+  PENDING_NUMBER = "pendingNumber",
+  
+  SEND_TOKEN = "sendToken"
+  
 }

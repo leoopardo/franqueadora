@@ -1,6 +1,7 @@
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
+import { createPromoterI } from "@franchisor/services/promoters/__interfaces/create_promoter.interface";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
@@ -10,9 +11,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createFranchiseI } from "../../../../../services/franchises/__interfaces/create_franchise.interface";
 import { StepOne } from "./steps/stepOne";
-import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
-import { createPromoterI } from "@franchisor/services/promoters/__interfaces/create_promoter.interface";
 
 interface mutateI {
   mutate: (body: createPromoterI) => void;
@@ -33,10 +32,9 @@ export const MutatePromoter = ({
   subtitle,
   initialValues,
   update,
-  agreements,
 }: mutateI) => {
-  const formRef = useRef<ProFormInstance>();
-  const [modules, setModules] = useState<string[]>([]);
+  const formRef = useRef<ProFormInstance>(null);
+  const [, setModules] = useState<string[]>([]);
   const [width, setWidth] = useState<number>((100 / 3) * 1);
   const [step, setStep] = useState<number>(1);
   const [loadingStep, setLoadingStep] = useState<boolean>(false);
@@ -46,7 +44,7 @@ export const MutatePromoter = ({
 
   const waitTime = (values: any) => {
     const agreements: { template_id?: string; value: string }[] = [];
-    
+
     const keysOrganization = [
       "ANTIFRAUD",
       "TRANSACTION",
@@ -77,9 +75,12 @@ export const MutatePromoter = ({
       mutate({
         ...initialValues,
         ...values,
-        cnpj: values?.cnpj ? values?.cnpj?.replace(/\D/g, "") : initialValues?.cnpj?.replace(/\D/g, ""),
+        cnpj: values?.cnpj
+          ? values?.cnpj?.replace(/\D/g, "")
+          : initialValues?.cnpj?.replace(/\D/g, ""),
         master: {
-          ...values?.master, ...initialValues?.master,
+          ...values?.master,
+          ...initialValues?.master,
           cpf: values?.master?.cpf
             ? values?.master?.cpf?.replace(/\D/g, "")
             : undefined,
@@ -91,7 +92,9 @@ export const MutatePromoter = ({
             : undefined,
           confirm_password: undefined,
         },
-        state_registration: values?.state_registration ? `${values?.state_registration}` : undefined,
+        state_registration: values?.state_registration
+          ? `${values?.state_registration}`
+          : undefined,
         contacts: [],
         agreement: agreements,
         agreements: undefined,
@@ -227,13 +230,17 @@ export const MutatePromoter = ({
               }}
               formProps={{ initialValues: initialFormValues }}
             >
-              <StepOne setModules={setModules} update={update} />
+              <StepOne
+                setModules={setModules}
+                update={update}
+                formRef={formRef}
+              />
               <StepTwo update={update} />
-              <StepThree
+              {/* <StepThree
                 modules={modules}
                 update={update}
                 agreements={agreements}
-              />
+              /> */}
             </StepsForm>
           </Col>
         </Row>

@@ -1,18 +1,20 @@
 import {
   ProForm,
+  ProFormField,
   ProFormInstance,
+  ProFormSelect,
   StepsForm,
 } from "@ant-design/pro-components";
-import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
-import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
-import { Button, Col, Divider, Input, Row } from "antd";
-import { useRef, useState } from "react";
-import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
 import {
   AgreementType,
   TFranchiseAgreementType,
 } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
+import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
+import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/outline";
+import { Button, Col, Divider, Input, InputNumber, Row } from "antd";
+import { useEffect, useRef, useState } from "react";
 import { CurrencyInput } from "react-currency-mask";
+import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
 
 // interface moduleType {
 //   name: string;
@@ -32,10 +34,15 @@ interface stepThreeI {
   agreements?: AgreementType[];
 }
 export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
-  const stepTrhreeRef = useRef<ProFormInstance>(null);
+  const stepThreeForm = useRef<ProFormInstance>(null);
   const { isXs } = useBreakpoints();
   const [updateFees, setUpdateFees] = useState<boolean>(false);
   const { data } = useListFranchiseAgreements();
+  const [licenses, setLicenses] = useState<any>();
+
+  useEffect(() => {
+    setLicenses(stepThreeForm.current?.getFieldValue(["licenses", "keys"]));
+  }, []);
 
   function renderFeeSection(section: TFranchiseAgreementType) {
     const keysOrganization = [
@@ -60,14 +67,23 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
           const name = item.name;
           const value = item.value;
 
-          stepTrhreeRef?.current?.setFieldValue(
+          stepThreeForm?.current?.setFieldValue(
             ["agreements", section, type],
-            value
+            stepThreeForm?.current?.getFieldValue([
+              "agreements",
+              section,
+              type,
+            ]) ?? value
           );
 
           valueType === "CURRENCY"
             ? components.push(
-                <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
+                <Col
+                  lg={{ span: 8 }}
+                  md={{ span: 12 }}
+                  xs={{ span: 24 }}
+                  key={name}
+                >
                   <ProForm.Item
                     name={["agreements", section, type]}
                     label={name}
@@ -79,11 +95,11 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                   >
                     <CurrencyInput
                       onChangeValue={(event) => {
-                        stepTrhreeRef?.current?.setFieldValue(
+                        stepThreeForm?.current?.setFieldValue(
                           ["agreements", section, type],
                           event.target.value
                         );
-                        console.log(stepTrhreeRef?.current?.getFieldsValue());
+                        console.log(stepThreeForm?.current?.getFieldsValue());
                       }}
                       hideSymbol
                       max={100}
@@ -101,7 +117,12 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                 </Col>
               )
             : components.push(
-                <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
+                <Col
+                  lg={{ span: 8 }}
+                  md={{ span: 12 }}
+                  xs={{ span: 24 }}
+                  key={name}
+                >
                   <ProForm.Item
                     name={["agreements", section, type]}
                     label={name}
@@ -111,26 +132,20 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                       },
                     ]}
                   >
-                    <CurrencyInput
-                      onChangeValue={(event) => {
-                        stepTrhreeRef?.current?.setFieldValue(
+                    <InputNumber
+                      onChange={(value) => {
+                        stepThreeForm?.current?.setFieldValue(
                           ["agreements", section, type],
-                          event.target.value
+                          value
                         );
 
-                        console.log(stepTrhreeRef?.current?.getFieldsValue());
+                        console.log(stepThreeForm?.current?.getFieldsValue());
                       }}
-                      hideSymbol
-                      max={100}
-                      InputElement={
-                        <Input
-                          size="large"
-                          style={{ width: "100%" }}
-                          disabled={!updateFees}
-                          placeholder="Digite a taxa da PAY356"
-                          addonAfter="%"
-                        />
-                      }
+                      size="large"
+                      style={{ width: "100%" }}
+                      disabled={!updateFees}
+                      placeholder="Digite a taxa da PAY356"
+                      addonAfter="%"
                     />
                   </ProForm.Item>
                 </Col>
@@ -146,14 +161,19 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
         const name = item.name;
         const value = item.value;
 
-        stepTrhreeRef?.current?.setFieldValue(
+        stepThreeForm?.current?.setFieldValue(
           ["agreements", section, type],
           value
         );
 
         valueType === "CURRENCY"
           ? components.push(
-              <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
+              <Col
+                lg={{ span: 8 }}
+                md={{ span: 12 }}
+                xs={{ span: 24 }}
+                key={name}
+              >
                 <ProForm.Item
                   name={["agreements", section, type]}
                   label={name}
@@ -165,11 +185,11 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                 >
                   <CurrencyInput
                     onChangeValue={(event) => {
-                      stepTrhreeRef?.current?.setFieldValue(
+                      stepThreeForm?.current?.setFieldValue(
                         ["agreements", section, type],
                         event.target.value
                       );
-                      console.log(stepTrhreeRef?.current?.getFieldsValue());
+                      console.log(stepThreeForm?.current?.getFieldsValue());
                     }}
                     hideSymbol
                     max={100}
@@ -187,7 +207,12 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
               </Col>
             )
           : components.push(
-              <Col md={{ span: 12 }} xs={{ span: 24 }} key={name}>
+              <Col
+                lg={{ span: 8 }}
+                md={{ span: 12 }}
+                xs={{ span: 24 }}
+                key={name}
+              >
                 <ProForm.Item
                   name={["agreements", section, type]}
                   label={name}
@@ -199,11 +224,11 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                 >
                   <CurrencyInput
                     onChangeValue={(event) => {
-                      stepTrhreeRef?.current?.setFieldValue(
+                      stepThreeForm?.current?.setFieldValue(
                         ["agreements", section, type],
                         event.target.value
                       );
-                      console.log(stepTrhreeRef?.current?.getFieldsValue());
+                      console.log(stepThreeForm?.current?.getFieldsValue());
                     }}
                     hideSymbol
                     max={100}
@@ -238,7 +263,7 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
       title="Acordo comercial"
       size="large"
       grid
-      formRef={stepTrhreeRef}
+      formRef={stepThreeForm}
     >
       <Row
         style={{ width: isXs ? "70%" : "100%" }}
@@ -268,6 +293,55 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
             onClick={() => setUpdateFees((prev) => !prev)}
           />
         </Col>
+        <Row gutter={[8, 0]} style={{ width: "100%" }}>
+          <Col span={24}>
+            <Divider orientation="left">Terminais</Divider>
+          </Col>
+          <Col span={24}>
+            <ProFormSelect
+              name={["licenses", "keys"]}
+              label="Licenças"
+              placeholder="Selecione as licenças utilizadas"
+              mode="multiple"
+              options={[
+                {
+                  label: "Livre",
+                  value: "LIVRE",
+                },
+                {
+                  label: "Mensal",
+                  value: "MENSAL",
+                },
+                {
+                  label: "Avulso",
+                  value: "AVULSO",
+                },
+              ]}
+              rules={[{ required: !update }]}
+              onChange={(value) => setLicenses(value)}
+              disabled={!updateFees}
+            />
+          </Col>
+          {licenses?.map((license: any) => (
+            <Col
+              lg={{ span: 8 }}
+              md={{ span: 12 }}
+              xs={{ span: 24 }}
+              key={license?.toLowerCase}
+            >
+              <ProFormField
+                name={["licenses", license]}
+                label={license?.toLowerCase()}
+                disabled={!updateFees}
+                rules={[
+                  {
+                    required: !update,
+                  },
+                ]}
+              />
+            </Col>
+          ))}
+        </Row>
         {modules.includes("Ficha") && (
           <>
             <Row gutter={[8, 0]}>

@@ -10,7 +10,6 @@ import {
   TicketIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
-import { Badge } from "antd";
 
 export const MenuItens = (pending: number) => {
   return [
@@ -42,53 +41,8 @@ export const MenuItens = (pending: number) => {
     {
       key: "terminais",
       name: "Terminais",
-      path: "/terminals",
-      icon: (
-        <Badge size="small" color="green" count={pending}>
-          <CalculatorIcon width={pending ? 20 : 24} />
-        </Badge>
-      ),
-
-      children: [
-        {
-          key: "terminais-geral",
-          name: "Geral",
-          path: "/terminals",
-        },
-        {
-          key: "terminais-pendentes",
-          name: "Pendentes",
-          path: "/terminals/pending",
-          label: (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                paddingRight: 6,
-              }}
-            >
-              Pendentes{" "}
-              <Badge size="small" color="green" count={pending}></Badge>
-            </div>
-          ),
-        },
-        {
-          key: "terminais-rastreamentos",
-          name: "Rastreamento",
-          path: "/terminals/tracking",
-        },
-        {
-          key: "terminais-adquirentes",
-          name: "Adquirentes",
-          path: "/terminals/acquirers",
-        },
-        {
-          key: "terminais-modelos",
-          name: "Modelos",
-          path: "/terminals/models",
-        },
-      ],
+      path: "/terminais",
+      icon: <CalculatorIcon width={pending ? 20 : 24} />,
     },
     {
       key: "login-backoffice",
@@ -149,7 +103,8 @@ export const MenuItens = (pending: number) => {
           path: "/fichas/usuarios-terminal",
         },
       ],
-    }, {
+    },
+    {
       key: "ingressos",
       name: "Ingressos",
       path: "/ingressos",

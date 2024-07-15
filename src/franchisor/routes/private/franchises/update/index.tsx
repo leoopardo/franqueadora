@@ -8,11 +8,13 @@ import { Col, Row } from "antd";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { MutateFranchise } from "../components/mutate";
+import { useUpdateAgreements } from "@franchisor/services/franchises/agreements/updateAgreements";
 
 export const UpdateFranchise = () => {
   const { state } = useLocation();
-  const { mutate, isLoading, isSuccess, error } = useUpdateFranchise(state.id); 
-  const franchise = useGetFranchiseById(state.id);                                    
+  const { mutate, isLoading, isSuccess, error } = useUpdateFranchise(state.id);
+  const mutateAgreements = useUpdateAgreements(state.id);
+  const franchise = useGetFranchiseById(state.id);
   const [parsed, setParsed] = useState<createFranchiseI | null>(null);
   const [agreements, setAgreements] = useState<AgreementType[]>([]);
 
@@ -59,6 +61,15 @@ export const UpdateFranchise = () => {
         counties: data?.FranchiseOccuppationCounties?.map(
           (c) => c.County.id || ""
         ),
+        licenses: {
+          keys: data.FranchiseLicenses?.map((l) => l?.type ?? ""),
+          LIVRE: data.FranchiseLicenses?.find((l) => l?.type === "LIVRE")
+            ?.value,
+          MENSAL: data.FranchiseLicenses?.find((l) => l?.type === "MENSAL")
+            ?.value,
+          AVULSO: data.FranchiseLicenses?.find((l) => l?.type === "AVULSO")
+            ?.value,
+        },
       });
     }
     if (franchise.data) parseData(franchise.data);
@@ -70,9 +81,10 @@ export const UpdateFranchise = () => {
         {parsed && (
           <MutateFranchise
             mutate={mutate}
+            mutateAgreements={mutateAgreements.mutate}
             update
             error={error}
-            loading={isLoading}
+            loading={isLoading || mutateAgreements.isLoading}
             success={isSuccess}
             initialValues={parsed}
             title={`Editar franquia: ${(parsed as any)?.franchise_name?.length > 21 ? `${(parsed as any)?.franchise_name.substring(0, 21)}...` : (parsed as any)?.franchise_name}`}

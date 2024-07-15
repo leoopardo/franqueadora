@@ -16,7 +16,7 @@ export const useListFranchises = (params: FranchiseParams) => {
   >(
     [QueryKeys.LIST_FRANCHISES, params],
     async () => {
-      const response = await apiFranquia.get(`/franchise/all`, {
+      const response = await apiFranquia.get(`/franchise`, {
         headers: { ...headers },
         params: { orderBy: "created_at", orderDirection: "desc", ...params },
       });

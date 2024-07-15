@@ -24,7 +24,7 @@ export const useGetFranchiseById = (id: string) => {
 
       return parsedResponse.data;
     },
-    { enabled: headers && headers["AuthToken"] ? true : false }
+    { enabled: headers && headers["AuthToken"] ? true : false, refetchOnWindowFocus: false }
   );
 
   return {

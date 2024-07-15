@@ -15,7 +15,7 @@ import {
 } from "../../../../../../../utils/regexFormat";
 import regexList from "../../../../../../../utils/regexList";
 
-export const StepTwo = ({update}: {update?: boolean}) => {
+export const StepTwo = ({ update }: { update?: boolean }) => {
   const stepTwoRef = useRef<any>(null);
   const { isXs } = useBreakpoints();
   const [password, setPassWord] = useState<string>("");
@@ -82,7 +82,9 @@ export const StepTwo = ({update}: {update?: boolean}) => {
         style={{ width: isXs ? "70%" : "100%", justifyContent: "center" }}
         gutter={[8, 8]}
       >
-        {" "}
+        <Col md={{ span: 24 }} xs={{ span: 24 }}>
+          <Divider orientation="left">Cadastre o usuário master</Divider>
+        </Col>
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
           <ProFormText
             name={["master", "cpf"]}
@@ -246,7 +248,10 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               { required: !update },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue(["master", "password"]) === value) {
+                  if (
+                    !value ||
+                    getFieldValue(["master", "password"]) === value
+                  ) {
                     return Promise.resolve();
                   }
                   return Promise.reject(new Error(""));
@@ -274,7 +279,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               case "confirm":
                 return (
                   <Col
-                  key={rule.title}
+                    key={rule.title}
                     md={{ span: 8 }}
                     style={{
                       display: "flex",
@@ -300,7 +305,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               case "minLength":
                 return (
                   <Col
-                  key={rule.title}
+                    key={rule.title}
                     md={{ span: 8 }}
                     style={{
                       display: "flex",
@@ -326,7 +331,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               default:
                 return (
                   <Col
-                  key={rule.title}
+                    key={rule.title}
                     md={{ span: 8 }}
                     style={{
                       display: "flex",
@@ -364,11 +369,13 @@ export const StepTwo = ({update}: {update?: boolean}) => {
                 <ReloadOutlined
                   style={{ cursor: "pointer" }}
                   onClick={() =>
-                    stepTwoRef.current.setFieldsValue({master: {
-                      terminal_password: Math.floor(
-                        100000 + Math.random() * 900000
-                      ),
-                    }})
+                    stepTwoRef.current.setFieldsValue({
+                      master: {
+                        terminal_password: Math.floor(
+                          100000 + Math.random() * 900000
+                        ),
+                      },
+                    })
                   }
                 />
               ),

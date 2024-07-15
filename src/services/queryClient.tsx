@@ -9,10 +9,20 @@ export const queryClient = new QueryClient({
       console.log("err", err);
 
       if (err?.response?.status === 401 || err?.response?.status === 403) {
-        notification.error({
-          message: "Token expirado!",
-          description: "Por favor, faça login novamente.",
-        });
+        if (
+          err?.response?.data?.message ===
+          "Desculpe, sua conta foi temporariamente bloqueada devido a quatro tentativas incorretas consecutivas de inserção do token de autenticação. Por favor, entre em contato com o usuário master para desbloquear sua conta."
+        ) {
+          notification.error({
+            message: "Usuário bloqueado!",
+            description: err?.response?.data?.message,
+          });
+        } else {
+          notification.error({
+            message: "Token expirado!",
+            description: "Por favor, faça login novamente.",
+          });
+        }
         await congnitoAuthService.signOut();
       }
     },

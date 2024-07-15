@@ -3,6 +3,7 @@ import { apiFranqueadora } from "../../../config/api";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
 import { congnitoAuthService } from "./CognitoAuthService";
 import { useEffect } from "react";
+import { QueryKeys } from "../queryKeys";
 
 export interface getMeI {
   id: string;
@@ -91,7 +92,7 @@ export function useGetMe() {
   };
 
   const { data, error, isLoading, refetch, isSuccess } = useQuery(
-    "getMe",
+    QueryKeys.GET_ME,
     fetchMe,
     {
       enabled: headers !== undefined, // Habilita a query somente quando o header Authorization estiver definido

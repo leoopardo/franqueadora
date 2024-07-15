@@ -28,4 +28,5 @@ export type Promoter = z.infer<typeof PromoterSchema>;
 export interface PromotersParams extends ParamsI {
   s?: string;
   f?: string[];
+  w?: any;
 }

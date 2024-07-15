@@ -59,7 +59,6 @@ const Dark: ThemeConfig = {
     Badge: {
       colorError: import.meta.env.VITE_APP_COLOR_SECONDARY,
     },
-    Input: { controlHeightLG: 38 },
   },
 
   token: {

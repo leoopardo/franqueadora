@@ -6,31 +6,25 @@ import {
   StepsForm,
 } from "@ant-design/pro-components";
 import { BuildingOfficeIcon, UserIcon } from "@heroicons/react/24/outline";
+import defaultTheme from "@styles/default";
 import { Col, Divider, Row, Typography } from "antd";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { useTheme } from "../../../../../../../contexts/themeContext";
 import useDebounce from "../../../../../../../hooks/useDebounce";
 import { useGetCEP } from "../../../../../../services/brasilApi/getCEP";
-import { useGetDDDs } from "../../../../../../services/brasilApi/getDDD";
-import { useGetAreaCode } from "../../../../../../services/utils/getAreaCode";
-import { useGetCityCode } from "../../../../../../services/utils/getCity";
 import { useGetPosModules } from "../../../../../../services/utils/getPosModules";
 import { JuridicPerson } from "./stepOneTypes/juridicPerson";
+import { PhysicalPerson } from "./stepOneTypes/physicalPerson";
 
 interface stepOneI {
   setModules: Dispatch<SetStateAction<string[]>>;
   update?: boolean;
+  formRef: React.RefObject<ProFormInstance>;
 }
 
-export const StepOne = ({ setModules, update }: stepOneI) => {
-  const { theme } = useTheme();
-  const [ddd, setDDD] = useState<string[]>([]);
+export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
   const [cep, setCep] = useState<string>("");
-  const { data } = useGetDDDs(ddd);
   const stepOneRef = useRef<ProFormInstance>(null);
   const cepRequest = useGetCEP(cep);
-  const { AreaCodeData } = useGetAreaCode();
-  const { CityCodeData } = useGetCityCode(ddd);
   const { PosModulesData } = useGetPosModules();
 
   const [personType, setPersonType] = useState<"physical" | "juridic">(
@@ -68,6 +62,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
   };
 
   const handleChangeCEP = useDebounce((value) => {
+    cepRequest.remove()
     setCep(value);
   }, 500);
 
@@ -136,88 +131,40 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             value={personType}
           >
             <CheckCard
-              title={
-                <Typography
-                  style={{
-                    color:
-                      theme === "light"
-                        ? "#000"
-                        : personType === "juridic"
-                          ? "#fff"
-                          : "#000",
-                  }}
-                >
-                  Pessoa física
-                </Typography>
-              }
+              style={{
+                backgroundColor:
+                  personType === "physical"
+                    ? defaultTheme["primary-300"]
+                    : undefined,
+              }}
+              title={<Typography>Pessoa física</Typography>}
               description={
-                <Typography
-                  style={{
-                    color:
-                      theme === "light"
-                        ? "#000"
-                        : personType === "juridic"
-                          ? "#fff"
-                          : "#000",
-                  }}
-                >
-                  Tem como documento principal o CPF.
-                </Typography>
+                <Typography>Tem como documento principal o CPF.</Typography>
               }
               avatar={
                 <UserIcon
                   style={{
                     width: "32px",
-                    color:
-                      theme === "light"
-                        ? "#000"
-                        : personType === "juridic"
-                          ? "#fff"
-                          : "#000",
                   }}
                 />
               }
               value="physical"
             />
             <CheckCard
-              title={
-                <Typography
-                  style={{
-                    color:
-                      theme === "light"
-                        ? "#000"
-                        : personType === "physical"
-                          ? "#fff"
-                          : "#000",
-                  }}
-                >
-                  Pessoa jurídica
-                </Typography>
-              }
+              style={{
+                backgroundColor:
+                  personType === "juridic"
+                    ? defaultTheme["primary-300"]
+                    : undefined,
+              }}
+              title={<Typography>Pessoa jurídica</Typography>}
               description={
-                <Typography
-                  style={{
-                    color:
-                      theme === "light"
-                        ? "#000"
-                        : personType === "physical"
-                          ? "#fff"
-                          : "#000",
-                  }}
-                >
-                  Tem como documento principal o CNPJ.
-                </Typography>
+                <Typography>Tem como documento principal o CNPJ.</Typography>
               }
               avatar={
                 <BuildingOfficeIcon
                   style={{
                     width: "32px",
-                    color:
-                      theme === "light"
-                        ? "#000"
-                        : personType === "physical"
-                          ? "#fff"
-                          : "#000",
                   }}
                 />
               }
@@ -227,6 +174,9 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
         </Col>
         {personType === "juridic" && (
           <JuridicPerson stepOneRef={stepOneRef} update={update} />
+        )}
+        {personType === "physical" && (
+          <PhysicalPerson stepOneRef={stepOneRef} update={update} formRef={formRef}  />
         )}
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
           <Divider orientation="left">Endereço</Divider>
@@ -293,40 +243,9 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
           />
         </Col>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
-          <Divider orientation="left">Abrangência</Divider>
+          <Divider orientation="left">Configurações</Divider>
         </Col>
-        <Col md={{ span: 8 }} xs={{ span: 24 }}>
-          <ProFormSelect
-            name="area_codes"
-            label="Código(s) de área(s)"
-            placeholder="Selecione o DDD"
-            mode="multiple"
-            options={AreaCodeData?.map((a) => ({
-              key: a.code,
-              label: `${a.code}`,
-              value: a.id,
-            }))}
-            rules={[{ required: !update }]}
-            onChange={(value: any) => setDDD(value)}
-            fieldProps={{ maxTagCount: 3 }}
-          />
-        </Col>
-        <Col md={{ span: 8 }} xs={{ span: 24 }}>
-          <ProFormSelect
-            name="counties"
-            label="Município(s)"
-            placeholder="Selecione o município"
-            mode="multiple"
-            options={CityCodeData?.map((c) => ({
-              key: c.id,
-              label: c.name,
-              value: c.id,
-            }))}
-            disabled={!data}
-            rules={[{ required: !update }]}
-            fieldProps={{ maxTagCount: 1, disabled: !ddd.length }}
-          />
-        </Col>
+
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormSelect
             name="module"

@@ -23,7 +23,7 @@ export const useListFranchiseAgreements = () => {
 
       return parsedResponse.data;
     },
-    { enabled: headers && headers["AuthToken"] ? true : false }
+    { enabled: headers && headers["AuthToken"] ? true : false, refetchOnWindowFocus: false }
   );
 
   return {

@@ -18,6 +18,19 @@ export const formatCellPhoneBR = (value: string) => {
   return value;
 };
 
+export const formatRG = (value: string | number) => {
+  if (!value) return "-";
+  value = `${value}`.replace(/\D/g, ""); // Remove qualquer caractere que não seja dígito
+  value = `${value}`.substring(0, 9); // Garante que só há no máximo 9 dígitos
+  if (value.length <= 9) {
+    return value
+      .replace(/^(\d{2})(\d)/, "$1.$2")
+      .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+      .replace(/\.(\d{3})(\d)/, ".$1-$2");
+  }
+  return value;
+};
+
 export const formatCPF = (value: string | number) => {
   if (!value) return "-";
   value = `${value}`.replace(/\D/g, ""); // Remove qualquer caractere que não seja dígito
