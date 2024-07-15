@@ -95,6 +95,14 @@ const MasterSchema = z
   })
   .optional();
 
+const FranchiseLicenseSchema = z
+  .object({
+    type: z.string(),
+    value: z.string(),
+    active: z.boolean(),
+  })
+  .optional();
+
 export const FranchiseSchema = z.object({
   id: z.string().optional(),
   franchise_name: z.string().optional(),
@@ -124,6 +132,7 @@ export const FranchiseSchema = z.object({
   FranchiseOccuppationCounties: z
     .array(FranchiseOccuppationCounties)
     .optional(),
+  FranchiseLicenses: z.array(FranchiseLicenseSchema).optional(),
 });
 
 export const franchiseResponseSchema = createResponseSchema(FranchiseSchema);

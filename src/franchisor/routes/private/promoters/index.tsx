@@ -38,6 +38,7 @@ export const Promoters = () => {
       }));
       return;
     }
+    
     setParams((state) => ({
       ...state,
       s: value,

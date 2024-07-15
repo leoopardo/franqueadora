@@ -27,4 +27,15 @@ export interface createFranchiseI {
     username?: string;
   };
   module?: string[];
+  licenses?: {
+    keys?: string[];
+    LIVRE?: string;
+    MENSAL?: string;
+    AVULSO?: string;
+  };
+}
+
+export interface franchiseAgreementsRoute {
+  agreements?: { template_id: string; value: string }[];
+  licenses?: { type: string; value: number }[];
 }

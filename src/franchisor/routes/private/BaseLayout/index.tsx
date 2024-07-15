@@ -11,6 +11,7 @@ import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { MenuItens } from "../../../components/sider_menus/menus";
 import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
 import { useGetMe } from "../../../services/auth/useGetMe";
+import secureLocalStorage from "react-secure-storage";
 
 export const BaseLayout = () => {
   const { isMd } = useBreakpoints();
@@ -26,7 +27,7 @@ export const BaseLayout = () => {
       navigate("/franquias");
     }
   }, []);
-  
+
   return (
     <SiderComponent
       isMenuOpen={isMenuOpen}
@@ -34,9 +35,16 @@ export const BaseLayout = () => {
       menus={() => MenuItens(pendingNumber.data || 0)}
       pending={pendingNumber.data || 0}
       logout={async () => {
-        await congnitoAuthService.signOut();
+        try {
+          await congnitoAuthService.signOut();
+        } catch (error) {
+          console.error(error);
+        }
         setHeader(null);
-        refetch();
+        secureLocalStorage.clear();
+        setTimeout(() => {
+          refetch();
+        }, 500);
       }}
       onChange={() => pendingNumber.refetch()}
     >

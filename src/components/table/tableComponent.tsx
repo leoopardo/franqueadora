@@ -48,7 +48,18 @@ function TableComponent<RowItemI>({
       tableLayout="auto"
       rowKey={"id" || "ref_id"}
       style={{ borderRadius: 8, border: "1px solid rgba(200, 200, 200, 0.3)" }}
-      loading={loading ? {indicator: <Spin size="large" indicator={<LoadingOutlined size={40} spin />} />} : false}
+      loading={
+        loading
+          ? {
+              indicator: (
+                <Spin
+                  size="large"
+                  indicator={<LoadingOutlined size={40} spin />}
+                />
+              ),
+            }
+          : false
+      }
       rowSelection={
         rowSelection
           ? {
@@ -142,6 +153,7 @@ function TableComponent<RowItemI>({
           setParams && setParams((state) => ({ ...state, size })),
         onChange(page) {
           setParams && setParams((state) => ({ ...state, page }));
+          window.scroll({ top: 0, left: 0, behavior: "smooth" });
         },
         showTotal: (total, range) =>
           `${range[0]} à ${range[1]} de ${total} itens`,

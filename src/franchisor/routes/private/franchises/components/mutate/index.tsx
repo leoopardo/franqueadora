@@ -1,20 +1,29 @@
-import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
+import {
+  ProCard,
+  ProFormInstance,
+  StepsForm,
+} from "@ant-design/pro-components";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
-import { Button, Card, Col, Row, Tabs, Typography } from "antd";
+import { Button, Col, Row, Tabs, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createFranchiseI } from "../../../../../services/franchises/__interfaces/create_franchise.interface";
+import {
+  createFranchiseI,
+  franchiseAgreementsRoute,
+} from "../../../../../services/franchises/__interfaces/create_franchise.interface";
 import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
+import { TokenModal } from "@components/token";
 
 interface mutateI {
   mutate: (body: createFranchiseI) => void;
+  mutateAgreements?: (body: franchiseAgreementsRoute) => void;
   loading?: boolean;
   success?: boolean;
   error?: any;
@@ -27,6 +36,7 @@ interface mutateI {
 
 export const MutateFranchise = ({
   mutate,
+  mutateAgreements,
   loading,
   title,
   subtitle,
@@ -42,10 +52,15 @@ export const MutateFranchise = ({
   const navigate = useNavigate();
   const { data } = useListFranchiseAgreements();
   const { isSm } = useBreakpoints();
+  const [isTokenModalOpen, setIsTokenModalOpen] = useState<boolean>(false);
 
   const waitTime = (values: any) => {
     const agreements: { template_id?: string; value: string }[] = [];
-    
+    const licenses = values.licenses.keys.map((l: any) => ({
+      type: l,
+      value: +values.licenses[l],
+    }));
+
     const keysOrganization = [
       "ANTIFRAUD",
       "TRANSACTION",
@@ -55,6 +70,9 @@ export const MutateFranchise = ({
       "RESULT_CREDIT_ADVANCE",
       "SPREAD_CREDIT_ADVANCE",
     ];
+
+    console.log(values.agreements);
+
     Object?.keys(values.agreements)?.forEach((section) => {
       keysOrganization?.forEach((key) => {
         const ag = data?.items?.find(
@@ -70,15 +88,53 @@ export const MutateFranchise = ({
       });
     });
 
-    console.log("values", values);
-
     return new Promise<boolean>((resolve) => {
+      if (update && mutateAgreements) {
+        mutate({
+          ...initialValues,
+          ...values,
+          cnpj: values?.cnpj
+            ? values?.cnpj?.replace(/\D/g, "")
+            : initialValues?.cnpj?.replace(/\D/g, ""),
+          master: {
+            ...values?.master,
+            ...initialValues?.master,
+            cpf: values?.master?.cpf
+              ? values?.master?.cpf?.replace(/\D/g, "")
+              : undefined,
+            phone: values?.master?.phone
+              ? values?.master?.phone?.replace(/\D/g, "")
+              : undefined,
+            terminal_password: values?.master?.terminal_password
+              ? `${values?.master?.terminal_password}`
+              : undefined,
+            confirm_password: undefined,
+          },
+          state_registration: values?.state_registration
+            ? `${values?.state_registration}`
+            : undefined,
+          contacts: [],
+          agreements: undefined,
+          licenses: undefined,
+        });
+
+        mutateAgreements({
+          agreements: agreements as any,
+          licenses,
+        });
+        resolve(true);
+        return;
+      }
+
       mutate({
         ...initialValues,
         ...values,
-        cnpj: values?.cnpj ? values?.cnpj?.replace(/\D/g, "") : initialValues?.cnpj?.replace(/\D/g, ""),
+        cnpj: values?.cnpj
+          ? values?.cnpj?.replace(/\D/g, "")
+          : initialValues?.cnpj?.replace(/\D/g, ""),
         master: {
-          ...values?.master, ...initialValues?.master,
+          ...values?.master,
+          ...initialValues?.master,
           cpf: values?.master?.cpf
             ? values?.master?.cpf?.replace(/\D/g, "")
             : undefined,
@@ -90,7 +146,9 @@ export const MutateFranchise = ({
             : undefined,
           confirm_password: undefined,
         },
-        state_registration: values?.state_registration ? `${values?.state_registration}` : undefined,
+        state_registration: values?.state_registration
+          ? `${values?.state_registration}`
+          : undefined,
         contacts: [],
         agreement: agreements,
         agreements: undefined,
@@ -98,6 +156,9 @@ export const MutateFranchise = ({
       resolve(true);
     });
   };
+
+  console.log(initialValues);
+
   const initialFormValues: createFranchiseI = initialValues ?? {
     address: {
       address: "",
@@ -185,7 +246,7 @@ export const MutateFranchise = ({
           />
         </div>
       </Col>
-      <Card
+      <ProCard
         style={{
           maxHeight: isSm ? undefined : "70vh",
           overflowY: "auto",
@@ -236,7 +297,7 @@ export const MutateFranchise = ({
             </StepsForm>
           </Col>
         </Row>
-      </Card>
+      </ProCard>
 
       <Col
         style={{
@@ -276,15 +337,32 @@ export const MutateFranchise = ({
           size="large"
           type="primary"
           onClick={() => {
-            formRef.current?.submit();
-            setLoadingStep(true);
-            setTimeout(() => setLoadingStep(false), 2000);
+            if (step !== 3) {
+              formRef.current?.submit();
+              setLoadingStep(true);
+              setTimeout(() => setLoadingStep(false), 2000);
+            } else {
+              setIsTokenModalOpen(true);
+            }
           }}
           loading={loadingStep || loading}
         >
           {update ? "Salvar dados" : "Próxima etapa"}
         </Button>
       </Col>
+
+      {isTokenModalOpen && (
+        <TokenModal
+          setOpen={setIsTokenModalOpen}
+          open={isTokenModalOpen}
+          loading={loading}
+          onSuccess={() => {
+            formRef.current?.submit();
+            setLoadingStep(true);
+            setTimeout(() => setLoadingStep(false), 2000);
+          }}
+        />
+      )}
     </Row>
   );
 };

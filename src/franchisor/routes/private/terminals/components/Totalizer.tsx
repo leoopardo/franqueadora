@@ -26,6 +26,7 @@ export const Totalizer = ({
     sale: "Venda",
     stock: "Estoque",
     total: "Total de terminais",
+    loose: "Perdidos",
   };
   const hideTotals = ["free", "monthly"];
 

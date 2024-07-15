@@ -118,7 +118,7 @@ export function useGetMe() {
     return response.data;
   };
 
-  const { data, error, isLoading, refetch, isSuccess } = useQuery(
+  const { data, error, isLoading, refetch, isSuccess, remove } = useQuery(
     "getMeFranchise",
     fetchMe,
     {
@@ -140,5 +140,6 @@ export function useGetMe() {
     isLoading,
     refetch,
     isSuccess,
+    remove
   };
 }

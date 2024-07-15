@@ -1,6 +1,10 @@
+import { ProCard } from "@ant-design/pro-components";
+import { SelectFranchises } from "@components/selects/SelectFranchises";
+import { SelectPromoters } from "@components/selects/SelectPromoters";
+import { useTerminalsSelects } from "@franchisor/services/terminals/create/getSelectsData";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
-import { Card, Col, Row, Typography } from "antd";
+import { Col, Form, Row, Select, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useState } from "react";
 
@@ -12,6 +16,11 @@ interface MutateTerminalI {
 export const MutateTerminal = ({ subtitle, title }: MutateTerminalI) => {
   const { isSm } = useBreakpoints();
   const [width] = useState<number>((100 / 1) * 1);
+  const { data, isLoading } = useTerminalsSelects();
+  const [body, setBody]  = useState<any>({});
+
+  const filterOption = (inputValue: string, option: any) =>
+    option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1;
   return (
     <Row justify="center" style={{ width: "100%" }}>
       <Col
@@ -65,23 +74,72 @@ export const MutateTerminal = ({ subtitle, title }: MutateTerminalI) => {
           }}
         />
       </div>
-      <Card
+      <ProCard
         style={{
-          maxHeight: isSm ? undefined : "70vh",
+          height: isSm ? undefined : "70vh",
           overflowY: "auto",
           overflowX: "hidden",
           minWidth: "100%",
+          display: "flex",
         }}
       >
         <Row
           style={{
             display: "flex",
             justifyContent: "center",
+            minWidth: "100%",
+            height: "100%",
           }}
         >
-          <Col xs={{ span: 24 }} md={{ span: 16 }}></Col>
+          <Col xs={{ span: 24 }} md={{ span: 16 }}>
+            <Form layout="vertical" onFinish={(values) => console.log(values)}>
+              <Row style={{ width: "100%" }} gutter={[8, 8]}>
+                <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
+                  <Form.Item label="Modelo" name="model">
+                    <Select
+                      size="large"
+                      showSearch
+                      allowClear
+                      placeholder="Selecione um modelo."
+                      filterSort={(optionA, optionB) =>
+                        (optionA?.label ?? "")
+                          .toLowerCase()
+                          .localeCompare((optionB?.label ?? "").toLowerCase())
+                      }
+                      filterOption={filterOption}
+                      options={data?.models.map((m) => ({
+                        label: m.model,
+                        value: m.id,
+                      }))}
+                      loading={isLoading}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
+                  <Form.Item label="Franquia" name="franchise">
+                    <SelectFranchises
+                      onChange={(value) =>
+                        setBody((state: any) => ({
+                          ...state,
+                          franchise_id: value,
+                        }))
+                      }
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
+                  <Form.Item label="Promotor" name="promoter">
+                    <SelectPromoters
+                      query={body}
+                      onChange={(value) => console.log(value)}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
+            </Form>
+          </Col>
         </Row>
-      </Card>
+      </ProCard>
     </Row>
   );
 };

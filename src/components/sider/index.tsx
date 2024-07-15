@@ -9,8 +9,8 @@ import {
 } from "@ant-design/icons";
 import { MenuDataItem, ProLayout } from "@ant-design/pro-components";
 import { Badge, Button, Switch } from "antd";
-import { Dispatch, ReactNode, SetStateAction } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Dispatch, ReactNode, SetStateAction, useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
 import { useTheme } from "../../contexts/themeContext";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
@@ -20,7 +20,7 @@ interface SiderComponentI {
   isMenuOpen: boolean;
   setIsMenuOpen: Dispatch<SetStateAction<boolean>>;
   children: ReactNode;
-  menus: (PendinCount: number) => MenuDataItem[];
+  menus: (PendingCount: number) => MenuDataItem[];
   pending?: number;
   franquia?: boolean;
   logout?: () => void;
@@ -41,6 +41,21 @@ export const SiderComponent = ({
   const { theme, setTheme } = useTheme();
   const { isSm, isMd, isXl, isLg } = useBreakpoints();
   const { headers } = useFranchisorAuth();
+  const location = useLocation();
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
+
+  const handleMenuOpenChange = (keys: string[] | false) => {
+    if (keys && keys.length > 1) {
+      setOpenKeys([keys[keys.length - 1]]);
+    } else {
+      setOpenKeys(keys ? keys : []);
+    }
+  };
+
+  useEffect(() => {
+    setOpenKeys([]);
+    window.scroll({ top: 0, left: 0, behavior: "smooth" });
+  }, [location]);
 
   return (
     <ProLayout
@@ -164,7 +179,9 @@ export const SiderComponent = ({
 
             {!franquia && (
               <Link
-                to={`http://franquia${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host
+                to={`http://franquia${
+                  import.meta.env.VITE_ENV === "local" ? "." : "-"
+                }${window.location.host
                   .split(import.meta.env.VITE_ENV === "local" ? "." : "-")
                   .slice(
                     1,
@@ -172,7 +189,11 @@ export const SiderComponent = ({
                       import.meta.env.VITE_ENV === "local" ? "." : "-"
                     ).length
                   )
-                  .join()}/cross-auth/${JSON.stringify({ ...headers, master: true })}`}
+                  .join()}/cross-auth/${JSON.stringify({
+                  ...headers,
+                  master: true,
+                })}`}
+                target="_blank"
               >
                 <Button
                   size="middle"
@@ -234,6 +255,8 @@ export const SiderComponent = ({
           </div>
         );
       }}
+      openKeys={openKeys}
+      onOpenChange={handleMenuOpenChange}
     >
       {children}
     </ProLayout>

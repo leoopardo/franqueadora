@@ -3,9 +3,9 @@ import { useBreakpoints } from "@hooks/useBreakpoints";
 import { Layout, Spin, Typography } from "antd";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 import { useFranchiseAuth } from "../../../../contexts/franchiseAuthContext";
 import { useTheme } from "../../../../contexts/themeContext";
-import secureLocalStorage from "react-secure-storage";
 
 export const CrossAuth = () => {
   const { theme } = useTheme();
@@ -22,13 +22,13 @@ export const CrossAuth = () => {
         }
         localStorage.setItem("master", JSON.parse(credentials)?.master);
         setHeader(JSON.parse(credentials));
-      }, 2500);
+      }, 3000);
 
       setTimeout(() => {
         navigate("/");
-      }, 3000);
+      }, 3500);
     }
-  }, []);
+  }, [credentials]);
 
   return (
     <Layout

@@ -1,23 +1,40 @@
 import { MailOutlined, MessageOutlined } from "@ant-design/icons";
 import { CheckCard } from "@ant-design/pro-components";
+import { useSendToken } from "@franchisor/services/token/sendToken";
 import { Avatar, Button, Input, Modal, Typography } from "antd";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useTheme } from "../../contexts/themeContext";
 import defaultTheme from "../../styles/default";
+import { queryClient } from "../../services/queryClient";
+import { QueryKeys } from "@franchisor/services/queryKeys";
+import { getMeI } from "@franchisor/services/auth/useGetMe";
+import { useValidateToken } from "@franchisor/services/token/validateToken";
 
 interface TokenModalI {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  onOk: (token: string) => void;
+  onSuccess: () => void;
+  loading?: boolean;
 }
 
-export const TokenModal = ({ onOk, open, setOpen }: TokenModalI) => {
+export const TokenModal = ({
+  open,
+  setOpen,
+  onSuccess,
+  loading,
+}: TokenModalI) => {
   const [token, setToken] = useState<string>("");
   const channel = localStorage.getItem("tokenChannel");
   const [changeChannel, setChangeChannel] = useState<string>(channel || "");
   const [selectedChannel, setSelectedChannel] = useState<string>(channel || "");
+  const { mutate } = useSendToken();
+  const validate = useValidateToken({ onSuccess });
 
   const { theme } = useTheme();
+
+  useEffect(() => {
+    if (changeChannel) mutate();
+  }, [changeChannel]);
 
   return (
     <Modal
@@ -52,13 +69,16 @@ export const TokenModal = ({ onOk, open, setOpen }: TokenModalI) => {
       okText={selectedChannel ? "Enviar" : "Selecionar canal"}
       onOk={
         channel
-          ? () => onOk(token)
+          ? () => {
+              validate.mutate(token);
+            }
           : () => {
               setSelectedChannel(changeChannel);
               localStorage.setItem("tokenChannel", changeChannel);
             }
       }
       onCancel={() => setOpen(false)}
+      confirmLoading={validate.isLoading || loading}
     >
       {!selectedChannel ? (
         <>
@@ -181,7 +201,24 @@ export const TokenModal = ({ onOk, open, setOpen }: TokenModalI) => {
       ) : (
         <>
           <Typography.Text>
-            Token enviado para ({selectedChannel})
+            Token enviado para (
+            <span style={{ textTransform: "capitalize" }}>
+              {selectedChannel}
+            </span>
+            :{" "}
+            {`${(queryClient.getQueryData(QueryKeys.GET_ME) as getMeI).email
+              .split("@")[0]
+              .substring(
+                0,
+                (
+                  queryClient.getQueryData(QueryKeys.GET_ME) as getMeI
+                ).email.split("@")[0].length - 3
+              )}***@${
+              (
+                queryClient.getQueryData(QueryKeys.GET_ME) as getMeI
+              ).email.split("@")[1]
+            }`}
+            )
           </Typography.Text>
           <Input.OTP
             length={6}

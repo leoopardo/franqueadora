@@ -4,6 +4,7 @@ import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
 import ResponseI from "../__interfaces/response.interface";
 import { Promoter, PromotersParams } from "./__interfaces/promoters.interface";
 import { QueryKeys } from "../queryKeys";
+import qs from "qs";
 
 export const useListPromoters = (params: PromotersParams) => {
   const { headers } = useFranchisorAuth();
@@ -12,13 +13,18 @@ export const useListPromoters = (params: PromotersParams) => {
   >(
     [QueryKeys.LIST_PROMOTERS, params],
     async () => {
-      const response = await apiFranquia.get(`/promoter/all`, {
-        headers: {
-          ...headers,
-          Referer: "https://backoffice.develop.pdv365.com.br",
-        },
-        params: { ...params, orderBy: "created_at", orderDirection: "desc" }
-      });
+      const response = await apiFranquia.get(
+        `/promoter`,
+        {
+          headers: {
+            ...headers,
+          },
+          params: {  orderBy: "created_at", orderDirection: "desc", ...params },
+          paramsSerializer: (params) => {
+            return qs.stringify(params, { encode: false });
+          },
+        }
+      );
       return response.data;
     },
     { enabled: headers && headers["AuthToken"] ? true : false }
