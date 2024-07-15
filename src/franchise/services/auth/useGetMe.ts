@@ -98,13 +98,12 @@ export function useGetMe() {
     const response =
       localStorage.getItem("master") === "true"
         ? await apiFranqueadora.get("/user/me", {
-            headers:
-              headers ?? {
-                Authorization: `${secureLocalStorage.getItem("Authorization")}`,
-                Identity: `${secureLocalStorage.getItem("Identity")}`,
-                AuthToken: `${secureLocalStorage.getItem("AuthToken")}`,
-                "ngrok-skip-browser-warning": true,
-              },
+            headers: headers ?? {
+              Authorization: `${secureLocalStorage.getItem("Authorization")}`,
+              Identity: `${secureLocalStorage.getItem("Identity")}`,
+              AuthToken: `${secureLocalStorage.getItem("AuthToken")}`,
+              "ngrok-skip-browser-warning": true,
+            },
           })
         : await apiFranquia.get("/user/me", {
             headers: headers ?? {
@@ -114,7 +113,7 @@ export function useGetMe() {
               "ngrok-skip-browser-warning": true,
             },
           });
-
+    setHeader((state) => ({ ...state, AuthToken: data?.AuthToken }));
     return response.data;
   };
 
@@ -130,7 +129,7 @@ export function useGetMe() {
     if (error) {
       setHeader(null);
       secureLocalStorage.clear();
-      localStorage.removeItem("master")
+      localStorage.removeItem("master");
     }
   }, [error, setHeader]);
 
@@ -140,6 +139,6 @@ export function useGetMe() {
     isLoading,
     refetch,
     isSuccess,
-    remove
+    remove,
   };
 }

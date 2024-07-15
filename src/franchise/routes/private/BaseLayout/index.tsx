@@ -38,7 +38,6 @@ export const BaseLayout = () => {
       <Content
         style={{
           width: "100%",
-          maxWidth: "92vw",
           height: "100%",
           minHeight: "100vh",
           backgroundSize: "cover",
@@ -71,7 +70,6 @@ export const BaseLayout = () => {
       >
         <Row
           style={{
-            padding: "20px",
             top: 0,
             display: "flex",
             flexDirection: "column",
