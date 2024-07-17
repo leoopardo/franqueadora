@@ -50,7 +50,7 @@ export const Login = () => {
   }, [loading]);
 
   if (isLoggedIn) {
-    navigate("/franchises");
+    setTimeout(() => navigate("/eventos"), 500);
   }
 
   return (

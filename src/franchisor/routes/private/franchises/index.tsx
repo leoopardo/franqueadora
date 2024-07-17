@@ -42,7 +42,7 @@ export const Franchises = () => {
     setParams((state) => ({
       ...state,
       s: value,
-      f: ["franchise_name", "cnpj", "ref_id", "username"],
+      f: ["franchise_name", "cnpj", "ref_id", "username"].join(","),
     }));
   }, 500);
 

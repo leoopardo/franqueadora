@@ -27,5 +27,5 @@ export const queryClient = new QueryClient({
       }
     },
   }),
-  defaultOptions: { queries: { retry: false, keepPreviousData: true } },
+  defaultOptions: { queries: { retry: false, keepPreviousData: false } },
 });

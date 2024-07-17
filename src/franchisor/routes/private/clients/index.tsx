@@ -41,7 +41,9 @@ export const Clients = () => {
     setParams((state) => ({
       ...state,
       s: value,
-      f: "ref_id,ClientPerson.name,ClientJuridic.company_name,ClientPerson.cpf,ClientJuridic.cnpj,ClientAddress.state,ClientAddress.city,Master.username,ClientPOSModule.POSModule.name,Franchise.franchise_name,Franchise.cnpj,Promoter.promoter_name,Promoter.PromoterPerson.cpf,Promoter.PromoterJuridic.cnpj".split(","),
+      f: "ref_id,ClientPerson.name,ClientJuridic.company_name,ClientPerson.cpf,ClientJuridic.cnpj,ClientAddress.state,ClientAddress.city,Master.username,ClientPOSModule.POSModule.name,Franchise.franchise_name,Franchise.cnpj,Promoter.promoter_name,Promoter.PromoterPerson.cpf,Promoter.PromoterJuridic.cnpj".split(
+        ","
+      ),
     }));
   }, 500);
 
@@ -111,8 +113,9 @@ export const Clients = () => {
                   }}
                 />
               ),
+              width: 40,
             },
-            { key: "ref_id", head: "ID" },
+            { key: "ref_id", head: "ID", responsive: ["lg"] },
             {
               key: "name",
               head: "Cliente",
@@ -146,10 +149,11 @@ export const Clients = () => {
                 </Row>
               ),
               width: 180,
+              responsive: ["lg"],
             },
             {
               key: "promoter_name",
-              head: "Franquia",
+              head: "Promotor",
               custom: (row) => (
                 <Row gutter={[4, 4]}>
                   <Col span={24}>
@@ -163,10 +167,11 @@ export const Clients = () => {
                 </Row>
               ),
               width: 180,
+              responsive: ["lg"],
             },
-            { key: "username", head: "Usuário" },
-            { key: "city", head: "Cidade" },
-            { key: "state", head: "Estado" },
+            { key: "username", head: "Usuário",custom: (row) => (row.username), width: 80 },
+            { key: "city", head: "Cidade", responsive: ["lg"] },
+            { key: "state", head: "Estado", responsive: ["lg"] },
             {
               key: "modules",
               head: "Módulos POS",
@@ -217,6 +222,7 @@ export const Clients = () => {
                   })}
                 </div>
               ),
+              width: 40,
             },
           ]}
         />

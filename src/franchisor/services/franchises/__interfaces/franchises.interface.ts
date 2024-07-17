@@ -141,5 +141,5 @@ export type Franchise = z.infer<typeof FranchiseSchema>;
 
 export interface FranchiseParams extends ParamsI {
   s?: string;
-  f?: string[];
+  f?: string;
 }

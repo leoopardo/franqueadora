@@ -25,10 +25,10 @@ export const Totalizer = ({
     lending: "Comodato",
     sale: "Venda",
     stock: "Estoque",
-    total: "Total de terminais",
-    loose: "Perdidos",
+    total: "Total",
+    deleted: "Excluídos"
   };
-  const hideTotals = ["free", "monthly"];
+  const hideTotals = ["free", "monthly", "loose"];
 
   return (
     <Card style={{ width: "100%" }} bodyStyle={{ padding: 8 }}>

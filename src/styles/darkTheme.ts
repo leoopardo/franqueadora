@@ -16,6 +16,7 @@ const Dark: ThemeConfig = {
     },
     Menu: {
       colorTextLightSolid: "#fff",
+      horizontalItemSelectedBg: "#fff"
     },
     Tooltip: {
       colorTextLightSolid: "#000",

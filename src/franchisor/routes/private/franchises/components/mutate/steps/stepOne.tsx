@@ -132,7 +132,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
       name="base"
       title="Informações da empresa"
       onFinish={async () => {
-        await waitTime(2000);
+        await waitTime();
         return true;
       }}
       size="large"
