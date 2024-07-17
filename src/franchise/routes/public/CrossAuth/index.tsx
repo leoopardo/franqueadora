@@ -25,7 +25,7 @@ export const CrossAuth = () => {
       }, 3000);
 
       setTimeout(() => {
-        navigate("/");
+        navigate("/eventos");
       }, 3500);
     }
   }, [credentials]);

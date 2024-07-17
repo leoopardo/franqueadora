@@ -1,10 +1,10 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { Dropdown, Spin, Table, Typography } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 import { Dispatch, SetStateAction } from "react";
 import ParamsI from "../../franchisor/services/__interfaces/queryParams.interface";
 import ResponseI from "../../franchisor/services/__interfaces/response.interface";
-import { LoadingOutlined } from "@ant-design/icons";
 
 interface ActionsI<RowItemI> {
   label?: string;
@@ -19,6 +19,7 @@ interface columnI<RowItemI> {
   head?: string;
   custom?: (row: RowItemI) => any;
   width?: number;
+  responsive?: "md"[] | "lg"[];
 }
 
 interface TableComponentI<RowItemI> {
@@ -47,7 +48,10 @@ function TableComponent<RowItemI>({
     <Table
       tableLayout="auto"
       rowKey={"id" || "ref_id"}
-      style={{ borderRadius: 8, border: "1px solid rgba(200, 200, 200, 0.3)" }}
+      style={{
+        borderRadius: 8,
+        border: "1px solid rgba(200, 200, 200, 0.3)",
+      }}
       loading={
         loading
           ? {
@@ -64,7 +68,6 @@ function TableComponent<RowItemI>({
         rowSelection
           ? {
               type: rowSelection ? "checkbox" : undefined,
-
               ...rowSelection,
             }
           : undefined
@@ -85,6 +88,7 @@ function TableComponent<RowItemI>({
                 ellipsis: {
                   showTitle: false,
                 },
+                responsive: c.responsive,
               }
             : {
                 title: c.head ?? c.key,
@@ -100,6 +104,7 @@ function TableComponent<RowItemI>({
                 ellipsis: {
                   showTitle: false,
                 },
+                responsive: c.responsive,
               }
         ) as any),
         {
@@ -108,7 +113,7 @@ function TableComponent<RowItemI>({
           render: (_value: any, row: any) => (
             <div
               style={{
-                minWidth: 48,
+                minWidth: 60,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -138,6 +143,7 @@ function TableComponent<RowItemI>({
               </Dropdown>
             </div>
           ),
+          width: 60,
           fixed: "right",
         },
       ]}

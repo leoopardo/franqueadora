@@ -1,8 +1,8 @@
 // import { cognitoUserPoolsTokenProvider } from "@aws-amplify/auth/cognito";
 import { Row } from "antd";
 import { Content } from "antd/es/layout/layout";
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import secureLocalStorage from "react-secure-storage";
 import { SiderComponent } from "../../../../components/sider";
 import { useFranchiseAuth } from "../../../../contexts/franchiseAuthContext";
@@ -18,6 +18,13 @@ export const BaseLayout = () => {
   const { theme } = useTheme();
   const { setHeader } = useFranchiseAuth();
   const { refetch } = useGetMe();
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("/eventos");
+    }
+  }, []);
 
   return (
     <SiderComponent
