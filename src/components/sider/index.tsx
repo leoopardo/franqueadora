@@ -32,6 +32,7 @@ import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
 import { useTheme } from "../../contexts/themeContext";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { queryClient } from "../../services/queryClient";
+import Logo from "../../../public/pdv365-logo-white.svg"
 
 interface SiderComponentI {
   isMenuOpen: boolean;
@@ -105,12 +106,14 @@ export const SiderComponent = ({
   }, [location]);
 
   useEffect(() => {
+    if(franquia) return
     if (localStorage.getItem("tenant")) {
       setTenant(`${localStorage.getItem("tenant")}`);
     }
   }, []);
 
   useEffect(() => {
+    if(franquia) return
     if (data) {
       mutate({
         franchise_id:
@@ -157,7 +160,7 @@ export const SiderComponent = ({
               borderRadius: 6,
             }}
           >
-            <img src="pdv365-logo-white.svg" />
+            <img src={Logo} alt="logo-pdv365" />
           </div>
         ),
         children: [

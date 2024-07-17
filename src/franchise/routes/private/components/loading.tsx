@@ -1,35 +1,11 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { useBreakpoints } from "@hooks/useBreakpoints";
-import { Layout, Spin, Typography } from "antd";
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import secureLocalStorage from "react-secure-storage";
-import { useFranchiseAuth } from "../../../../contexts/franchiseAuthContext";
+import { Layout, Spin } from "antd";
 import { useTheme } from "../../../../contexts/themeContext";
 
-export const CrossAuth = () => {
+export const Loading = () => {
   const { theme } = useTheme();
   const { isMd, isSm } = useBreakpoints();
-  const { credentials } = useParams();
-  const { setHeader } = useFranchiseAuth();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (credentials) {
-      setTimeout(() => {
-        for (const key of Object.keys(JSON.parse(credentials))) {
-          secureLocalStorage.setItem(key, JSON.parse(credentials)[key]);
-        }
-        localStorage.setItem("master", JSON.parse(credentials)?.master);
-        setHeader(JSON.parse(credentials));
-      }, 500);
-
-      setTimeout(() => {
-        navigate("/eventos");
-      }, 500);
-    }
-  }, [credentials]);
-
   return (
     <Layout
       style={{
@@ -58,7 +34,6 @@ export const CrossAuth = () => {
                 : { height: 15, width: 50 }
             }
           />
-          <Typography.Text>Autenticando como usuário master</Typography.Text>
           <Spin size="large" indicator={<LoadingOutlined size={40} spin />} />
         </div>
       ) : (
@@ -78,8 +53,7 @@ export const CrossAuth = () => {
                 ? { height: 45, width: 150 }
                 : { height: 15, width: 50 }
             }
-          />{" "}
-          <Typography.Text>Autenticando como usuário master</Typography.Text>
+          />
           <Spin size="large" indicator={<LoadingOutlined size={40} spin />} />
         </div>
       )}
