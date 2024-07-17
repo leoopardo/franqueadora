@@ -121,7 +121,7 @@ export function useGetMe() {
     "getMeFranchise",
     fetchMe,
     {
-      enabled: !!headers,
+      enabled: !!headers && !!headers["AuthToken"],
     }
   );
 
