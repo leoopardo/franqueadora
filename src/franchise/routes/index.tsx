@@ -1,13 +1,16 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { congnitoAuthService } from "@franchise/services/auth/CognitoAuthService";
+import { useBreakpoints } from "@hooks/useBreakpoints";
+import { Layout, Spin } from "antd";
 import { Amplify } from "aws-amplify";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useFranchiseAuth } from "../../contexts/franchiseAuthContext";
+import { useTheme } from "../../contexts/themeContext";
 import { queryClient } from "../../services/queryClient";
 import { amplifyConfig } from "../services/auth/login.config";
 import { useGetMe } from "../services/auth/useGetMe";
 import { PrivateRoutes } from "./private";
-import { Loading } from "./private/components/loading";
 import { PublicRoutes } from "./public";
 import { CrossAuth } from "./public/CrossAuth";
 
@@ -16,6 +19,8 @@ export const FranchiseRoutes = (): React.ReactElement => {
   const navigate = useNavigate();
   const location = useLocation();
   const { token } = useFranchiseAuth();
+  const { theme } = useTheme();
+  const { isMd, isSm } = useBreakpoints();
   const { setHeader } = useFranchiseAuth();
 
   document.title = `Painel ${window.location.host.split(".")[0]} - PDV365`;
@@ -55,7 +60,60 @@ export const FranchiseRoutes = (): React.ReactElement => {
   if (isLoading) {
     if (localStorage.getItem("master")) {
       return <CrossAuth />;
-    } else return <Loading />;
+    }
+    return (
+      <Layout
+        style={{
+          height: "100vh",
+          width: "100vw",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {theme === "light" ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            <img
+              src="/logoDef.svg"
+              style={
+                !isMd || isSm
+                  ? { height: 45, width: 150 }
+                  : { height: 15, width: 50 }
+              }
+            />
+            <Spin size="large" indicator={<LoadingOutlined size={40} spin />} />
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
+            <img
+              src="/logoWhiteDef.svg"
+              style={
+                !isMd || isSm
+                  ? { height: 45, width: 150 }
+                  : { height: 15, width: 50 }
+              }
+            />
+            <Spin size="large" indicator={<LoadingOutlined size={40} spin />} />
+          </div>
+        )}
+      </Layout>
+    );
   }
 
   return isSuccess ? <PrivateRoutes /> : <PublicRoutes />;

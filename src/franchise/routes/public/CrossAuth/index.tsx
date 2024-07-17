@@ -22,11 +22,11 @@ export const CrossAuth = () => {
         }
         localStorage.setItem("master", JSON.parse(credentials)?.master);
         setHeader(JSON.parse(credentials));
-      }, 3000);
+      }, 500);
 
       setTimeout(() => {
         navigate("/eventos");
-      }, 3500);
+      }, 500);
     }
   }, [credentials]);
 
