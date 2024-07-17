@@ -3,6 +3,7 @@ import { BaseLayout } from "./BaseLayout";
 import { Button, Result } from "antd";
 import { Events } from "./events";
 import { Terminals } from "./terminals";
+import { Loading } from "./components/loading";
 
 export const PrivateRoutes = () => {
   return (
@@ -13,6 +14,7 @@ export const PrivateRoutes = () => {
         <Route path="terminais">
           <Route index element={<Terminals />} />
         </Route>
+        
         <Route
           path="*"
           element={
@@ -25,6 +27,7 @@ export const PrivateRoutes = () => {
           }
         />
       </Route>
+      <Route path="cross-auth/:credentials" element={<Loading />} />
     </Routes>
   );
 };

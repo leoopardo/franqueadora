@@ -30,11 +30,7 @@ export const useListFranchises = (
 
       return parsedResponse.data;
     },
-    {
-      enabled: franchise && headers && headers["AuthToken"] ? true : false,
-      keepPreviousData: true,
-      refetchOnWindowFocus: false,
-    }
+    { enabled: franchise && headers && headers["AuthToken"] ? true : false }
   );
 
   return {
