@@ -26,9 +26,9 @@ export const Totalizer = ({
     sale: "Venda",
     stock: "Estoque",
     total: "Total de terminais",
-    loose: "Perdidos",
+    deleted: "Deletados"
   };
-  const hideTotals = ["free", "monthly"];
+  const hideTotals = ["free", "monthly", "loose"];
 
   return (
     <Card style={{ width: "100%" }} bodyStyle={{ padding: 8 }}>

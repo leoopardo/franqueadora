@@ -9,7 +9,7 @@ export const useSetTenant = () => {
   const mutation = useMutation<
     any | null | undefined,
     unknown,
-    { franchise_id?: string }
+    { franchise_id?: string | null }
   >({
     mutationFn: async (body) => {
       const response = await apiFranquia.post(`/user/tenant`, body, {

@@ -1,4 +1,8 @@
-import { Bars3BottomLeftIcon, PencilIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import {
+  Bars3BottomLeftIcon,
+  PencilIcon,
+  PencilSquareIcon,
+} from "@heroicons/react/24/outline";
 import { Button, Col, Input, Row, Switch, Typography } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -70,7 +74,7 @@ export const Terminals = () => {
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 3 }}>
-      <Button
+        <Button
           style={{
             width: "100%",
             display: "flex",
@@ -165,40 +169,56 @@ export const Terminals = () => {
               ),
             },
             { key: "ref_id", head: "ID" },
-            { key: "serial_number", head: "Número de serial", width: 80 },
+            {
+              key: "serial_number",
+              head: "Número de serial",
+              custom(row) {
+                return <Typography.Text copyable>{row.serial_number}</Typography.Text>;
+              },
+              width: 80,
+            },
             {
               key: "franchise_name",
               head: "Franquia",
-              custom: (row) => (
-                <Row gutter={[4, 4]}>
-                  <Col span={24}>
-                    <Typography.Text>{row?.franchise_name}</Typography.Text>
-                  </Col>
-                  <Col span={24}>
-                    <Typography.Text copyable style={{ color: "#71717A" }}>
-                      {formatCNPJ(row?.franchise_cnpj)}
-                    </Typography.Text>
-                  </Col>
-                </Row>
-              ),
+              custom: (row) =>
+                row.franchise_name ? (
+                  <Row gutter={[4, 4]}>
+                    <Col span={24}>
+                      <Typography.Text>{row?.franchise_name}</Typography.Text>
+                    </Col>
+                    {row?.franchise_cnpj && (
+                      <Col span={24}>
+                        <Typography.Text copyable style={{ color: "#71717A" }}>
+                          {formatCNPJ(row?.franchise_cnpj)}
+                        </Typography.Text>
+                      </Col>
+                    )}
+                  </Row>
+                ) : (
+                  "-"
+                ),
               width: 180,
             },
             {
               key: "promoter_name",
               head: "Promotor",
-              custom: (row) => (
-                <Row gutter={[4, 4]}>
-                  <Col span={24}>
-                    <Typography.Text>{row?.promoter_name}</Typography.Text>
-                  </Col>
-                  <Col span={24}>
-                    <Typography.Text copyable style={{ color: "#71717A" }}>
-                      {formatCpfCnpj(row?.promoter_document || "")}
-                    </Typography.Text>
-                  </Col>
-                </Row>
-              ),
-              width: 180,
+              custom: (row) =>
+                row?.promoter_name ? (
+                  <Row gutter={[4, 4]}>
+                    <Col span={24}>
+                      <Typography.Text>{row?.promoter_name}</Typography.Text>
+                    </Col>
+                    {row?.promoter_document && (
+                      <Col span={24}>
+                        <Typography.Text copyable style={{ color: "#71717A" }}>
+                          {formatCpfCnpj(row?.promoter_document)}
+                        </Typography.Text>
+                      </Col>
+                    )}
+                  </Row>
+                ) : (
+                  "-"
+                ),
             },
             {
               key: "client_name",
@@ -218,7 +238,6 @@ export const Terminals = () => {
                   </Col>
                 </Row>
               ),
-              width: 180,
             },
             { key: "terminal_model", head: "Modelo do terminal", width: 140 },
           ]}

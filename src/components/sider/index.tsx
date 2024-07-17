@@ -68,8 +68,8 @@ export const SiderComponent = ({
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const [franchisesParams, setFranchisesParams] =
     useState<FranchiseParams>(INITIAL_PARAMS);
-  const [tenant, setTenant] = useState<string>(
-    localStorage.getItem("tenent") || ""
+  const [tenant, setTenant] = useState<string | null>(
+    localStorage.getItem("tenant") || null
   );
   const { data } = useListFranchises(INITIAL_PARAMS, franquia);
   const searchFranchises = useSearchFranchises(franchisesParams, franquia);
@@ -105,14 +105,19 @@ export const SiderComponent = ({
   }, [location]);
 
   useEffect(() => {
+    if (localStorage.getItem("tenant")) {
+      setTenant(`${localStorage.getItem("tenant")}`);
+    }
+  }, []);
+
+  useEffect(() => {
     if (data) {
-      if (tenant) {
-        mutate({ franchise_id: tenant });
-      } else {
-        mutate({ franchise_id: data?.items[0]?.id });
-        setTenant(`${data?.items[0]?.id}`);
-        localStorage.setItem("tenant", `${data?.items[0]?.id}`);
-      }
+      mutate({
+        franchise_id:
+          tenant || localStorage.getItem("tenant")
+            ? `${localStorage.getItem("tenant")}`
+            : null,
+      });
     }
   }, [tenant, data]);
 
@@ -127,9 +132,10 @@ export const SiderComponent = ({
           </div>
         ),
         disabled: !franchise.active || franchise.is_deleted,
-        style: { height: 60, width: 220 },
+        style: { height: 60, width: 260 },
         onClick: () => {
           setTenant(`${franchise.id}`);
+          localStorage.setItem("tenant", `${franchise.id}`);
           setFranchisesParams(INITIAL_PARAMS);
         },
       })) || [];
@@ -138,13 +144,10 @@ export const SiderComponent = ({
       {
         key:
           data?.items.find((franchise) => franchise.id === tenant)?.id ||
-          data?.items[0].id ||
-          "",
+          "Selecionar franquia",
         label:
           data?.items.find((franchise) => franchise.id === tenant)
-            ?.franchise_name ||
-          data?.items[0].franchise_name ||
-          "",
+            ?.franchise_name || "Selecionar franquia",
         icon: (
           <div
             style={{
@@ -158,8 +161,26 @@ export const SiderComponent = ({
           </div>
         ),
         children: [
-          { type: "group", label: <Input onChange={debounceSearch} /> },
+          {
+            type: "group",
+            label: (
+              <Input
+                onChange={debounceSearch}
+                placeholder="Pesquisar franquia"
+                size="large"
+              />
+            ),
+          },
           ...items,
+          {
+            label: "Visão geral",
+            key: "asuidhaisdh",
+            onClick: () => {
+              mutate({ franchise_id: null });
+              setTenant(null);
+              localStorage.removeItem("tenant");
+            },
+          },
         ],
       },
     ];
@@ -193,10 +214,11 @@ export const SiderComponent = ({
                 }
               />{" "}
             </Link>
-            {franquia && (
+            {franquia && localStorage.getItem("master") && (
               <Menu
                 style={{
-                  width: "100%",
+                  width: "120%",
+                  marginLeft: -20,
                   borderRadius: 8,
                 }}
                 mode="vertical"
@@ -216,7 +238,7 @@ export const SiderComponent = ({
                 }
               />
             </Link>
-            {franquia && (
+            {franquia && localStorage.getItem("master") && (
               <Menu
                 style={{
                   width: "120%",
