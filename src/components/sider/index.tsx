@@ -32,7 +32,7 @@ import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
 import { useTheme } from "../../contexts/themeContext";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { queryClient } from "../../services/queryClient";
-import Logo from "../../../public/pdv365-logo-white.svg"
+import Logo from "../../../public/pdv365-logo-white.svg";
 
 interface SiderComponentI {
   isMenuOpen: boolean;
@@ -72,8 +72,14 @@ export const SiderComponent = ({
   const [tenant, setTenant] = useState<string | null>(
     localStorage.getItem("tenant") || null
   );
-  const { data } = useListFranchises(INITIAL_PARAMS, franquia);
-  const searchFranchises = useSearchFranchises(franchisesParams, franquia);
+  const { data } = useListFranchises(
+    INITIAL_PARAMS,
+    franquia && localStorage.getItem("master") ? true : false
+  );
+  const searchFranchises = useSearchFranchises(
+    franchisesParams,
+    franquia && !!localStorage.getItem("master")? true : false
+  );
   const { mutate } = useSetTenant();
 
   const debounceSearch = useDebounce((e) => {
@@ -106,14 +112,14 @@ export const SiderComponent = ({
   }, [location]);
 
   useEffect(() => {
-    if(franquia) return
+    if (franquia) return;
     if (localStorage.getItem("tenant")) {
       setTenant(`${localStorage.getItem("tenant")}`);
     }
   }, []);
 
   useEffect(() => {
-    if(franquia) return
+    if (franquia) return;
     if (data) {
       mutate({
         franchise_id:

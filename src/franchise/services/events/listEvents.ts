@@ -11,7 +11,7 @@ export const useListEvents = (params: EventParams) => {
   const { data, error, isLoading, refetch } = useQuery<
     ResponseI<EventType> | null | undefined
   >(
-    [QueryKeys.LIST_EVENTS, params],
+    [QueryKeys.LIST_EVENTS, params, headers],
     async () => {
       const response = await apiPortalEvent.get(`/days/events/all`, {
         headers: { ...headers },
