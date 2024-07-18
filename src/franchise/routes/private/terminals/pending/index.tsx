@@ -8,11 +8,7 @@ import {
 import { useApproveTerminals } from "@franchisor/services/terminals/pending/approveTerminals";
 import { useListPending } from "@franchisor/services/terminals/pending/listPending";
 import { useReproveTerminals } from "@franchisor/services/terminals/pending/reproveTerminals";
-import {
-  Bars3BottomLeftIcon,
-  CheckIcon,
-  PencilIcon,
-} from "@heroicons/react/24/outline";
+import { Bars3BottomLeftIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import useDebounce from "@hooks/useDebounce";
 import { formatCNPJ, formatCpfCnpj } from "@utils/regexFormat";
@@ -158,59 +154,62 @@ export const Pending = () => {
           data={data}
           params={params}
           setParams={setParams}
-          actions={[
-            {
-              label: "Editar",
-              onClick: (row) => console.log(row),
-              icon: <PencilIcon style={{ width: 16 }} />,
-            },
-            {
-              label: "Aprovar",
-              onClick: (row) => approveTerminals.mutate([row?.id ?? ""]),
-              icon: <CheckIcon style={{ height: 16 }} />,
-            },
-            {
-              label: "Reprovar",
-              onClick: (row) => reproveTerminals.mutate([row?.id ?? ""]),
-              icon: <CheckIcon style={{ height: 16 }} />,
-            },
-          ]}
           columns={[
             { key: "ref_id", head: "ID" },
-            { key: "serial_number", head: "Número de serial", width: 80 },
+            {
+              key: "serial_number",
+              head: "Número de serial",
+              custom(row) {
+                return (
+                  <Typography.Text copyable>
+                    {row.serial_number}
+                  </Typography.Text>
+                );
+              },
+              width: 80,
+            },
             {
               key: "franchise_name",
               head: "Franquia",
-              custom: (row) => (
-                <Row gutter={[4, 4]}>
-                  <Col span={24}>
-                    <Typography.Text>{row?.franchise_name}</Typography.Text>
-                  </Col>
-                  <Col span={24}>
-                    <Typography.Text copyable style={{ color: "#71717A" }}>
-                      {formatCNPJ(row?.franchise_cnpj)}
-                    </Typography.Text>
-                  </Col>
-                </Row>
-              ),
+              custom: (row) =>
+                row.franchise_name ? (
+                  <Row gutter={[4, 4]}>
+                    <Col span={24}>
+                      <Typography.Text>{row?.franchise_name}</Typography.Text>
+                    </Col>
+                    {row?.franchise_cnpj && (
+                      <Col span={24}>
+                        <Typography.Text copyable style={{ color: "#71717A" }}>
+                          {formatCNPJ(row?.franchise_cnpj)}
+                        </Typography.Text>
+                      </Col>
+                    )}
+                  </Row>
+                ) : (
+                  "-"
+                ),
               width: 180,
             },
             {
               key: "promoter_name",
               head: "Promotor",
-              custom: (row) => (
-                <Row gutter={[4, 4]}>
-                  <Col span={24}>
-                    <Typography.Text>{row?.promoter_name}</Typography.Text>
-                  </Col>
-                  <Col span={24}>
-                    <Typography.Text copyable style={{ color: "#71717A" }}>
-                      {formatCpfCnpj(row?.promoter_document || "")}
-                    </Typography.Text>
-                  </Col>
-                </Row>
-              ),
-              width: 180,
+              custom: (row) =>
+                row?.promoter_name ? (
+                  <Row gutter={[4, 4]}>
+                    <Col span={24}>
+                      <Typography.Text>{row?.promoter_name}</Typography.Text>
+                    </Col>
+                    {row?.promoter_document && (
+                      <Col span={24}>
+                        <Typography.Text copyable style={{ color: "#71717A" }}>
+                          {formatCpfCnpj(row?.promoter_document)}
+                        </Typography.Text>
+                      </Col>
+                    )}
+                  </Row>
+                ) : (
+                  "-"
+                ),
             },
             {
               key: "client_name",
@@ -230,7 +229,6 @@ export const Pending = () => {
                   </Col>
                 </Row>
               ),
-              width: 180,
             },
             { key: "terminal_model", head: "Modelo do terminal", width: 140 },
           ]}
