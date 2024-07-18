@@ -4,17 +4,21 @@ import { Button, Result } from "antd";
 import { Events } from "./events";
 import { Terminals } from "./terminals";
 import { Loading } from "./components/loading";
+import { CreateEvent } from "./events/create";
 
 export const PrivateRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<BaseLayout />}>
         <Route path="franquias" element={<>Franquias</>} />
-        <Route path="eventos" element={<Events />} />
+        <Route path="eventos">
+          <Route index element={<Events />} />
+          <Route path="cadastro" element={<CreateEvent />} />
+        </Route>
         <Route path="terminais">
           <Route index element={<Terminals />} />
         </Route>
-        
+
         <Route
           path="*"
           element={

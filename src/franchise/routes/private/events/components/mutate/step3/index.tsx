@@ -1,7 +1,7 @@
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import { useRef } from "react";
 
-export const StepOne = () => {
+export const StepThree = () => {
   const stepOneRef = useRef<ProFormInstance>();
   const waitTime = (time: number = 100) => {
     return new Promise((resolve) => {
@@ -14,7 +14,7 @@ export const StepOne = () => {
   return (
     <StepsForm.StepForm
       name="base"
-      title="Informações da empresa"
+      title="Módulo bar"
       onFinish={async () => {
         await waitTime(2000);
         return true;

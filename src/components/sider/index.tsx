@@ -143,6 +143,7 @@ export const SiderComponent = ({
         disabled: !franchise.active || franchise.is_deleted,
         style: { height: 60, width: 260 },
         onClick: () => {
+          mutate({franchise_id: `${franchise.id}`})
           setTenant(`${franchise.id}`);
           localStorage.setItem("tenant", `${franchise.id}`);
           setFranchisesParams(INITIAL_PARAMS);

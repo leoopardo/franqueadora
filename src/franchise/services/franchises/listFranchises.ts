@@ -17,7 +17,7 @@ export const useListFranchises = (
   const { data, error, isLoading, refetch } = useQuery<
     ResponseI<Franchise> | null | undefined
   >(
-    [QueryKeys.LIST_FRANCHISES, params],
+    [QueryKeys.LIST_FRANCHISES, params, franchise],
     async () => {
       const response = await apiFranquia.get(`/admin/franchise`, {
         headers: { ...headers },

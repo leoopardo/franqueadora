@@ -8,11 +8,14 @@ import { AgreementType } from "@franchisor/services/franchises/__interfaces/agre
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
-import { Button, Col, Row, Tabs, Typography } from "antd";
+import { Button, Col, Row, Steps, Tabs, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { StepOne } from "./stepOne";
+import { StepOne } from "./step1";
+import { StepTwo } from "./step2";
+import { StepThree } from "./step3";
+import { StepFour } from "./step4";
 
 interface mutateI {
   mutate: (body: any) => void;
@@ -37,7 +40,7 @@ export const MutateFranchise = ({
   //   agreements,
 }: mutateI) => {
   const formRef = useRef<ProFormInstance>();
-  const [width, setWidth] = useState<number>((100 / 3) * 1);
+  const [width, setWidth] = useState<number>((100 / 4) * 1);
   const [step, setStep] = useState<number>(1);
   const [loadingStep, setLoadingStep] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -72,7 +75,7 @@ export const MutateFranchise = ({
         >
           <Col xs={{ span: 20 }} md={{ span: 10 }}>
             <Typography.Text style={{ lineHeight: 0 }}>
-              Passo {step} de 3
+              Passo {step} de 4
             </Typography.Text>
             <Typography.Title level={isSm ? 5 : 3} style={{ margin: 0 }}>
               {title}
@@ -120,9 +123,11 @@ export const MutateFranchise = ({
           style={{
             display: "flex",
             justifyContent: "center",
+            width: "100%",
+            minHeight: "70vh"
           }}
         >
-          <Col xs={{ span: 24 }} md={{ span: 16 }}>
+          <Col xs={{ span: 24 }} md={{ span: 24 }}>
             <StepsForm<any>
               formRef={formRef}
               onFinish={waitTime}
@@ -139,7 +144,38 @@ export const MutateFranchise = ({
                       key: step.key,
                     }))}
                   />
-                ) : null
+                ) : (
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Steps
+                      size="small"
+                      current={step - 1}
+                      items={steps.map((step) => ({
+                        title: (
+                          <div
+                            title={`${step.title}`}
+                            style={{ cursor: "pointer" }}
+                          >
+                            {step.title}
+                          </div>
+                        ),
+                        key: step.key,
+                        onClick: () => {
+                          setStep(+step.key);
+                          setWidth((100 / 4) * (+step.key ));
+                        },
+                      }))}
+                      responsive
+                      style={{ width: "60%" }}
+                    />
+                  </div>
+                )
               }
               submitter={false}
               current={step - 1}
@@ -148,8 +184,12 @@ export const MutateFranchise = ({
                 setStep(current + 1);
               }}
               formProps={{ initialValues: initialFormValues }}
+              containerStyle={{ width: "90%" }}
             >
               <StepOne />
+              <StepTwo />
+              <StepThree />
+              <StepFour />
             </StepsForm>
           </Col>
         </Row>
