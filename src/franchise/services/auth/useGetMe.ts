@@ -1,10 +1,10 @@
 import { apiFranqueadora } from "@config/api";
 import { useEffect } from "react";
 import { QueryFunction, useQuery } from "react-query";
+import secureLocalStorage from "react-secure-storage";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchiseAuth } from "../../../contexts/franchiseAuthContext";
 import { congnitoAuthService } from "./CognitoAuthService";
-import secureLocalStorage from "react-secure-storage";
 
 export interface getMeI {
   id: string;

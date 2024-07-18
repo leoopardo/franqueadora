@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { createResponseSchema } from "../../__interfaces/response.interface";
 import ParamsI from "../../__interfaces/queryParams.interface";
+import { createResponseSchema } from "../../__interfaces/response.interface";
 
 const pendingTerminalSchema = z.object({
   active: z.boolean().optional(),
-  franchise_cnpj: z.string().optional(),
-  franchise_name: z.string().optional(),
+  franchise_cnpj: z.string().optional().nullable(),
+  franchise_name: z.string().optional().nullable(),
   id: z.string().optional(),
   inclusion_date: z.string().optional(),
   last_use: z.string().optional(),
@@ -13,8 +13,8 @@ const pendingTerminalSchema = z.object({
   license_expiration_date: z.string().optional().nullable(),
   license_type: z.string().optional().nullable(),
   modules: z.array(z.string()).optional(),
-  promoter_document: z.string().optional(),
-  promoter_name: z.string().optional(),
+  promoter_document: z.string().optional().nullable(),
+  promoter_name: z.string().optional().nullable(),
   client_document: z.string().optional().nullable(),
   client_name: z.string().optional().nullable(),
   ref_id: z.string().optional(),

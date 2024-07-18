@@ -148,16 +148,18 @@ function TableComponent<RowItemI>({
         },
       ]}
       dataSource={data ? (data.items as any) : []}
-      scroll={{ x: 900 }}
+      scroll={{ x: 900, y: "61vh" }}
       pagination={{
         pageSize: params?.size,
         showSizeChanger: true,
         total: data?.totalItems ?? total,
-        current: (data?.page || 0) + 1,
+        current: (params?.page || 0),
         style: { paddingRight: 16 },
         onShowSizeChange: (_current, size) =>
           setParams && setParams((state) => ({ ...state, size })),
         onChange(page) {
+          console.log(page);
+          
           setParams && setParams((state) => ({ ...state, page }));
           window.scroll({ top: 0, left: 0, behavior: "smooth" });
         },

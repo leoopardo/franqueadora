@@ -24,6 +24,7 @@ export const queryClient = new QueryClient({
           });
         }
         await congnitoAuthService.signOut();
+        location.reload();
       }
     },
   }),
