@@ -1,12 +1,8 @@
+import { ProFormItem, ProFormSwitch } from "@ant-design/pro-components";
 import { MapPinIcon } from "@heroicons/react/24/outline";
+import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
 import defaultTheme from "@styles/default";
 import { AutoComplete, Card, Col, Divider, Row } from "antd";
-import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
-import {
-  ProFormField,
-  ProFormItem,
-  ProFormSwitch,
-} from "@ant-design/pro-components";
 import usePlacesAutocomplete from "use-places-autocomplete";
 
 export const Localization = () => {
@@ -16,11 +12,11 @@ export const Localization = () => {
     libraries,
   });
   const {
-    ready,
-    value,
+    // _ready,
+    // _value,
     setValue,
     suggestions: { status, data },
-    clearSuggestions,
+    // clearSuggestions,
   } = usePlacesAutocomplete({});
   const center = { lat: -24.95232, lng: -53.47538 };
 
