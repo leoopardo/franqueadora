@@ -27,6 +27,9 @@ export interface getMeI {
   id_role: string;
   id_auth: string;
   modified_role: boolean;
+  Franchise?: { active: boolean; id: string }[];
+  Promoter?: { active: boolean; id: string };
+  Client?: { active: boolean; id: string };
   Auth: {
     id: string;
     request_password_token: string;

@@ -44,7 +44,7 @@ export const MutateFranchise = ({
   const [step, setStep] = useState<number>(1);
   const [loadingStep, setLoadingStep] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { isSm } = useBreakpoints();
+  const { isSm, isMd, isLg } = useBreakpoints();
   const [isTokenModalOpen, setIsTokenModalOpen] = useState<boolean>(false);
 
   const waitTime = (_values: any) => {
@@ -124,11 +124,15 @@ export const MutateFranchise = ({
             display: "flex",
             justifyContent: "center",
             width: "100%",
-            minHeight: "70vh"
+            minHeight: "70vh",
           }}
         >
           <Col xs={{ span: 24 }} md={{ span: 24 }}>
-            <StepsForm<any>
+            <StepsForm<{
+              promoter_id: string;
+              client_id?: string;
+              address: string;
+            }>
               formRef={formRef}
               onFinish={waitTime}
               stepsRender={(steps) =>
@@ -168,11 +172,11 @@ export const MutateFranchise = ({
                         key: step.key,
                         onClick: () => {
                           setStep(+step.key);
-                          setWidth((100 / 4) * (+step.key ));
+                          setWidth((100 / 4) * +step.key);
                         },
                       }))}
                       responsive
-                      style={{ width: "60%" }}
+                      style={{ width: isSm || isMd || isLg ? "95%" : "60%" }}
                     />
                   </div>
                 )
@@ -184,7 +188,10 @@ export const MutateFranchise = ({
                 setStep(current + 1);
               }}
               formProps={{ initialValues: initialFormValues }}
-              containerStyle={{ width: "90%" }}
+              containerStyle={{
+                width: isSm || isMd || isLg ? "100%" : "90%",
+                paddingBottom: 24,
+              }}
             >
               <StepOne />
               <StepTwo />

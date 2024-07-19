@@ -4,10 +4,10 @@ import {
   MapPinIcon,
   ScaleIcon,
 } from "@heroicons/react/24/outline";
+import { useBreakpoints } from "@hooks/useBreakpoints";
 import { Card, Col, Menu, Row } from "antd";
 import { useRef, useState } from "react";
 import { Config } from "./config";
-import { useBreakpoints } from "@hooks/useBreakpoints";
 import { Localization } from "./localization";
 
 export const StepOne = () => {
@@ -28,9 +28,18 @@ export const StepOne = () => {
 
   return (
     <Row style={{ width: "100%" }} gutter={[24, 24]}>
-      <Col xs={{ span: 24 }} md={{ span: 6 }}>
+      <Col
+        xs={{ span: 24 }}
+        md={{ span: 8 }}
+        xl={{ span: 6 }}
+        style={{ marginBottom: isSm ? 16 : 0 }}
+      >
         <Card
-          style={{ position: isSm ? undefined : "fixed", minWidth: 250 }}
+          style={{
+            position: isSm ? undefined : "sticky",
+            top: 24,
+            width: isSm ? "90vw" : "100%",
+          }}
           styles={{ body: { padding: "8px 0 8px 6px" } }}
         >
           <Menu
@@ -64,8 +73,10 @@ export const StepOne = () => {
           />
         </Card>
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 18 }}>
-        <StepsForm.StepForm
+      <Col xs={{ span: 22 }} md={{ span: 16 }} xl={{ span: 18 }}>
+        <StepsForm.StepForm<{
+          address: string
+        }>
           name="base"
           title="Detalhes do evento"
           onFinish={async () => {
@@ -88,8 +99,10 @@ export const StepOne = () => {
             }
           }}
         >
-          {activeKey === "configs" && <Config />}
-          {activeKey === "localization" && <Localization />}
+          {activeKey === "configs" && <Config formRef={stepOneRef.current} />}
+          {activeKey === "localization" && (
+            <Localization formRef={stepOneRef.current} />
+          )}
         </StepsForm.StepForm>
       </Col>
     </Row>

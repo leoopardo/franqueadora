@@ -1,15 +1,44 @@
 import {
   ProFormDatePicker,
   ProFormField,
+  ProFormInstance,
   ProFormSelect,
   ProFormTimePicker,
 } from "@ant-design/pro-components";
+import { getMeI } from "@franchise/services/auth/useGetMe";
+import { ClientParams } from "@franchise/services/clients/__interfaces/clients.interface";
+import { useListClients } from "@franchise/services/clients/listClients";
+import { useListPromoters } from "@franchise/services/promoters/listPromoters";
+import { QueryKeys } from "@franchise/services/queryKeys";
+import {
+  useGetPosModules
+} from "@franchise/services/utils/getPosModules";
 import { CalendarDaysIcon, Cog6ToothIcon } from "@heroicons/react/24/outline";
 import defaultTheme from "@styles/default";
 import { Card, Col, Divider, Row } from "antd";
 import dayjs from "dayjs";
+import { useState } from "react";
+import { queryClient } from "../../../../../../../../services/queryClient";
 
-export const Config = () => {
+interface ConfigI {
+  formRef?: ProFormInstance;
+}
+
+export const Config = ({ formRef }: ConfigI) => {
+  const [ClientParams, setClientParams] = useState<ClientParams>({
+    page: 0,
+    size: 500,
+  });
+  const [modulesParams, setModulesParams] = useState<any>({});
+  const listPromoter = useListPromoters({
+    page: 0,
+    size: 500,
+  });
+  const listClient = useListClients(ClientParams);
+  const listPOSModules = useGetPosModules(modulesParams);
+
+  const user = queryClient.getQueryData(QueryKeys.GET_ME) as getMeI;
+
   return (
     <Row gutter={[8, 8]} style={{ width: "100%" }}>
       <Card>
@@ -20,35 +49,88 @@ export const Config = () => {
                 height={20}
                 style={{ marginRight: 8, marginBottom: -4 }}
                 color={defaultTheme.primary}
-              />{" "}
+              />
               Configurações do evento
             </Divider>
-          </Col>
-          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
-            <ProFormSelect
-              name="promoter_id"
-              label="Promotor"
-              rules={[{ required: true }]}
-              style={{ width: "100%" }}
-            />
-          </Col>
-          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
-            <ProFormSelect
-              name="client_id"
-              label="Cliente"
-              style={{ width: "100%" }}
-            />
-          </Col>
+          </Col>{" "}
+          {!user?.Client && !user?.Promoter && (
+            <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
+              <ProFormSelect
+                name="promoter_id"
+                label="Promotor"
+                rules={[{ required: true }]}
+                options={listPromoter.data?.items.map((i) => ({
+                  label: i.promoter_name,
+                  value: i.id,
+                }))}
+                onChange={(value) => {
+                  if (!value) {
+                    setModulesParams((state: any) => ({
+                      ...state,
+                      promoter_id: undefined,
+                    }));
+                    setClientParams((state) => ({
+                      ...state,
+                      w: undefined,
+                    }));
+                  } else {
+                    setModulesParams((state: any) => ({
+                      ...state,
+                      promoter_id: value,
+                    }));
+                    setClientParams((state) => ({
+                      ...state,
+                      w: `promoter_id=[${value}]`,
+                    }));
+                  }
+                }}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          )}
+          {!user?.Client && (
+            <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
+              <ProFormSelect
+                name="client_id"
+                label="Cliente"
+                disabled={!formRef?.getFieldValue("promoter_id")}
+                onChange={(value) => {
+                  if (!value) {
+                    setModulesParams((state: any) => ({
+                      ...state,
+                      client_id: undefined,
+                    }));
+                  } else {
+                    setModulesParams((state: any) => ({
+                      ...state,
+                      client_id: value,
+                    }));
+                  }
+                }}
+                options={listClient.data?.items.map((i) => ({
+                  label: i.name,
+                  value: i.id,
+                }))}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          )}
           <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
             <ProFormSelect
               name="modules"
               mode="multiple"
               label="Módulos"
+              options={listPOSModules?.PosModulesData?.filter(
+                (module) => module.active
+              ).map((module) => ({
+                label: module.name,
+                value: module.id,
+              }))}
               rules={[{ required: true }]}
               style={{ width: "100%" }}
             />
           </Col>
-          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 16 }}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
             <ProFormField
               name="event_name"
               label="Nome do evento"
@@ -90,7 +172,7 @@ export const Config = () => {
           </Col>
         </Row>
       </Card>
-      <Card style={{ width: "100%", marginTop: 24, marginBottom: 36 }}>
+      <Card style={{ width: "100%", marginTop: 20 }}>
         <Row style={{ width: "100%" }} gutter={[8, 0]}>
           <Col span={24}>
             <Divider orientation="left" style={{ marginTop: 0 }}>
