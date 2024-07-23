@@ -13,7 +13,6 @@ import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StepOne } from "./step1";
-import { StepTwo } from "./step2";
 import { StepThree } from "./step3";
 import { StepFour } from "./step4";
 
@@ -31,13 +30,11 @@ interface mutateI {
 }
 
 export const MutateFranchise = ({
-  //   mutate,
   loading,
   title,
   subtitle,
   initialValues,
   update,
-  //   agreements,
 }: mutateI) => {
   const formRef = useRef<ProFormInstance>();
   const [width, setWidth] = useState<number>((100 / 4) * 1);
@@ -170,10 +167,7 @@ export const MutateFranchise = ({
                           </div>
                         ),
                         key: step.key,
-                        onClick: () => {
-                          setStep(+step.key);
-                          setWidth((100 / 4) * +step.key);
-                        },
+                       
                       }))}
                       responsive
                       style={{ width: isSm || isMd || isLg ? "95%" : "60%" }}
@@ -194,7 +188,7 @@ export const MutateFranchise = ({
               }}
             >
               <StepOne />
-              <StepTwo />
+              {/* <StepTwo /> */}
               <StepThree />
               <StepFour />
             </StepsForm>
@@ -240,6 +234,8 @@ export const MutateFranchise = ({
           size="large"
           type="primary"
           onClick={() => {
+            console.log(formRef.current?.getFieldsValue());
+
             if (step !== 3) {
               formRef.current?.submit();
               setLoadingStep(true);

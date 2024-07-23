@@ -1,7 +1,4 @@
-import {
-  ProFormInstance,
-  ProFormItem
-} from "@ant-design/pro-components";
+import { ProFormInstance, ProFormItem } from "@ant-design/pro-components";
 import { MapPinIcon } from "@heroicons/react/24/outline";
 import { GoogleMap, MarkerF, useLoadScript } from "@react-google-maps/api";
 import defaultTheme from "@styles/default";
@@ -16,18 +13,18 @@ const libraries: any = ["places"];
 
 interface LocalizationI {
   formRef?: ProFormInstance;
+  hidden?: boolean;
 }
 
-export const Localization = ({ formRef }: LocalizationI) => {
+export const Localization = ({ formRef, hidden }: LocalizationI) => {
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: `${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`,
     libraries,
   });
 
-  const [position, setPosition] = useState<{ lat: number; lng: number }>({
-    lat: -24.95232,
-    lng: -53.47538,
-  });
+  const [position, setPosition] = useState<{ lat: number; lng: number } | null>(
+    null
+  );
   const [address, setAddress] = useState("");
   const [isGoogleMapsReady, setIsGoogleMapsReady] = useState(false);
   const [revealLatter, setRevealLatter] = useState(false);
@@ -45,7 +42,7 @@ export const Localization = ({ formRef }: LocalizationI) => {
       if (results[0]) {
         setAddress(results[0].formatted_address);
         setValue(results[0].formatted_address, false);
-        formRef?.setFieldValue("address", results[0].formatted_address);
+        formRef?.setFieldValue("location", results[0].formatted_address);
       }
     } catch (error) {
       console.error("Error getting address: ", error);
@@ -56,11 +53,11 @@ export const Localization = ({ formRef }: LocalizationI) => {
     if (isLoaded) {
       setIsGoogleMapsReady(true);
       initPlacesAutocomplete(); // Initialize usePlacesAutocomplete after Google Maps script is loaded
-      if (!formRef?.getFieldValue("address")) {
-        getAddressFromLatLng(position.lat, position.lng);
+      if (!formRef?.getFieldValue("location") && !revealLatter && position) {
+        getAddressFromLatLng(position?.lat, position?.lng);
       } else {
-        setValue(formRef?.getFieldValue("address"));
-        setAddress(formRef?.getFieldValue("address"));
+        setValue(formRef?.getFieldValue("location"));
+        setAddress(formRef?.getFieldValue("location"));
       }
     }
   }, [isLoaded]);
@@ -70,7 +67,7 @@ export const Localization = ({ formRef }: LocalizationI) => {
   }
 
   return (
-    <Card style={{ width: "100%" }}>
+    <Card style={{ width: "100%", display: hidden ? "none" : undefined }}>
       <Divider orientation="left" style={{ marginTop: 0 }}>
         <MapPinIcon
           height={20}
@@ -89,7 +86,7 @@ export const Localization = ({ formRef }: LocalizationI) => {
             <Switch
               onChange={(active) => {
                 if (active) {
-                  formRef?.setFieldValue("address", null);
+                  formRef?.setFieldValue("location", null);
                   setValue("");
                   setAddress("");
                 }
@@ -99,14 +96,18 @@ export const Localization = ({ formRef }: LocalizationI) => {
           </ProFormItem>
         </Col>
         <Col span={24}>
-          <ProFormItem name="address" label="Endereço.">
+          <ProFormItem
+            name="location"
+            label="Endereço."
+            rules={[{ required: !revealLatter }]}
+          >
             <AutoComplete
               value={address}
               placeholder="Pesquise um local ou endereço."
               onChange={(value) => {
                 setAddress(value);
                 setValue(value);
-                formRef?.setFieldValue("address", value);
+                formRef?.setFieldValue("location", value);
               }}
               onSelect={async (value) => {
                 const result = await getGeocode({ address: value });
@@ -127,7 +128,10 @@ export const Localization = ({ formRef }: LocalizationI) => {
           ) : (
             <GoogleMap
               mapContainerClassName="map_container"
-              center={position}
+              center={position ?? {
+                lat: -24.95232,
+                lng: -53.47538,
+              }}
               zoom={15}
               mapContainerStyle={{
                 width: "100%",
@@ -135,8 +139,16 @@ export const Localization = ({ formRef }: LocalizationI) => {
                 borderRadius: 12,
                 border: "1px solid rgb(113, 113, 122, 0.3)",
               }}
+              onClick={(e) => {
+                const newLat = e?.latLng?.lat();
+                const newLng = e?.latLng?.lng();
+                if (newLat && newLng) {
+                  setPosition({ lat: newLat, lng: newLng });
+                  getAddressFromLatLng(newLat, newLng);
+                }
+              }}
             >
-              {!revealLatter && (
+              {!revealLatter && position && (
                 <MarkerF
                   position={position}
                   clickable

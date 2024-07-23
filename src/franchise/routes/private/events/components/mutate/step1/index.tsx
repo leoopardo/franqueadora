@@ -9,6 +9,7 @@ import { Card, Col, Menu, Row } from "antd";
 import { useRef, useState } from "react";
 import { Config } from "./config";
 import { Localization } from "./localization";
+import { Agreements } from "./agreements";
 
 export const StepOne = () => {
   const [activeKey, setActiveKey] = useState<string>("configs");
@@ -25,6 +26,26 @@ export const StepOne = () => {
     setActiveKey(menu);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
+
+  const menus = {
+    config: [
+      "promoter_id",
+      "client_id",
+      "modules",
+      "event_name",
+      "subject",
+      "category",
+      "time_stamp",
+      "currency",
+      "open_gate",
+      "start_date",
+      "start_hour",
+      "end_date",
+      "end_hour",
+    ],
+    localization: ["location"],
+    agreements: ["agreements_type", ],
+  };
 
   return (
     <Row style={{ width: "100%" }} gutter={[24, 24]}>
@@ -73,9 +94,9 @@ export const StepOne = () => {
           />
         </Card>
       </Col>
-      <Col xs={{ span: 22 }} md={{ span: 16 }} xl={{ span: 18 }}>
+      <Col xs={{ span: 22 }} md={{ span: 14 }} xl={{ span: 18 }}>
         <StepsForm.StepForm<{
-          address: string
+          address: string;
         }>
           name="base"
           title="Detalhes do evento"
@@ -88,9 +109,21 @@ export const StepOne = () => {
           formRef={stepOneRef}
           onFinishFailed={() => {
             const fields = stepOneRef?.current?.getFieldsError();
+
             const firstErrorField = fields?.find(
               (field: any) => field.errors.length > 0
             );
+            console.log(firstErrorField);
+            
+            if (menus.config.includes(firstErrorField?.name[0] as any)) {
+              setActiveKey("configs");
+            }
+            if (menus.localization.includes(firstErrorField?.name[0] as any)) {
+              setActiveKey("localization");
+            }
+            if (menus.agreements.includes(firstErrorField?.name[0] as any)) {
+              setActiveKey("agreements");
+            }
             if (firstErrorField) {
               stepOneRef?.current?.scrollToField(firstErrorField.name[0], {
                 behavior: "smooth",
@@ -99,10 +132,18 @@ export const StepOne = () => {
             }
           }}
         >
-          {activeKey === "configs" && <Config formRef={stepOneRef.current} />}
-          {activeKey === "localization" && (
-            <Localization formRef={stepOneRef.current} />
-          )}
+          <Config
+            formRef={stepOneRef.current}
+            hidden={activeKey !== "configs"}
+          />
+          <Localization
+            formRef={stepOneRef.current}
+            hidden={activeKey !== "localization"}
+          />
+          <Agreements
+            formRef={stepOneRef.current}
+            hidden={activeKey !== "agreements"}
+          />
         </StepsForm.StepForm>
       </Col>
     </Row>

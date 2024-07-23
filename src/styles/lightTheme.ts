@@ -16,6 +16,9 @@ const Light: ThemeConfig = {
     },
     Menu: {
       colorTextLightSolid: "#000",
+      controlItemBgActive: defaultTheme["primary-200"],
+      controlItemBgHover: defaultTheme["primary-300"],
+      itemHoverBg: defaultTheme["primary-500"],
     },
     Typography: { colorTextHeading: "#272727"},
     Tooltip: {
@@ -37,7 +40,7 @@ const Light: ThemeConfig = {
           controlHeightLG: 38
     },
     Select: {
-      controlItemBgActive: defaultTheme.primary,
+      controlItemBgActive: defaultTheme["primary-300"],
       paddingContentVerticalLG: 12,
     },
     Table: {

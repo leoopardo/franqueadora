@@ -9,7 +9,7 @@ export const getSelectsData = () => {
   const { data, error, isLoading, refetch } = useQuery<
     SelectType | null | undefined
   >(
-    [QueryKeys.LIST_EVENTS, headers],
+    [QueryKeys.GET_EVENT_SELECT, headers],
     async () => {
       const response = await apiPortalEvent.get(`event/selects`, {
         headers: { ...headers },

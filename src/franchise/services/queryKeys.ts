@@ -10,6 +10,8 @@ export enum QueryKeys {
 
   GET_TERMINAL_TOTALS = "franchiseGetTerminalTotals",
   GET_ME = "getMeFranchise",
+  GET_PROMOTER = "franchiseGetPromoter",
+  GET_EVENT_SELECT = "getEventSelect",
 
   INACTIVATE_TERMINAL = "franchiseInactivateTerminal",
   INACTIVATE_EVENT = "franchiseInactivateEvent",

@@ -14,7 +14,7 @@ const items: MenuItem[] = [
     key: "talk",
   },
   {
-    label: "Seja um franquado",
+    label: "Seja um franqueado",
     key: "franchise",
   },
   {
@@ -46,7 +46,7 @@ export const Landing = () => {
   const [current, setCurrent] = useState("mail");
 
   const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
+    console.log("click ", e); 
     setCurrent(e.key);
   };
   const videoRef = useRef(null);
@@ -98,7 +98,7 @@ export const Landing = () => {
           selectedKeys={[current]}
           mode="horizontal"
           items={items}
-          style={{ width: "40%", fontWeight: 700, fontSize: 20, height: 60 }}
+          style={{ width: "41%", fontWeight: 700, fontSize: 20, height: 60 }}
         />
         <Dropdown
           menu={{
