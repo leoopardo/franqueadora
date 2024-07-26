@@ -21,6 +21,7 @@ import {
   Select,
   Switch,
   Tag,
+  Tooltip,
   Typography,
 } from "antd";
 import { useState } from "react";
@@ -148,14 +149,28 @@ export const Events = () => {
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>
         <Link to={"cadastro"}>
-          <Button
-            style={{ width: "100%" }}
-            size="large"
-            type="primary"
-            shape="round"
+          <Tooltip
+            title={
+              !localStorage.getItem("tenant") && localStorage.getItem("master")
+                ? "Você deve acessar uma franquia para realizar cadastros"
+                : undefined
+            }
           >
-            Cadastrar evento
-          </Button>
+            <Button
+              style={{ width: "100%" }}
+              size="large"
+              type="primary"
+              shape="round"
+              disabled={
+                !localStorage.getItem("tenant") &&
+                localStorage.getItem("master")
+                  ? true
+                  : false
+              }
+            >
+              Cadastrar evento
+            </Button>
+          </Tooltip>
         </Link>
       </Col>
       <Col span={24} style={{ display: "flex", flexDirection: "row-reverse" }}>
@@ -178,7 +193,7 @@ export const Events = () => {
             actions={[
               {
                 label: "Editar",
-                onClick: (row) => navigate(`edição/${row?.id}`, { state: row }),
+                onClick: (row) => navigate(`edição`, { state: row }),
                 icon: <PencilIcon style={{ width: 16 }} />,
               },
             ]}

@@ -16,7 +16,6 @@ export const SelectFranchises = ({ onChange, value, size }: SelectModelsI) => {
   const { data, isLoading } = useListFranchises(params);
 
   const debounceSearch = useDebounce((value) => {
-    if(data && data?.size >= data?.totalItems) return
     if (!value) {
       setParams((state) => ({
         ...state,

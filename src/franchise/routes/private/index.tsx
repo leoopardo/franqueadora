@@ -1,20 +1,26 @@
+import { Button, Result } from "antd";
 import { Route, Routes } from "react-router-dom";
 import { BaseLayout } from "./BaseLayout";
-import { Button, Result } from "antd";
-import { Events } from "./events";
-import { Terminals } from "./terminals";
 import { Loading } from "./components/loading";
+import { Events } from "./events";
+import { CreateEvent } from "./events/create";
+import { UpdateEvent } from "./events/update";
+import { Terminals } from "./terminals";
 
 export const PrivateRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<BaseLayout />}>
         <Route path="franquias" element={<>Franquias</>} />
-        <Route path="eventos" element={<Events />} />
+        <Route path="eventos">
+          <Route index element={<Events />} />
+          <Route path="cadastro" element={<CreateEvent />} />
+          <Route path="edição" element={<UpdateEvent />} />
+        </Route>
         <Route path="terminais">
           <Route index element={<Terminals />} />
         </Route>
-        
+
         <Route
           path="*"
           element={

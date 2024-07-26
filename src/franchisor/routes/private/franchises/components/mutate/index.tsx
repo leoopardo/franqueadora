@@ -58,7 +58,7 @@ export const MutateFranchise = ({
     const agreements: { template_id?: string; value: string }[] = [];
     const licenses = values.licenses.keys.map((l: any) => ({
       type: l,
-      value: +values.licenses[l],
+      value: values.licenses[l],
     }));
 
     const keysOrganization = [
@@ -70,8 +70,6 @@ export const MutateFranchise = ({
       "RESULT_CREDIT_ADVANCE",
       "SPREAD_CREDIT_ADVANCE",
     ];
-
-    console.log(values.agreements);
 
     Object?.keys(values.agreements)?.forEach((section) => {
       keysOrganization?.forEach((key) => {
@@ -102,8 +100,8 @@ export const MutateFranchise = ({
             cpf: values?.master?.cpf
               ? values?.master?.cpf?.replace(/\D/g, "")
               : undefined,
-            phone: values?.master?.phone
-              ? values?.master?.phone?.replace(/\D/g, "")
+              cellphone: values?.master?.cellphone
+              ? values?.master?.cellphone?.replace(/\D/g, "")
               : undefined,
             terminal_password: values?.master?.terminal_password
               ? `${values?.master?.terminal_password}`
@@ -138,8 +136,8 @@ export const MutateFranchise = ({
           cpf: values?.master?.cpf
             ? values?.master?.cpf?.replace(/\D/g, "")
             : undefined,
-          phone: values?.master?.phone
-            ? values?.master?.phone?.replace(/\D/g, "")
+            cellphone: values?.master?.cellphone
+            ? values?.master?.cellphone?.replace(/\D/g, "")
             : undefined,
           terminal_password: values?.master?.terminal_password
             ? `${values?.master?.terminal_password}`
@@ -151,14 +149,12 @@ export const MutateFranchise = ({
           : undefined,
         contacts: [],
         agreement: agreements,
-        agreements: undefined,
+        agreements: undefined, 
+        licenses,
       });
       resolve(true);
     });
   };
-
-  console.log(initialValues);
-
   const initialFormValues: createFranchiseI = initialValues ?? {
     address: {
       address: "",
@@ -183,7 +179,7 @@ export const MutateFranchise = ({
       email: "",
       name: "",
       password: "",
-      phone: "",
+      cellphone: "",
       terminal_password: "",
       username: "",
     },

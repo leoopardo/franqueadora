@@ -16,7 +16,10 @@ const Dark: ThemeConfig = {
     },
     Menu: {
       colorTextLightSolid: "#fff",
-      horizontalItemSelectedBg: "#fff"
+      horizontalItemSelectedBg: "#fff",
+      controlItemBgActive: defaultTheme["primary-200"],
+      controlItemBgHover: defaultTheme["primary-300"],
+      itemHoverBg: defaultTheme["primary-500"],
     },
     Tooltip: {
       colorTextLightSolid: "#000",

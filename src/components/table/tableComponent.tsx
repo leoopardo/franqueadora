@@ -1,6 +1,6 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
-import { Dropdown, Spin, Table, Typography } from "antd";
+import { EllipsisVerticalIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { Button, Dropdown, Empty, Spin, Table, Typography } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 import { Dispatch, SetStateAction } from "react";
 import ParamsI from "../../franchisor/services/__interfaces/queryParams.interface";
@@ -32,6 +32,7 @@ interface TableComponentI<RowItemI> {
   setParams?: Dispatch<SetStateAction<ParamsI>>;
   total?: number;
   rowSelection?: TableRowSelection<RowItemI>;
+  emptyAction?: () => void;
 }
 
 function TableComponent<RowItemI>({
@@ -43,6 +44,8 @@ function TableComponent<RowItemI>({
   setParams,
   total,
   rowSelection,
+  error,
+  emptyAction,
 }: TableComponentI<RowItemI>) {
   return (
     <Table
@@ -51,6 +54,51 @@ function TableComponent<RowItemI>({
       style={{
         borderRadius: 8,
         border: "1px solid rgba(200, 200, 200, 0.3)",
+      }}
+      locale={{
+        emptyText: error ? (
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <Empty
+              style={{
+                padding: 15,
+                paddingBottom: 30,
+                maxWidth: "430px",
+              }}
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description={<div>{error?.response?.status}</div>}
+            />
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Empty
+              style={{ marginBottom: 16 }}
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description={"Não encontramos nenhum registro."}
+            />
+            {emptyAction && (
+              <Button
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+                onClick={emptyAction}
+                icon={<PlusIcon height={20} />}
+                shape="round"
+                type="primary"
+              >
+                Cadastrar
+              </Button>
+            )}
+          </div>
+        ),
       }}
       loading={
         loading
@@ -113,7 +161,7 @@ function TableComponent<RowItemI>({
           render: (_value: any, row: any) => (
             <div
               style={{
-                minWidth: 60,
+                minWidth: 80,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -143,23 +191,21 @@ function TableComponent<RowItemI>({
               </Dropdown>
             </div>
           ),
-          width: 60,
+          width: 80,
           fixed: "right",
         },
       ]}
       dataSource={data ? (data.items as any) : []}
-      scroll={{ x: 900, y: "61vh" }}
+      scroll={{ x: "60%", y: "61vh" }}
       pagination={{
-        pageSize: params?.size,
+        pageSize: params?.size || data?.page,
         showSizeChanger: true,
         total: data?.totalItems ?? total,
-        current: (params?.page || 0),
+        current: params?.page || data?.page,
         style: { paddingRight: 16 },
         onShowSizeChange: (_current, size) =>
           setParams && setParams((state) => ({ ...state, size })),
         onChange(page) {
-          console.log(page);
-          
           setParams && setParams((state) => ({ ...state, page }));
           window.scroll({ top: 0, left: 0, behavior: "smooth" });
         },

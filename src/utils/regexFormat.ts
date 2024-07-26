@@ -68,3 +68,23 @@ export function formatCpfCnpj(value: string | number) {
 
   return cleanValue;
 }
+
+export const formatPercentage = (value: string | number) => {
+  if (!value && value !== 0) return "-";
+  
+  // Remove caracteres não numéricos, exceto ponto decimal
+  let cleanedValue = `${value}`.replace(/[^\d.]/g, "");
+
+  // Limita a um máximo de 5 dígitos antes do ponto decimal e 2 após o ponto decimal
+  cleanedValue = cleanedValue.substring(0, 8); 
+  
+  // Adiciona .00 se o valor não tiver casas decimais
+  if (!cleanedValue.includes('.')) {
+    cleanedValue = `${cleanedValue}.00`;
+  }
+
+  // Transforma o valor para ter sempre duas casas decimais
+  const numericValue = parseFloat(cleanedValue).toFixed(2);
+
+  return `${numericValue}%`;
+};

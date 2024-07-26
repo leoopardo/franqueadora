@@ -28,5 +28,11 @@ export const queryClient = new QueryClient({
       }
     },
   }),
-  defaultOptions: { queries: { retry: false, keepPreviousData: false } },
+  defaultOptions: {
+    queries: {
+      retry: false,
+      keepPreviousData: false,
+      refetchOnWindowFocus: false,
+    },
+  },
 });

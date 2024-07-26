@@ -22,7 +22,7 @@ export interface createFranchiseI {
     email?: string;
     name?: string;
     password?: string;
-    phone?: string;
+    cellphone?: string;
     terminal_password?: string;
     username?: string;
   };
