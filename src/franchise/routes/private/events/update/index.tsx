@@ -52,7 +52,7 @@ export const UpdateEvent = () => {
           street: data?.address,
           latitude: Number(data?.latitude) || null,
           longitude: Number(data?.longitude) || null,
-          agreement: getParsedAgreements(data.agreements),
+          agreement: getParsedAgreements(data?.agreements),
           Modules: data?.modules,
         }}
         mutate={(body) => {
