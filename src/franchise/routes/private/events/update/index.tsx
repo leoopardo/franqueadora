@@ -10,19 +10,19 @@ export const UpdateEvent = () => {
   const { data, isLoading } = useGetEventById(state?.id);
 
   function getParsedAgreements(agreements: any) {
-    const PHYSICAL_PUB = agreements.filter(
-      (agreement: any) => agreement.type === "PHYSICAL_PUB"
+    const PHYSICAL_PUB = agreements?.filter(
+      (agreement: any) => agreement?.type === "PHYSICAL_PUB"
     );
     const agrupatedAgreements: any = [];
     if (!PHYSICAL_PUB) return agrupatedAgreements;
     for (const agreement of PHYSICAL_PUB) {
       const index = agrupatedAgreements.findIndex(
         (agreementAgrupated: any) =>
-          agreementAgrupated.debit_transaction_fee ===
+          agreementAgrupated?.debit_transaction_fee ===
             agreement.debit_transaction_fee &&
-          agreementAgrupated.credit_transaction_fee ===
+          agreementAgrupated?.credit_transaction_fee ===
             agreement.credit_transaction_fee &&
-          agreementAgrupated.antecipation_fee === agreement.antecipation_fee
+          agreementAgrupated?.antecipation_fee === agreement?.antecipation_fee
       );
 
       if (index === -1) {
