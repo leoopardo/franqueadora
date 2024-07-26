@@ -100,6 +100,8 @@ export const PromoterByIdSchema = z.object({
 
 export type PromoterById = z.infer<typeof PromoterByIdSchema>;
 
+export type PromoterFee = z.infer<typeof PromoterAgreementSchema>;
+
 export interface PromotersParams extends ParamsI {
   s?: string;
   f?: string[];

@@ -2,9 +2,8 @@ import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import defaultTheme from "@styles/default";
 import { Col, Modal, Row, Typography } from "antd";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { SectorFirstStep } from "./sectorFirstStep";
-import { SectorPaymentsStep } from "./sectorPaymentsStep";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { SubSectorFirstStep } from "./subSectorFirstStep";
 
 interface CreateSectorModalProps {
   open: boolean;
@@ -22,35 +21,19 @@ export const CreateSectorModal = ({
   const [step, setStep] = useState<number>(1);
   const [width, setWidth] = useState<number>((100 / 2) * 1);
   const sectorFormRef = useRef<ProFormInstance>();
-  const [haveSubSectors, setHaveSubSectors] = useState<boolean>(false);
-
-  useEffect(() => {
-    if (haveSubSectors) {
-      setStep(1);
-      setWidth((100 / 1) * 1);
-    } else {
-      setStep(1);
-      setWidth((100 / 2) * 1);
-    }
-  }, [haveSubSectors]);
 
   const waitTime = (values: any) => {
-    const sectors = Array.isArray(formRef?.getFieldValue(["pub", "sectors"]))
-      ? formRef?.getFieldValue(["pub", "sectors"])
+    const sectors = Array.isArray(formRef?.getFieldValue("sub-sectors"))
+      ? formRef?.getFieldValue("sub-sectors")
       : [];
-    sectors.push({
-      ...values,
-      active: true,
-      terminal_user_ids: [],
-      terminals: [],
-    });
+    sectors.push({ ...values, active: true });
 
     setDataSource((state) => [
       ...state,
       { ...values, active: true, key: state.length + 1 },
     ]);
 
-    formRef?.setFieldValue(["pub", "sectors"], sectors);
+    formRef?.setFieldValue("sub-sectors", sectors);
 
     return new Promise<boolean>((resolve) => {
       setOpen(false);
@@ -61,6 +44,7 @@ export const CreateSectorModal = ({
   return (
     <Modal
       width={800}
+      
       title={
         <>
           <Row
@@ -79,13 +63,13 @@ export const CreateSectorModal = ({
                   color: "rgb(150, 150, 150)",
                 }}
               >
-                Passo {step} de {haveSubSectors ? "1" : "2"}
+                Passo {step} de 2
               </Typography.Text>
               <Typography.Title level={4} style={{ margin: 0 }}>
-                Cadastrar setor
+                Cadastrar sub-setor
               </Typography.Title>
               <Typography.Text style={{ lineHeight: 0, fontWeight: 400 }}>
-                Insira as informações do setor para cadastrar um novo setor.
+                Insira as informações para cadastrar um novo sub-setor.
               </Typography.Text>
             </Col>
           </Row>
@@ -144,7 +128,7 @@ export const CreateSectorModal = ({
           borderTop: "1px solid rgb(240, 240, 240)",
         },
       }}
-      style={{ padding: 0 }}
+      style={{ padding: 0, marginTop: 8 }}
       onOk={() => {
         sectorFormRef.current?.submit();
       }}
@@ -165,8 +149,7 @@ export const CreateSectorModal = ({
           paddingBottom: 24,
         }}
       >
-        <SectorFirstStep setHaveSubSectors={setHaveSubSectors} />
-        <SectorPaymentsStep />
+        <SubSectorFirstStep />
       </StepsForm>
     </Modal>
   );

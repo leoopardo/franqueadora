@@ -69,8 +69,6 @@ export const MutatePromoter = ({
       });
     });
 
-    console.log("values", values);
-
     return new Promise<boolean>((resolve) => {
       mutate({
         ...initialValues,
@@ -126,7 +124,7 @@ export const MutatePromoter = ({
       email: "",
       name: "",
       password: "",
-      phone: "",
+      cellphone: "",
       terminal_password: "",
       username: "",
     },

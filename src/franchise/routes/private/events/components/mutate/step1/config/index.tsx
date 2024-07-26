@@ -16,7 +16,7 @@ import { CalendarDaysIcon, Cog6ToothIcon } from "@heroicons/react/24/outline";
 import defaultTheme from "@styles/default";
 import { Card, Col, Divider, Row, Typography } from "antd";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { queryClient } from "../../../../../../../../services/queryClient";
 
 interface ConfigI {
@@ -42,6 +42,17 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
 
   const user = queryClient.getQueryData(QueryKeys.GET_ME) as getMeI;
 
+  useEffect(() => {
+    if (user?.Promoter?.id) {
+      formRef?.setFieldValue("promoter_id", user?.Promoter?.id);
+      setModulesParams({promoter_id: user?.Promoter?.id});
+    }
+    if (user?.Client?.id) {
+      formRef?.setFieldValue("client_id", user?.Client?.id);
+      setModulesParams({client_id: user?.Client?.id});
+    }
+  }, [user]);
+
   return (
     <Row
       gutter={[8, 8]}
@@ -59,68 +70,76 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
               Configurações do evento
             </Divider>
           </Col>{" "}
-          {!user?.Client && !user?.Promoter && (
-            <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
-              <ProFormSelect
-                name="promoter_id"
-                label="Promotor"
-                rules={[{ required: true }]}
-                options={listPromoter.data?.items.map((i) => ({
-                  label: i.promoter_name,
-                  value: i.id,
-                }))}
-                onChange={(value) => {
-                  if (!value) {
-                    setModulesParams((state: any) => ({
-                      ...state,
-                      promoter_id: undefined,
-                    }));
-                    setClientParams((state) => ({
-                      ...state,
-                      w: undefined,
-                    }));
-                  } else {
-                    setModulesParams((state: any) => ({
-                      ...state,
-                      promoter_id: value,
-                    }));
-                    setClientParams((state) => ({
-                      ...state,
-                      w: `promoter_id=[${value}]`,
-                    }));
-                  }
-                }}
-                style={{ width: "100%" }}
-              />
-            </Col>
-          )}
-          {!user?.Client && (
-            <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
-              <ProFormSelect
-                name="client_id"
-                label="Cliente"
-                disabled={!formRef?.getFieldValue("promoter_id")}
-                onChange={(value) => {
-                  if (!value) {
-                    setModulesParams((state: any) => ({
-                      ...state,
-                      client_id: undefined,
-                    }));
-                  } else {
-                    setModulesParams((state: any) => ({
-                      ...state,
-                      client_id: value,
-                    }));
-                  }
-                }}
-                options={listClient.data?.items.map((i) => ({
-                  label: i.name,
-                  value: i.id,
-                }))}
-                style={{ width: "100%" }}
-              />
-            </Col>
-          )}
+          <Col
+            xs={{ span: 24 }}
+            md={{ span: 12 }}
+            lg={{ span: 8 }}
+            style={{
+              display: !user?.Client && !user?.Promoter ? undefined : "none",
+            }}
+          >
+            <ProFormSelect
+              name="promoter_id"
+              label="Promotor"
+              rules={[{ required: true }]}
+              options={listPromoter.data?.items.map((i) => ({
+                label: i.promoter_name,
+                value: i.id,
+              }))}
+              onChange={(value) => {
+                if (!value) {
+                  setModulesParams((state: any) => ({
+                    ...state,
+                    promoter_id: undefined,
+                  }));
+                  setClientParams((state) => ({
+                    ...state,
+                    w: undefined,
+                  }));
+                } else {
+                  setModulesParams((state: any) => ({
+                    ...state,
+                    promoter_id: value,
+                  }));
+                  setClientParams((state) => ({
+                    ...state,
+                    w: `promoter_id=[${value}]`,
+                  }));
+                }
+              }}
+              style={{ width: "100%" }}
+            />
+          </Col>
+          <Col
+            xs={{ span: 24 }}
+            md={{ span: 12 }}
+            lg={{ span: 8 }}
+            style={{ display: !user?.Client ? undefined : "none" }}
+          >
+            <ProFormSelect
+              name="client_id"
+              label="Cliente"
+              disabled={!formRef?.getFieldValue("promoter_id")}
+              onChange={(value) => {
+                if (!value) {
+                  setModulesParams((state: any) => ({
+                    ...state,
+                    client_id: undefined,
+                  }));
+                } else {
+                  setModulesParams((state: any) => ({
+                    ...state,
+                    client_id: value,
+                  }));
+                }
+              }}
+              options={listClient.data?.items.map((i) => ({
+                label: i.name,
+                value: i.id,
+              }))}
+              style={{ width: "100%" }}
+            />
+          </Col>
           <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
             <ProFormSelect
               name="Modules"
@@ -212,6 +231,10 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
               }}
               deleteIconProps={{ tooltipText: "Remover data" }}
               copyIconProps={{ tooltipText: "Copiar data" }}
+              min={1}
+              initialValue={[
+                { open_gates_time: null, start_time: null, end_time: null },
+              ]}
             >
               {(list) => {
                 return (

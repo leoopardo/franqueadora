@@ -71,8 +71,6 @@ export const MutateFranchise = ({
       "SPREAD_CREDIT_ADVANCE",
     ];
 
-    console.log(values.agreements);
-
     Object?.keys(values.agreements)?.forEach((section) => {
       keysOrganization?.forEach((key) => {
         const ag = data?.items?.find(

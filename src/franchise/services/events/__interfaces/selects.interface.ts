@@ -57,3 +57,5 @@ export const SelectsSchema = z.object({
 });
 
 export type SelectType = z.infer<typeof SelectsSchema>;
+
+export type PaymentType = z.infer<typeof PaymentMethodSchema>;

@@ -69,12 +69,14 @@ function TableComponent<RowItemI>({
             />
           </div>
         ) : (
-          <div style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "column",
-          }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
             <Empty
               style={{ marginBottom: 16 }}
               image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -89,6 +91,7 @@ function TableComponent<RowItemI>({
                 }}
                 onClick={emptyAction}
                 icon={<PlusIcon height={20} />}
+                shape="round"
                 type="primary"
               >
                 Cadastrar
@@ -193,12 +196,12 @@ function TableComponent<RowItemI>({
         },
       ]}
       dataSource={data ? (data.items as any) : []}
-      scroll={{ x: 740, y: "61vh" }}
+      scroll={{ x: "60%", y: "61vh" }}
       pagination={{
-        pageSize: params?.size,
+        pageSize: params?.size || data?.page,
         showSizeChanger: true,
         total: data?.totalItems ?? total,
-        current: params?.page || 0,
+        current: params?.page || data?.page,
         style: { paddingRight: 16 },
         onShowSizeChange: (_current, size) =>
           setParams && setParams((state) => ({ ...state, size })),

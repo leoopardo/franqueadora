@@ -2,8 +2,6 @@ import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import {
   CalculatorIcon,
   Cog6ToothIcon,
-  MapPinIcon,
-  ScaleIcon,
   Squares2X2Icon,
   UsersIcon,
   ViewColumnsIcon,

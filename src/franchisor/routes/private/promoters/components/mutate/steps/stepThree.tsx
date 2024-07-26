@@ -83,7 +83,6 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                           ["agreements", section, type],
                           event.target.value
                         );
-                        console.log(stepTrhreeRef?.current?.getFieldsValue());
                       }}
                       hideSymbol
                       max={100}
@@ -118,7 +117,6 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                           event.target.value
                         );
 
-                        console.log(stepTrhreeRef?.current?.getFieldsValue());
                       }}
                       hideSymbol
                       max={100}
@@ -169,7 +167,6 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                         ["agreements", section, type],
                         event.target.value
                       );
-                      console.log(stepTrhreeRef?.current?.getFieldsValue());
                     }}
                     hideSymbol
                     max={100}
@@ -203,7 +200,6 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                         ["agreements", section, type],
                         event.target.value
                       );
-                      console.log(stepTrhreeRef?.current?.getFieldsValue());
                     }}
                     hideSymbol
                     max={100}

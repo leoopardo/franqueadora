@@ -44,7 +44,7 @@ export const StepOne = () => {
       "end_hour",
     ],
     localization: ["location"],
-    agreements: ["agreements_type", ],
+    agreements: ["agreements_type"],
   };
 
   return (
@@ -114,7 +114,7 @@ export const StepOne = () => {
               (field: any) => field.errors.length > 0
             );
             console.log(firstErrorField);
-            
+
             if (menus.config.includes(firstErrorField?.name[0] as any)) {
               setActiveKey("configs");
             }

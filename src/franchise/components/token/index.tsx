@@ -1,14 +1,14 @@
 import { MailOutlined, MessageOutlined } from "@ant-design/icons";
 import { CheckCard } from "@ant-design/pro-components";
+import { QueryKeys } from "@franchise/services/queryKeys";
 import { getMeI } from "@franchisor/services/auth/useGetMe";
-import { QueryKeys } from "@franchisor/services/queryKeys";
-import { useSendToken } from "@franchisor/services/token/sendToken";
-import { useValidateToken } from "@franchisor/services/token/validateToken";
+import defaultTheme from "@styles/default";
 import { Avatar, Button, Input, Modal, Typography } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useTheme } from "../../contexts/themeContext";
-import { queryClient } from "../../services/queryClient";
-import defaultTheme from "../../styles/default";
+import { useTheme } from "../../../contexts/themeContext";
+import { queryClient } from "../../../services/queryClient";
+import { useValidateToken } from "@franchise/services/token/validateToken";
+import { useSendToken } from "@franchise/services/token/sendToken";
 
 interface TokenModalI {
   open: boolean;
@@ -35,8 +35,6 @@ export const TokenModal = ({
   useEffect(() => {
     if (changeChannel) mutate();
   }, [changeChannel]);
-
-  console.log(queryClient.getQueryData(QueryKeys.GET_ME) as getMeI);
 
   return (
     <Modal

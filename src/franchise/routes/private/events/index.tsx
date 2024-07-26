@@ -193,7 +193,7 @@ export const Events = () => {
             actions={[
               {
                 label: "Editar",
-                onClick: (row) => navigate(`edição/${row?.id}`, { state: row }),
+                onClick: (row) => navigate(`edição`, { state: row }),
                 icon: <PencilIcon style={{ width: 16 }} />,
               },
             ]}

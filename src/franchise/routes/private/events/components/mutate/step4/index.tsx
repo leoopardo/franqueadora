@@ -1,4 +1,9 @@
-import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
+import {
+  ProFormCheckbox,
+  ProFormInstance,
+  StepsForm,
+} from "@ant-design/pro-components";
+import { Col, Row, Typography } from "antd";
 import { useRef } from "react";
 
 export const StepFour = () => {
@@ -34,6 +39,28 @@ export const StepFour = () => {
           });
         }
       }}
-    ></StepsForm.StepForm>
+    >
+      <Row style={{ width: "100%" }} justify="center">
+        <Col span={12}>
+          <ProFormCheckbox.Group>
+            <ProFormCheckbox
+              name={["terms", "accepted"]}
+              rules={[{ required: true }]}
+            >
+              Ao publicar este evento estou de acordo com os Termos de uso, com
+              as <Typography.Link>Diretrizes da Comunidade</Typography.Link> e
+              com o{" "}
+              <Typography.Link>
+                Acordo de Processamento de Dados
+              </Typography.Link>
+              , bem como declaro estar ciente da{" "}
+              <Typography.Link>Política de Privacidade</Typography.Link>, da{" "}
+              <Typography.Link>Política de Cookies</Typography.Link> e das{" "}
+              <Typography.Link>Obrigatoriedades Legais</Typography.Link>.
+            </ProFormCheckbox>
+          </ProFormCheckbox.Group>
+        </Col>
+      </Row>
+    </StepsForm.StepForm>
   );
 };

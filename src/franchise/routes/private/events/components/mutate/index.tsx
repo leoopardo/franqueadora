@@ -3,7 +3,7 @@ import {
   ProFormInstance,
   StepsForm,
 } from "@ant-design/pro-components";
-import { TokenModal } from "@components/token";
+import { TokenModal } from "@franchise/components/token";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
@@ -20,6 +20,7 @@ interface mutateI {
   mutate: (body: any) => void;
   mutateAgreements?: (body: any) => void;
   loading?: boolean;
+  getDataLoading?: boolean;
   success?: boolean;
   error?: any;
   title?: string;
@@ -35,6 +36,8 @@ export const MutateFranchise = ({
   subtitle,
   initialValues,
   update,
+  mutate,
+  getDataLoading,
 }: mutateI) => {
   const formRef = useRef<ProFormInstance>();
   const [width, setWidth] = useState<number>((100 / 4) * 1);
@@ -44,7 +47,10 @@ export const MutateFranchise = ({
   const { isSm, isMd, isLg } = useBreakpoints();
   const [isTokenModalOpen, setIsTokenModalOpen] = useState<boolean>(false);
 
-  const waitTime = (_values: any) => {
+  console.log(initialValues);
+
+  const waitTime = (values: any) => {
+    mutate(values);
     return new Promise<boolean>((resolve) => {
       return resolve(true);
     });
@@ -125,73 +131,74 @@ export const MutateFranchise = ({
           }}
         >
           <Col xs={{ span: 24 }} md={{ span: 24 }}>
-            <StepsForm<{
-              promoter_id: string;
-              client_id?: string;
-              address: string;
-            }>
-              formRef={formRef}
-              onFinish={waitTime}
-              stepsRender={(steps) =>
-                update ? (
-                  <Tabs
-                    centered
-                    onChange={(key) => {
-                      setStep(+key + 1);
-                      setWidth((100 / 3) * (+key + 1));
-                    }}
-                    items={steps.map((step) => ({
-                      label: step.title,
-                      key: step.key,
-                    }))}
-                  />
-                ) : (
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Steps
-                      size="small"
-                      current={step - 1}
+            {!getDataLoading && (
+              <StepsForm<{
+                promoter_id: string;
+                client_id?: string;
+                address: string;
+              }>
+                formRef={formRef}
+                onFinish={waitTime}
+                stepsRender={(steps) =>
+                  update ? (
+                    <Tabs
+                      centered
+                      onChange={(key) => {
+                        setStep(+key + 1);
+                        setWidth((100 / 3) * (+key + 1));
+                      }}
                       items={steps.map((step) => ({
-                        title: (
-                          <div
-                            title={`${step.title}`}
-                            style={{ cursor: "pointer" }}
-                          >
-                            {step.title}
-                          </div>
-                        ),
+                        label: step.title,
                         key: step.key,
-                       
                       }))}
-                      responsive
-                      style={{ width: isSm || isMd || isLg ? "95%" : "60%" }}
                     />
-                  </div>
-                )
-              }
-              submitter={false}
-              current={step - 1}
-              onCurrentChange={(current) => {
-                setWidth((100 / 3) * (current + 1));
-                setStep(current + 1);
-              }}
-              formProps={{ initialValues: initialFormValues }}
-              containerStyle={{
-                width: isSm || isMd || isLg ? "100%" : "90%",
-                paddingBottom: 24,
-              }}
-            >
-              <StepOne />
-              {/* <StepTwo /> */}
-              <StepThree />
-              <StepFour />
-            </StepsForm>
+                  ) : (
+                    <div
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Steps
+                        size="small"
+                        current={step - 1}
+                        items={steps.map((step) => ({
+                          title: (
+                            <div
+                              title={`${step.title}`}
+                              style={{ cursor: "pointer" }}
+                            >
+                              {step.title}
+                            </div>
+                          ),
+                          key: step.key,
+                        }))}
+                        responsive
+                        style={{ width: isSm || isMd || isLg ? "95%" : "60%" }}
+                      />
+                    </div>
+                  )
+                }
+                submitter={false}
+                current={step - 1}
+                onCurrentChange={(current) => {
+                  setWidth((100 / 3) * (current + 1));
+                  setStep(current + 1);
+                }}
+                formProps={{ initialValues: initialFormValues }}
+                containerStyle={{
+                  width: isSm || isMd || isLg ? "100%" : "90%",
+                  paddingBottom: 24,
+                }}
+              >
+                <StepOne />
+                {/* <StepTwo /> */}
+                <StepThree />
+                <StepFour />
+              </StepsForm>
+            )}
           </Col>
         </Row>
       </ProCard>
@@ -234,8 +241,6 @@ export const MutateFranchise = ({
           size="large"
           type="primary"
           onClick={() => {
-            console.log(formRef.current?.getFieldsValue());
-
             if (step !== 3) {
               formRef.current?.submit();
               setLoadingStep(true);
