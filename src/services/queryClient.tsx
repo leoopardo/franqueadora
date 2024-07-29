@@ -6,7 +6,12 @@ import { congnitoAuthService } from "../franchisor/services/auth/CognitoAuthServ
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: async (err: any) => {
-      console.log("err", err);
+      if (err?.response?.status === 500 || err.code === "ERR_NETWORK") {
+        notification.error({
+          message: "Erro interno!",
+          description: "Por favor, aguarde enquanto corrigimos o problema.",
+        });
+      }
 
       if (err?.response?.status === 401 || err?.response?.status === 403) {
         if (
