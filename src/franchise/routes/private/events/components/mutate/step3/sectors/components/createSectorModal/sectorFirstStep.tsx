@@ -14,10 +14,12 @@ import { CreateSectorModal } from "./createSubSector";
 
 interface SectorFirstStepProps {
   setHaveSubSectors: Dispatch<SetStateAction<boolean>>;
+  updateData?: any;
 }
 
 export const SectorFirstStep = ({
   setHaveSubSectors,
+  updateData,
 }: SectorFirstStepProps) => {
   const stepOneRef = useRef<ProFormInstance>();
   const waitTime = (_values: any) => {
@@ -35,6 +37,7 @@ export const SectorFirstStep = ({
   const [data, setData] = useState<any[]>(
     stepOneRef?.current?.getFieldValue("sub-sectors") || []
   );
+  const [updateSubSectorData, setUpdateSubSectorData] = useState<any>();
 
   useEffect(() => {
     if (data.length >= 1) {
@@ -43,6 +46,11 @@ export const SectorFirstStep = ({
       setHaveSubSectors(false);
     }
   }, [data]);
+
+  useEffect(() => {
+    stepOneRef.current?.setFieldsValue({ ...updateData });
+    setData(updateData?.["sub-sectors"] ?? []);
+  }, [updateData]);
 
   return (
     <StepsForm.StepForm<{
@@ -71,8 +79,15 @@ export const SectorFirstStep = ({
           });
         }
       }}
+      initialValues={updateData}
     >
       <Row style={{ width: "100%", marginTop: -40 }} gutter={8}>
+        <Col span={24}   style={{ display: "none" }}>
+          <ProFormField
+          
+            name={"key"}
+          />
+        </Col>
         <Col span={24}>
           <ProFormField
             rules={[{ required: true }]}
@@ -162,7 +177,7 @@ export const SectorFirstStep = ({
 
         <ProFormList
           style={{ display: "none" }}
-          name={"sub_sectors"}
+          name={"sub-sectors"}
           initialValue={[]}
         ></ProFormList>
 
@@ -205,7 +220,8 @@ export const SectorFirstStep = ({
               {
                 label: "Editar",
                 onClick(RowItemI) {
-                  console.log("RowItemI", RowItemI);
+                  setUpdateSubSectorData(RowItemI);
+                  setCreateSectorModalIsOpen(true);
                 },
               },
               {
@@ -243,6 +259,7 @@ export const SectorFirstStep = ({
         setOpen={setCreateSectorModalIsOpen}
         setDataSource={setData}
         formRef={stepOneRef.current}
+        updateData={updateSubSectorData}
       />
     </StepsForm.StepForm>
   );

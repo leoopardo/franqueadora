@@ -36,8 +36,6 @@ export const TokenModal = ({
     if (changeChannel) mutate();
   }, [changeChannel]);
 
-  console.log(queryClient.getQueryData(QueryKeys.GET_ME) as getMeI);
-
   return (
     <Modal
       title={

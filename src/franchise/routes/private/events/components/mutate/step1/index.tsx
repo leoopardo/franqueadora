@@ -113,7 +113,6 @@ export const StepOne = () => {
             const firstErrorField = fields?.find(
               (field: any) => field.errors.length > 0
             );
-            console.log(firstErrorField);
 
             if (menus.config.includes(firstErrorField?.name[0] as any)) {
               setActiveKey("configs");

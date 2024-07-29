@@ -79,8 +79,6 @@ export const Localization = ({ formRef, hidden }: LocalizationI) => {
         formRef?.setFieldValue("zipcode", addressObj.zipcode || "");
         formRef?.setFieldValue("neighborhood", addressObj.neighborhood || "");
         formRef?.setFieldValue("number", addressObj.number || "");
-
-        console.log(formRef?.getFieldsValue());
       }
     } catch (error) {
       console.error("Error getting address: ", error);

@@ -11,6 +11,8 @@ interface CreateSectorModalProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
   formRef?: ProFormInstance;
   setDataSource: Dispatch<SetStateAction<any[]>>;
+  updateData?: any;
+  setUpdateData?: Dispatch<SetStateAction<any>>;
 }
 
 export const CreateSectorModal = ({
@@ -18,6 +20,8 @@ export const CreateSectorModal = ({
   setOpen,
   formRef,
   setDataSource,
+  updateData,
+  setUpdateData,
 }: CreateSectorModalProps) => {
   const [step, setStep] = useState<number>(1);
   const [width, setWidth] = useState<number>((100 / 2) * 1);
@@ -25,34 +29,49 @@ export const CreateSectorModal = ({
   const [haveSubSectors, setHaveSubSectors] = useState<boolean>(false);
 
   useEffect(() => {
-    if (haveSubSectors) {
+    if (sectorFormRef?.current?.getFieldValue("sub-sectors")?.length >= 1) {
       setStep(1);
       setWidth((100 / 1) * 1);
-    } else {
-      setStep(1);
-      setWidth((100 / 2) * 1);
-    }
-  }, [haveSubSectors]);
+      setHaveSubSectors(true);
+    } 
+  }, [sectorFormRef?.current?.getFieldValue("sub-sectors")]);
 
   const waitTime = (values: any) => {
     const sectors = Array.isArray(formRef?.getFieldValue(["pub", "sectors"]))
       ? formRef?.getFieldValue(["pub", "sectors"])
       : [];
-    sectors.push({
-      ...values,
-      active: true,
-      terminal_user_ids: [],
-      terminals: [],
-    });
 
-    setDataSource((state) => [
-      ...state,
-      { ...values, active: true, key: state.length + 1 },
-    ]);
+    if (updateData) {
+      sectors.splice(updateData.key - 1, 1, {
+        ...values,
+        active: true,
+        terminal_user_ids: [],
+        terminals: [],
+      });
+      setDataSource(sectors);
+      formRef?.setFieldValue(["pub", "sectors"], sectors);
+      return new Promise<boolean>((resolve) => {
+        setUpdateData && setUpdateData(undefined);
+        setOpen(false);
+        return resolve(true);
+      });
+    }
+
+    setDataSource((state) => {
+      sectors.push({
+        ...values,
+        active: true,
+        terminal_user_ids: [],
+        terminals: [],
+        key: state.length + 1,
+      });
+      return [...state, { ...values, active: true, key: state.length + 1 }];
+    });
 
     formRef?.setFieldValue(["pub", "sectors"], sectors);
 
     return new Promise<boolean>((resolve) => {
+      setUpdateData && setUpdateData(undefined);
       setOpen(false);
       return resolve(true);
     });
@@ -82,10 +101,12 @@ export const CreateSectorModal = ({
                 Passo {step} de {haveSubSectors ? "1" : "2"}
               </Typography.Text>
               <Typography.Title level={4} style={{ margin: 0 }}>
-                Cadastrar setor
+                {updateData ? "Editar" : "Cadastrar"} setor
+                {updateData && `: ${updateData?.name}`}
               </Typography.Title>
               <Typography.Text style={{ lineHeight: 0, fontWeight: 400 }}>
-                Insira as informações do setor para cadastrar um novo setor.
+                Insira as informações do setor para{" "}
+                {updateData ? "editar o setor" : "cadastrar um novo setor"}.
               </Typography.Text>
             </Col>
           </Row>
@@ -124,10 +145,25 @@ export const CreateSectorModal = ({
           return;
         }
         setOpen(false);
+        setUpdateData && setUpdateData(undefined);
       }}
       okButtonProps={{ shape: "round" }}
-      okText={step === 2 ? "Cadastrar" : "Próximo"}
-      cancelText={step === 1 ? "Cancelar" : "Voltar"}
+      okText={
+        (!sectorFormRef?.current?.getFieldValue("sub-sectors") ||
+          sectorFormRef?.current?.getFieldValue("sub-sectors")?.length ===
+            0) &&
+        step === 1
+          ? "Próximo"
+          : updateData
+            ? "Editar"
+            : "Cadastrar"
+      }
+      cancelText={
+        sectorFormRef?.current?.getFieldValue("sub-sectors")?.length >= 1 ||
+        step === 1
+          ? "Cancelar"
+          : "Voltar"
+      }
       cancelButtonProps={{ shape: "round", type: "default", danger: true }}
       styles={{
         content: { padding: 0 },
@@ -165,8 +201,13 @@ export const CreateSectorModal = ({
           paddingBottom: 24,
         }}
       >
-        <SectorFirstStep setHaveSubSectors={setHaveSubSectors} />
-        <SectorPaymentsStep />
+        <SectorFirstStep
+          setHaveSubSectors={setHaveSubSectors}
+          updateData={updateData}
+        />
+        {(!sectorFormRef?.current?.getFieldValue("sub-sectors") ||
+          sectorFormRef?.current?.getFieldValue("sub-sectors")?.length ===
+            0) && <SectorPaymentsStep />}
       </StepsForm>
     </Modal>
   );

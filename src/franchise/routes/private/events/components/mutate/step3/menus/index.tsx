@@ -1,49 +1,53 @@
 import { ProFormInstance, ProFormList } from "@ant-design/pro-components";
 import TableComponent from "@components/table/tableComponent";
-import { Squares2X2Icon } from "@heroicons/react/24/outline";
+import { useListMenus } from "@franchise/services/menus/listEvents";
+import { ViewColumnsIcon } from "@heroicons/react/24/outline";
 import defaultTheme from "@styles/default";
-import { Button, Card, Col, Divider, Row, Switch } from "antd";
+import { Button, Card, Col, Divider, Row, Select, Space } from "antd";
 import { useEffect, useState } from "react";
-import { CreateSectorModal } from "./components/createSectorModal";
+import { CreateMenuModal } from "./components/createMenuModal";
 interface ConfigI {
   formRef?: ProFormInstance;
   hidden?: boolean;
 }
 
-export const Sectors = ({ formRef, hidden }: ConfigI) => {
-  const [createSectorModalIsOpen, setCreateSectorModalIsOpen] =
+export const Menus = ({ formRef, hidden }: ConfigI) => {
+  const [createMenuModalIsOpen, setCreateMenuModalIsOpen] =
     useState<boolean>(false);
   const [tableParams, setTableParams] = useState<any>({
     page: 1,
     size: 20,
-    totalItems: formRef?.getFieldValue(["pub", "sectors"])?.length,
+    totalItems: formRef?.getFieldValue(["pub", "menus"])?.length,
   });
   const [data, setData] = useState<any[]>(
-    formRef?.getFieldValue(["pub", "sectors"]) || []
+    formRef?.getFieldValue(["pub", "menus"]) || []
   );
+  const menus = useListMenus({ page: 0, size: 500 });
   const [updateData, setUpdateData] = useState<any>();
 
   useEffect(() => {
-    setData(formRef?.getFieldValue(["pub", "sectors"]));
+    setData(formRef?.getFieldValue(["pub", "menus"]));
   }, [formRef?.getFieldsValue()]);
 
   useEffect(() => {
     if (updateData) {
-      setCreateSectorModalIsOpen(true);
+      setCreateMenuModalIsOpen(true);
     }
   }, [updateData]);
+
+  console.log(formRef?.getFieldValue(["pub", "menus"]));
 
   return (
     <Card style={{ width: "100%", display: hidden ? "none" : undefined }}>
       <Row style={{ width: "100%" }} gutter={[8, 8]}>
         <Col span={24}>
           <Divider orientation="left" style={{ marginTop: 0 }}>
-            <Squares2X2Icon
+            <ViewColumnsIcon
               height={20}
               style={{ marginRight: 8, marginBottom: -4 }}
               color={defaultTheme.primary}
             />
-            Setores do evento
+            Cardápios do evento
           </Divider>
         </Col>
         {data?.length >= 1 && (
@@ -53,26 +57,39 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
           >
             <Button
               shape="round"
-              onClick={() => setCreateSectorModalIsOpen(true)}
+              onClick={() => setCreateMenuModalIsOpen(true)}
             >
-              Adicionar setor
+              Adicionar cardápio
             </Button>
           </Col>
         )}
         <ProFormList
           style={{ display: "none" }}
-          name={["pub", "sectors"]}
+          name={["pub", "menus"]}
           onAfterRemove={(index) => {
             console.log("index", index);
           }}
         ></ProFormList>
+        <Col span={24}>
+          <Space.Compact style={{ width: "100%" }} size="large">
+            <Select
+              placeholder="Selecione um cardápio para vincular"
+              style={{ width: "80%" }}
+              options={menus.data?.items.map((m) => ({
+                key: m.id,
+                label: m.name,
+              }))}
+            />
+            <Button size="large">Vincular cardápio</Button>
+          </Space.Compact>
+        </Col>
 
         <Col span={24}>
           <TableComponent<{
             key: string;
-            active: boolean;
             name: string;
-            "sub-sectors": any[];
+            items_quantity: number;
+            id: string;
           }>
             data={{
               items: data,
@@ -94,50 +111,40 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
                 label: "Excluir",
                 onClick(RowItemI) {
                   formRef?.setFieldValue(
-                    ["pub", "sectors"],
+                    ["pub", "menus"],
                     formRef
-                      ?.getFieldValue(["pub", "sectors"])
-                      ?.filter((item: any) => item.key !== RowItemI?.key)
+                      ?.getFieldValue(["pub", "menus"])
+                      ?.filter(
+                        (item: any) =>
+                          item.key !== RowItemI?.key && item.id !== RowItemI?.id
+                      )
                   );
                   setData(
                     formRef
-                      ?.getFieldValue(["pub", "sectors"])
-                      ?.filter((item: any) => item.key !== RowItemI?.key)
+                      ?.getFieldValue(["pub", "menus"])
+                      ?.filter(
+                        (item: any) =>
+                          item.key !== RowItemI?.key && item.id !== RowItemI?.id
+                      )
                   );
                 },
               },
             ]}
             columns={[
-              {
-                key: "active",
-                head: "Status",
-                custom(row) {
-                  return <Switch checked={row.active} />;
-                },
-              },
-              { key: "name", head: "Setor" },
-              {
-                key: "sub-sectors",
-                head: "Sub-setores",
-                custom(row) {
-                  return row["sub-sectors"]?.length ?? "Não possui";
-                },
-              },
+              { key: "name", head: "Cardápio" },
+              { key: "items_quantity", head: "Quantidade de produtos" },
             ]}
             emptyAction={() => {
-              setCreateSectorModalIsOpen(true);
+              setCreateMenuModalIsOpen(true);
             }}
           />
         </Col>
       </Row>
-      {createSectorModalIsOpen && (
-        <CreateSectorModal
-          open={createSectorModalIsOpen}
-          setOpen={setCreateSectorModalIsOpen}
-          formRef={formRef}
+      {createMenuModalIsOpen && (
+        <CreateMenuModal
+          open={createMenuModalIsOpen}
           setDataSource={setData}
-          updateData={updateData}
-          setUpdateData={setUpdateData}
+          setOpen={setCreateMenuModalIsOpen}
         />
       )}
     </Card>
