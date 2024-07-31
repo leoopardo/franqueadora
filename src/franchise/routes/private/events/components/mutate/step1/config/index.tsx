@@ -45,11 +45,11 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
   useEffect(() => {
     if (user?.Promoter?.id) {
       formRef?.setFieldValue("promoter_id", user?.Promoter?.id);
-      setModulesParams({promoter_id: user?.Promoter?.id});
+      setModulesParams({ promoter_id: user?.Promoter?.id });
     }
     if (user?.Client?.id) {
       formRef?.setFieldValue("client_id", user?.Client?.id);
-      setModulesParams({client_id: user?.Client?.id});
+      setModulesParams({ client_id: user?.Client?.id });
     }
   }, [user]);
 
@@ -243,6 +243,9 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
                       <Typography.Title style={{ paddingLeft: 48 }} level={5}>
                         Data {list.name + 1}
                       </Typography.Title>
+                    </Col>
+                    <Col span={24} style={{ display: "none" }}>
+                      <ProFormField name="id" />
                     </Col>
                     <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 12 }}>
                       <ProFormDateTimePicker

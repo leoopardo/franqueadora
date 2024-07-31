@@ -10,7 +10,7 @@ import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
 import { Button, Col, Row, Spin, Steps, Tabs, Typography } from "antd";
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StepOne } from "./step1";
 import { StepThree } from "./step3";
@@ -56,6 +56,14 @@ export const MutateFranchise = ({
   };
 
   const initialFormValues: any = initialValues ?? {};
+
+  useEffect(() => {
+    console.log("initialFormValues", initialFormValues);
+    
+    if (initialFormValues) {
+      formRef.current?.setFieldsValue(initialFormValues);
+    }
+  }, [initialFormValues]);
 
   return (
     <Row justify="center" style={{ width: "100%" }}>
@@ -195,7 +203,7 @@ export const MutateFranchise = ({
               >
                 <StepOne />
                 {/* <StepTwo /> */}
-                <StepThree />
+                <StepThree stepperRef={formRef.current} />
                 <StepFour />
               </StepsForm>
             ) : (

@@ -1,8 +1,9 @@
-import { ProFormInstance } from "@ant-design/pro-components";
+import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import defaultTheme from "@styles/default";
 import { Col, Modal, Row, Typography } from "antd";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { MenuStepOne } from "./stepOne";
 
 interface CreateMenuModalProps {
   open: boolean;
@@ -11,62 +12,57 @@ interface CreateMenuModalProps {
   setDataSource: Dispatch<SetStateAction<any[]>>;
   updateData?: any;
   setUpdateData?: Dispatch<SetStateAction<any>>;
+  stepperRef?: ProFormInstance;
 }
 
 export const CreateMenuModal = ({
   open,
   setOpen,
   formRef,
-  setDataSource,
+  // setDataSource,
   updateData,
   setUpdateData,
+  stepperRef,
 }: CreateMenuModalProps) => {
   const [step, setStep] = useState<number>(1);
-  const [width, setWidth] = useState<number>((100 / 2) * 1);
+  const [width, setWidth] = useState<number>((100 / 3) * 1);
   const sectorFormRef = useRef<ProFormInstance>();
-  const [haveSubMenus, setHaveSubMenus] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (sectorFormRef?.current?.getFieldValue("sub-sectors")?.length >= 1) {
-      setStep(1);
-      setWidth((100 / 1) * 1);
-      setHaveSubMenus(true);
-    }
-  }, [sectorFormRef?.current?.getFieldValue("sub-sectors")]);
+  const waitTime = (_values: any) => {
+    // console.log("values", values);
 
-  const waitTime = (values: any) => {
-    const sectors = Array.isArray(formRef?.getFieldValue(["pub", "sectors"]))
-      ? formRef?.getFieldValue(["pub", "sectors"])
-      : [];
+    // const menus = Array.isArray(formRef?.getFieldValue(["pub", "menus"]))
+    //   ? formRef?.getFieldValue(["pub", "menus"])
+    //   : [];
 
-    if (updateData) {
-      sectors.splice(updateData.key - 1, 1, {
-        ...values,
-        active: true,
-        terminal_user_ids: [],
-        terminals: [],
-      });
-      setDataSource(sectors);
-      formRef?.setFieldValue(["pub", "sectors"], sectors);
-      return new Promise<boolean>((resolve) => {
-        setUpdateData && setUpdateData(undefined);
-        setOpen(false);
-        return resolve(true);
-      });
-    }
+    // if (updateData) {
+    //   menus.splice(updateData.key - 1, 1, {
+    //     ...values,
+    //     active: true,
+    //     terminal_user_ids: [],
+    //     terminals: [],
+    //   });
+    //   setDataSource(menus);
+    //   formRef?.setFieldValue(["pub", "menus"], menus);
+    //   return new Promise<boolean>((resolve) => {
+    //     setUpdateData && setUpdateData(undefined);
+    //     setOpen(false);
+    //     return resolve(true);
+    //   });
+    // }
 
-    setDataSource((state) => {
-      sectors.push({
-        ...values,
-        active: true,
-        terminal_user_ids: [],
-        terminals: [],
-        key: state.length + 1,
-      });
-      return [...state, { ...values, active: true, key: state.length + 1 }];
-    });
+    // setDataSource((state) => {
+    //   menus.push({
+    //     ...values,
+    //     active: true,
+    //     terminal_user_ids: [],
+    //     terminals: [],
+    //     key: state.length + 1,
+    //   });
+    //   return [...state, { ...values, active: true, key: state.length + 1 }];
+    // });
 
-    formRef?.setFieldValue(["pub", "sectors"], sectors);
+    // formRef?.setFieldValue(["pub", "menus"], menus);
 
     return new Promise<boolean>((resolve) => {
       setUpdateData && setUpdateData(undefined);
@@ -96,15 +92,18 @@ export const CreateMenuModal = ({
                   color: "rgb(150, 150, 150)",
                 }}
               >
-                Passo {step} de {haveSubMenus ? "1" : "2"}
+                Passo {step} de 3
               </Typography.Text>
               <Typography.Title level={4} style={{ margin: 0 }}>
                 {updateData ? "Editar" : "Cadastrar"} cardápio
                 {updateData && `: ${updateData?.name}`}
               </Typography.Title>
               <Typography.Text style={{ lineHeight: 0, fontWeight: 400 }}>
-                Insira as informações do setor para{" "}
-                {updateData ? "editar o setor" : "cadastrar um novo cardápio"}.
+                Insira as informações para{" "}
+                {updateData
+                  ? "editar o cardápio"
+                  : "cadastrar um novo cardápio"}
+                .
               </Typography.Text>
             </Col>
           </Row>
@@ -146,21 +145,8 @@ export const CreateMenuModal = ({
         setUpdateData && setUpdateData(undefined);
       }}
       okButtonProps={{ shape: "round" }}
-      okText={
-        (!sectorFormRef?.current?.getFieldValue("sub-sectors") ||
-          sectorFormRef?.current?.getFieldValue("sub-sectors")?.length === 0) &&
-        step === 1
-          ? "Próximo"
-          : updateData
-            ? "Editar"
-            : "Cadastrar"
-      }
-      cancelText={
-        sectorFormRef?.current?.getFieldValue("sub-sectors")?.length >= 1 ||
-        step === 1
-          ? "Cancelar"
-          : "Voltar"
-      }
+      okText={step === 3 ? "Cadastrar" : "Próximo"}
+      cancelText={step === 1 ? "Cancelar" : "Voltar"}
       cancelButtonProps={{ shape: "round", type: "default", danger: true }}
       styles={{
         content: { padding: 0 },
@@ -181,6 +167,29 @@ export const CreateMenuModal = ({
       onOk={() => {
         sectorFormRef.current?.submit();
       }}
-    ></Modal>
+    >
+      <StepsForm
+        formRef={sectorFormRef}
+        onFinish={waitTime}
+        stepsRender={() => null}
+        submitter={false}
+        current={step - 1}
+        onCurrentChange={(current) => {
+          setWidth((100 / 3) * (current + 1));
+          setStep(current + 1);
+        }}
+        formProps={{ initialValues: {} }}
+        containerStyle={{
+          width: "95%",
+          paddingBottom: 24,
+        }}
+      >
+        <MenuStepOne
+          updateData={updateData}
+          formRef={formRef}
+          stepperRef={stepperRef}
+        />
+      </StepsForm>
+    </Modal>
   );
 };

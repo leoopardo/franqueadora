@@ -20,7 +20,7 @@ export const useCreateEvent = () => {
         headers: { ...headers },
       });
       await queryClient.refetchQueries({
-        queryKey: [QueryKeys.LIST_FRANCHISES],
+        queryKey: [QueryKeys.LIST_EVENTS],
       });
       return response.data;
     },
@@ -32,7 +32,7 @@ export const useCreateEvent = () => {
   if (isSuccess) {
     notification.success({ message: "Evento cadastrado com sucesso!" });
     reset();
-    navigate(-1);
+    navigate("/eventos");
   }
   if (error) {
     notification.error({

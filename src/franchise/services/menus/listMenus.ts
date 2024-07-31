@@ -14,7 +14,7 @@ export const useListMenus = (params: MenuParams) => {
   const { data, error, isLoading, refetch } = useQuery<
     ResponseI<MenuType> | null | undefined
   >(
-    [QueryKeys.LIST_EVENTS, params, headers],
+    [QueryKeys.LIST_MENUS, params, headers],
     async () => {
       const response = await apiPortalEvent.get(`/menu/all`, {
         headers: { ...headers },
@@ -27,7 +27,10 @@ export const useListMenus = (params: MenuParams) => {
 
       return parsedResponse.data;
     },
-    { enabled: headers && headers["AuthToken"] ? true : false }
+    {
+      enabled: headers && headers["AuthToken"] ? true : false,
+      refetchOnWindowFocus: true,
+    }
   );
 
   return {

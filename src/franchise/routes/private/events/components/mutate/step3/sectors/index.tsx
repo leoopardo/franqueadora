@@ -136,6 +136,7 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
           setOpen={setCreateSectorModalIsOpen}
           formRef={formRef}
           setDataSource={setData}
+          dataSource={data}
           updateData={updateData}
           setUpdateData={setUpdateData}
         />

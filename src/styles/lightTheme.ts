@@ -37,7 +37,9 @@ const Light: ThemeConfig = {
         import.meta.env.VITE_APP_BUTTON === "dark"
           ? "rgba(0, 0, 0, 0.88)"
           : "#fff",
-          controlHeightLG: 38
+          boxShadowSecondary: "none",
+          primaryShadow: "none",
+          dangerShadow: "none",
     },
     Select: {
       controlItemBgActive: defaultTheme["primary-300"],

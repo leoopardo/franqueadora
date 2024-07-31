@@ -13,21 +13,21 @@ export const useListPromoters = (params: PromotersParams) => {
   >(
     [QueryKeys.LIST_PROMOTERS, params],
     async () => {
-      const response = await apiFranquia.get(
-        `/promoter`,
-        {
-          headers: {
-            ...headers,
-          },
-          params: {  orderBy: "created_at", orderDirection: "desc", ...params },
-          paramsSerializer: (params) => {
-            return qs.stringify(params, { encode: false });
-          },
-        }
-      );
+      const response = await apiFranquia.get(`/promoter`, {
+        headers: {
+          ...headers,
+        },
+        params: { orderBy: "created_at", orderDirection: "desc", ...params },
+        paramsSerializer: (params) => {
+          return qs.stringify(params, { encode: false });
+        },
+      });
       return response.data;
     },
-    { enabled: headers && headers["AuthToken"] ? true : false }
+    {
+      enabled: headers && headers["AuthToken"] ? true : false,
+      refetchOnWindowFocus: true,
+    }
   );
 
   return {

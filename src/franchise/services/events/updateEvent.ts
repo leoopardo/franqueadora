@@ -20,7 +20,7 @@ export const useUpdateEvent = () => {
         headers: { ...headers },
       });
       await queryClient.refetchQueries({
-        queryKey: [QueryKeys.LIST_FRANCHISES],
+        queryKey: [QueryKeys.LIST_EVENTS],
       });
       return response.data;
     },

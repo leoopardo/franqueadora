@@ -52,7 +52,7 @@ export const UpdateFranchise = () => {
           cpf: formatCPF(data?.Tenant?.UserTenant[0].User.document || ""),
           name: data?.Tenant?.UserTenant[0].User.name,
           email: data?.Tenant?.UserTenant[0].User.email,
-          cellphone: data?.Tenant?.UserTenant[0].User.phone || "",
+          phone: data?.Tenant?.UserTenant[0].User.phone || "",
           username: data.username,
         },
         area_codes: data?.FranchiseOccuppationCounties?.map(

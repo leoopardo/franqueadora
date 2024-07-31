@@ -11,7 +11,7 @@ import useDebounce from "../../../../../../../hooks/useDebounce";
 import defaultTheme from "../../../../../../../styles/default";
 import {
   formatCPF,
-  formatCellPhoneBR,
+  formatCellPhoneBR
 } from "../../../../../../../utils/regexFormat";
 import regexList from "../../../../../../../utils/regexList";
 
@@ -164,7 +164,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name={["master", "cellphone"]}
+            name={["master", "phone"]}
             label="Celular"
             placeholder="Digite número de celular"
             validateTrigger={["onChange", "onBlur", "onPaste"]}
@@ -197,7 +197,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
             ]}
             fieldProps={{
               onChange(e) {
-                handleValidate("cellphone", e.target.value.replace(/\D/g, ""));
+                handleValidate("phone", e.target.value.replace(/\D/g, ""));
               },
             }}
             getValueFromEvent={(e) => formatCellPhoneBR(e.target.value)}

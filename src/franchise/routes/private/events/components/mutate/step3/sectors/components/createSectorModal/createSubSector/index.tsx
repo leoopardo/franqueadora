@@ -25,8 +25,8 @@ export const CreateSectorModal = ({
   const sectorFormRef = useRef<ProFormInstance>();
 
   const waitTime = (values: any) => {
-    const sectors = Array.isArray(formRef?.getFieldValue("sub-sectors"))
-      ? formRef?.getFieldValue("sub-sectors")
+    const sectors = Array.isArray(formRef?.getFieldValue("sub_sectors"))
+      ? formRef?.getFieldValue("sub_sectors")
       : [];
     sectors.push({ ...values, active: true });
 
@@ -35,7 +35,7 @@ export const CreateSectorModal = ({
       { ...values, active: true, key: state.length + 1 },
     ]);
 
-    formRef?.setFieldValue("sub-sectors", sectors);
+    formRef?.setFieldValue("sub_sectors", sectors);
 
     return new Promise<boolean>((resolve) => {
       setOpen(false);

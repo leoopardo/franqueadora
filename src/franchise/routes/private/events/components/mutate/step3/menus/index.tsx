@@ -1,17 +1,19 @@
 import { ProFormInstance, ProFormList } from "@ant-design/pro-components";
 import TableComponent from "@components/table/tableComponent";
-import { useListMenus } from "@franchise/services/menus/listEvents";
 import { ViewColumnsIcon } from "@heroicons/react/24/outline";
 import defaultTheme from "@styles/default";
 import { Button, Card, Col, Divider, Row, Select, Space } from "antd";
 import { useEffect, useState } from "react";
 import { CreateMenuModal } from "./components/createMenuModal";
+import { PlusOutlined } from "@ant-design/icons";
+import { useListMenus } from "@franchise/services/menus/listMenus";
 interface ConfigI {
   formRef?: ProFormInstance;
   hidden?: boolean;
+  stepperRef?: ProFormInstance;
 }
 
-export const Menus = ({ formRef, hidden }: ConfigI) => {
+export const Menus = ({ formRef, hidden, stepperRef }: ConfigI) => {
   const [createMenuModalIsOpen, setCreateMenuModalIsOpen] =
     useState<boolean>(false);
   const [tableParams, setTableParams] = useState<any>({
@@ -24,6 +26,7 @@ export const Menus = ({ formRef, hidden }: ConfigI) => {
   );
   const menus = useListMenus({ page: 0, size: 500 });
   const [updateData, setUpdateData] = useState<any>();
+  const [selectedMenu, setSelectedMenu] = useState<any>();
 
   useEffect(() => {
     setData(formRef?.getFieldValue(["pub", "menus"]));
@@ -36,7 +39,7 @@ export const Menus = ({ formRef, hidden }: ConfigI) => {
   }, [updateData]);
 
   console.log(formRef?.getFieldValue(["pub", "menus"]));
-
+  
   return (
     <Card style={{ width: "100%", display: hidden ? "none" : undefined }}>
       <Row style={{ width: "100%" }} gutter={[8, 8]}>
@@ -50,19 +53,7 @@ export const Menus = ({ formRef, hidden }: ConfigI) => {
             Cardápios do evento
           </Divider>
         </Col>
-        {data?.length >= 1 && (
-          <Col
-            span={24}
-            style={{ display: "flex", flexDirection: "row-reverse" }}
-          >
-            <Button
-              shape="round"
-              onClick={() => setCreateMenuModalIsOpen(true)}
-            >
-              Adicionar cardápio
-            </Button>
-          </Col>
-        )}
+
         <ProFormList
           style={{ display: "none" }}
           name={["pub", "menus"]}
@@ -75,12 +66,52 @@ export const Menus = ({ formRef, hidden }: ConfigI) => {
             <Select
               placeholder="Selecione um cardápio para vincular"
               style={{ width: "80%" }}
-              options={menus.data?.items.map((m) => ({
-                key: m.id,
-                label: m.name,
-              }))}
+              options={menus?.data?.items
+                ?.filter((m) => !data?.find((d) => d.id === m.id))
+                ?.map((m) => ({
+                  key: m.id,
+                  label: m.name,
+                  value: m.id,
+                  quantity: m.itens_quantity,
+                }))}
+              showSearch
+              onSelect={(_value, option) => {
+                console.log(option);
+                
+                setSelectedMenu({
+                  name: option?.label,
+                  id: option?.value,
+                  items_quantity: option?.quantity,
+                });
+              }}
+              dropdownRender={(menu) => (
+                <>
+                  {menu}
+
+                  <Button
+                    style={{ width: "100%" }}
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={() => setCreateMenuModalIsOpen(true)}
+                  >
+                    Cadastrar um cardápio
+                  </Button>
+                </>
+              )}
             />
-            <Button size="large">Vincular cardápio</Button>
+            <Button
+              size="large"
+              onClick={() => {
+                const menus = formRef?.getFieldValue(["pub", "menus"]) || []
+                formRef?.setFieldValue(
+                  ["pub", "menus"],
+                  [...menus, selectedMenu]
+                );
+              }}
+              disabled={!selectedMenu}
+            >
+              Vincular cardápio
+            </Button>
           </Space.Compact>
         </Col>
 
@@ -145,6 +176,8 @@ export const Menus = ({ formRef, hidden }: ConfigI) => {
           open={createMenuModalIsOpen}
           setDataSource={setData}
           setOpen={setCreateMenuModalIsOpen}
+          formRef={formRef}
+          stepperRef={stepperRef}
         />
       )}
     </Card>
