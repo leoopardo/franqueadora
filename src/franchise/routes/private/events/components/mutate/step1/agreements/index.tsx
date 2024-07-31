@@ -43,8 +43,6 @@ export const Agreements = ({ formRef, hidden }: ConfigI) => {
     }
   }, [data]);
 
-  console.log(promoterAgreements?.data?.agrupatedAgreements);
-
   return (
     <Card
       style={{

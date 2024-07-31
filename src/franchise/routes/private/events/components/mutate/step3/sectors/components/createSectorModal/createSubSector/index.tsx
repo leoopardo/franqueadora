@@ -2,7 +2,7 @@ import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import defaultTheme from "@styles/default";
 import { Col, Modal, Row, Typography } from "antd";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { SubSectorFirstStep } from "./subSectorFirstStep";
 
 interface CreateSectorModalProps {
@@ -10,6 +10,7 @@ interface CreateSectorModalProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
   formRef?: ProFormInstance;
   setDataSource: Dispatch<SetStateAction<any[]>>;
+  updateData?: any;
 }
 
 export const CreateSectorModal = ({
@@ -17,14 +18,15 @@ export const CreateSectorModal = ({
   setOpen,
   formRef,
   setDataSource,
+  updateData,
 }: CreateSectorModalProps) => {
   const [step, setStep] = useState<number>(1);
   const [width, setWidth] = useState<number>((100 / 2) * 1);
   const sectorFormRef = useRef<ProFormInstance>();
 
   const waitTime = (values: any) => {
-    const sectors = Array.isArray(formRef?.getFieldValue("sub-sectors"))
-      ? formRef?.getFieldValue("sub-sectors")
+    const sectors = Array.isArray(formRef?.getFieldValue("sub_sectors"))
+      ? formRef?.getFieldValue("sub_sectors")
       : [];
     sectors.push({ ...values, active: true });
 
@@ -33,7 +35,7 @@ export const CreateSectorModal = ({
       { ...values, active: true, key: state.length + 1 },
     ]);
 
-    formRef?.setFieldValue("sub-sectors", sectors);
+    formRef?.setFieldValue("sub_sectors", sectors);
 
     return new Promise<boolean>((resolve) => {
       setOpen(false);
@@ -41,10 +43,13 @@ export const CreateSectorModal = ({
     });
   };
 
+  useEffect(() => {
+    sectorFormRef.current?.setFieldsValue(updateData);
+  }, [updateData]);
+
   return (
     <Modal
       width={800}
-      
       title={
         <>
           <Row

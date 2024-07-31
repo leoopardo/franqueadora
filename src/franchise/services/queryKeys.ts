@@ -4,6 +4,7 @@ export enum QueryKeys {
   LIST_FRANCHISES = "franchiseListFranchises",
   LIST_PROMOTERS = "franchiseListPromoters",
   LIST_CLIENTS = "franchiseListClients",
+  LIST_MENUS = "franchiseListMenus",
 
   CREATE_PROMOTER = "franchiseCreatePromoter",
   CREATE_CLIENT = "franchiseCreateClient",

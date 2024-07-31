@@ -7,16 +7,16 @@ import { queryClient } from "../../../services/queryClient";
 import { QueryKeys } from "../queryKeys";
 import { CreateEventType } from "./__interfaces/create_event.interface";
 
-export const useCreateEvent = () => {
+export const useUpdateEvent = () => {
   const { headers } = useFranchiseAuth();
   const navigate = useNavigate();
   const mutation = useMutation<
     any | null | undefined,
     unknown,
-    CreateEventType
+    {body: CreateEventType, id: string}
   >({
-    mutationFn: async (body) => {
-      const response = await apiPortalEvent.post(`/event`, body, {
+    mutationFn: async ({body, id}) => {
+      const response = await apiPortalEvent.put(`/event/${id}`, body, {
         headers: { ...headers },
       });
       await queryClient.refetchQueries({
@@ -30,13 +30,13 @@ export const useCreateEvent = () => {
   const { data, error, isLoading, mutate, reset, isSuccess } = mutation;
 
   if (isSuccess) {
-    notification.success({ message: "Evento cadastrado com sucesso!" });
+    notification.success({ message: "Evento atualizado com sucesso!" });
     reset();
-    navigate("/eventos");
+    navigate(-1);
   }
   if (error) {
     notification.error({
-      message: "Não foi possível cadastrar o evento.",
+      message: "Não foi possível atualizar o evento.",
       description: (error as any)?.response?.data?.message,
     });
     reset();

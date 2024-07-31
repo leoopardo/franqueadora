@@ -14,10 +14,12 @@ import { CreateSectorModal } from "./createSubSector";
 
 interface SectorFirstStepProps {
   setHaveSubSectors: Dispatch<SetStateAction<boolean>>;
+  updateData?: any;
 }
 
 export const SectorFirstStep = ({
   setHaveSubSectors,
+  updateData,
 }: SectorFirstStepProps) => {
   const stepOneRef = useRef<ProFormInstance>();
   const waitTime = (_values: any) => {
@@ -30,19 +32,25 @@ export const SectorFirstStep = ({
   const [tableParams, setTableParams] = useState<any>({
     page: 1,
     size: 20,
-    totalItems: stepOneRef?.current?.getFieldValue("sub-sectors")?.length,
+    totalItems: stepOneRef?.current?.getFieldValue("sub_sectors")?.length,
   });
   const [data, setData] = useState<any[]>(
-    stepOneRef?.current?.getFieldValue("sub-sectors") || []
+    stepOneRef?.current?.getFieldValue("sub_sectors") || []
   );
+  const [updateSubSectorData, setUpdateSubSectorData] = useState<any>();
 
   useEffect(() => {
-    if (data.length >= 1) {
+    if (data?.length >= 1) {
       setHaveSubSectors(true);
     } else {
       setHaveSubSectors(false);
     }
   }, [data]);
+
+  useEffect(() => {
+    stepOneRef.current?.setFieldsValue({ ...updateData });
+    setData(updateData?.["sub_sectors"] ?? []);
+  }, [updateData]);
 
   return (
     <StepsForm.StepForm<{
@@ -61,7 +69,7 @@ export const SectorFirstStep = ({
         const fields = stepOneRef?.current?.getFieldsError();
 
         const firstErrorField = fields?.find(
-          (field: any) => field.errors.length > 0
+          (field: any) => field?.errors?.length > 0
         );
 
         if (firstErrorField) {
@@ -71,8 +79,15 @@ export const SectorFirstStep = ({
           });
         }
       }}
+      initialValues={updateData}
     >
       <Row style={{ width: "100%", marginTop: -40 }} gutter={8}>
+        <Col span={24}   style={{ display: "none" }}>
+          <ProFormField
+          
+            name={"key"}
+          />
+        </Col>
         <Col span={24}>
           <ProFormField
             rules={[{ required: true }]}
@@ -176,7 +191,7 @@ export const SectorFirstStep = ({
             }}
           >
             <Typography.Title level={5}>Sub-Setores</Typography.Title>
-            {data.length >= 1 && (
+            {data?.length >= 1 && (
               <Button
                 shape="round"
                 onClick={() => {
@@ -191,7 +206,7 @@ export const SectorFirstStep = ({
             key: string;
             active: boolean;
             name: string;
-            "sub-sectors": any[];
+            "sub_sectors": any[];
           }>
             data={{
               items: data,
@@ -205,18 +220,19 @@ export const SectorFirstStep = ({
               {
                 label: "Editar",
                 onClick(RowItemI) {
-                  console.log("RowItemI", RowItemI);
+                  setUpdateSubSectorData(RowItemI);
+                  setCreateSectorModalIsOpen(true);
                 },
               },
               {
                 label: "Excluir",
                 onClick(RowItemI) {
                   stepOneRef?.current?.setFieldValue(
-                    "sub-sectors",
+                    "sub_sectors",
                     data.filter((item) => item.key !== RowItemI?.key)
                   );
                   setData((state) =>
-                    state.filter((item) => item.key !== RowItemI?.key)
+                    state?.filter((item) => item.key !== RowItemI?.key)
                   );
                 },
               },
@@ -243,6 +259,7 @@ export const SectorFirstStep = ({
         setOpen={setCreateSectorModalIsOpen}
         setDataSource={setData}
         formRef={stepOneRef.current}
+        updateData={updateSubSectorData}
       />
     </StepsForm.StepForm>
   );

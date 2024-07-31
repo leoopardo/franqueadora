@@ -37,8 +37,8 @@ export const CreateEvent = () => {
             agreements_type: undefined,
             type: "PRESENCIAL",
             location: body.location.substring(0, 49),
-            latitude: `${body.latitude}`,
-            longitude: `${body.longitude}`,
+            latitude: body.latitude && `${body.latitude}`,
+            longitude: body.latitude && `${body.longitude}`,
             DaysData: body?.DaysData?.map((day: any) => ({
               end_time: moment(day.end_time).toISOString(),
               start_time: moment(day.start_time).toISOString(),
@@ -51,6 +51,7 @@ export const CreateEvent = () => {
               ...body.pub,
               add_waiter_comission: body.add_waiter_comission,
               accept_cashless: body.accept_cashless,
+              menu_ids: body.pub.menus?.map((menu: any) => menu.id),
             },
           });
         }}

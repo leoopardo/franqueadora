@@ -2,74 +2,67 @@ import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import defaultTheme from "@styles/default";
 import { Col, Modal, Row, Typography } from "antd";
 import { motion } from "framer-motion";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
-import { SectorFirstStep } from "./sectorFirstStep";
-import { SectorPaymentsStep } from "./sectorPaymentsStep";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { MenuStepOne } from "./stepOne";
 
-interface CreateSectorModalProps {
+interface CreateMenuModalProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
   formRef?: ProFormInstance;
   setDataSource: Dispatch<SetStateAction<any[]>>;
   updateData?: any;
   setUpdateData?: Dispatch<SetStateAction<any>>;
-  dataSource: any[];
+  stepperRef?: ProFormInstance;
 }
 
-export const CreateSectorModal = ({
+export const CreateMenuModal = ({
   open,
   setOpen,
   formRef,
-  setDataSource,
+  // setDataSource,
   updateData,
   setUpdateData,
-}: CreateSectorModalProps) => {
+  stepperRef,
+}: CreateMenuModalProps) => {
   const [step, setStep] = useState<number>(1);
-  const [width, setWidth] = useState<number>((100 / 2) * 1);
+  const [width, setWidth] = useState<number>((100 / 3) * 1);
   const sectorFormRef = useRef<ProFormInstance>();
-  const [haveSubSectors, setHaveSubSectors] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (sectorFormRef?.current?.getFieldValue("sub_sectors")?.length >= 1) {
-      setStep(1);
-      setWidth((100 / 1) * 1);
-      setHaveSubSectors(true);
-    }
-  }, [sectorFormRef?.current?.getFieldValue("sub_sectors")]);
+  const waitTime = (_values: any) => {
+    // console.log("values", values);
 
-  const waitTime = (values: any) => {
-    const sectors = Array.isArray(formRef?.getFieldValue(["pub", "sectors"]))
-      ? formRef?.getFieldValue(["pub", "sectors"])
-      : [];
+    // const menus = Array.isArray(formRef?.getFieldValue(["pub", "menus"]))
+    //   ? formRef?.getFieldValue(["pub", "menus"])
+    //   : [];
 
-    if (updateData) {
-      sectors.splice(updateData.key - 1, 1, {
-        ...values,
-        active: true,
-        terminal_user_ids: [],
-        terminals: [],
-      });
-      setDataSource(sectors);
-      formRef?.setFieldValue(["pub", "sectors"], sectors);
-      return new Promise<boolean>((resolve) => {
-        setUpdateData && setUpdateData(undefined);
-        setOpen(false);
-        return resolve(true);
-      });
-    }
-    sectors.push({
-      ...values,
-      active: true,
-      terminal_user_ids: [],
-      terminals: [],
-      key: sectors?.length + 1,
-    });
-    setDataSource((state) => [
-      ...sectors,
-      { ...values, active: true, key: state?.length + 1 },
-    ]);
+    // if (updateData) {
+    //   menus.splice(updateData.key - 1, 1, {
+    //     ...values,
+    //     active: true,
+    //     terminal_user_ids: [],
+    //     terminals: [],
+    //   });
+    //   setDataSource(menus);
+    //   formRef?.setFieldValue(["pub", "menus"], menus);
+    //   return new Promise<boolean>((resolve) => {
+    //     setUpdateData && setUpdateData(undefined);
+    //     setOpen(false);
+    //     return resolve(true);
+    //   });
+    // }
 
-    formRef?.setFieldValue(["pub", "sectors"], sectors);
+    // setDataSource((state) => {
+    //   menus.push({
+    //     ...values,
+    //     active: true,
+    //     terminal_user_ids: [],
+    //     terminals: [],
+    //     key: state.length + 1,
+    //   });
+    //   return [...state, { ...values, active: true, key: state.length + 1 }];
+    // });
+
+    // formRef?.setFieldValue(["pub", "menus"], menus);
 
     return new Promise<boolean>((resolve) => {
       setUpdateData && setUpdateData(undefined);
@@ -99,15 +92,18 @@ export const CreateSectorModal = ({
                   color: "rgb(150, 150, 150)",
                 }}
               >
-                Passo {step} de {haveSubSectors ? "1" : "2"}
+                Passo {step} de 3
               </Typography.Text>
               <Typography.Title level={4} style={{ margin: 0 }}>
-                {updateData ? "Editar" : "Cadastrar"} setor
+                {updateData ? "Editar" : "Cadastrar"} cardápio
                 {updateData && `: ${updateData?.name}`}
               </Typography.Title>
               <Typography.Text style={{ lineHeight: 0, fontWeight: 400 }}>
-                Insira as informações do setor para{" "}
-                {updateData ? "editar o setor" : "cadastrar um novo setor"}.
+                Insira as informações para{" "}
+                {updateData
+                  ? "editar o cardápio"
+                  : "cadastrar um novo cardápio"}
+                .
               </Typography.Text>
             </Col>
           </Row>
@@ -149,21 +145,8 @@ export const CreateSectorModal = ({
         setUpdateData && setUpdateData(undefined);
       }}
       okButtonProps={{ shape: "round" }}
-      okText={
-        (!sectorFormRef?.current?.getFieldValue("sub_sectors") ||
-          sectorFormRef?.current?.getFieldValue("sub_sectors")?.length === 0) &&
-        step === 1
-          ? "Próximo"
-          : updateData
-            ? "Editar"
-            : "Cadastrar"
-      }
-      cancelText={
-        sectorFormRef?.current?.getFieldValue("sub_sectors")?.length >= 1 ||
-        step === 1
-          ? "Cancelar"
-          : "Voltar"
-      }
+      okText={step === 3 ? "Cadastrar" : "Próximo"}
+      cancelText={step === 1 ? "Cancelar" : "Voltar"}
       cancelButtonProps={{ shape: "round", type: "default", danger: true }}
       styles={{
         content: { padding: 0 },
@@ -201,13 +184,11 @@ export const CreateSectorModal = ({
           paddingBottom: 24,
         }}
       >
-        <SectorFirstStep
-          setHaveSubSectors={setHaveSubSectors}
+        <MenuStepOne
           updateData={updateData}
+          formRef={formRef}
+          stepperRef={stepperRef}
         />
-        {(!sectorFormRef?.current?.getFieldValue("sub_sectors") ||
-          sectorFormRef?.current?.getFieldValue("sub_sectors")?.length ===
-            0) && <SectorPaymentsStep />}
       </StepsForm>
     </Modal>
   );

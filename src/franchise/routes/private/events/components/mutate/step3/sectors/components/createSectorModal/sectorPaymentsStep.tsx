@@ -56,7 +56,7 @@ export const SectorPaymentsStep = () => {
       const newMethod: PaymentType = {
         id: `${Date.now()}`, // Temporarily using timestamp as id
         name: newMethodName as any,
-        order: paymentMethods.length + 1,
+        order: paymentMethods?.length + 1,
       };
       setPaymentMethods([...paymentMethods, newMethod]);
       setIsAdding(false);
@@ -96,7 +96,7 @@ export const SectorPaymentsStep = () => {
         const fields = stepOneRef?.current?.getFieldsError();
 
         const firstErrorField = fields?.find(
-          (field: any) => field.errors.length > 0
+          (field: any) => field?.errors?.length > 0
         );
 
         if (firstErrorField) {

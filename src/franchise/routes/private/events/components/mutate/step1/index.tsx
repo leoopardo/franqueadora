@@ -42,9 +42,10 @@ export const StepOne = () => {
       "start_hour",
       "end_date",
       "end_hour",
+      "name"
     ],
     localization: ["location"],
-    agreements: ["agreements_type"],
+    agreements: ["agreement"],
   };
 
   return (
@@ -113,6 +114,7 @@ export const StepOne = () => {
             const firstErrorField = fields?.find(
               (field: any) => field.errors.length > 0
             );
+
             console.log(firstErrorField);
 
             if (menus.config.includes(firstErrorField?.name[0] as any)) {
@@ -125,10 +127,15 @@ export const StepOne = () => {
               setActiveKey("agreements");
             }
             if (firstErrorField) {
-              stepOneRef?.current?.scrollToField(firstErrorField.name[0], {
-                behavior: "smooth",
-                block: "center",
-              });
+              setTimeout(() => {
+                stepOneRef?.current?.scrollToField(
+                  firstErrorField.name[0],
+                  {
+                    behavior: "smooth",
+                    block: "center",
+                  }
+                );
+              }, 1000);
             }
           }}
         >

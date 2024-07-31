@@ -84,7 +84,7 @@ export const Events = () => {
               <li key={index}>
                 <Tag
                   color={defaultTheme["primary-300"]}
-                  onClick={() => navigate(`/eventos/editar/${event.id}`)}
+                  onClick={() => navigate(`/eventos/edição`, { state: event })}
                 >
                   {event.name}
                 </Tag>
@@ -109,7 +109,7 @@ export const Events = () => {
               <li key={index}>
                 <Tag
                   color={defaultTheme["primary-300"]}
-                  onClick={() => navigate(`/eventos/editar/${event.id}`)}
+                  onClick={() => navigate(`/eventos/edição`, { state: event })}
                 >
                   {event.name}
                 </Tag>
@@ -179,7 +179,12 @@ export const Events = () => {
             { label: "Tabela", value: "board" },
             { label: "Calendário", value: "calendar" },
           ]}
-          onChange={(value) => setViewType(value)}
+          onChange={(value) => {
+            setViewType(value);
+            value === "calendar"
+              ? setParams((state) => ({ ...state, page: 1, size: 1000 }))
+              : setParams((state) => ({ ...state, page: 1, size: 15 }));
+          }}
           value={viewType}
         />
       </Col>

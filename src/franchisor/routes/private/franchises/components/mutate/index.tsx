@@ -100,13 +100,16 @@ export const MutateFranchise = ({
             cpf: values?.master?.cpf
               ? values?.master?.cpf?.replace(/\D/g, "")
               : undefined,
-              cellphone: values?.master?.cellphone
+            cellphone: values?.master?.cellphone
               ? values?.master?.cellphone?.replace(/\D/g, "")
               : undefined,
             terminal_password: values?.master?.terminal_password
               ? `${values?.master?.terminal_password}`
               : undefined,
             confirm_password: undefined,
+            phone: values?.master?.phone
+            ? values?.master?.phone?.replace(/\D/g, "")
+            : undefined,
           },
           state_registration: values?.state_registration
             ? `${values?.state_registration}`
@@ -136,8 +139,8 @@ export const MutateFranchise = ({
           cpf: values?.master?.cpf
             ? values?.master?.cpf?.replace(/\D/g, "")
             : undefined,
-            cellphone: values?.master?.cellphone
-            ? values?.master?.cellphone?.replace(/\D/g, "")
+          phone: values?.master?.phone
+            ? values?.master?.phone?.replace(/\D/g, "")
             : undefined,
           terminal_password: values?.master?.terminal_password
             ? `${values?.master?.terminal_password}`
@@ -149,7 +152,7 @@ export const MutateFranchise = ({
           : undefined,
         contacts: [],
         agreement: agreements,
-        agreements: undefined, 
+        agreements: undefined,
         licenses,
       });
       resolve(true);
@@ -179,7 +182,7 @@ export const MutateFranchise = ({
       email: "",
       name: "",
       password: "",
-      cellphone: "",
+      phone: "",
       terminal_password: "",
       username: "",
     },

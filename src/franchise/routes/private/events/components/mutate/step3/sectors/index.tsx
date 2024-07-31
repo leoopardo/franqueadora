@@ -3,7 +3,7 @@ import TableComponent from "@components/table/tableComponent";
 import { Squares2X2Icon } from "@heroicons/react/24/outline";
 import defaultTheme from "@styles/default";
 import { Button, Card, Col, Divider, Row, Switch } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CreateSectorModal } from "./components/createSectorModal";
 interface ConfigI {
   formRef?: ProFormInstance;
@@ -21,7 +21,17 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
   const [data, setData] = useState<any[]>(
     formRef?.getFieldValue(["pub", "sectors"]) || []
   );
+  const [updateData, setUpdateData] = useState<any>();
 
+  useEffect(() => {
+    setData(formRef?.getFieldValue(["pub", "sectors"]));
+  }, [formRef?.getFieldsValue()]);
+
+  useEffect(() => {
+    if (updateData) {
+      setCreateSectorModalIsOpen(true);
+    }
+  }, [updateData]);
 
   return (
     <Card style={{ width: "100%", display: hidden ? "none" : undefined }}>
@@ -36,7 +46,7 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
             Setores do evento
           </Divider>
         </Col>
-        {data.length >= 1 && (
+        {data?.length >= 1 && (
           <Col
             span={24}
             style={{ display: "flex", flexDirection: "row-reverse" }}
@@ -76,6 +86,7 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
               {
                 label: "Editar",
                 onClick(RowItemI) {
+                  setUpdateData(RowItemI);
                   console.log("RowItemI", RowItemI);
                 },
               },
@@ -84,10 +95,14 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
                 onClick(RowItemI) {
                   formRef?.setFieldValue(
                     ["pub", "sectors"],
-                    data.filter((item) => item.key !== RowItemI?.key)
+                    formRef
+                      ?.getFieldValue(["pub", "sectors"])
+                      ?.filter((item: any) => item.key !== RowItemI?.key)
                   );
-                  setData((state) =>
-                    state.filter((item) => item.key !== RowItemI?.key)
+                  setData(
+                    formRef
+                      ?.getFieldValue(["pub", "sectors"])
+                      ?.filter((item: any) => item.key !== RowItemI?.key)
                   );
                 },
               },
@@ -121,6 +136,9 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
           setOpen={setCreateSectorModalIsOpen}
           formRef={formRef}
           setDataSource={setData}
+          dataSource={data}
+          updateData={updateData}
+          setUpdateData={setUpdateData}
         />
       )}
     </Card>

@@ -34,8 +34,6 @@ const Dark: ThemeConfig = {
 
     Button: {
       colorTextLightSolid: "rgba(0, 0, 0, 0.88)",
-      fontWeight: 500,
-      controlHeightLG: 38,
       boxShadowSecondary: "none",
       primaryShadow: "none",
       dangerShadow: "none",

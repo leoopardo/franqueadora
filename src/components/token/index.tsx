@@ -4,9 +4,8 @@ import { getMeI } from "@franchisor/services/auth/useGetMe";
 import { QueryKeys } from "@franchisor/services/queryKeys";
 import { useSendToken } from "@franchisor/services/token/sendToken";
 import { useValidateToken } from "@franchisor/services/token/validateToken";
-import { Avatar, Button, Input, Modal, Typography } from "antd";
+import { Button, Input, Modal, Typography } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useTheme } from "../../contexts/themeContext";
 import { queryClient } from "../../services/queryClient";
 import defaultTheme from "../../styles/default";
 
@@ -30,13 +29,9 @@ export const TokenModal = ({
   const { mutate } = useSendToken();
   const validate = useValidateToken({ onSuccess });
 
-  const { theme } = useTheme();
-
   useEffect(() => {
     if (changeChannel) mutate();
   }, [changeChannel]);
-
-  console.log(queryClient.getQueryData(QueryKeys.GET_ME) as getMeI);
 
   return (
     <Modal
@@ -97,105 +92,49 @@ export const TokenModal = ({
             defaultValue={changeChannel}
           >
             <CheckCard
-              title={
-                <Typography
-                  style={{
-                    color:
-                      theme === "light"
-                        ? "#000"
-                        : changeChannel === "email"
-                          ? "#000"
-                          : "#fff",
-                  }}
-                >
-                  Enviar token por e-mail
-                </Typography>
-              }
+              title={<Typography>Enviar token por e-mail</Typography>}
               description={
-                <Typography
-                  style={{
-                    color:
-                      theme === "light"
-                        ? "#000"
-                        : changeChannel === "email"
-                          ? "#000"
-                          : "#fff",
-                  }}
-                >
+                <Typography>
                   Receba um token de autênticação de acesso por e-mail.
                 </Typography>
               }
               value="email"
               style={{
+                backgroundColor:
+                  changeChannel === "email"
+                    ? defaultTheme["primary-300"]
+                    : undefined,
                 width: "100%",
               }}
               avatar={
-                <Avatar
-                  size="large"
+                <MailOutlined
                   style={{
-                    backgroundColor:
-                      changeChannel === "email"
-                        ? defaultTheme.primary
-                        : undefined,
+                    fontSize: "24px",
                   }}
-                >
-                  <MailOutlined
-                    style={{
-                      fontSize: "24px",
-                    }}
-                  />
-                </Avatar>
+                />
               }
             />
             <CheckCard
-              title={
-                <Typography
-                  style={{
-                    color:
-                      theme === "light"
-                        ? "#000"
-                        : changeChannel === "sms"
-                          ? "#000"
-                          : "#fff",
-                  }}
-                >
-                  Enviar token por SMS
-                </Typography>
-              }
+              title={<Typography>Enviar token por SMS</Typography>}
               description={
-                <Typography
-                  style={{
-                    color:
-                      theme === "light"
-                        ? "#000"
-                        : changeChannel === "sms"
-                          ? "#000"
-                          : "#fff",
-                  }}
-                >
+                <Typography>
                   Receba um token de autênticação de acesso por SMS.
                 </Typography>
               }
               value="sms"
               style={{
                 width: "100%",
+                backgroundColor:
+                  changeChannel === "sms"
+                    ? defaultTheme["primary-300"]
+                    : undefined,
               }}
               avatar={
-                <Avatar
-                  size="large"
+                <MessageOutlined
                   style={{
-                    backgroundColor:
-                      changeChannel === "sms"
-                        ? defaultTheme.primary
-                        : undefined,
+                    fontSize: "24px",
                   }}
-                >
-                  <MessageOutlined
-                    style={{
-                      fontSize: "24px",
-                    }}
-                  />
-                </Avatar>
+                />
               }
             />
           </CheckCard.Group>

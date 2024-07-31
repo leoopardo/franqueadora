@@ -11,8 +11,13 @@ import { Card, Col, Menu, Row } from "antd";
 import { useRef, useState } from "react";
 import { Config } from "./configs";
 import { Sectors } from "./sectors";
+import { Menus } from "./menus";
 
-export const StepThree = () => {
+interface StepThreeProps {
+  stepperRef?: ProFormInstance;
+}
+
+export const StepThree = ({ stepperRef }: StepThreeProps) => {
   const [activeKey, setActiveKey] = useState<string>("configs");
   const stepOneRef = useRef<ProFormInstance>();
   const { isSm } = useBreakpoints();
@@ -150,6 +155,11 @@ export const StepThree = () => {
           <Sectors
             formRef={stepOneRef.current}
             hidden={activeKey !== "sectors"}
+          />
+          <Menus
+            formRef={stepOneRef.current}
+            stepperRef={stepperRef}
+            hidden={activeKey !== "menus"}
           />
         </StepsForm.StepForm>
       </Col>

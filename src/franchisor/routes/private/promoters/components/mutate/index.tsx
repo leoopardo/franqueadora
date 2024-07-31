@@ -124,7 +124,7 @@ export const MutatePromoter = ({
       email: "",
       name: "",
       password: "",
-      cellphone: "",
+      phone: "",
       terminal_password: "",
       username: "",
     },
