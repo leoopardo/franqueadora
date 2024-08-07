@@ -4,7 +4,9 @@ import {
   ProductParams,
   ProductType,
 } from "@franchise/services/service_orders/products/_interfaces/products.interface";
+import { useActivateProduct } from "@franchise/services/service_orders/products/activateProducts";
 import { useDeleteProduct } from "@franchise/services/service_orders/products/deleteProduct";
+import { useInactivateProduct } from "@franchise/services/service_orders/products/inactivateProduct";
 import { useListProducts } from "@franchise/services/service_orders/products/listProducts";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
@@ -30,6 +32,8 @@ export const Products = () => {
   const { isSm } = useBreakpoints();
   const navigate = useNavigate();
   const deleteProduct = useDeleteProduct();
+  const inactivate = useInactivateProduct();
+  const activate = useActivateProduct();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -142,21 +146,21 @@ export const Products = () => {
                   description={`Tem certeza que deseja ${row.active ? "inativar" : "ativar"} o produto?`}
                   okText={`Sim, ${row.active ? "inativar" : "ativar"}`}
                   cancelText="Não, cancelar."
-                  // onConfirm={() => {
-                  //   row.active
-                  //     ? inactivate.mutate({
-                  //         body: { active: false },
-                  //         id: row.id ?? "",
-                  //       })
-                  //     : activate.mutate({
-                  //         body: { active: true },
-                  //         id: row.id ?? "",
-                  //       });
-                  // }}
+                  onConfirm={() => {
+                    row.active
+                      ? inactivate.mutate({
+                          body: { active: false },
+                          id: row.id ?? "",
+                        })
+                      : activate.mutate({
+                          body: { active: true },
+                          id: row.id ?? "",
+                        });
+                  }}
                 >
                   <Switch
                     checked={row?.active || false}
-                    //   loading={inactivate.isLoading || activate.isLoading}
+                    loading={inactivate.isLoading || activate.isLoading}
                   />
                 </Popconfirm>
               ),

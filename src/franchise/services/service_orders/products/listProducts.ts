@@ -16,9 +16,9 @@ export const useListProducts = (params: ProductParams) => {
   >(
     [QueryKeys.LIST_PRODUCTS, params, headers],
     async () => {
-      const response = await apiPortalEvent.get(`/product`, {
+      const response = await apiPortalEvent.get(`/product/all`, {
         headers: { ...headers },
-        params: { orderBy: "created_at", orderDirection: "desc", ...params },
+        params: { orderBy: "name", orderDirection: "asc", ...params },
       });
       const parsedResponse = ProductResponseSchema.safeParse(response.data);
       if (!parsedResponse.success) {
