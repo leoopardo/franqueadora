@@ -1,7 +1,7 @@
 export const parseImageDataFromFile: any = async (file: File) => {
   console.log(file);
   
-  const logo_image_extension = `.${file.name.split(".")[1]}`;
+  const logo_image_extension = `.${file?.name?.split(".")[1]}`;
   const arrayBuffer = await readFileAsArrayBuffer(file);
   const logo_image = Array.from(new Uint8Array(arrayBuffer as any));
 
