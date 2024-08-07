@@ -1,25 +1,20 @@
 import {
-  ArchiveBoxXMarkIcon,
-  BellAlertIcon,
   CalculatorIcon,
   CalendarDaysIcon,
-  DocumentIcon,
   DocumentTextIcon,
   MegaphoneIcon,
-  Squares2X2Icon,
-  TicketIcon,
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 
 export const MenuItens = (pending: number) => {
   return [
-    {
-      key: "dashboard",
-      name: "Dashboard",
-      path: "/dashboard",
-      icon: <Squares2X2Icon width={24} />,
-      disabled: true,
-    },
+    // {
+    //   key: "dashboard",
+    //   name: "Dashboard",
+    //   path: "/dashboard",
+    //   icon: <Squares2X2Icon width={24} />,
+    //   disabled: true,
+    // },
     {
       key: "promotores",
       name: "Promotores",
@@ -62,20 +57,20 @@ export const MenuItens = (pending: number) => {
         },
       ],
     },
-    {
-      key: "cancelamentos",
-      name: "Cancelamentos",
-      path: "/cancelamentos",
-      icon: <ArchiveBoxXMarkIcon width={24} />,
-      disabled: true,
-    },
-    {
-      key: "notificações",
-      name: "Notificações",
-      path: "/notificações",
-      icon: <BellAlertIcon width={24} />,
-      disabled: true,
-    },
+    // {
+    //   key: "cancelamentos",
+    //   name: "Cancelamentos",
+    //   path: "/cancelamentos",
+    //   icon: <ArchiveBoxXMarkIcon width={24} />,
+    //   disabled: true,
+    // },
+    // {
+    //   key: "notificações",
+    //   name: "Notificações",
+    //   path: "/notificações",
+    //   icon: <BellAlertIcon width={24} />,
+    //   disabled: true,
+    // },
     {
       key: "fichas",
       name: "Fichas",
@@ -104,19 +99,19 @@ export const MenuItens = (pending: number) => {
         },
       ],
     },
-    {
-      key: "ingressos",
-      name: "Ingressos",
-      path: "/ingressos",
-      icon: <TicketIcon width={24} />,
-      disabled: true,
-    },
-    {
-      key: "reports",
-      name: "Relatórios",
-      path: "/reports",
-      icon: <DocumentIcon width={24} />,
-      disabled: true,
-    },
+    // {
+    //   key: "ingressos",
+    //   name: "Ingressos",
+    //   path: "/ingressos",
+    //   icon: <TicketIcon width={24} />,
+    //   disabled: true,
+    // },
+    // {
+    //   key: "reports",
+    //   name: "Relatórios",
+    //   path: "/reports",
+    //   icon: <DocumentIcon width={24} />,
+    //   disabled: true,
+    // },
   ];
 };

@@ -19,6 +19,7 @@ const envs = {
       AWS_REGION: import.meta.env.VITE_FRANCHISE_AWS_REGION,
     },
   },
+  S3_IMAGES_URL: import.meta.env.VITE_API_S3_IMAGES_URL,
 };
 
 export default envs;

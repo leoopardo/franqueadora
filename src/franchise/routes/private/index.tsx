@@ -1,13 +1,17 @@
 import { Button, Result } from "antd";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { BaseLayout } from "./BaseLayout";
 import { Loading } from "./components/loading";
 import { Events } from "./events";
 import { CreateEvent } from "./events/create";
 import { UpdateEvent } from "./events/update";
+import { Products } from "./service_orders/products";
 import { Terminals } from "./terminals";
+import { CreateProduct } from "./service_orders/products/create";
+import { UpdateProduct } from "./service_orders/products/update";
 
 export const PrivateRoutes = () => {
+  const navigate = useNavigate();
   return (
     <Routes>
       <Route path="/" element={<BaseLayout />}>
@@ -20,6 +24,13 @@ export const PrivateRoutes = () => {
         <Route path="terminais">
           <Route index element={<Terminals />} />
         </Route>
+        <Route path="/fichas">
+          <Route path="produtos">
+            <Route index element={<Products />} />
+            <Route path="cadastro" element={<CreateProduct />} />
+            <Route path="edição" element={<UpdateProduct />} />
+          </Route>
+        </Route>
 
         <Route
           path="*"
@@ -28,7 +39,11 @@ export const PrivateRoutes = () => {
               status="404"
               title="404"
               subTitle="Desculpa, essa página não existe."
-              extra={<Button type="default">Voltar para o início</Button>}
+              extra={
+                <Button type="default" onClick={() => navigate(-1)}>
+                  Voltar
+                </Button>
+              }
             />
           }
         />

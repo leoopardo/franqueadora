@@ -179,7 +179,7 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
               style={{ width: "100%" }}
             />
           </Col>
-          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 12 }}>
             <ProFormSelect
               name="timezone_id"
               label="Fuso horário"
@@ -192,7 +192,7 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
               }))}
             />
           </Col>
-          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 12 }}>
             <ProFormSelect
               name="currency_type"
               label="Tipo de moeda"

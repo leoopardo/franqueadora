@@ -66,7 +66,9 @@ export const Events = () => {
     setParams((state) => ({
       ...state,
       s: value,
-      f: ["franchise_name", "cnpj", "ref_id", "username"],
+      f: "sub_name,Event.name,Event.Client.name,Event.Client.document,Event.Promoter.name,Event.Promoter.document,Event.Modules.POSModule.name".split(
+        ","
+      ),
     }));
   }, 500);
 
