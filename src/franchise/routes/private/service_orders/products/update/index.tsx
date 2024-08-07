@@ -1,10 +1,14 @@
-import { useCreateProduct } from "@franchise/services/service_orders/products/createProduct";
-import { MutateProduct } from "../components/mutate";
 import { CreateProductType } from "@franchise/services/service_orders/products/_interfaces/create_product.interface";
+import { useGetProductById } from "@franchise/services/service_orders/products/getProductById";
+import { useUpdateProduct } from "@franchise/services/service_orders/products/updateProduct";
 import { parseImageDataFromFile } from "@utils/buffer_blob_utils";
+import { useLocation } from "react-router-dom";
+import { MutateProduct } from "../components/mutate";
 
-export const CreateProduct = () => {
-  const { mutate } = useCreateProduct();
+export const UpdateProduct = () => {
+  const { state } = useLocation();
+  const { mutate } = useUpdateProduct(state.id);
+  const { data, isLoading } = useGetProductById(state?.id);
 
   const blobUrlToFile = async (
     blobUrl: string,
@@ -20,13 +24,19 @@ export const CreateProduct = () => {
     return file;
   };
 
+  console.log("data", data);
+
   return (
     <div>
       <MutateProduct
-        title="Cadastro de produtos"
-        subtitle="Preencha todos os campos para adicionar um novo produto"
+        title={`Edição de produto: ${data?.name}`}
+        subtitle="Altere os campos desejados para editar o produto"
         mutate={async (body: CreateProductType) => {
           let image: any;
+
+          if (body?.image.includes("product_images")) {
+            image = undefined;
+          }
           if (typeof body?.image === "string") {
             image = await parseImageDataFromFile(
               await blobUrlToFile(body?.image, "image.png")
@@ -36,16 +46,22 @@ export const CreateProduct = () => {
               ? await parseImageDataFromFile(body?.image?.file?.originFileObj)
               : null;
           }
-          console.log(body);
+          console.log(image);
 
           mutate({
             ...body,
-            image: image?.image,
-            image_extension: image?.image_extension,
+            image: body?.image.includes("product_images")
+              ? undefined
+              : image?.image,
+            image_extension: body?.image.includes("product_images")
+              ? undefined
+              : image?.image_extension,
             code: +body.code,
-            consumption_unit_id: body.consumption_unit_id,
           });
         }}
+        initialValues={data}
+        loading={isLoading}
+        update
       />
     </div>
   );

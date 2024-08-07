@@ -4,8 +4,11 @@ import {
   ProFormField,
   ProFormInstance,
   ProFormRadio,
+  ProFormSelect,
 } from "@ant-design/pro-components";
 import { TokenModal } from "@franchise/components/token";
+import { useGetAvaliableProductCode } from "@franchise/services/service_orders/products/getAvaliableProductCode";
+import { useGetUnits } from "@franchise/services/service_orders/products/getProductUnits";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 import {
   ArrowUpOnSquareIcon,
@@ -15,7 +18,17 @@ import {
 } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
-import { Button, Col, Row, Tooltip, Typography, Upload } from "antd";
+import { getRelativeImagePath } from "@utils/gerRelativeImagePath";
+import {
+  Button,
+  Col,
+  Input,
+  Row,
+  Space,
+  Tooltip,
+  Typography,
+  Upload,
+} from "antd";
 import { UploadType } from "antd/es/upload/interface";
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -35,6 +48,64 @@ interface mutateI {
   agreements?: AgreementType[];
 }
 
+const generateImage = async (prompt: string): Promise<string> => {
+  const apiKey = import.meta.env.VITE_AI_KEY; // Substitua pela sua chave de API do DeepAI
+  const response = await fetch(
+    "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4",
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ inputs: prompt }),
+    }
+  );
+
+  if (!response.ok) {
+    throw new Error(`Erro: ${response.statusText}`);
+  }
+
+  // Verifique o tipo de resposta para ver se é uma imagem
+  const contentType = response.headers.get("Content-Type");
+  if (contentType?.startsWith("image/")) {
+    // Converter a resposta binária em URL de imagem
+    const blob = await response.blob();
+    console.log(blob);
+
+    const imageUrl = URL.createObjectURL(blob);
+    return imageUrl;
+  } else {
+    // Se for JSON, processar como JSON
+    const data = await response.json();
+    return data.generated_image_url; // Ajuste conforme necessário
+  }
+};
+
+// const generateImageSecondary = async (prompt: string): Promise<string> => {
+//   const response = await fetch("https://api.openai.com/v1/images/generations", {
+//     method: "POST",
+//     headers: {
+//       Authorization: `Bearer ${apiKey}`,
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({
+//       "model": "dall-e-2",
+//       prompt: prompt, // A propriedade 'prompt' deve ser usada conforme a documentação da API
+//       n: 1, // Número de imagens a serem geradas
+//       size: "256x256", // Tamanho da imagem (opcional)
+//       quality: "standard"
+//     }),
+//   });
+
+//   if (!response.ok) {
+//     throw new Error(`Erro: ${response.statusText}`);
+//   }
+
+//   const data = await response.json();
+//   return data.data[0].url; // Ajuste conforme a estrutura de resposta da API
+// };
+
 export const MutateProduct = ({
   loading,
   title,
@@ -52,6 +123,11 @@ export const MutateProduct = ({
   const { isSm } = useBreakpoints();
   const [isTokenModalOpen, setIsTokenModalOpen] = useState<boolean>(false);
   const [files, setFiles] = useState<any[]>([]);
+  const { data } = useGetAvaliableProductCode();
+  const units = useGetUnits();
+  const [currType, setCurrType] = useState<string>("food");
+  const [imagePrompt, setImagePrompt] = useState<string>("");
+  const [generatingImage, setGeneratingImage] = useState<boolean>(false);
 
   const waitTime = (values: any) => {
     mutate(values);
@@ -63,14 +139,52 @@ export const MutateProduct = ({
   const initialFormValues: any = initialValues ?? {};
 
   useEffect(() => {
-    console.log("initialFormValues", initialFormValues);
-
     if (initialFormValues) {
       formRef.current?.setFieldsValue(initialFormValues);
     }
   }, [initialFormValues]);
 
-  console.log(formRef?.current?.getFieldValue("product_image"));
+  useEffect(() => {
+    if (initialValues) {
+      formRef.current?.setFieldsValue({ ...initialValues });
+      return;
+    }
+    formRef.current?.setFieldsValue({
+      type: "FOOD",
+      code: data?.available_code,
+      is_additional: false,
+    });
+  }, [data, initialValues]);
+
+  console.log(initialValues);
+
+  const unitByType = {
+    drink: ["Litros (l)", "Mililitros (ml)", "Unidade (un)"],
+  };
+
+  const handleGenerateImage = async () => {
+    setGeneratingImage(true);
+    try {
+      const imageUrl = await generateImage(imagePrompt);
+      console.log(imageUrl);
+
+      formRef.current?.setFieldValue("image", imageUrl);
+      setFiles([{ url: imageUrl }]);
+    } catch (error) {
+      console.error("Erro ao gerar imagem:", error);
+    }
+    setGeneratingImage(false);
+  };
+
+  const handleBeforeUpload = (file: any) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      file.thumbUrl = e?.target?.result;
+      setFiles([file]);
+    };
+    reader.readAsDataURL(file);
+    return false; // Impede o upload automático
+  };
 
   return (
     <Row justify="center" style={{ width: "100%" }}>
@@ -141,7 +255,7 @@ export const MutateProduct = ({
             minHeight: "70vh",
           }}
         >
-          <Col xs={{ span: 24 }} md={{ span: 12 }}>
+          <Col xs={{ span: 24 }} md={{ span: 24 }} lg={{ span: 12 }}>
             <ProForm
               formRef={formRef}
               onFinish={waitTime}
@@ -149,123 +263,195 @@ export const MutateProduct = ({
                 render: () => [],
               }}
               style={{ width: "100%" }}
+              initialValues={initialFormValues}
             >
               <Row
                 style={{
                   display: "flex",
-                  justifyContent: "center",
                   width: "100%",
                 }}
                 gutter={[8, 8]}
               >
-                <Col span={24}>
+                <Col span={15}>
                   <ProFormRadio.Group
                     name="type"
                     label="Tipo do produto"
                     options={[
-                      { label: "Alimentação", value: "food" },
-                      { label: "Bebida", value: "drink" },
-                      { label: "Diversos", value: "other" },
+                      { label: "Alimentação", value: "FOOD" },
+                      { label: "Bebida", value: "DRINK" },
+                      { label: "Diversos", value: "OTHER" },
                     ]}
+                    fieldProps={{
+                      size: "large",
+                      onChange: (e) => {
+                        setCurrType(e.target.value);
+                      },
+                    }}
+                  />
+                </Col>
+                <Col span={9}>
+                  <ProFormRadio.Group
+                    name="is_additional"
+                    label="Incluir produto como adicional?"
+                    options={[
+                      { label: "Não", value: false },
+                      { label: "Sim", value: true },
+                    ]}
+                    fieldProps={{
+                      size: "large",
+                      onChange: (e) => {
+                        setCurrType(e.target.value);
+                      },
+                    }}
                   />
                 </Col>
                 <Col span={24}>
-                  <ProForm.Item name="product_image" label="Imagem do produto">
-                    <Upload.Dragger
-                      ref={uploadRef as any}
-                      style={{
-                        height: 150,
-                        width: "100%",
-                        display: formRef?.current?.getFieldValue(
-                          "product_image"
-                        )
-                          ? "none"
-                          : undefined,
-                      }}
-                      accept="image/*"
-                      listType="picture-card"
-                      height={150}
-                      maxCount={1}
-                      onChange={(file) => setFiles(file.fileList)}
-                      showUploadList={{
-                        showDownloadIcon: true,
-                        downloadIcon: "Download",
-                        showRemoveIcon: true,
-                        removeIcon: (
-                          <TrashIcon
-                            height={20}
-                            style={{
-                              color: "#fff",
-                              backgroundColor: defaultTheme.primary,
-                            }}
-                          />
-                        ),
-                      }}
-                      fileList={files}
-                      itemRender={(_, file) => {
-                        return (
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "flex-end",
-                              gap: 8,
-                            }}
-                          >
-                            {" "}
-                            <img
-                              src={file.thumbUrl}
-                              alt={file.name}
+                  <ProForm.Item name="image" label="Imagem do produto">
+                    {`${formRef?.current?.getFieldValue("image")}`?.split(
+                      "/"
+                    )[0] !== "product_images" ? (
+                      <Upload.Dragger
+                        ref={uploadRef as any}
+                        style={{
+                          height: 150,
+                          width: "100%",
+                          display: formRef?.current?.getFieldValue("image")
+                            ? "none"
+                            : undefined,
+                        }}
+                        accept="image/*"
+                        height={150}
+                        maxCount={1}
+                        onChange={(file) => {
+                          setFiles(file.fileList);
+                          console.log(file);
+                        }}
+                        beforeUpload={handleBeforeUpload}
+                        showUploadList={{
+                          showDownloadIcon: true,
+                          downloadIcon: "Download",
+                          showRemoveIcon: true,
+                          removeIcon: (
+                            <TrashIcon
+                              height={20}
                               style={{
-                                height: "250px",
-                                width: "250px",
-                                objectFit: "cover",
-                                borderRadius: 12,
+                                color: "#fff",
+                                backgroundColor: defaultTheme.primary,
                               }}
                             />
-                            <Tooltip title="Remover">
-                              <Button
-                                size="large"
-                                type="text"
-                                danger
-                                onClick={() => {
-                                  setFiles([]);
-                                  formRef.current?.setFieldValue(
-                                    "product_image",
-                                    null
-                                  );
+                          ),
+                        }}
+                        fileList={files}
+                        itemRender={(_, file) => {
+                          return (
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "flex-end",
+                                gap: 8,
+                              }}
+                            >
+                              <img
+                                src={file?.thumbUrl || file?.url}
+                                alt={file.name}
+                                style={{
+                                  height: "250px",
+                                  width: "250px",
+                                  objectFit: "cover",
+                                  borderRadius: 12,
                                 }}
-                                icon={<TrashIcon height={24} />}
-                              ></Button>
-                            </Tooltip>
-                          </div>
-                        );
-                      }}
-                    >
-                      <ArrowUpOnSquareIcon
-                        width={40}
-                        style={{ color: defaultTheme.primary }}
-                      />
-                      <Typography.Title
-                        level={4}
-                        style={{ color: defaultTheme.primary }}
+                              />
+                              <Tooltip title="Remover">
+                                <Button
+                                  size="large"
+                                  type="text"
+                                  danger
+                                  onClick={() => {
+                                    setFiles([]);
+                                    formRef.current?.setFieldValue(
+                                      "image",
+                                      null
+                                    );
+                                  }}
+                                  icon={<TrashIcon height={24} />}
+                                ></Button>
+                              </Tooltip>
+                            </div>
+                          );
+                        }}
                       >
-                        Clique ou arraste uma imagem.
-                      </Typography.Title>
-                      <Typography.Text>
-                        Suporte imagens de até 5MB.
-                      </Typography.Text>
-                    </Upload.Dragger>
+                        <ArrowUpOnSquareIcon
+                          width={40}
+                          style={{ color: defaultTheme.primary }}
+                        />
+                        <Typography.Title
+                          level={4}
+                          style={{ color: defaultTheme.primary }}
+                        >
+                          Selecione ou arraste uma imagem.
+                        </Typography.Title>
+                        <Typography.Text>
+                          Suporta imagens de até 5MB.
+                        </Typography.Text>
+                      </Upload.Dragger>
+                    ) : (
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "flex-end",
+                          gap: 8,
+                        }}
+                      >
+                        <img
+                          src={getRelativeImagePath(
+                            formRef?.current?.getFieldValue("image")
+                          )}
+                          style={{
+                            height: "250px",
+                            width: "250px",
+                            objectFit: "cover",
+                            borderRadius: 12,
+                          }}
+                        />
+                        <Tooltip title="Remover">
+                          <Button
+                            size="large"
+                            type="text"
+                            danger
+                            onClick={() => {
+                              setFiles([]);
+                              formRef.current?.setFieldValue("image", null);
+                            }}
+                            icon={<TrashIcon height={24} />}
+                          ></Button>
+                        </Tooltip>
+                      </div>
+                    )}
+                  </ProForm.Item>
+                  <ProForm.Item
+                    help="Gere a imagem do produto com inteligência artificial, ou faça upload acima."
+                    style={{ marginBottom: 32 }}
+                  >
+                    <Space.Compact style={{ width: "100%" }} size="large">
+                      <Input
+                        value={imagePrompt}
+                        onChange={(e) => setImagePrompt(e.target.value)}
+                        placeholder="Digite um prompt para gerar a imagem"
+                        style={{ flex: 1 }}
+                        size="large"
+                      />
+                      <Button
+                        type="primary"
+                        onClick={handleGenerateImage}
+                        loading={generatingImage}
+                        size="large"
+                      >
+                        Gerar Imagem
+                      </Button>
+                    </Space.Compact>
                   </ProForm.Item>
                 </Col>{" "}
-                <Col
-                  xs={{ span: 24 }}
-                  md={{ span: 12 }}
-                  style={{
-                    marginTop: formRef?.current?.getFieldValue("product_image")
-                      ? "180px"
-                      : undefined,
-                  }}
-                >
+                <Col xs={{ span: 24 }} md={{ span: 12 }}>
                   <ProFormField
                     name="name"
                     label="Nome do produto"
@@ -274,20 +460,48 @@ export const MutateProduct = ({
                     placeholder={"Por favor, insira o nome do produto."}
                   />
                 </Col>
-                <Col
-                  xs={{ span: 24 }}
-                  md={{ span: 12 }}
-                  style={{
-                    marginTop: formRef?.current?.getFieldValue("product_image")
-                      ? "180px"
-                      : undefined,
-                  }}
-                >
+                <Col xs={{ span: 24 }} md={{ span: 12 }}>
                   <ProFormField
                     name="description"
                     label="Descrição"
                     fieldProps={{ size: "large" }}
                     placeholder={"Por favor, insira a descrição."}
+                  />
+                </Col>
+                <Col xs={{ span: 24 }} md={{ span: 12 }}>
+                  <ProFormField
+                    name="code"
+                    label="Código do produto"
+                    fieldProps={{ size: "large" }}
+                    placeholder={"000000"}
+                    disabled
+                    help="O código do produto é gerado automaticamente."
+                  />
+                </Col>
+                <Col xs={{ span: 24 }} md={{ span: 12 }}>
+                  <ProFormSelect
+                    name="consumption_unit_id"
+                    label="Consumo em"
+                    fieldProps={{ size: "large" }}
+                    help="Unidade de medida do produto."
+                    options={units?.data?.items
+                      ?.filter((un) => {
+                        if (currType === "DRINK") {
+                          return unitByType.drink.includes(un.name);
+                        } else return true;
+                      })
+                      ?.map((unit) => ({
+                        label: unit.name,
+                        value: unit.id,
+                      }))}
+                  />
+                </Col>
+                <Col xs={{ span: 24 }} md={{ span: 12 }}>
+                  <ProFormField
+                    name="brand"
+                    label="Marca"
+                    rules={[{ required: true }]}
+                    fieldProps={{ size: "large" }}
                   />
                 </Col>
               </Row>

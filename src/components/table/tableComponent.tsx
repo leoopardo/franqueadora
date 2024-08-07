@@ -1,6 +1,14 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { EllipsisVerticalIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { Button, Dropdown, Empty, Spin, Table, Typography } from "antd";
+import {
+  Button,
+  Dropdown,
+  Empty,
+  Modal,
+  Spin,
+  Table,
+  Typography
+} from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 import { Dispatch, SetStateAction } from "react";
 import ParamsI from "../../franchisor/services/__interfaces/queryParams.interface";
@@ -12,6 +20,10 @@ interface ActionsI<RowItemI> {
   id?: string;
   onClick: (RowItemI?: RowItemI) => void;
   disabled?: (RowItemI?: RowItemI) => boolean;
+  confimation?: (RowItemI?: RowItemI) => {
+    title: string;
+    description: string;
+  };
 }
 
 interface columnI<RowItemI> {
@@ -177,11 +189,23 @@ function TableComponent<RowItemI>({
                           key: a.label,
                           label: a.label,
                           icon: a.icon,
-                          onClick: () => a.onClick(row),
+                          onClick: a?.confimation
+                            ? () =>
+                                Modal.confirm({
+                                  title:
+                                    a?.confimation &&
+                                    a?.confimation(row)?.title,
+                                  content:
+                                    a?.confimation &&
+                                    a?.confimation(row)?.description,
+                                 
+                                  onOk: () => a.onClick(row),
+                                })
+                            : () => a.onClick(row),
                         }) as any
                     ),
                 }}
-                align={{ offset: [9, 5] }}
+                align={{ offset: [-6, 8] }}
                 arrow
                 placement="bottomLeft"
               >

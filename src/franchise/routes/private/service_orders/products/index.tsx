@@ -4,8 +4,9 @@ import {
   ProductParams,
   ProductType,
 } from "@franchise/services/service_orders/products/_interfaces/products.interface";
+import { useDeleteProduct } from "@franchise/services/service_orders/products/deleteProduct";
 import { useListProducts } from "@franchise/services/service_orders/products/listProducts";
-import { PencilIcon } from "@heroicons/react/24/outline";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import useDebounce from "@hooks/useDebounce";
 import defaultTheme from "@styles/default";
@@ -28,6 +29,7 @@ export const Products = () => {
   const { data, isLoading } = useListProducts(params);
   const { isSm } = useBreakpoints();
   const navigate = useNavigate();
+  const deleteProduct = useDeleteProduct();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -107,7 +109,7 @@ export const Products = () => {
 
       <Col span={24}>
         <TableComponent<ProductType>
-          loading={isLoading}
+          loading={isLoading || deleteProduct.isLoading}
           data={data}
           params={params}
           setParams={setParams}
@@ -116,6 +118,17 @@ export const Products = () => {
               label: "Editar",
               onClick: (row) => navigate(`edição`, { state: row }),
               icon: <PencilIcon style={{ width: 16 }} />,
+            },
+            {
+              label: "Excluir",
+              onClick: (row) => {
+                deleteProduct.mutate({ id: row?.id || "" });
+              },
+              icon: <TrashIcon style={{ width: 16 }} />,
+              confimation: (row) => ({
+                title: `Excluir o produto: ${row?.name}.`,
+                description: "Tem certeza que deseja excluir o produto?",
+              }),
             },
           ]}
           columns={[
@@ -142,7 +155,7 @@ export const Products = () => {
                   // }}
                 >
                   <Switch
-                    checked={row.active}
+                    checked={row?.active || false}
                     //   loading={inactivate.isLoading || activate.isLoading}
                   />
                 </Popconfirm>

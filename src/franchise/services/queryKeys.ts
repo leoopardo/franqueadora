@@ -10,6 +10,12 @@ export enum QueryKeys {
   CREATE_PROMOTER = "franchiseCreatePromoter",
   CREATE_CLIENT = "franchiseCreateClient",
   CREATE_EVENT = "franchiseCreateEvent",
+  CREATE_PRODUCT = "franchiseCreateProduct",
+
+  UPDATE_EVENT = "franchiseUpdateEvent",
+  UPDATE_PRODUCT = "franchiseUpdateProduct",
+
+  DELETE_PRODUCT = "franchiseDeleteProduct",
 
   GET_TERMINAL_TOTALS = "franchiseGetTerminalTotals",
   GET_ME = "getMeFranchise",
@@ -17,6 +23,8 @@ export enum QueryKeys {
   GET_EVENT_SELECT = "getEventSelect",
   GET_PROMOTER_FEES = "franchiseGetPromoterFees",
   GET_EVENT_BY_ID = "franchiseGetEventById",
+  GET_AVALIABLE_PRODUCT_CODE = "franchiseGetAvaliableProductCode",
+  GET_UNITS_LIST = "franchiseGetUnitsList",
 
   INACTIVATE_TERMINAL = "franchiseInactivateTerminal",
   INACTIVATE_EVENT = "franchiseInactivateEvent",

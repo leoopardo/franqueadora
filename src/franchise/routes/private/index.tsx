@@ -8,6 +8,7 @@ import { UpdateEvent } from "./events/update";
 import { Products } from "./service_orders/products";
 import { Terminals } from "./terminals";
 import { CreateProduct } from "./service_orders/products/create";
+import { UpdateProduct } from "./service_orders/products/update";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ export const PrivateRoutes = () => {
           <Route path="produtos">
             <Route index element={<Products />} />
             <Route path="cadastro" element={<CreateProduct />} />
+            <Route path="edição" element={<UpdateProduct />} />
           </Route>
         </Route>
 
