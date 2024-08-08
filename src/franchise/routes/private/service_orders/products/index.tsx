@@ -82,6 +82,7 @@ export const Products = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar produto"
+          style={{borderRadius: 32}}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>
