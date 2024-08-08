@@ -30,11 +30,13 @@ export enum QueryKeys {
   INACTIVATE_EVENT = "franchiseInactivateEvent",
   INACTIVATE_PROMOTER = "franchiseInactivatePromoter",
   INACTIVATE_CLIENT = "franchiseInactivateClient",
+  INACTIVATE_PRODUCT = "franchiseInactivateProduct",
 
   ACTIVATE_TERMINAL = "franchiseActivateTerminal",
   ACTIVATE_EVENT = "franchiseActivateEvent",
   ACTIVATE_PROMOTER = "franchiseActivatePromoter",
   ACTIVATE_CLIENT = "franchiseActivateClient",
+  ACTIVATE_PRODUCT = "franchiseActivateProduct",
 
   SET_TENANT = "setTenant",
 

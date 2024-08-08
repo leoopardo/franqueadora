@@ -1,7 +1,7 @@
-import { useCreateProduct } from "@franchise/services/service_orders/products/createProduct";
-import { MutateProduct } from "../components/mutate";
 import { CreateProductType } from "@franchise/services/service_orders/products/_interfaces/create_product.interface";
+import { useCreateProduct } from "@franchise/services/service_orders/products/createProduct";
 import { parseImageDataFromFile } from "@utils/buffer_blob_utils";
+import { MutateProduct } from "../components/mutate";
 
 export const CreateProduct = () => {
   const { mutate } = useCreateProduct();
@@ -26,17 +26,22 @@ export const CreateProduct = () => {
         title="Cadastro de produtos"
         subtitle="Preencha todos os campos para adicionar um novo produto"
         mutate={async (body: CreateProductType) => {
+          console.log("body", body?.image?.file);
+
           let image: any;
           if (typeof body?.image === "string") {
+            ("aqui");
             image = await parseImageDataFromFile(
               await blobUrlToFile(body?.image, "image.png")
             );
           } else {
+            ("2");
             image = body?.image?.file
-              ? await parseImageDataFromFile(body?.image?.file?.originFileObj)
+              ? await parseImageDataFromFile(
+                  body?.image?.file?.originFileObj || body?.image?.file
+                )
               : null;
           }
-          console.log(body);
 
           mutate({
             ...body,

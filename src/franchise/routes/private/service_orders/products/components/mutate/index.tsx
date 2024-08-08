@@ -23,6 +23,7 @@ import {
   Button,
   Col,
   Input,
+  notification,
   Row,
   Space,
   Tooltip,
@@ -128,6 +129,7 @@ export const MutateProduct = ({
   const [currType, setCurrType] = useState<string>("food");
   const [imagePrompt, setImagePrompt] = useState<string>("");
   const [generatingImage, setGeneratingImage] = useState<boolean>(false);
+  const [fileLarge, setFileLarge] = useState<boolean>(false);
 
   const waitTime = (values: any) => {
     mutate(values);
@@ -177,6 +179,21 @@ export const MutateProduct = ({
   };
 
   const handleBeforeUpload = (file: any) => {
+    const maxSizeMB = 0.5; // Tamanho máximo permitido em MB
+    const maxSizeBytes = maxSizeMB * 1024 * 1024; // Converter MB para Bytes
+
+    console.log(file.size, maxSizeBytes);
+
+    if (file.size > maxSizeBytes) {
+      notification.error({
+        message: `O tamanho da imagem deve ser menor que ${maxSizeMB}MB.`,
+        duration: 5000,
+      });
+      setFileLarge(true);
+    } else {
+      setFileLarge(false);
+    }
+
     const reader = new FileReader();
     reader.onload = (e) => {
       file.thumbUrl = e?.target?.result;
@@ -372,6 +389,7 @@ export const MutateProduct = ({
                                       "image",
                                       null
                                     );
+                                    setFileLarge(false);
                                   }}
                                   icon={<TrashIcon height={24} />}
                                 ></Button>
@@ -391,7 +409,7 @@ export const MutateProduct = ({
                           Selecione ou arraste uma imagem.
                         </Typography.Title>
                         <Typography.Text>
-                          Suporta imagens de até 5MB.
+                          Suporta imagens de até 500KB (0.5MB).
                         </Typography.Text>
                       </Upload.Dragger>
                     ) : (
@@ -563,6 +581,7 @@ export const MutateProduct = ({
             justifyContent: "center",
           }}
           icon={<CheckIcon width={20} />}
+          disabled={fileLarge}
         >
           {update ? "Salvar dados" : "Concluir cadastro"}
         </Button>

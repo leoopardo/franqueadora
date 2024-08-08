@@ -12,7 +12,7 @@ export const ProductSchema = z.object({
   description: z.string().optional().nullable(),
   id: z.string().optional().nullable(),
   image: z.string().optional().nullable(),
-  is_additional: z.boolean(),
+  is_additional: z.boolean().optional().nullable(),
   name: z.string().optional().nullable(),
   ref_id: z.string().optional().nullable(),
   type: z.string().optional().nullable(),
