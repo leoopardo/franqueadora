@@ -255,7 +255,7 @@ export const StepOne = ({ setModules, update, formRef, updatePersonType }: stepO
           <Divider orientation="left">Configurações</Divider>
         </Col>
 
-        <Col md={{ span: 8 }} xs={{ span: 24 }}>
+        <Col md={{ span: 24 }} xs={{ span: 24 }}>
           <ProFormSelect
             name={[personType, "module"]}
             label="Módulos"

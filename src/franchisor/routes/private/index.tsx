@@ -2,6 +2,7 @@ import { Button, Layout, Result } from "antd";
 import { Route, Routes } from "react-router-dom";
 import { BaseLayout } from "./BaseLayout";
 import { Clients } from "./clients";
+import { CreateClient } from "./clients/create";
 import { Franchises } from "./franchises";
 import { CreateFranchise } from "./franchises/create";
 import { UpdateFranchise } from "./franchises/update";
@@ -28,6 +29,7 @@ export const PrivateRoutes = () => {
         </Route>
         <Route path="/clientes">
           <Route index element={<Clients />} />
+          <Route path="cadastro" element={<CreateClient />} />
         </Route>
         <Route path="/terminais">
           <Route index element={<Terminals />} />

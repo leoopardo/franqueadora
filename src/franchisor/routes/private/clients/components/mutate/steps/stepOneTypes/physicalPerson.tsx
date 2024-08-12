@@ -1,10 +1,10 @@
 import {
   ProFormDatePicker,
   ProFormInstance,
-  ProFormSwitch,
-  ProFormText,
+  ProFormText
 } from "@ant-design/pro-components";
 import { ProFormSelectFrianchise } from "@components/proFormSelects/SelectFranchises";
+import { ProFormSelectPromoters } from "@components/proFormSelects/SelectPromoters";
 import useDebounce from "@hooks/useDebounce";
 import { formatCellPhoneBR, formatCPF, formatRG } from "@utils/regexFormat";
 import { Col } from "antd";
@@ -21,6 +21,8 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
     rg?: string;
     phone?: string;
   }>({});
+
+  const [promoterQuery, setPromoterQuery] = useState<any>();
   // TODO - implementar o validate do step 1
   // const validate = usePromoterValidateStepOne({ body: bodyValidate });
   // console.log(validate.data);
@@ -31,12 +33,6 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
 
   return (
     <>
-      <Col md={{ span: 24 }} xs={{ span: 24 }}>
-        <ProFormSwitch
-          name={["physical", "client_manager"]}
-          label="Gerencia clientes?"
-        />
-      </Col>
       <Col md={{ span: 8 }} xs={{ span: 24 }}>
         <ProFormSelectFrianchise
           name={["physical", "franchise_id"]}
@@ -44,9 +40,31 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
           placeholder="Selecione a franquia"
           mode="single"
           rules={[{ required: !update }]}
+          fieldProps={{
+            onChange(value) {
+              formRef?.current?.setFieldValue(
+                ["physical", "promoter_id"],
+                null
+              );
+              if (!value) {
+                setPromoterQuery(undefined);
+                return;
+              }
+              setPromoterQuery({ franchise_id: value });
+            },
+          }}
         />
       </Col>
       <Col md={{ span: 8 }} xs={{ span: 24 }}>
+        <ProFormSelectPromoters
+          label="Promotor"
+          name={["physical", "promoter_id"]}
+          rules={[{ required: !update }]}
+          query={promoterQuery}
+          fieldProps={{ disabled: !promoterQuery }}
+        />
+      </Col>
+      {/* <Col md={{ span: 8 }} xs={{ span: 24 }}>
         <ProFormText
           name={["physical", "name"]}
           label="Nome completo"
@@ -54,7 +72,7 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
           rules={[{ required: !update }]}
           fieldProps={{}}
         />
-      </Col>
+      </Col> */}
       <Col md={{ span: 8 }} xs={{ span: 24 }}>
         <ProFormText
           name={["physical", "commercial_name"]}

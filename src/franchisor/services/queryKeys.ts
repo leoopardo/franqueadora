@@ -10,6 +10,7 @@ export enum QueryKeys {
   GET_TERMINAL_TOTALS = "getTerminalTotals",
   GET_ME = "getMeFranchisor",
   GET_PROMOTER_BY_ID = "getPromoterById",
+  GET_CLIENT_BY_ID = "getClientById",
 
   INACTIVATE_FRANCHISE = "inactivateFranchise",
   INACTIVATE_PROMOTER = "inactivatePromoter",
@@ -26,10 +27,12 @@ export enum QueryKeys {
 
   CREATE_FRANCHISE = "createFranchise",
   CREATE_PROMOTER = "createPromoter",
+  CREATE_CLIENT = "createClient",
 
   UPDATE_FRANCHISE = "updateFranchise",
   UPDATE_FRANCHISE_AGREEMENTS = "updateFranchiseAgreements",
   UPDATE_PROMOTER = "updatePromoter",
+  UPDATE_CLIENT = "updateClient",
 
   PENDING_NUMBER = "pendingNumber",
   
