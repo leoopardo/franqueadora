@@ -9,6 +9,7 @@ export enum QueryKeys {
   GET_TERMINAL_SELECTS = "getTerminalSelects",
   GET_TERMINAL_TOTALS = "getTerminalTotals",
   GET_ME = "getMeFranchisor",
+  GET_PROMOTER_BY_ID = "getPromoterById",
 
   INACTIVATE_FRANCHISE = "inactivateFranchise",
   INACTIVATE_PROMOTER = "inactivatePromoter",
@@ -28,9 +29,8 @@ export enum QueryKeys {
 
   UPDATE_FRANCHISE = "updateFranchise",
   UPDATE_FRANCHISE_AGREEMENTS = "updateFranchiseAgreements",
-  
   UPDATE_PROMOTER = "updatePromoter",
-  
+
   PENDING_NUMBER = "pendingNumber",
   
   SEND_TOKEN = "sendToken"

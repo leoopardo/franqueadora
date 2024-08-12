@@ -1,15 +1,16 @@
+import { Button, Layout, Result } from "antd";
 import { Route, Routes } from "react-router-dom";
 import { BaseLayout } from "./BaseLayout";
-import { Button, Layout, Result } from "antd";
+import { Clients } from "./clients";
 import { Franchises } from "./franchises";
 import { CreateFranchise } from "./franchises/create";
+import { UpdateFranchise } from "./franchises/update";
 import { Promoters } from "./promoters";
 import { CreatePromoter } from "./promoters/create";
+import { UpdatePromoter } from "./promoters/update";
 import { Terminals } from "./terminals";
-import { Pending } from "./terminals/pending";
-import { Clients } from "./clients";
-import { UpdateFranchise } from "./franchises/update";
 import { CreateTerminals } from "./terminals/create";
+import { Pending } from "./terminals/pending";
 
 export const PrivateRoutes = () => {
   return (
@@ -23,6 +24,7 @@ export const PrivateRoutes = () => {
         <Route path="/promotores">
           <Route index element={<Promoters />} />
           <Route path="cadastro" element={<CreatePromoter />} />
+          <Route path="edição/:id" element={<UpdatePromoter />} />
         </Route>
         <Route path="/clientes">
           <Route index element={<Clients />} />

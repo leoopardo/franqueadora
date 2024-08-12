@@ -86,7 +86,7 @@ export const SectorPaymentsStep = () => {
       name="base"
       title="Detalhes do setor"
       onFinish={async () => {
-        await waitTime(2000);
+        await waitTime(500);
         return true;
       }}
       size="large"

@@ -19,16 +19,17 @@ interface stepOneI {
   setModules: Dispatch<SetStateAction<string[]>>;
   update?: boolean;
   formRef: React.RefObject<ProFormInstance>;
+  updatePersonType?: "juridic" | "physical";
 }
 
-export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
+export const StepOne = ({ setModules, update, formRef, updatePersonType }: stepOneI) => {
   const [cep, setCep] = useState<string>("");
   const stepOneRef = useRef<ProFormInstance>(null);
   const cepRequest = useGetCEP(cep);
   const { PosModulesData } = useGetPosModules();
 
   const [personType, setPersonType] = useState<"physical" | "juridic">(
-    "physical"
+    updatePersonType || "physical"
   );
 
   const waitTime = (time: number = 100) => {
@@ -41,8 +42,8 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
 
   useEffect(() => {
     if (cepRequest.data)
-      stepOneRef?.current?.setFieldsValue({
-        address: {
+      formRef?.current?.setFieldsValue({
+        [personType]: {
           state: cepRequest?.data.state,
           city: cepRequest?.data.city,
           address: cepRequest?.data.street,
@@ -62,7 +63,7 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
   };
 
   const handleChangeCEP = useDebounce((value) => {
-    cepRequest.remove()
+    cepRequest.remove();
     setCep(value);
   }, 500);
 
@@ -101,8 +102,10 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
     }>
       name="base"
       title="Informações da empresa"
-      onFinish={async () => {
-        await waitTime(2000);
+      onFinish={async (form) => {
+        console.log(form);
+
+        await waitTime(500);
         return true;
       }}
       size="large"
@@ -120,6 +123,7 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
           });
         }
       }}
+
     >
       <Row style={{ width: "100%", maxWidth: "100vw" }} gutter={8}>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
@@ -129,6 +133,7 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
             }}
             defaultValue="physical"
             value={personType}
+            disabled={updatePersonType ? true : false}
           >
             <CheckCard
               style={{
@@ -176,14 +181,18 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
           <JuridicPerson stepOneRef={stepOneRef} update={update} />
         )}
         {personType === "physical" && (
-          <PhysicalPerson stepOneRef={stepOneRef} update={update} formRef={formRef}  />
+          <PhysicalPerson
+            stepOneRef={stepOneRef}
+            update={update}
+            formRef={formRef}
+          />
         )}
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
           <Divider orientation="left">Endereço</Divider>
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name={["address", "cep"]}
+            name={[personType, "cep"]}
             label="CEP"
             placeholder="Digite o CEP"
             fieldProps={{
@@ -197,7 +206,7 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name={["address", "address"]}
+            name={[personType, "address"]}
             label="Endereço"
             placeholder="Digite o Endereço"
             rules={[{ required: !update }]}
@@ -205,7 +214,7 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }}>
           <ProFormText
-            name={["address", "number"]}
+            name={[personType, "address_number"]}
             label="Número"
             placeholder="000"
             rules={[{ required: !update }]}
@@ -213,7 +222,7 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name={["address", "state"]}
+            name={[personType, "state"]}
             label="Estado"
             placeholder="Digite o estado"
             rules={[{ required: !update }]}
@@ -221,7 +230,7 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name={["address", "city"]}
+            name={[personType, "city"]}
             label="Cidade"
             placeholder="Digite a cidade"
             rules={[{ required: !update }]}
@@ -229,7 +238,7 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name={["address", "district"]}
+            name={[personType, "district"]}
             label="Bairro"
             placeholder="Digite o bairro"
             rules={[{ required: !update }]}
@@ -237,7 +246,7 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
         </Col>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
           <ProFormText
-            name={["address", "complement"]}
+            name={[personType, "complement"]}
             label="Complemento"
             placeholder="Digite algum complemento"
           />
@@ -248,7 +257,7 @@ export const StepOne = ({ setModules, update, formRef }: stepOneI) => {
 
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormSelect
-            name="module"
+            name={[personType, "module"]}
             label="Módulos"
             placeholder="Selecione os módulos utilizados"
             mode="multiple"

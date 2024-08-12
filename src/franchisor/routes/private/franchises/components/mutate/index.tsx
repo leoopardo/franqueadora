@@ -8,9 +8,9 @@ import { useListFranchiseAgreements } from "@franchisor/services/franchises/agre
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
-import { Button, Col, Row, Tabs, Typography } from "antd";
+import { Button, Col, notification, Row, Space, Tabs, Typography } from "antd";
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   createFranchiseI,
@@ -20,6 +20,7 @@ import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
 import { TokenModal } from "@components/token";
+import cookies from "js-cookie";
 
 interface mutateI {
   mutate: (body: createFranchiseI) => void;
@@ -53,6 +54,41 @@ export const MutateFranchise = ({
   const { data } = useListFranchiseAgreements();
   const { isSm } = useBreakpoints();
   const [isTokenModalOpen, setIsTokenModalOpen] = useState<boolean>(false);
+  const [api, contextHolder] = notification.useNotification();
+
+  useEffect(() => {
+    if (cookies.get("create_franchise")) {
+      const data = JSON.parse(`${cookies.get("create_franchise")}`);
+
+      api.info({
+        message: "Rascunho identificado!",
+        description:
+          "Você não concluiu o cadastro anteriormente. Deseja recupera-lo?",
+        duration: 30000,
+        btn: (
+          <Space>
+            <Button
+              onClick={() => {
+                formRef.current?.setFieldsValue(data);
+                api.destroy();
+                cookies.remove("create_franchise");
+              }}
+            >
+              Sim
+            </Button>
+            <Button
+              onClick={() => {
+                cookies.remove("create_franchise");
+                api.destroy();
+              }}
+            >
+              Não
+            </Button>
+          </Space>
+        ),
+      });
+    }
+  }, []);
 
   const waitTime = (values: any) => {
     const agreements: { template_id?: string; value: string }[] = [];
@@ -108,8 +144,8 @@ export const MutateFranchise = ({
               : undefined,
             confirm_password: undefined,
             phone: values?.master?.phone
-            ? values?.master?.phone?.replace(/\D/g, "")
-            : undefined,
+              ? values?.master?.phone?.replace(/\D/g, "")
+              : undefined,
           },
           state_registration: values?.state_registration
             ? `${values?.state_registration}`
@@ -191,6 +227,7 @@ export const MutateFranchise = ({
 
   return (
     <Row justify="center" style={{ width: "100%" }}>
+      {contextHolder}
       <Col
         style={{
           width: "100%",
@@ -285,6 +322,16 @@ export const MutateFranchise = ({
                 setStep(current + 1);
               }}
               formProps={{ initialValues: initialFormValues }}
+              onFormChange={(_name, info) => {
+                if (update) return;
+                let form = {};
+                for (const step in info?.forms) {
+                  form = { ...form, ...info?.forms[step].getFieldsValue() };
+                  cookies.set("create_franchise", JSON.stringify(form), {
+                    expires: 1,
+                  });
+                }
+              }}
             >
               <StepOne setModules={setModules} update={update} />
               <StepTwo update={update} />

@@ -7,7 +7,7 @@ import {
 import { Button, Col, Input, Row, Switch, Tooltip, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PageHeader } from "../../../../components/header/pageHeader";
 import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
@@ -28,6 +28,7 @@ export const Promoters = () => {
   const activate = useActivatePromoter();
   const { data, isLoading } = useListPromoters(params);
   const { isSm } = useBreakpoints();
+  const navigate = useNavigate();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -38,7 +39,7 @@ export const Promoters = () => {
       }));
       return;
     }
-    
+
     setParams((state) => ({
       ...state,
       s: value,
@@ -90,7 +91,7 @@ export const Promoters = () => {
           actions={[
             {
               label: "Editar",
-              onClick: (row) => console.log(row),
+              onClick: (row) => navigate(`/promotores/edição/${row?.id}`),
               icon: <PencilIcon style={{ width: 16 }} />,
             },
           ]}

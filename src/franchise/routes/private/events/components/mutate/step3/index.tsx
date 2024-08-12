@@ -122,7 +122,7 @@ export const StepThree = ({ stepperRef }: StepThreeProps) => {
           name="Bar"
           title="Modulo bar"
           onFinish={async () => {
-            await waitTime(2000);
+            await waitTime(500);
             return true;
           }}
           size="large"

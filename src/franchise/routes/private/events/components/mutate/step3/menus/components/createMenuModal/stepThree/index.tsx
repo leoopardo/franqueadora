@@ -25,7 +25,7 @@ export const MenuStepTwo = ({ updateData }: MenuStepOneProps) => {
       name="base"
       title="Grupo"
       onFinish={async () => {
-        await waitTime(2000);
+        await waitTime(500);
         return true;
       }}
       size="large"

@@ -1,11 +1,11 @@
+import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
 import {
-  CheckCircleFilled,
-  CloseCircleFilled,
-  ReloadOutlined,
-} from "@ant-design/icons";
-import { ProFormText, StepsForm } from "@ant-design/pro-components";
-import { Col, Divider, Row, Typography, message } from "antd";
-import { useEffect, useRef, useState } from "react";
+  ProFormInstance,
+  ProFormText,
+  StepsForm,
+} from "@ant-design/pro-components";
+import { Col, Divider, Row, Typography } from "antd";
+import { useRef, useState } from "react";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
 import useDebounce from "../../../../../../../hooks/useDebounce";
 import defaultTheme from "../../../../../../../styles/default";
@@ -15,8 +15,13 @@ import {
 } from "../../../../../../../utils/regexFormat";
 import regexList from "../../../../../../../utils/regexList";
 
-export const StepTwo = ({ update }: { update?: boolean }) => {
-  const stepTwoRef = useRef<any>(null);
+export const StepTwo = ({
+  update,
+}: {
+  update?: boolean;
+  formRef?: React.RefObject<ProFormInstance>;
+}) => {
+  const stepTwoRef = useRef<ProFormInstance>(null);
   const { isXs } = useBreakpoints();
   const [password, setPassWord] = useState<string>("");
   const [confirmPassword, setConfirmPassWord] = useState<string>("");
@@ -40,38 +45,30 @@ export const StepTwo = ({ update }: { update?: boolean }) => {
     });
   };
 
-  useEffect(() => {
-    stepTwoRef.current.setFieldsValue({
-      terminal_password: Math.floor(100000 + Math.random() * 900000),
-    });
-  }, []);
-
   const handleValidate = useDebounce((key, value) => {
     setBodyValidate((state) => ({ ...state, [key]: value }));
   }, 500);
 
   return (
-    <StepsForm.StepForm<{
-      name: string;
-      cnpj: number;
-      legal_name: string;
-    }>
-      name="master"
+    <StepsForm.StepForm<any>
+      name="base"
       title="Perfil principal"
-      onFinish={async () => {
-        await waitTime(2000);
+      onFinish={async (form) => {
+        console.log(form);
+
+        await waitTime(500);
         return true;
       }}
       size="large"
       grid
       formRef={stepTwoRef}
       onFinishFailed={() => {
-        const fields = stepTwoRef.current.getFieldsError();
-        const firstErrorField = fields.find(
+        const fields = stepTwoRef?.current?.getFieldsError();
+        const firstErrorField = fields?.find(
           (field: any) => field.errors.length > 0
         );
         if (firstErrorField) {
-          stepTwoRef.current.scrollToField(firstErrorField.name[0], {
+          stepTwoRef?.current?.scrollToField(firstErrorField.name[0], {
             behavior: "smooth",
             block: "center",
           });
@@ -166,7 +163,7 @@ export const StepTwo = ({ update }: { update?: boolean }) => {
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
-            name={["master", "cellphone"]}
+            name={["master", "phone"]}
             label="Celular"
             placeholder="Digite número de celular"
             validateTrigger={["onChange", "onBlur", "onPaste"]}
@@ -356,36 +353,6 @@ export const StepTwo = ({ update }: { update?: boolean }) => {
             }
           })}
         </>
-        <Col md={{ span: 24 }} xs={{ span: 24 }}>
-          <Divider orientation="left">Senha do terminal</Divider>
-        </Col>
-        <Col md={{ span: 24 }} xs={{ span: 24 }}>
-          <ProFormText.Password
-            name={["master", "terminal_password"]}
-            label="Senha do terminal"
-            rules={[{ required: !update }]}
-            fieldProps={{
-              addonAfter: (
-                <ReloadOutlined
-                  style={{ cursor: "pointer" }}
-                  onClick={() =>
-                    stepTwoRef.current.setFieldsValue({
-                      master: {
-                        terminal_password: Math.floor(
-                          100000 + Math.random() * 900000
-                        ),
-                      },
-                    })
-                  }
-                />
-              ),
-              readOnly: true,
-              onClick: () => {
-                message.success("Senha copiada para a área de transferência");
-              },
-            }}
-          />
-        </Col>
       </Row>
     </StepsForm.StepForm>
   );

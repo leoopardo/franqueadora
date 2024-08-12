@@ -1,13 +1,24 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
-import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
 import { createPromoterI } from "@franchisor/services/promoters/__interfaces/create_promoter.interface";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
-import { Button, Card, Col, Row, Tabs, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  notification,
+  Row,
+  Space,
+  Spin,
+  Tabs,
+  Typography,
+} from "antd";
 import { motion } from "framer-motion";
-import { useRef, useState } from "react";
+import cookies from "js-cookie";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createFranchiseI } from "../../../../../services/franchises/__interfaces/create_franchise.interface";
 import { StepOne } from "./steps/stepOne";
@@ -20,7 +31,7 @@ interface mutateI {
   error?: any;
   title?: string;
   subtitle?: string;
-  initialValues?: createFranchiseI;
+  initialValues?: createPromoterI;
   update?: boolean;
   agreements?: AgreementType[];
 }
@@ -35,90 +46,103 @@ export const MutatePromoter = ({
 }: mutateI) => {
   const formRef = useRef<ProFormInstance>(null);
   const [, setModules] = useState<string[]>([]);
-  const [width, setWidth] = useState<number>((100 / 3) * 1);
+  const [width, setWidth] = useState<number>((100 / 2) * 1);
   const [step, setStep] = useState<number>(1);
   const [loadingStep, setLoadingStep] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { data } = useListFranchiseAgreements();
   const { isSm } = useBreakpoints();
+  const [api, contextHolder] = notification.useNotification();
+  const [isDrafLoading, setIsDrafLoading] = useState<boolean>(false);
 
-  const waitTime = (values: any) => {
-    const agreements: { template_id?: string; value: string }[] = [];
+  useEffect(() => {
+    if (cookies.get("create_promoter") && !update) {
+      const data = JSON.parse(`${cookies.get("create_promoter")}`);
 
-    const keysOrganization = [
-      "ANTIFRAUD",
-      "TRANSACTION",
-      "FEE_EMISSION",
-      "FEE_PAY365",
-      "RESULT_FRANCHISOR",
-      "RESULT_CREDIT_ADVANCE",
-      "SPREAD_CREDIT_ADVANCE",
-    ];
-    Object?.keys(values.agreements)?.forEach((section) => {
-      keysOrganization?.forEach((key) => {
-        const ag = data?.items?.find(
-          (i) => i.type === section && i.key === key
-        );
+      console.log(data);
 
-        if (ag) {
-          agreements?.push({
-            template_id: ag.id,
-            value: values?.agreements[section][key],
-          });
-        }
+      api.info({
+        message: "Rascunho identificado!",
+        description:
+          "Você não concluiu o cadastro anteriormente. Deseja recupera-lo?",
+        duration: 30000,
+        btn: (
+          <Space>
+            <Button
+              type="primary"
+              onClick={() => {
+                cookies.remove("create_promoter");
+                api.destroy();
+              }}
+              danger
+            >
+              Não, descartar
+            </Button>{" "}
+            <Button
+              type="primary"
+              onClick={() => {
+                setIsDrafLoading(true);
+                setTimeout(() => {
+                  setIsDrafLoading(false);
+                  formRef.current?.setFieldsValue(data);
+                  api.destroy();
+                  cookies.remove("create_promoter");
+                }, 500);
+                setTimeout(() => {
+                  formRef.current?.setFieldsValue(data);
+                }, 800);
+              }}
+            >
+              Sim, recuperar.
+            </Button>
+          </Space>
+        ),
       });
-    });
+    }
+  }, []);
 
+  useEffect(() => {
+    if (initialValues) {
+      formRef.current?.setFieldsValue(initialValues);
+    }
+  }, [initialValues]);
+
+  const waitTime = async (values: any) => {
+    // const agreements: { template_id?: string; value: string }[] = [];
+
+    // const keysOrganization = [
+    //   "ANTIFRAUD",
+    //   "TRANSACTION",
+    //   "FEE_EMISSION",
+    //   "FEE_PAY365",
+    //   "RESULT_FRANCHISOR",
+    //   "RESULT_CREDIT_ADVANCE",
+    //   "SPREAD_CREDIT_ADVANCE",
+    // ];
+    // Object?.keys(values.agreements)?.forEach((section) => {
+    //   keysOrganization?.forEach((key) => {
+    //     const ag = data?.items?.find(
+    //       (i) => i.type === section && i.key === key
+    //     );
+
+    //     if (ag) {
+    //       agreements?.push({
+    //         template_id: ag.id,
+    //         value: values?.agreements[section][key],
+    //       });
+    //     }
+    //   });
+    // });
     return new Promise<boolean>((resolve) => {
       mutate({
         ...initialValues,
         ...values,
-        cnpj: values?.cnpj
-          ? values?.cnpj?.replace(/\D/g, "")
-          : initialValues?.cnpj?.replace(/\D/g, ""),
-        master: {
-          ...values?.master,
-          ...initialValues?.master,
-          cpf: values?.master?.cpf
-            ? values?.master?.cpf?.replace(/\D/g, "")
-            : undefined,
-          phone: values?.master?.phone
-            ? values?.master?.phone?.replace(/\D/g, "")
-            : undefined,
-          terminal_password: values?.master?.terminal_password
-            ? `${values?.master?.terminal_password}`
-            : undefined,
-          confirm_password: undefined,
-        },
-        state_registration: values?.state_registration
-          ? `${values?.state_registration}`
-          : undefined,
-        contacts: [],
-        agreement: agreements,
-        agreements: undefined,
       });
-      resolve(true);
+      resolve(false);
     });
   };
-  const initialFormValues: createFranchiseI = initialValues ?? {
-    address: {
-      address: "",
-      cep: "",
-      city: "",
-      complement: "",
-      district: "",
-      number: "",
-      state: "",
-    },
+  const initialFormValues: createPromoterI = initialValues ?? {
     agreement: [],
-    area_codes: [],
-    cnpj: "",
-    commercial_name: "",
-    company_name: "",
     contacts: [],
-    counties: [],
-    franchise_name: "",
-    state_registration: "",
     master: {
       cpf: "",
       email: "",
@@ -128,11 +152,28 @@ export const MutatePromoter = ({
       terminal_password: "",
       username: "",
     },
-    module: [],
+    physical: {
+      address: "",
+      address_number: "",
+      cep: "",
+      city: "",
+      client_manager: true,
+      commercial_name: "",
+      complement: "",
+      cpf: "",
+      district: "",
+      franchise_id: undefined,
+      module: [],
+      name: "",
+      phone: "",
+      rg: "",
+      state: "",
+    },
   };
 
   return (
     <Row justify="center" style={{ width: "100%" }}>
+      {contextHolder}
       <Col
         style={{
           width: "100%",
@@ -151,7 +192,7 @@ export const MutatePromoter = ({
         >
           <Col xs={{ span: 20 }} md={{ span: 10 }}>
             <Typography.Text style={{ lineHeight: 0 }}>
-              Passo {step} de 3
+              Passo {step} de 2
             </Typography.Text>
             <Typography.Title level={isSm ? 5 : 3} style={{ margin: 0 }}>
               {title}
@@ -202,44 +243,103 @@ export const MutatePromoter = ({
           }}
         >
           <Col xs={{ span: 24 }} md={{ span: 16 }}>
-            <StepsForm<createFranchiseI>
-              formRef={formRef}
-              onFinish={waitTime}
-              stepsRender={(steps) =>
-                update ? (
-                  <Tabs
-                    centered
-                    onChange={(key) => {
-                      setStep(+key + 1);
-                      setWidth((100 / 3) * (+key + 1));
-                    }}
-                    items={steps.map((step) => ({
-                      label: step.title,
-                      key: step.key,
-                    }))}
+            {loading || isDrafLoading ? (
+              <Spin
+                size="large"
+                indicator={<LoadingOutlined size={40} spin />}
+                tip="Carregando dados..."
+              >
+                <StepsForm<createFranchiseI>
+                  formRef={formRef}
+                  onFinish={waitTime}
+                  stepsRender={(steps) =>
+                    update ? (
+                      <Tabs
+                        centered
+                        onChange={(key) => {
+                          setStep(+key + 1);
+                          setWidth((100 / 2) * (+key + 1));
+                        }}
+                        items={steps.map((step) => ({
+                          label: step.title,
+                          key: step.key,
+                        }))}
+                      />
+                    ) : null
+                  }
+                  submitter={false}
+                  current={step - 1}
+                  onCurrentChange={(current) => {
+                    setWidth((100 / 2) * (current + 1));
+                    setStep(current + 1);
+                  }}
+                  formProps={{ initialValues: initialFormValues }}
+                  onFormChange={(_name, info) => {
+                    if (update) return;
+                    let form = {};
+                    for (const step in info?.forms) {
+                      form = { ...form, ...info?.forms[step].getFieldsValue() };
+                      cookies.set("create_promoter", JSON.stringify(form), {
+                        expires: 1,
+                      });
+                    }
+                  }}
+                >
+                  <StepOne
+                    setModules={setModules}
+                    update={update}
+                    formRef={formRef}
                   />
-                ) : null
-              }
-              submitter={false}
-              current={step - 1}
-              onCurrentChange={(current) => {
-                setWidth((100 / 3) * (current + 1));
-                setStep(current + 1);
-              }}
-              formProps={{ initialValues: initialFormValues }}
-            >
-              <StepOne
-                setModules={setModules}
-                update={update}
+                  <StepTwo update={update} />
+                </StepsForm>
+              </Spin>
+            ) : (
+              <StepsForm<createFranchiseI>
                 formRef={formRef}
-              />
-              <StepTwo update={update} />
-              {/* <StepThree
-                modules={modules}
-                update={update}
-                agreements={agreements}
-              /> */}
-            </StepsForm>
+                onFinish={waitTime}
+                stepsRender={(steps) =>
+                  update ? (
+                    <Tabs
+                      centered
+                      onChange={(key) => {
+                        setStep(+key + 1);
+                        setWidth((100 / 2) * (+key + 1));
+                      }}
+                      items={steps.map((step) => ({
+                        label: step.title,
+                        key: step.key,
+                      }))}
+                    />
+                  ) : null
+                }
+                submitter={false}
+                current={step - 1}
+                onCurrentChange={(current) => {
+                  setWidth((100 / 2) * (current + 1));
+                  setStep(current + 1);
+                }}
+                formProps={{ initialValues: initialFormValues }}
+                onFormChange={(_name, info) => {
+                  if (update) return;
+                  let form = {};
+                  for (const step in info?.forms) {
+                    form = { ...form, ...info?.forms[step].getFieldsValue() };
+                    cookies.set("create_promoter", JSON.stringify(form), {
+                      expires: 1,
+                    });
+                  }
+                }}
+              >
+                <StepOne
+                  setModules={setModules}
+                  update={update}
+                  formRef={formRef}
+                  updatePersonType={initialFormValues?.physical ? "physical" : "juridic"}
+
+                />
+                <StepTwo update={update} />
+              </StepsForm>
+            )}
           </Col>
         </Row>
       </Card>
@@ -271,7 +371,7 @@ export const MutatePromoter = ({
               navigate(-1);
               return;
             }
-            setWidth((100 / 3) * (step - 1));
+            setWidth((100 / 2) * (step - 1));
             setStep((curr) => curr - 1);
           }}
         >
