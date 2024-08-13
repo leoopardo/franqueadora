@@ -1,13 +1,13 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProFormSelect } from "@ant-design/pro-components";
-import { FranchiseParams } from "@franchisor/services/franchises/__interfaces/franchises.interface";
-import { useListFranchises } from "@franchisor/services/franchises/listFranchises";
+import { ClientParams } from "@franchisor/services/clients/__interfaces/clients.interface";
+import { useListClients } from "@franchisor/services/clients/listClients";
 import useDebounce from "@hooks/useDebounce";
 import { Spin } from "antd";
 import { Rule } from "antd/es/form";
 import { DefaultOptionType } from "antd/es/select";
 import { SelectProps } from "antd/lib";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface SelectModelsI {
   size?: "large" | "middle" | "small";
@@ -18,11 +18,11 @@ interface SelectModelsI {
   label: string;
   placeholder?: string;
   mode?: "multiple" | "tags" | "single" | undefined;
-  franchise?: boolean
 }
 
-export const ProFormSelectFrianchise = ({
+export const ProFormSelectClient = ({
   size,
+  query,
   rules,
   fieldProps,
   name,
@@ -30,9 +30,22 @@ export const ProFormSelectFrianchise = ({
   placeholder,
   mode,
 }: SelectModelsI) => {
-  const [params, setParams] = useState<FranchiseParams>({ page: 1, size: 200 });
-  const { data, isLoading } = useListFranchises(params);
-  
+  const [params, setParams] = useState<ClientParams>({ page: 1, size: 200 });
+  const { data, isLoading } = useListClients(params);
+
+  useEffect(() => {
+    if (query?.promoter_id) {
+      setParams((state) => ({
+        ...state,
+        w: `promoter_id=[${query.promoter_id}]`,
+      }));
+    } else {
+      setParams((state) => ({
+        ...state,
+        w: undefined,
+      }));
+    }
+  }, [query]);
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -46,7 +59,9 @@ export const ProFormSelectFrianchise = ({
     setParams((state) => ({
       ...state,
       s: value,
-      f: ["franchise_name", "cnpj", "ref_id", "username"].join(","),
+      f: "ref_id,ClientPerson.name,ClientJuridic.company_name,ClientPerson.cpf,ClientJuridic.cnpj,ClientAddress.state,ClientAddress.city,Master.username,ClientPOSModule.POSModule.name,Franchise.franchise_name,Franchise.cnpj,Promoter.promoter_name,Promoter.PromoterPerson.cpf,Promoter.PromoterJuridic.cnpj".split(
+        ","
+      ),
     }));
   }, 500);
 
@@ -60,7 +75,7 @@ export const ProFormSelectFrianchise = ({
       placeholder={placeholder}
       mode={mode}
       options={data?.items.map((promoter) => ({
-        label: promoter.franchise_name,
+        label: promoter.name,
         value: promoter.id,
       }))}
       rules={rules}

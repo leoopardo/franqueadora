@@ -1,9 +1,9 @@
+import { Services } from "@franchisor/services";
 import { Col, Row } from "antd";
 import { MutateClient } from "../components/mutate";
-import { useCreateClient } from "@franchisor/services/clients/createClient";
 
 export const CreateClient = () => {
-  const { mutate, isLoading, isSuccess, error } = useCreateClient();
+  const { mutate, isLoading, isSuccess, error } = Services.client.create();
 
   return (
     <Row style={{ width: "100%" }} justify="center">

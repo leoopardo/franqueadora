@@ -1,10 +1,8 @@
+import { Services } from "@franchisor/services";
 import {
   ClientParams,
   ClientType,
 } from "@franchisor/services/clients/__interfaces/clients.interface.ts";
-import { useActivateClient } from "@franchisor/services/clients/activateClient";
-import { useInactivateClient } from "@franchisor/services/clients/inactivateFranchise";
-import { useListClients } from "@franchisor/services/clients/listClients.ts";
 import {
   CreditCardIcon,
   DocumentTextIcon,
@@ -24,10 +22,11 @@ import { formatCNPJ, formatCpfCnpj } from "../../../../utils/regexFormat";
 
 export const Clients = () => {
   const [params, setParams] = useState<ClientParams>({ page: 1, size: 15 });
-  const { data, isLoading } = useListClients(params);
+  const { list, enable, disable } = Services.client;
+  const { data, isLoading } = list(params);
   const { isSm } = useBreakpoints();
-  const activate = useActivateClient();
-  const inactivate = useInactivateClient();
+  const activate = enable();
+  const inactivate = disable();
   const navigate = useNavigate();
 
   const debounceSearch = useDebounce((value) => {

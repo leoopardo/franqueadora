@@ -1,5 +1,5 @@
 import { Button, Layout, Result } from "antd";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import { BaseLayout } from "./BaseLayout";
 import { Clients } from "./clients";
 import { CreateClient } from "./clients/create";
@@ -13,8 +13,10 @@ import { Terminals } from "./terminals";
 import { CreateTerminals } from "./terminals/create";
 import { Pending } from "./terminals/pending";
 import { UpdateClient } from "./clients/update";
+import { Me } from "./users/me";
 
 export const PrivateRoutes = () => {
+  const navigate = useNavigate();
   return (
     <Routes>
       <Route path="/" element={<BaseLayout />}>
@@ -38,6 +40,8 @@ export const PrivateRoutes = () => {
           <Route path="cadastro" element={<CreateTerminals />} />
           <Route path="pendentes" element={<Pending />} />
         </Route>
+        <Route path="conta" element={<Me />} />
+        
         <Route
           path="*"
           element={
@@ -54,7 +58,11 @@ export const PrivateRoutes = () => {
                 status="404"
                 title="404"
                 subTitle="Desculpa, essa página não existe."
-                extra={<Button type="default">Voltar para o início</Button>}
+                extra={
+                  <Button type="default" onClick={() => navigate(-1)}>
+                    Voltar para o início
+                  </Button>
+                }
               />
             </Layout>
           }

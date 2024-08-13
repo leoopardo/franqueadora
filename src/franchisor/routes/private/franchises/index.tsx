@@ -1,9 +1,11 @@
+import { Services } from "@franchisor/services/index.ts";
 import {
   CreditCardIcon,
   DocumentTextIcon,
   PencilIcon,
   TicketIcon,
 } from "@heroicons/react/24/outline";
+import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 import { Button, Col, Input, Row, Switch, Tooltip, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -17,17 +19,14 @@ import {
   Franchise,
   FranchiseParams,
 } from "../../../services/franchises/__interfaces/franchises.interface";
-import { useListFranchises } from "../../../services/franchises/listFranchises";
-import { useActivateFranchise } from "../../../services/franchises/activateFranchise.ts";
-import { useInactivateFranchise } from "../../../services/franchises/inactivateFranchise";
-import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 
 export const Franchises = () => {
   const [params, setParams] = useState<FranchiseParams>({ page: 1, size: 15 });
-  const { data, isLoading } = useListFranchises(params);
+  const { list, enable, disable } = Services.franchise;
+  const { data, isLoading } = list(params);
   const { isSm } = useBreakpoints();
-  const activate = useActivateFranchise();
-  const inactivate = useInactivateFranchise();
+  const activate = enable();
+  const inactivate = disable();
   const navigate = useNavigate();
 
   const debounceSearch = useDebounce((value) => {

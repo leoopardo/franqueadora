@@ -1,9 +1,11 @@
+import { Services } from "@franchisor/services";
 import {
   CreditCardIcon,
   DocumentTextIcon,
   PencilIcon,
   TicketIcon,
 } from "@heroicons/react/24/outline";
+import { useBreakpoints } from "@hooks/useBreakpoints";
 import { Button, Col, Input, Row, Switch, Tooltip, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useState } from "react";
@@ -17,16 +19,13 @@ import {
   Promoter,
   PromotersParams,
 } from "../../../services/promoters/__interfaces/promoters.interface";
-import { useActivatePromoter } from "../../../services/promoters/activatePromoter";
-import { useInactivatePromoter } from "../../../services/promoters/inactivatePromoter";
-import { useListPromoters } from "../../../services/promoters/listPromoters";
-import { useBreakpoints } from "@hooks/useBreakpoints";
 
 export const Promoters = () => {
   const [params, setParams] = useState<PromotersParams>({ page: 1, size: 15 });
-  const inactivate = useInactivatePromoter();
-  const activate = useActivatePromoter();
-  const { data, isLoading } = useListPromoters(params);
+  const { list, enable, disable } = Services.promoter;
+  const inactivate = disable();
+  const activate = enable();
+  const { data, isLoading } = list(params);
   const { isSm } = useBreakpoints();
   const navigate = useNavigate();
 

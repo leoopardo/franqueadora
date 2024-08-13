@@ -1,9 +1,9 @@
+import { Services } from "@franchisor/services";
 import { Col, Row } from "antd";
-import { useCreateFranchise } from "../../../../services/franchises/createFranchise";
 import { MutateFranchise } from "../components/mutate";
 
 export const CreateFranchise = () => {
-  const { mutate, isLoading, isSuccess, error } = useCreateFranchise();
+  const { mutate, isLoading, isSuccess, error } = Services.franchise.create();
 
   return (
     <Row style={{ width: "100%" }} justify="center">

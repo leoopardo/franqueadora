@@ -11,6 +11,7 @@ export enum QueryKeys {
   GET_ME = "getMeFranchisor",
   GET_PROMOTER_BY_ID = "getPromoterById",
   GET_CLIENT_BY_ID = "getClientById",
+  GET_USER_BY_ID = "getUserById",
 
   INACTIVATE_FRANCHISE = "inactivateFranchise",
   INACTIVATE_PROMOTER = "inactivatePromoter",
@@ -28,6 +29,7 @@ export enum QueryKeys {
   CREATE_FRANCHISE = "createFranchise",
   CREATE_PROMOTER = "createPromoter",
   CREATE_CLIENT = "createClient",
+  CREATE_TERMINALS = "createClient",
 
   UPDATE_FRANCHISE = "updateFranchise",
   UPDATE_FRANCHISE_AGREEMENTS = "updateFranchiseAgreements",
@@ -35,7 +37,8 @@ export enum QueryKeys {
   UPDATE_CLIENT = "updateClient",
 
   PENDING_NUMBER = "pendingNumber",
-  
-  SEND_TOKEN = "sendToken"
-  
+
+  SEND_TOKEN = "sendToken",
+
+  DELETE_TERMINAL = "deleteTerminal",
 }

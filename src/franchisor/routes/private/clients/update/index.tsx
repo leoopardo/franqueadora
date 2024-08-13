@@ -1,5 +1,4 @@
-import { useGetClientById } from "@franchisor/services/clients/getClientById";
-import { useUpdateClient } from "@franchisor/services/clients/updateClient";
+import { Services } from "@franchisor/services";
 import { formatCellPhoneBR, formatCPF, formatRG } from "@utils/regexFormat";
 import { Col, Row } from "antd";
 import { useParams } from "react-router-dom";
@@ -7,8 +6,9 @@ import { MutateClient } from "../components/mutate";
 
 export const UpdateClient = () => {
   const { id } = useParams();
-  const client = useGetClientById(id || "");
-  const { mutate, isLoading, isSuccess, error } = useUpdateClient(id || "");
+  const {update, getById} = Services.client
+  const client = getById(id || "");
+  const { mutate, isLoading, isSuccess, error } = update(id || "");
 
   return (
     <Row style={{ width: "100%" }} justify="center">

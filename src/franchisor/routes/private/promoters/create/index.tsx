@@ -1,9 +1,9 @@
-import { useCreatePromoter } from "@franchisor/services/promoters/createPromoter";
+import { Services } from "@franchisor/services";
 import { Col, Row } from "antd";
 import { MutatePromoter } from "../components/mutate";
 
 export const CreatePromoter = () => {
-  const { mutate, isLoading, isSuccess, error } = useCreatePromoter();
+  const { mutate, isLoading, isSuccess, error } = Services.promoter.create();
 
   return (
     <Row style={{ width: "100%" }} justify="center">

@@ -1,5 +1,4 @@
-import { useGetPromoterById } from "@franchisor/services/promoters/getPromoterById";
-import { useUpdatePromoter } from "@franchisor/services/promoters/updatePromoter";
+import { Services } from "@franchisor/services";
 import { formatCellPhoneBR, formatCPF, formatRG } from "@utils/regexFormat";
 import { Col, Row } from "antd";
 import { useParams } from "react-router-dom";
@@ -7,9 +6,9 @@ import { MutatePromoter } from "../components/mutate";
 
 export const UpdatePromoter = () => {
   const { id } = useParams();
-  const promoter = useGetPromoterById(id || "");
-  const { mutate, isLoading, isSuccess, error } = useUpdatePromoter(id || "");
-
+  const { update, getById } = Services.promoter;
+  const promoter = getById(id || "");
+  const { mutate, isLoading, isSuccess, error } = update(id || "");
 
   return (
     <Row style={{ width: "100%" }} justify="center">

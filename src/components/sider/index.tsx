@@ -391,7 +391,7 @@ export const SiderComponent = ({
                 fontSize: 15,
               }}
               icon={<UserOutlined />}
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/conta")}
             >
               {!props?.collapsed &&
                 `${
