@@ -1,24 +1,23 @@
-import { useGetPromoterById } from "@franchisor/services/promoters/getPromoterById";
-import { useUpdatePromoter } from "@franchisor/services/promoters/updatePromoter";
+import { useGetClientById } from "@franchisor/services/clients/getClientById";
+import { useUpdateClient } from "@franchisor/services/clients/updateClient";
 import { formatCellPhoneBR, formatCPF, formatRG } from "@utils/regexFormat";
 import { Col, Row } from "antd";
 import { useParams } from "react-router-dom";
-import { MutatePromoter } from "../components/mutate";
+import { MutateClient } from "../components/mutate";
 
-export const UpdatePromoter = () => {
+export const UpdateClient = () => {
   const { id } = useParams();
-  const promoter = useGetPromoterById(id || "");
-  const { mutate, isLoading, isSuccess, error } = useUpdatePromoter(id || "");
-
+  const client = useGetClientById(id || "");
+  const { mutate, isLoading, isSuccess, error } = useUpdateClient(id || "");
 
   return (
     <Row style={{ width: "100%" }} justify="center">
       <Col xs={{ span: 24 }} md={{ span: 24 }}>
-        <MutatePromoter
+        <MutateClient
           mutate={(data) => {
             mutate({
               ...data,
-              promoter: {
+              client: {
                 physical: {
                   ...data.physical,
                   birthdate: `${new Date(data?.physical?.birthdate || "").toISOString()}`,
@@ -40,30 +39,30 @@ export const UpdatePromoter = () => {
             } as any);
           }}
           error={error}
-          loading={isLoading || promoter.isLoading}
+          loading={isLoading || client.isLoading}
           success={isSuccess}
-          title={`Editar promotor: ${promoter?.data?.PromoterPerson?.name && promoter?.data?.PromoterPerson?.name?.length > 21 ? `${promoter?.data?.PromoterPerson?.name.substring(0, 21)}...` : promoter?.data?.PromoterPerson?.name}`}
-          subtitle="Preencha todos os campos para editar o promotor"
+          title={`Editar cliente: ${client?.data?.ClientPerson?.name && client?.data?.ClientPerson?.name?.length > 21 ? `${client?.data?.ClientPerson?.name.substring(0, 21)}...` : client?.data?.ClientPerson?.name}`}
+          subtitle="Preencha todos os campos para editar o cliente"
           initialValues={
             {
               physical: {
-                ...promoter.data?.PromoterPerson,
-                ...promoter.data?.PromoterAddress,
-                address_number: promoter.data?.PromoterAddress?.number || "",
-                cpf: formatCPF(promoter.data?.PromoterPerson?.cpf || ""),
-                rg: formatRG(promoter.data?.PromoterPerson?.rg || ""),
+                ...client.data?.ClientPerson,
+                ...client.data?.ClientAddress,
+                address_number: client.data?.ClientAddress?.number || "",
+                cpf: formatCPF(client.data?.ClientPerson?.cpf || ""),
+                rg: formatRG(client.data?.ClientPerson?.rg || ""),
                 module:
-                  promoter.data?.PromoterPOSModule?.map(
+                  client.data?.ClientPOSModule?.map(
                     (module) => module.POSModule.id
                   ) || [],
-                franchise_id: promoter?.data?.Franchise?.id || undefined,
-                phone: formatCellPhoneBR(promoter.data?.Master?.phone || ""),
-                client_manager: promoter?.data?.client_manager || false,
+                franchise_id: client?.data?.Franchise?.id || undefined,
+                promoter_id: client?.data?.promoter_id|| undefined,
+                phone: formatCellPhoneBR(client.data?.Master?.phone || ""),
               },
               master: {
-                ...promoter.data?.Master,
-                cpf: formatCPF(promoter.data?.Master?.document || ""),
-                phone: formatCellPhoneBR(promoter.data?.Master?.phone || ""),
+                ...client.data?.Master,
+                cpf: formatCPF(client.data?.Master?.document || ""),
+                phone: formatCellPhoneBR(client.data?.Master?.phone || ""),
               },
             } as any
           }

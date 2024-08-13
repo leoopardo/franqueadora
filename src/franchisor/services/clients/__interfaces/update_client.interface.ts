@@ -1,4 +1,4 @@
-export interface updatePromoterI {
+export interface updateClientI {
   agreement?: {
     active?: boolean;
     antecipation_fee?: string;
@@ -21,8 +21,7 @@ export interface updatePromoterI {
     };
     contacts?: any[];
   };
-  licenses?: any[];
-  promoter?: {
+  client?: {
     physical?: {
       address?: string;
       address_number?: string;

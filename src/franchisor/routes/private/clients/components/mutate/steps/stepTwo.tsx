@@ -51,7 +51,7 @@ export const StepTwo = ({
 
   return (
     <StepsForm.StepForm<any>
-      name="base"
+      name="master"
       title="Perfil principal"
       onFinish={async (form) => {
         console.log(form);

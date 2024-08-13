@@ -15,7 +15,7 @@ import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 import { Button, Col, Input, Row, Switch, Tooltip, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PageHeader } from "../../../../components/header/pageHeader";
 import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
@@ -28,6 +28,7 @@ export const Clients = () => {
   const { isSm } = useBreakpoints();
   const activate = useActivateClient();
   const inactivate = useInactivateClient();
+  const navigate = useNavigate();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -88,7 +89,7 @@ export const Clients = () => {
           actions={[
             {
               label: "Editar",
-              onClick: (row) => console.log(row),
+              onClick: (row) => navigate(`/clientes/edição/${row?.id}`),
               icon: <PencilIcon style={{ width: 16 }} />,
             },
           ]}
@@ -169,7 +170,12 @@ export const Clients = () => {
               width: 180,
               responsive: ["lg"],
             },
-            { key: "username", head: "Usuário",custom: (row) => (row.username), width: 80 },
+            {
+              key: "username",
+              head: "Usuário",
+              custom: (row) => row.username,
+              width: 80,
+            },
             { key: "city", head: "Cidade", responsive: ["lg"] },
             { key: "state", head: "Estado", responsive: ["lg"] },
             {

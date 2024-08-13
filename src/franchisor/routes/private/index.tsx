@@ -12,6 +12,7 @@ import { UpdatePromoter } from "./promoters/update";
 import { Terminals } from "./terminals";
 import { CreateTerminals } from "./terminals/create";
 import { Pending } from "./terminals/pending";
+import { UpdateClient } from "./clients/update";
 
 export const PrivateRoutes = () => {
   return (
@@ -30,6 +31,7 @@ export const PrivateRoutes = () => {
         <Route path="/clientes">
           <Route index element={<Clients />} />
           <Route path="cadastro" element={<CreateClient />} />
+          <Route path="edição/:id" element={<UpdateClient />} />
         </Route>
         <Route path="/terminais">
           <Route index element={<Terminals />} />

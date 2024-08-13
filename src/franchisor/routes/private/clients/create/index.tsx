@@ -1,6 +1,6 @@
-import { useCreateClient } from "@franchisor/services/clients/createPromoter";
 import { Col, Row } from "antd";
 import { MutateClient } from "../components/mutate";
+import { useCreateClient } from "@franchisor/services/clients/createClient";
 
 export const CreateClient = () => {
   const { mutate, isLoading, isSuccess, error } = useCreateClient();

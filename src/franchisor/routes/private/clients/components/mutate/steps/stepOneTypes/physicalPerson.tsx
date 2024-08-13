@@ -1,7 +1,7 @@
 import {
   ProFormDatePicker,
   ProFormInstance,
-  ProFormText
+  ProFormText,
 } from "@ant-design/pro-components";
 import { ProFormSelectFrianchise } from "@components/proFormSelects/SelectFranchises";
 import { ProFormSelectPromoters } from "@components/proFormSelects/SelectPromoters";
@@ -9,7 +9,7 @@ import useDebounce from "@hooks/useDebounce";
 import { formatCellPhoneBR, formatCPF, formatRG } from "@utils/regexFormat";
 import { Col } from "antd";
 import ptbr from "antd/lib/date-picker/locale/pt_BR";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 interface PhysicalPersonI {
   stepOneRef: React.RefObject<ProFormInstance>;
   update?: boolean;
@@ -30,6 +30,17 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
   const handleValidate = useDebounce((key, value) => {
     setBodyValidate((state) => ({ ...state, [key]: value }));
   }, 500);
+
+  useEffect(() => {
+    if (formRef?.current?.getFieldValue(["physical", "franchise_id"])) {
+      setPromoterQuery({
+        franchise_id: formRef?.current?.getFieldValue([
+          "physical",
+          "franchise_id",
+        ]),
+      });
+    }
+  }, [formRef?.current?.getFieldValue(["physical", "franchise_id"])]);
 
   return (
     <>
@@ -64,7 +75,7 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
           fieldProps={{ disabled: !promoterQuery }}
         />
       </Col>
-      {/* <Col md={{ span: 8 }} xs={{ span: 24 }}>
+      <Col md={{ span: 8 }} xs={{ span: 24 }}>
         <ProFormText
           name={["physical", "name"]}
           label="Nome completo"
@@ -72,7 +83,7 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
           rules={[{ required: !update }]}
           fieldProps={{}}
         />
-      </Col> */}
+      </Col>
       <Col md={{ span: 8 }} xs={{ span: 24 }}>
         <ProFormText
           name={["physical", "commercial_name"]}

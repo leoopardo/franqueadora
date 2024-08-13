@@ -3,16 +3,16 @@ import { useQuery } from "react-query";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchisorAuth } from "../../../contexts/franchisorAuthContext";
 import { QueryKeys } from "../queryKeys";
-import { PromoterById } from "./__interfaces/promoter_by_id.interface";
+import { ClientById } from "./__interfaces/client_by_id.interface";
 
-export const useGetPromoterById = (id: string) => {
+export const useGetClientById = (id: string) => {
   const { headers } = useFranchisorAuth();
   const { data, error, isLoading, refetch } = useQuery<
-  PromoterById | null | undefined
+  ClientById | null | undefined
   >(
-    [QueryKeys.GET_PROMOTER_BY_ID, id],
+    [QueryKeys.GET_CLIENT_BY_ID, id],
     async () => {
-      const response = await apiFranquia.get(`/promoter/${id}`, {
+      const response = await apiFranquia.get(`/client/${id}`, {
         headers: {
           ...headers,
         },

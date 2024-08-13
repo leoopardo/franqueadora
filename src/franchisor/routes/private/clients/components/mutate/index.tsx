@@ -132,10 +132,12 @@ export const MutateClient = ({
     //     }
     //   });
     // });
+
     return new Promise<boolean>((resolve) => {
       mutate({
         ...initialValues,
         ...values,
+        master: formRef.current?.getFieldValue("master"),
       });
       resolve(false);
     });
@@ -334,8 +336,9 @@ export const MutateClient = ({
                   setModules={setModules}
                   update={update}
                   formRef={formRef}
-                  updatePersonType={initialFormValues?.physical ? "physical" : "juridic"}
-
+                  updatePersonType={
+                    initialFormValues?.physical ? "physical" : "juridic"
+                  }
                 />
                 <StepTwo update={update} />
               </StepsForm>
