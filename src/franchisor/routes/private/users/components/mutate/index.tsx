@@ -119,7 +119,7 @@ export const MutateUser = ({
         ...initialValues,
         ...values,
       });
-      resolve(true);
+      resolve(false);
     });
   };
   const initialFormValues: createPromoterI = initialValues ?? {
@@ -226,7 +226,7 @@ export const MutateUser = ({
           }}
         >
           <Col xs={{ span: 24 }} md={{ span: 16 }}>
-            {loading || isDrafLoading ? (
+            {isDrafLoading ? (
               <Spin
                 size="large"
                 indicator={<LoadingOutlined size={40} spin />}
