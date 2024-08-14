@@ -14,7 +14,7 @@ export const useListPromoters = (params: PromotersParams) => {
     [QueryKeys.LIST_PROMOTERS, params],
     async () => {
       const response = await apiFranquia.get(
-        `/promoter`,
+        `/promoter/all`,
         {
           headers: {
             ...headers,

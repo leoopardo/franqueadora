@@ -21,7 +21,7 @@ export const StepFour = () => {
       name="base"
       title="Termos e condições"
       onFinish={async () => {
-        await waitTime(2000);
+        await waitTime(500);
         return true;
       }}
       size="large"

@@ -59,7 +59,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
       name="master"
       title="Perfil principal"
       onFinish={async () => {
-        await waitTime(2000);
+        await waitTime(500);
         return true;
       }}
       size="large"

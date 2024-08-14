@@ -1,11 +1,14 @@
+import { Services } from "@franchisor/services/index.ts";
 import {
   Bars3BottomLeftIcon,
   PencilIcon,
   PencilSquareIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
+import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 import { Button, Col, Input, Row, Switch, Typography } from "antd";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PageHeader } from "../../../../components/header/pageHeader";
 import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
@@ -14,19 +17,16 @@ import {
   Terminal,
   terminalParams,
 } from "../../../services/terminals/__interfaces/terminals.interface.ts";
-import { useActivateTerminal } from "../../../services/terminals/activateTerminals.ts";
-import { useTerminalTotals } from "../../../services/terminals/getTerminalTotals.ts";
-import { useInactivateTerminal } from "../../../services/terminals/inactivateTerminals.ts";
-import { useListTerminals } from "../../../services/terminals/listTerminals.ts";
 import { Totalizer } from "./components/Totalizer.tsx";
-import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 
 export const Terminals = () => {
   const [params, setParams] = useState<terminalParams>({ page: 1, size: 15 });
-  const { data, isLoading } = useListTerminals(params);
-  const activate = useActivateTerminal();
-  const inactivate = useInactivateTerminal();
-  const totals = useTerminalTotals({
+  const { list, disable, enable, totals, Delete } = Services.terminal;
+  const { data, isLoading } = list(params);
+  const deleteTerminal = Delete();
+  const activate = enable();
+  const inactivate = disable();
+  const total = totals({
     page: 1,
     size: 50,
     f: params.f,
@@ -34,6 +34,7 @@ export const Terminals = () => {
   });
   const [selectedRows, setSelectedRows] = useState<Terminal[]>([]);
   const { isSm } = useBreakpoints();
+  const navigate = useNavigate()
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -102,10 +103,10 @@ export const Terminals = () => {
       </Col>
       <Col span={24}>
         <Totalizer
-          content={totals?.data?.content}
+          content={total?.data?.content}
           setParams={setParams}
           params={params}
-          loading={totals.isLoading}
+          loading={total.isLoading}
         />
       </Col>
       {selectedRows.length >= 1 && (
@@ -142,8 +143,20 @@ export const Terminals = () => {
           actions={[
             {
               label: "Editar",
-              onClick: (row) => console.log(row),
+              onClick: (row) => navigate(`edição/${row?.id}`),
               icon: <PencilIcon style={{ width: 16 }} />,
+            },
+            {
+              label: "Excluir",
+              onClick: (row) => deleteTerminal.mutate({ id: `${row?.id}` }),
+              confimation(RowItemI) {
+                return {
+                  title: "Excluir terminal.",
+                  description: `Deseja realmente excluir o terminal ${RowItemI?.serial_number}?`,
+
+                };
+              },
+              icon: <TrashIcon style={{ width: 16 }} />,
             },
           ]}
           columns={[
@@ -173,7 +186,11 @@ export const Terminals = () => {
               key: "serial_number",
               head: "Número de serial",
               custom(row) {
-                return <Typography.Text copyable>{row.serial_number}</Typography.Text>;
+                return (
+                  <Typography.Text copyable>
+                    {row.serial_number}
+                  </Typography.Text>
+                );
               },
               width: 80,
             },

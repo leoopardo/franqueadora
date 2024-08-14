@@ -16,7 +16,7 @@ export const StepTwo = () => {
       name="base"
       title="Ingressos"
       onFinish={async () => {
-        await waitTime(2000);
+        await waitTime(500);
         return true;
       }}
       size="large"

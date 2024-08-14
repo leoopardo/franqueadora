@@ -25,7 +25,7 @@ export const MenuStepOne = ({ updateData }: MenuStepOneProps) => {
       name="menu"
       title="Detalhes do cardápio"
       onFinish={async () => {
-        await waitTime(2000);
+        await waitTime(500);
         return true;
       }}
       size="large"

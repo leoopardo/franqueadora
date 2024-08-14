@@ -1,10 +1,8 @@
+import { Services } from "@franchisor/services";
 import {
   ClientParams,
   ClientType,
 } from "@franchisor/services/clients/__interfaces/clients.interface.ts";
-import { useActivateClient } from "@franchisor/services/clients/activateClient";
-import { useInactivateClient } from "@franchisor/services/clients/inactivateFranchise";
-import { useListClients } from "@franchisor/services/clients/listClients.ts";
 import {
   CreditCardIcon,
   DocumentTextIcon,
@@ -15,7 +13,7 @@ import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 import { Button, Col, Input, Row, Switch, Tooltip, Typography } from "antd";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PageHeader } from "../../../../components/header/pageHeader";
 import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
@@ -24,10 +22,12 @@ import { formatCNPJ, formatCpfCnpj } from "../../../../utils/regexFormat";
 
 export const Clients = () => {
   const [params, setParams] = useState<ClientParams>({ page: 1, size: 15 });
-  const { data, isLoading } = useListClients(params);
+  const { list, enable, disable } = Services.client;
+  const { data, isLoading } = list(params);
   const { isSm } = useBreakpoints();
-  const activate = useActivateClient();
-  const inactivate = useInactivateClient();
+  const activate = enable();
+  const inactivate = disable();
+  const navigate = useNavigate();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -88,7 +88,7 @@ export const Clients = () => {
           actions={[
             {
               label: "Editar",
-              onClick: (row) => console.log(row),
+              onClick: (row) => navigate(`/clientes/edição/${row?.id}`),
               icon: <PencilIcon style={{ width: 16 }} />,
             },
           ]}
@@ -169,7 +169,12 @@ export const Clients = () => {
               width: 180,
               responsive: ["lg"],
             },
-            { key: "username", head: "Usuário",custom: (row) => (row.username), width: 80 },
+            {
+              key: "username",
+              head: "Usuário",
+              custom: (row) => row.username,
+              width: 80,
+            },
             { key: "city", head: "Cidade", responsive: ["lg"] },
             { key: "state", head: "Estado", responsive: ["lg"] },
             {

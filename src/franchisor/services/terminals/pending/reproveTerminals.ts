@@ -21,6 +21,9 @@ export const useReproveTerminals = () => {
       await queryClient.refetchQueries({
         queryKey: [QueryKeys.LIST_PENDING_TERMINALS],
       });
+      await queryClient.refetchQueries({
+        queryKey: [QueryKeys.GET_TERMINAL_TOTALS],
+      });
       return response.data;
     },
     mutationKey: QueryKeys.REPROVE_TERMINAL,
@@ -29,7 +32,7 @@ export const useReproveTerminals = () => {
   const { data, error, isLoading, mutate, reset, isSuccess } = mutation;
 
   if (isSuccess) {
-    notification.success({ message: "Terminalis aprovados com sucesso!" });
+    notification.success({ message: "Terminais aprovados com sucesso!" });
     reset();
   }
   if (error) {

@@ -102,7 +102,7 @@ export const StepOne = () => {
           name="base"
           title="Detalhes do evento"
           onFinish={async () => {
-            await waitTime(2000);
+            await waitTime(500);
             return true;
           }}
           size="large"

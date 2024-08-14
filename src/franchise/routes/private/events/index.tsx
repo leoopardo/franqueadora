@@ -147,6 +147,7 @@ export const Events = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar evento"
+          style={{borderRadius: 32}}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>

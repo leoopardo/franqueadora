@@ -1,17 +1,24 @@
-import { Route, Routes } from "react-router-dom";
-import { BaseLayout } from "./BaseLayout";
 import { Button, Layout, Result } from "antd";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { BaseLayout } from "./BaseLayout";
+import { Clients } from "./clients";
+import { CreateClient } from "./clients/create";
 import { Franchises } from "./franchises";
 import { CreateFranchise } from "./franchises/create";
+import { UpdateFranchise } from "./franchises/update";
 import { Promoters } from "./promoters";
 import { CreatePromoter } from "./promoters/create";
+import { UpdatePromoter } from "./promoters/update";
 import { Terminals } from "./terminals";
-import { Pending } from "./terminals/pending";
-import { Clients } from "./clients";
-import { UpdateFranchise } from "./franchises/update";
 import { CreateTerminals } from "./terminals/create";
+import { Pending } from "./terminals/pending";
+import { UpdateClient } from "./clients/update";
+import { Me } from "./users/me";
+import { Users } from "./users";
+import { UpdateTerminals } from "./terminals/update";
 
 export const PrivateRoutes = () => {
+  const navigate = useNavigate();
   return (
     <Routes>
       <Route path="/" element={<BaseLayout />}>
@@ -23,15 +30,22 @@ export const PrivateRoutes = () => {
         <Route path="/promotores">
           <Route index element={<Promoters />} />
           <Route path="cadastro" element={<CreatePromoter />} />
+          <Route path="edição/:id" element={<UpdatePromoter />} />
         </Route>
         <Route path="/clientes">
           <Route index element={<Clients />} />
+          <Route path="cadastro" element={<CreateClient />} />
+          <Route path="edição/:id" element={<UpdateClient />} />
         </Route>
         <Route path="/terminais">
           <Route index element={<Terminals />} />
           <Route path="cadastro" element={<CreateTerminals />} />
           <Route path="pendentes" element={<Pending />} />
+          <Route path="edição/:id" element={<UpdateTerminals />} />
         </Route>
+        <Route path="usuários" element={<Users />} />
+        <Route path="conta" element={<Me />} />
+
         <Route
           path="*"
           element={
@@ -48,7 +62,11 @@ export const PrivateRoutes = () => {
                 status="404"
                 title="404"
                 subTitle="Desculpa, essa página não existe."
-                extra={<Button type="default">Voltar para o início</Button>}
+                extra={
+                  <Button type="default" onClick={() => navigate(-1)}>
+                    Voltar para o início
+                  </Button>
+                }
               />
             </Layout>
           }

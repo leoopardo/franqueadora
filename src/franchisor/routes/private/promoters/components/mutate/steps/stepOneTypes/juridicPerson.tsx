@@ -76,7 +76,7 @@ export const JuridicPerson = ({ stepOneRef, update }: juridicPersonI) => {
     <>
       <Col md={{ span: 12 }} xs={{ span: 24 }}>
         <ProFormSelect
-          name="franchise_id"
+          name={["physical", "franchise_id"]}
           label="Franquia"
           placeholder="Selecione a franquia"
           mode="single"
@@ -91,7 +91,7 @@ export const JuridicPerson = ({ stepOneRef, update }: juridicPersonI) => {
       </Col>
       <Col md={{ span: 12 }} xs={{ span: 24 }}>
         <ProFormText
-          name="cnpj"
+          name={["physical", "cnpj"]}
           label="CNPJ"
           placeholder="Digite o CNPJ"
           validateTrigger={["onChange", "onBlur", "onPaste"]}
@@ -139,7 +139,7 @@ export const JuridicPerson = ({ stepOneRef, update }: juridicPersonI) => {
       </Col>
       <Col md={{ span: 8 }} xs={{ span: 24 }}>
         <ProFormText
-          name="company_name"
+          name={["physical", "company_name"]}
           label="Razão social"
           placeholder="Digite a razão social"
           rules={[{ required: !update }]}
@@ -147,7 +147,7 @@ export const JuridicPerson = ({ stepOneRef, update }: juridicPersonI) => {
       </Col>
       <Col md={{ span: 8 }} xs={{ span: 24 }}>
         <ProFormText
-          name="commercial_name"
+          name={["physical", "commercial_name"]}
           label="Nome fantasia"
           placeholder="Digite o nome fantasia"
           rules={[{ required: !update }]}
@@ -155,7 +155,7 @@ export const JuridicPerson = ({ stepOneRef, update }: juridicPersonI) => {
       </Col>
       <Col md={{ span: 8 }} xs={{ span: 24 }}>
         <ProFormText
-          name="state_registration"
+          name={["physical", "state_registration"]}
           label="Inscrição estadual"
           placeholder="Digite a inscição estadual"
           rules={[{ required: !update }]}

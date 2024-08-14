@@ -28,6 +28,9 @@ const terminalSchema = z.object({
   serial_number: z.string().optional(),
   situation: z.string().optional(),
   terminal_model: z.string().optional(),
+  modules: z.array(z.any()).optional().nullable(),
+  terminal_model_id: z.string().optional().nullable(),
+  time_zone_id: z.string().optional().nullable(),
 });
 
 export const terminalResponseSchema = createResponseSchema(terminalSchema);

@@ -71,6 +71,7 @@ export const Terminals = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar terminal"
+          style={{borderRadius: 32}}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 3 }}>

@@ -78,7 +78,7 @@ export const SiderComponent = ({
   );
   const searchFranchises = useSearchFranchises(
     franchisesParams,
-    franquia && !!localStorage.getItem("master")? true : false
+    franquia && !!localStorage.getItem("master") ? true : false
   );
   const { mutate } = useSetTenant();
 
@@ -143,7 +143,7 @@ export const SiderComponent = ({
         disabled: !franchise.active || franchise.is_deleted,
         style: { height: 60, width: 260 },
         onClick: () => {
-          mutate({franchise_id: `${franchise.id}`})
+          mutate({ franchise_id: `${franchise.id}` });
           setTenant(`${franchise.id}`);
           localStorage.setItem("tenant", `${franchise.id}`);
           setFranchisesParams(INITIAL_PARAMS);
@@ -208,6 +208,7 @@ export const SiderComponent = ({
         display: "flex",
         justifyContent: "center",
       }}
+      style={{}}
       collapsed={!isMenuOpen}
       onCollapse={(collapsed) => setIsMenuOpen(!collapsed)}
       logo={
@@ -391,7 +392,7 @@ export const SiderComponent = ({
                 fontSize: 15,
               }}
               icon={<UserOutlined />}
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/conta")}
             >
               {!props?.collapsed &&
                 `${
@@ -425,7 +426,11 @@ export const SiderComponent = ({
       openKeys={openKeys}
       onOpenChange={handleMenuOpenChange}
       stylish={{
-        sider: () => ({ borderRight: "1px solid rgb(113, 113, 122, 0.2)" }),
+        sider: () => ({
+          borderRight: "1px solid rgb(113, 113, 122, 0.2)",
+          zIndex: 9999,
+          backgroundColor: theme === "light" ? "#f0f2f5" : "#1f1f1f",
+        }),
       }}
     >
       {children}
