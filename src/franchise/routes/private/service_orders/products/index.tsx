@@ -1,3 +1,4 @@
+import { SearchOutlined } from "@ant-design/icons";
 import { PageHeader } from "@components/header/pageHeader";
 import TableComponent from "@components/table/tableComponent";
 import {
@@ -82,7 +83,8 @@ export const Products = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar produto"
-          style={{borderRadius: 32}}
+          style={{ borderRadius: 32 }}
+          suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>

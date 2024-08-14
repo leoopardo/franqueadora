@@ -19,6 +19,7 @@ import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
 import defaultTheme from "../../../../styles/default";
 import { formatCNPJ, formatCpfCnpj } from "../../../../utils/regexFormat";
+import { SearchOutlined } from "@ant-design/icons";
 
 export const Clients = () => {
   const [params, setParams] = useState<ClientParams>({ page: 1, size: 15 });
@@ -65,6 +66,8 @@ export const Clients = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar cliente"
+          style={{borderRadius: 32}}
+          suffix={<SearchOutlined style={{width: 16}} />}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>

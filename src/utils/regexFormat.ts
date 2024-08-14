@@ -32,7 +32,6 @@ export const formatRG = (value: string | number) => {
 };
 
 export const formatCPF = (value: string | number) => {
-  if (!value) return "-";
   value = `${value}`.replace(/\D/g, ""); // Remove qualquer caractere que não seja dígito
   value = `${value}`.substring(0, 11); // Garante que só há no máximo 11 dígitos
   if (value.length <= 11) {

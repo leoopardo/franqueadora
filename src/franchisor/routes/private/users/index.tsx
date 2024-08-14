@@ -1,9 +1,7 @@
 import { Services } from "@franchisor/services";
 import { ClientParams } from "@franchisor/services/clients/__interfaces/clients.interface.ts";
 import { UserType } from "@franchisor/services/users/__interfaces/users.interface";
-import {
-    PencilIcon
-} from "@heroicons/react/24/outline";
+import { PencilIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 import { Button, Col, Input, Row, Switch, Typography } from "antd";
 import { useState } from "react";
@@ -11,7 +9,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { PageHeader } from "../../../../components/header/pageHeader";
 import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
-import { formatCellPhoneBR, formatCpfCnpj } from "../../../../utils/regexFormat";
+import {
+  formatCellPhoneBR,
+  formatCpfCnpj,
+} from "../../../../utils/regexFormat";
+import { SearchOutlined } from "@ant-design/icons";
 
 export const Users = () => {
   const [params, setParams] = useState<ClientParams>({ page: 1, size: 15 });
@@ -58,6 +60,8 @@ export const Users = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar usuário"
+          style={{ borderRadius: 32 }}
+          suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>
@@ -139,9 +143,14 @@ export const Users = () => {
               custom: (row) => row.username,
             },
             { key: "role", head: "Perfil", responsive: ["lg"] },
-            {key: "phone", head: "Telefone",custom(row){
+            {
+              key: "phone",
+              head: "Telefone",
+              custom(row) {
                 return formatCellPhoneBR(row?.phone ?? "");
-            }, responsive: ["lg"]},
+              },
+              responsive: ["lg"],
+            },
           ]}
         />
       </Col>

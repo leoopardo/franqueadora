@@ -4,6 +4,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   MoonOutlined,
+  SearchOutlined,
   SunOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -17,7 +18,7 @@ import { QueryKeys } from "@franchisor/services/queryKeys";
 import useDebounce from "@hooks/useDebounce";
 import defaultTheme from "@styles/default";
 import { formatCNPJ } from "@utils/regexFormat";
-import { Badge, Button, Input, Menu, Switch, Typography } from "antd";
+import { Badge, Button, Input, Menu, Typography } from "antd";
 import { MenuProps } from "antd/lib";
 import {
   Dispatch,
@@ -28,11 +29,11 @@ import {
   useState,
 } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Logo from "../../../public/pdv365-logo-white.svg";
 import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
 import { useTheme } from "../../contexts/themeContext";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { queryClient } from "../../services/queryClient";
-import Logo from "../../../public/pdv365-logo-white.svg";
 
 interface SiderComponentI {
   isMenuOpen: boolean;
@@ -63,7 +64,7 @@ export const SiderComponent = ({
 }: SiderComponentI) => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
-  const { isSm, isMd, isXl, isLg } = useBreakpoints();
+  const { isSm, isXl, isLg } = useBreakpoints();
   const { headers } = useFranchisorAuth();
   const location = useLocation();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
@@ -178,6 +179,8 @@ export const SiderComponent = ({
                 onChange={debounceSearch}
                 placeholder="Pesquisar franquia"
                 size="large"
+                style={{ borderRadius: 32, marginLeft: 8, marginTop: 8 }}
+                suffix={<SearchOutlined style={{ width: 16 }} />}
               />
             ),
           },
@@ -212,56 +215,67 @@ export const SiderComponent = ({
       collapsed={!isMenuOpen}
       onCollapse={(collapsed) => setIsMenuOpen(!collapsed)}
       logo={
-        theme === "light" ? (
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <Link to="/dashboard">
-              {" "}
-              <img
-                src="/logoDef.svg"
-                style={
-                  !isMd || isSm
-                    ? { height: "100%", width: data ? "70%" : "100%" }
-                    : { height: 15, width: 50 }
-                }
-              />{" "}
-            </Link>
-            {franquia && localStorage.getItem("master") && (
-              <Menu
-                style={{
-                  width: "120%",
-                  marginLeft: -20,
-                  borderRadius: 8,
-                }}
-                mode="vertical"
-                items={getFranchises()}
-              />
-            )}
-          </div>
-        ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <Link to="/dashboard">
-              <img
-                src="/logoWhiteDef.svg"
-                style={
-                  !isMd || isSm
-                    ? { height: "100%", width: data ? "70%" : "100%" }
-                    : { height: 15, width: 50 }
-                }
-              />
-            </Link>
-            {franquia && localStorage.getItem("master") && (
-              <Menu
-                style={{
-                  width: "120%",
-                  marginLeft: -20,
-                  borderRadius: 8,
-                }}
-                mode="vertical"
-                items={getFranchises()}
-              />
-            )}
-          </div>
-        )
+        <div
+          style={{
+            width: isMenuOpen ? (!isXl ? 250 : 200) : 30,
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          {theme === "light" ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <Link to="/dashboard">
+                {" "}
+                <img
+                  src="/logoDef.svg"
+                  style={
+                    isMenuOpen
+                      ? { height: "100%", width: data ? "70%" : "90%" }
+                      : { height: 15, width: 50, marginLeft: -8 }
+                  }
+                />{" "}
+              </Link>
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <Link to="/dashboard">
+                <img
+                  src="/logoWhiteDef.svg"
+                  style={
+                    isMenuOpen
+                      ? { height: "100%", width: data ? "70%" : "90%" }
+                      : { height: 15, width: 50, marginLeft: -8 }
+                  }
+                />
+              </Link>
+            </div>
+          )}
+          <Button
+            type="link"
+            icon={theme === "dark" ? <SunOutlined /> : <MoonOutlined />}
+            onClick={
+              theme === "dark"
+                ? () => setTheme("light")
+                : () => setTheme("dark")
+            }
+            style={{
+              color: theme === "light" ? "#000" : "#fff",
+            }}
+          />
+          {franquia && localStorage.getItem("master") && (
+            <Menu
+              style={{
+                width: "120%",
+                marginLeft: -7,
+                borderRadius: 8,
+              }}
+              mode="vertical"
+              items={getFranchises()}
+            />
+          )}
+        </div>
       }
       headerContentRender={
         !isSm
@@ -332,19 +346,6 @@ export const SiderComponent = ({
               gap: 8,
             }}
           >
-            {!props?.collapsed && (
-              <Switch
-                style={{ width: 50, marginLeft: 14 }}
-                value={theme === "dark"}
-                checkedChildren={<SunOutlined />}
-                unCheckedChildren={<MoonOutlined />}
-                defaultChecked
-                onChange={(checked) =>
-                  checked ? setTheme("dark") : setTheme("light")
-                }
-              />
-            )}
-
             {!franquia && (
               <Link
                 to={`http://franquia${

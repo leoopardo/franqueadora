@@ -20,6 +20,7 @@ import { useInactivateTerminal } from "../../../services/terminals/inactivateTer
 import { useListTerminals } from "../../../services/terminals/listTerminals.ts";
 import { Totalizer } from "./components/Totalizer.tsx";
 import { useBreakpoints } from "@hooks/useBreakpoints.ts";
+import { SearchOutlined } from "@ant-design/icons";
 
 export const Terminals = () => {
   const [params, setParams] = useState<terminalParams>({ page: 1, size: 15 });
@@ -71,7 +72,8 @@ export const Terminals = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar terminal"
-          style={{borderRadius: 32}}
+          style={{ borderRadius: 32 }}
+          suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 3 }}>
@@ -174,7 +176,11 @@ export const Terminals = () => {
               key: "serial_number",
               head: "Número de serial",
               custom(row) {
-                return <Typography.Text copyable>{row.serial_number}</Typography.Text>;
+                return (
+                  <Typography.Text copyable>
+                    {row.serial_number}
+                  </Typography.Text>
+                );
               },
               width: 80,
             },

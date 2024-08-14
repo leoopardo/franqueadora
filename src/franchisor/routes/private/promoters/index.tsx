@@ -19,6 +19,7 @@ import {
   Promoter,
   PromotersParams,
 } from "../../../services/promoters/__interfaces/promoters.interface";
+import { SearchOutlined } from "@ant-design/icons";
 
 export const Promoters = () => {
   const [params, setParams] = useState<PromotersParams>({ page: 1, size: 15 });
@@ -66,6 +67,8 @@ export const Promoters = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar promotor"
+          style={{ borderRadius: 32 }}
+          suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>
