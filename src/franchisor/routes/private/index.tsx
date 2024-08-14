@@ -14,6 +14,8 @@ import { CreateTerminals } from "./terminals/create";
 import { Pending } from "./terminals/pending";
 import { UpdateClient } from "./clients/update";
 import { Me } from "./users/me";
+import { Users } from "./users";
+import { UpdateTerminals } from "./terminals/update";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
@@ -39,9 +41,11 @@ export const PrivateRoutes = () => {
           <Route index element={<Terminals />} />
           <Route path="cadastro" element={<CreateTerminals />} />
           <Route path="pendentes" element={<Pending />} />
+          <Route path="edição/:id" element={<UpdateTerminals />} />
         </Route>
+        <Route path="usuários" element={<Users />} />
         <Route path="conta" element={<Me />} />
-        
+
         <Route
           path="*"
           element={

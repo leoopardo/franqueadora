@@ -8,7 +8,7 @@ import {
 import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 import { Button, Col, Input, Row, Switch, Typography } from "antd";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PageHeader } from "../../../../components/header/pageHeader";
 import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
@@ -34,6 +34,7 @@ export const Terminals = () => {
   });
   const [selectedRows, setSelectedRows] = useState<Terminal[]>([]);
   const { isSm } = useBreakpoints();
+  const navigate = useNavigate()
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -142,7 +143,7 @@ export const Terminals = () => {
           actions={[
             {
               label: "Editar",
-              onClick: (row) => console.log(row),
+              onClick: (row) => navigate(`edição/${row?.id}`),
               icon: <PencilIcon style={{ width: 16 }} />,
             },
             {

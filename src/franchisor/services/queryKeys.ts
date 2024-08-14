@@ -5,6 +5,7 @@ export enum QueryKeys {
   LIST_PENDING_TERMINALS = "listPendingTerminals",
   LIST_CLIENTS = "listClients",
   LIST_AGREEMENTS = "listAgreements",
+  LIST_USERS = "listUsers",
 
   GET_TERMINAL_SELECTS = "getTerminalSelects",
   GET_TERMINAL_TOTALS = "getTerminalTotals",
@@ -12,16 +13,19 @@ export enum QueryKeys {
   GET_PROMOTER_BY_ID = "getPromoterById",
   GET_CLIENT_BY_ID = "getClientById",
   GET_USER_BY_ID = "getUserById",
+  GET_TERMINAL_BY_ID = "getTerminalById",
 
   INACTIVATE_FRANCHISE = "inactivateFranchise",
   INACTIVATE_PROMOTER = "inactivatePromoter",
   INACTIVATE_TERMINAL = "inactivateTerminal",
   INACTIVATE_CLIENT = "inactivateClient",
+  INACTIVATE_USER = "inactiveUser",
 
   ACTIVATE_FRANCHISE = "activateFranchise",
   ACTIVATE_PROMOTER = "activatePromoter",
   ACTIVATE_TERMINAL = "activateTerminal",
   ACTIVATE_CLIENT = "activateClient",
+  ACTIVATE_USER = "activateUser",
 
   APPROVE_TERMINALS = "approveTerminals",
   REPROVE_TERMINAL = "reproveTerminals",
@@ -35,6 +39,7 @@ export enum QueryKeys {
   UPDATE_FRANCHISE_AGREEMENTS = "updateFranchiseAgreements",
   UPDATE_PROMOTER = "updatePromoter",
   UPDATE_CLIENT = "updateClient",
+  UPDTAE_TERMINAL = "updateTerminal",
 
   PENDING_NUMBER = "pendingNumber",
 

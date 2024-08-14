@@ -7,7 +7,8 @@ export interface CreateTerminals {
   modules: string[];
   promoter_id?: string;
   promoter_license_id?: string | null;
-  serial_numbers: string[];
+  serial_numbers?: string[];
+  serial_number?: string;
   situation: string;
   time_zone_id: string;
 }

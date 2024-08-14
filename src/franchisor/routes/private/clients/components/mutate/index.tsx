@@ -266,6 +266,7 @@ export const MutateClient = ({
                           label: step.title,
                           key: step.key,
                         }))}
+                        style={{ position: "sticky", top: 500 }}
                       />
                     ) : null
                   }
@@ -311,6 +312,7 @@ export const MutateClient = ({
                         label: step.title,
                         key: step.key,
                       }))}
+                     
                     />
                   ) : null
                 }

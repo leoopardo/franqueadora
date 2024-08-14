@@ -1,7 +1,6 @@
 import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
 import { ProCard, ProFormText, StepsForm } from "@ant-design/pro-components";
 import { PageHeader } from "@components/header/pageHeader";
-import { Services } from "@franchisor/services";
 import { QueryKeys } from "@franchisor/services/queryKeys";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
@@ -16,8 +15,8 @@ export const Me = () => {
   const { isSm } = useBreakpoints();
   const Me = queryClient?.getQueryData(QueryKeys.GET_ME) as any;
   const formRef = useRef<any>();
-  const { data } = Services.users.byId(Me.id);
-  const [step, setStep] = useState<number>(1);
+  // const { data } = Services.users.byId(Me.id);
+  const [, setStep] = useState<number>(1);
   const [password, setPassWord] = useState<string>("");
   const [confirmPassword, setConfirmPassWord] = useState<string>("");
 

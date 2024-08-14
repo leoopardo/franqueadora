@@ -89,13 +89,13 @@ export const MenuItens = (pending: number) => {
     {
       key: "usuarios",
       name: "Usuários",
-      path: "/users",
+      path: "/usuários",
       icon: <UserCircleIcon width={24} />,
       children: [
         {
           key: "usuarios-geral",
           name: "Geral",
-          path: "/users",
+          path: "/usuários",
         },
         {
           key: "logs",

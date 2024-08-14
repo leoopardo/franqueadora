@@ -1,5 +1,11 @@
+import { useActivateUser } from "./activateUser";
 import { useGetUserById } from "./getUserById";
+import { useInactivateUser } from "./inactivateUser";
+import { useListUsers } from "./listUsers";
 
 export const Users = {
-    byId: useGetUserById
-}
+  list: useListUsers,
+  byId: useGetUserById,
+  enable: useActivateUser,
+  disable: useInactivateUser,
+};

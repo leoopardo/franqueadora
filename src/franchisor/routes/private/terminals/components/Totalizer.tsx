@@ -26,7 +26,7 @@ export const Totalizer = ({
     sale: "Venda",
     stock: "Estoque",
     total: "Total",
-    deleted: "Excluídos"
+    deleted: "Excluídos",
   };
   const hideTotals = ["free", "monthly", "loose"];
 
@@ -102,6 +102,8 @@ export const Totalizer = ({
                   alignItems: "center",
                   height: "100%",
                   width: "100%",
+                  gap: 8,
+                  maxWidth: 143,
                 }}
               >
                 <Statistic title={labels[item.label]} value={item?.value} />

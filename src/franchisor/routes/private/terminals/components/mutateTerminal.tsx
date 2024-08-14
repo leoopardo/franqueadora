@@ -87,8 +87,20 @@ export const MutateTerminal = ({
               type="primary"
               onClick={() => {
                 console.log(data);
-
                 formRef.current?.setFieldsValue(data);
+                if (data?.franchise_id) {
+                  setPromoterQuery({
+                    franchise_id: data.franchise_id,
+                  });
+                }
+                if (data?.promoter_id) {
+                  setClientQuery({
+                    promoter_id: data.promoter_id,
+                  });
+                }
+                if(data?.serial_numbers) {
+                  setSerials(data.serial_numbers);
+                }
                 api.destroy();
                 cookies.remove("create_terminal");
               }}
@@ -100,6 +112,22 @@ export const MutateTerminal = ({
       });
     }
   }, []);
+
+  useEffect(() => {
+    if (initialValues) {
+      formRef.current?.setFieldsValue(initialValues);
+    }
+    if (initialValues?.franchise_id) {
+      setPromoterQuery({
+        franchise_id: initialValues.franchise_id,
+      });
+    }
+    if (initialValues?.promoter_id) {
+      setClientQuery({
+        promoter_id: initialValues.promoter_id,
+      });
+    }
+  }, [initialValues]);
 
   const onNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSerial(event.target.value);
@@ -395,6 +423,7 @@ export const MutateTerminal = ({
                     <ProFormField
                       label="Número de série"
                       name={"serial_number"}
+                      fieldProps={{ size: "large" }}
                     />
                   )}
                 </Col>
