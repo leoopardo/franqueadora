@@ -29,6 +29,7 @@ import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { formatCpfCnpj } from "@utils/regexFormat";
 import { CalendarProps } from "antd/lib";
+import { SearchOutlined } from "@ant-design/icons";
 
 const month = {
   1: "JAN",
@@ -147,7 +148,8 @@ export const Events = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar evento"
-          style={{borderRadius: 32}}
+          style={{ borderRadius: 32 }}
+          suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>

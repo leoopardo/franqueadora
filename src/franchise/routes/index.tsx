@@ -1,9 +1,9 @@
-import { LoadingOutlined } from "@ant-design/icons";
+import loading from "@assets/loading.gif";
 import { congnitoAuthService } from "@franchise/services/auth/CognitoAuthService";
 import { useBreakpoints } from "@hooks/useBreakpoints";
-import { Layout, Spin } from "antd";
+import { Layout } from "antd";
 import { Amplify } from "aws-amplify";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useFranchiseAuth } from "../../contexts/franchiseAuthContext";
 import { useTheme } from "../../contexts/themeContext";
@@ -22,6 +22,7 @@ export const FranchiseRoutes = (): React.ReactElement => {
   const { theme } = useTheme();
   const { isMd, isSm } = useBreakpoints();
   const { setHeader } = useFranchiseAuth();
+  const [delay, setDelay] = useState<boolean>(true);
 
   document.title = `Painel ${window.location.host.split(".")[0]} - PDV365`;
 
@@ -57,7 +58,15 @@ export const FranchiseRoutes = (): React.ReactElement => {
     }
   }, [isSuccess, error]);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!isLoading) {
+      setTimeout(() => {
+        setDelay(false);
+      }, 2000);
+    }
+  }, [isLoading]);
+
+  if (delay) {
     if (localStorage.getItem("master")) {
       return <CrossAuth />;
     }
@@ -85,11 +94,20 @@ export const FranchiseRoutes = (): React.ReactElement => {
               src="/logoDef.svg"
               style={
                 !isMd || isSm
-                  ? { height: 45, width: 150 }
+                  ? { height: 60, width: 250 }
                   : { height: 15, width: 50 }
               }
             />
-            <Spin size="large" indicator={<LoadingOutlined size={40} spin />} />
+            <img
+              src={loading}
+              alt="logo"
+              style={
+                !isMd || isSm
+                  ? { width: 150 }
+                  : {width: 50 }
+              }
+            />
+            {/* <Spin size="large" indicator={<LoadingOutlined size={40} spin />} /> */}
           </div>
         ) : (
           <div
@@ -105,11 +123,20 @@ export const FranchiseRoutes = (): React.ReactElement => {
               src="/logoWhiteDef.svg"
               style={
                 !isMd || isSm
-                  ? { height: 45, width: 150 }
+                  ? { height: 60, width: 250 }
                   : { height: 15, width: 50 }
               }
             />
-            <Spin size="large" indicator={<LoadingOutlined size={40} spin />} />
+            <img
+              src={loading}
+              alt="logo"
+              style={
+                !isMd || isSm
+                  ? { width: 150 }
+                  : {width: 50 }
+              }
+            />
+            {/* <Spin size="large" indicator={<LoadingOutlined size={40} spin />} /> */}
           </div>
         )}
       </Layout>

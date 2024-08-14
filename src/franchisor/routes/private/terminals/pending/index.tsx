@@ -1,4 +1,4 @@
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
 import { PageHeader } from "@components/header/pageHeader";
 import TableComponent from "@components/table/tableComponent";
 import {
@@ -66,6 +66,8 @@ export const Pending = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar terminal"
+          style={{ borderRadius: 32 }}
+          suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 3 }}>

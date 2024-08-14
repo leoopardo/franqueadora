@@ -14,6 +14,7 @@ export enum QueryKeys {
   GET_CLIENT_BY_ID = "getClientById",
   GET_USER_BY_ID = "getUserById",
   GET_TERMINAL_BY_ID = "getTerminalById",
+  GET_ROLES = "getRoles",
 
   INACTIVATE_FRANCHISE = "inactivateFranchise",
   INACTIVATE_PROMOTER = "inactivatePromoter",
@@ -34,6 +35,7 @@ export enum QueryKeys {
   CREATE_PROMOTER = "createPromoter",
   CREATE_CLIENT = "createClient",
   CREATE_TERMINALS = "createClient",
+  CREATE_USER = "createUser",
 
   UPDATE_FRANCHISE = "updateFranchise",
   UPDATE_FRANCHISE_AGREEMENTS = "updateFranchiseAgreements",

@@ -1,6 +1,6 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { Layout, Spin } from "antd";
-import { useEffect } from "react";
+import loading from "@assets/loading.gif";
+import { Layout } from "antd";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
 import { useTheme } from "../../contexts/themeContext";
@@ -15,6 +15,7 @@ export const FranchisorRoutes = (): React.ReactElement => {
   const { token } = useFranchisorAuth();
   const { theme } = useTheme();
   const { isMd, isSm } = useBreakpoints();
+  const [delay, setDelay] = useState<boolean>(true);
 
   document.title = `Franqueadora - PDV365`;
 
@@ -28,7 +29,15 @@ export const FranchisorRoutes = (): React.ReactElement => {
     }
   }, [isSuccess, error]);
 
-  if (isLoading) {
+  useEffect(() => {
+    if(!isLoading) {
+      setTimeout(() => {
+        setDelay(false);
+      }, 2000);
+    }
+  }, [isLoading])
+
+  if (delay) {
     return (
       <Layout
         style={{
@@ -53,11 +62,20 @@ export const FranchisorRoutes = (): React.ReactElement => {
               src="/logoDef.svg"
               style={
                 !isMd || isSm
-                  ? { height: 45, width: 150 }
+                  ? { height: 60, width: 250 }
                   : { height: 15, width: 50 }
               }
             />
-            <Spin size="large" indicator={<LoadingOutlined size={40} spin />} />
+            <img
+              src={loading}
+              alt="logo"
+              style={
+                !isMd || isSm
+                  ? { width: 150 }
+                  : {width: 50 }
+              }
+            />
+            {/* <Spin size="large" indicator={<LoadingOutlined size={40} spin />} /> */}
           </div>
         ) : (
           <div
@@ -73,11 +91,20 @@ export const FranchisorRoutes = (): React.ReactElement => {
               src="/logoWhiteDef.svg"
               style={
                 !isMd || isSm
-                  ? { height: 45, width: 150 }
+                  ? { height: 60, width: 250 }
                   : { height: 15, width: 50 }
               }
             />
-            <Spin size="large" indicator={<LoadingOutlined size={40} spin />} />
+            <img
+              src={loading}
+              alt="logo"
+              style={
+                !isMd || isSm
+                  ? { width: 150 }
+                  : {width: 50 }
+              }
+            />
+            {/* <Spin size="large" indicator={<LoadingOutlined size={40} spin />} /> */}
           </div>
         )}
       </Layout>

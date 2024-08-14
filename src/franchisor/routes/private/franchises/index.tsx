@@ -19,6 +19,7 @@ import {
   Franchise,
   FranchiseParams,
 } from "../../../services/franchises/__interfaces/franchises.interface";
+import { SearchOutlined } from "@ant-design/icons";
 
 export const Franchises = () => {
   const [params, setParams] = useState<FranchiseParams>({ page: 1, size: 15 });
@@ -63,6 +64,8 @@ export const Franchises = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar franquia"
+          style={{ borderRadius: 32 }}
+          suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 5 }}>

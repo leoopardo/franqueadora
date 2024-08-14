@@ -18,6 +18,7 @@ import {
   terminalParams,
 } from "../../../services/terminals/__interfaces/terminals.interface.ts";
 import { Totalizer } from "./components/Totalizer.tsx";
+import { SearchOutlined } from "@ant-design/icons";
 
 export const Terminals = () => {
   const [params, setParams] = useState<terminalParams>({ page: 1, size: 15 });
@@ -34,7 +35,7 @@ export const Terminals = () => {
   });
   const [selectedRows, setSelectedRows] = useState<Terminal[]>([]);
   const { isSm } = useBreakpoints();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -72,6 +73,8 @@ export const Terminals = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar terminal"
+          style={{ borderRadius: 32 }}
+          suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 3 }}>
@@ -153,7 +156,6 @@ export const Terminals = () => {
                 return {
                   title: "Excluir terminal.",
                   description: `Deseja realmente excluir o terminal ${RowItemI?.serial_number}?`,
-
                 };
               },
               icon: <TrashIcon style={{ width: 16 }} />,

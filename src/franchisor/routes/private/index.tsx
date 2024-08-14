@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { BaseLayout } from "./BaseLayout";
 import { Clients } from "./clients";
 import { CreateClient } from "./clients/create";
+import { UpdateClient } from "./clients/update";
 import { Franchises } from "./franchises";
 import { CreateFranchise } from "./franchises/create";
 import { UpdateFranchise } from "./franchises/update";
@@ -12,10 +13,10 @@ import { UpdatePromoter } from "./promoters/update";
 import { Terminals } from "./terminals";
 import { CreateTerminals } from "./terminals/create";
 import { Pending } from "./terminals/pending";
-import { UpdateClient } from "./clients/update";
-import { Me } from "./users/me";
-import { Users } from "./users";
 import { UpdateTerminals } from "./terminals/update";
+import { Users } from "./users";
+import { CreateUser } from "./users/create";
+import { Me } from "./users/me";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
@@ -43,7 +44,10 @@ export const PrivateRoutes = () => {
           <Route path="pendentes" element={<Pending />} />
           <Route path="edição/:id" element={<UpdateTerminals />} />
         </Route>
-        <Route path="usuários" element={<Users />} />
+        <Route path="usuários">
+          <Route index element={<Users />} />
+          <Route path="cadastro" element={<CreateUser />} />
+        </Route>
         <Route path="conta" element={<Me />} />
 
         <Route
