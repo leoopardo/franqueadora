@@ -61,6 +61,12 @@ const Dark: ThemeConfig = {
     Badge: {
       colorError: import.meta.env.VITE_APP_COLOR_SECONDARY,
     },
+    Notification: {
+      colorBgBase: "#18191B",
+      colorBgContainer: "#18191B",
+      colorBgElevated: "#18191B",
+      colorBgLayout: "#18191B",
+    },
   },
 
   token: {

@@ -8,9 +8,10 @@ import { SiderComponent } from "../../../../components/sider";
 import { useFranchiseAuth } from "../../../../contexts/franchiseAuthContext";
 import { useTheme } from "../../../../contexts/themeContext";
 import { useBreakpoints } from "../../../../hooks/useBreakpoints";
+import { queryClient } from "../../../../services/queryClient";
 import { MenuItens } from "../../../components/sider_menus/menus";
 import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
-import { useGetMe } from "../../../services/auth/useGetMe";
+import { getMeI, useGetMe } from "../../../services/auth/useGetMe";
 
 export const BaseLayout = () => {
   const { isMd } = useBreakpoints();
@@ -18,7 +19,8 @@ export const BaseLayout = () => {
   const { theme } = useTheme();
   const { setHeader } = useFranchiseAuth();
   const { refetch } = useGetMe();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const user = queryClient.getQueryData("getMeFranchise") as getMeI;
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -26,11 +28,20 @@ export const BaseLayout = () => {
     }
   }, []);
 
+  console.log(user);
+  
+
   return (
     <SiderComponent
       isMenuOpen={isMenuOpen}
       setIsMenuOpen={setIsMenuOpen}
-      menus={() => MenuItens(100)}
+      menus={() =>
+        MenuItens(
+          100,
+          user?.Promoter?.id ? true : false,
+          user?.Client?.id ? true : false
+        )
+      }
       logout={async () => {
         await congnitoAuthService.signOut();
         setHeader(null);

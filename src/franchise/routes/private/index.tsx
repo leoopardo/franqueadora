@@ -9,6 +9,8 @@ import { Products } from "./service_orders/products";
 import { Terminals } from "./terminals";
 import { CreateProduct } from "./service_orders/products/create";
 import { UpdateProduct } from "./service_orders/products/update";
+import { Promoters } from "./promoters";
+import { CreatePromoter } from "./promoters/create";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
@@ -30,6 +32,10 @@ export const PrivateRoutes = () => {
             <Route path="cadastro" element={<CreateProduct />} />
             <Route path="edição" element={<UpdateProduct />} />
           </Route>
+        </Route>
+        <Route path="promotores">
+          <Route index element={<Promoters />} />
+          <Route path="cadastro" element={<CreatePromoter/>} />
         </Route>
 
         <Route

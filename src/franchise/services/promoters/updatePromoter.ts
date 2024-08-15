@@ -1,23 +1,22 @@
 import { notification } from "antd";
-import cookies from "js-cookie";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchiseAuth } from "../../../contexts/franchiseAuthContext";
 import { queryClient } from "../../../services/queryClient";
 import { QueryKeys } from "../queryKeys";
-import { createPromoterI } from "./__interfaces/create_promoter.interface";
+import { updatePromoterI } from "@franchisor/services/promoters/__interfaces/update_promoter.interface";
 
-export const useCreatePromoter = () => {
+export const useUpdatePromoter = (id: string) => {
   const { headers } = useFranchiseAuth();
   const navigate = useNavigate();
   const mutation = useMutation<
     any | null | undefined,
     unknown,
-    createPromoterI
+    updatePromoterI
   >({
     mutationFn: async (body) => {
-      const response = await apiFranquia.post(`/promoter`, body, {
+      const response = await apiFranquia.put(`/promoter/${id}`, body, {
         headers: { ...headers },
       });
       await queryClient.refetchQueries({
@@ -25,25 +24,24 @@ export const useCreatePromoter = () => {
       });
       return response.data;
     },
-    mutationKey: QueryKeys.CREATE_PROMOTER,
+    mutationKey: QueryKeys.UPDATE_PROMOTER,
   });
 
   const { data, error, isLoading, mutate, reset, isSuccess } = mutation;
 
   if (isSuccess) {
-    notification.success({ message: "Promotor criado com sucesso!" });
-    notification.info({
-      message: "A sua senha de terminal.",
-      description: `Armazene sua senha de terminal: ${data?.terminal_password}`,
-      duration: 5000,
-    });
+    notification.success({ message: "Promotor editado com sucesso!" });
+    // notification.info({
+    //   message: "A sua senha de terminal.",
+    //   description: `Armazene sua senha de terminal: ${data?.terminal_password}`,
+    //   duration: 5000,
+    // });
     reset();
-    cookies.remove("create_promoter");
     navigate("/promotores");
   }
   if (error) {
     notification.error({
-      message: "Não foi possível criar o promotor.",
+      message: "Não foi possível editar o promotor.",
       description: (error as any)?.response?.data?.message,
     });
     reset();

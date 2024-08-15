@@ -20,13 +20,12 @@ import { motion } from "framer-motion";
 import cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createFranchiseI } from "../../../../../services/franchises/__interfaces/create_franchise.interface";
+import { createFranchiseI } from "@franchisor/services/franchises/__interfaces/create_franchise.interface";
 import { StepOne } from "./steps/stepOne";
-import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
 
 interface mutateI {
-  mutate: (body: any) => void;
+  mutate: (body: createPromoterI) => void;
   loading?: boolean;
   success?: boolean;
   error?: any;
@@ -37,7 +36,7 @@ interface mutateI {
   agreements?: AgreementType[];
 }
 
-export const MutateUser = ({
+export const MutatePromoter = ({
   mutate,
   loading,
   title,
@@ -54,11 +53,13 @@ export const MutateUser = ({
   const { isSm } = useBreakpoints();
   const [api, contextHolder] = notification.useNotification();
   const [isDrafLoading, setIsDrafLoading] = useState<boolean>(false);
-  const [draft, setDraft] = useState<any>(undefined);
 
   useEffect(() => {
-    if (cookies.get("create_user") && !update) {
-      const data = JSON.parse(`${cookies.get("create_user")}`);
+    if (cookies.get("create_promoter") && !update) {
+      const data = JSON.parse(`${cookies.get("create_promoter")}`);
+
+      console.log(data);
+
       api.info({
         message: "Rascunho identificado!",
         description:
@@ -69,7 +70,7 @@ export const MutateUser = ({
             <Button
               type="primary"
               onClick={() => {
-                cookies.remove("create_user");
+                cookies.remove("create_promoter");
                 api.destroy();
               }}
               danger
@@ -80,20 +81,14 @@ export const MutateUser = ({
               type="primary"
               onClick={() => {
                 setIsDrafLoading(true);
-                setDraft(data);
-                // não sei pq ta funcionando, mas tá se tirar um dos dois timeout para
                 setTimeout(() => {
                   setIsDrafLoading(false);
                   formRef.current?.setFieldsValue(data);
                   api.destroy();
-                  setLoadingStep(false);
+                  cookies.remove("create_promoter");
                 }, 500);
                 setTimeout(() => {
-                  setDraft(undefined);
-                  setIsDrafLoading(false);
                   formRef.current?.setFieldsValue(data);
-                  api.destroy();
-                  setLoadingStep(false);
                 }, 800);
               }}
             >
@@ -112,6 +107,31 @@ export const MutateUser = ({
   }, [initialValues]);
 
   const waitTime = async (values: any) => {
+    // const agreements: { template_id?: string; value: string }[] = [];
+
+    // const keysOrganization = [
+    //   "ANTIFRAUD",
+    //   "TRANSACTION",
+    //   "FEE_EMISSION",
+    //   "FEE_PAY365",
+    //   "RESULT_FRANCHISOR",
+    //   "RESULT_CREDIT_ADVANCE",
+    //   "SPREAD_CREDIT_ADVANCE",
+    // ];
+    // Object?.keys(values.agreements)?.forEach((section) => {
+    //   keysOrganization?.forEach((key) => {
+    //     const ag = data?.items?.find(
+    //       (i) => i.type === section && i.key === key
+    //     );
+
+    //     if (ag) {
+    //       agreements?.push({
+    //         template_id: ag.id,
+    //         value: values?.agreements[section][key],
+    //       });
+    //     }
+    //   });
+    // });
     return new Promise<boolean>((resolve) => {
       mutate({
         ...initialValues,
@@ -172,7 +192,7 @@ export const MutateUser = ({
         >
           <Col xs={{ span: 20 }} md={{ span: 10 }}>
             <Typography.Text style={{ lineHeight: 0 }}>
-              Passo {step} de 3
+              Passo {step} de 2
             </Typography.Text>
             <Typography.Title level={isSm ? 5 : 3} style={{ margin: 0 }}>
               {title}
@@ -211,7 +231,6 @@ export const MutateUser = ({
       <Card
         style={{
           maxHeight: isSm ? undefined : "70vh",
-          minHeight: isSm ? "100vh" : "70vh",
           overflowY: "auto",
           overflowX: "hidden",
           minWidth: "100%",
@@ -224,7 +243,7 @@ export const MutateUser = ({
           }}
         >
           <Col xs={{ span: 24 }} md={{ span: 16 }}>
-            {isDrafLoading ? (
+            {loading || isDrafLoading ? (
               <Spin
                 size="large"
                 indicator={<LoadingOutlined size={40} spin />}
@@ -245,7 +264,6 @@ export const MutateUser = ({
                           label: step.title,
                           key: step.key,
                         }))}
-                        style={{ position: "sticky", top: 500 }}
                       />
                     ) : null
                   }
@@ -261,13 +279,18 @@ export const MutateUser = ({
                     let form = {};
                     for (const step in info?.forms) {
                       form = { ...form, ...info?.forms[step].getFieldsValue() };
-                      cookies.set("create_user", JSON.stringify(form), {
+                      cookies.set("create_promoter", JSON.stringify(form), {
                         expires: 1,
                       });
                     }
                   }}
                 >
-                  <StepOne setModules={setModules} update={update} />
+                  <StepOne
+                    setModules={setModules}
+                    update={update}
+                    formRef={formRef}
+                  />
+                  <StepTwo update={update} />
                 </StepsForm>
               </Spin>
             ) : (
@@ -301,7 +324,7 @@ export const MutateUser = ({
                   let form = {};
                   for (const step in info?.forms) {
                     form = { ...form, ...info?.forms[step].getFieldsValue() };
-                    cookies.set("create_user", JSON.stringify(form), {
+                    cookies.set("create_promoter", JSON.stringify(form), {
                       expires: 1,
                     });
                   }
@@ -310,12 +333,12 @@ export const MutateUser = ({
                 <StepOne
                   setModules={setModules}
                   update={update}
+                  formRef={formRef}
                   updatePersonType={
                     initialFormValues?.physical ? "physical" : "juridic"
                   }
                 />
-                <StepTwo update={update} draft={draft} />
-                <StepThree update={update} draft={draft} />
+                <StepTwo update={update} />
               </StepsForm>
             )}
           </Col>

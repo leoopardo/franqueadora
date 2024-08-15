@@ -6,18 +6,18 @@ import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchiseAuth } from "../../../contexts/franchiseAuthContext";
 import { queryClient } from "../../../services/queryClient";
 import { QueryKeys } from "../queryKeys";
-import { createPromoterI } from "./__interfaces/create_promoter.interface";
+import { createClientI } from "@franchisor/services/clients/__interfaces/create_client.interface";
 
-export const useCreatePromoter = () => {
+export const useCreateClient = () => {
   const { headers } = useFranchiseAuth();
   const navigate = useNavigate();
   const mutation = useMutation<
     any | null | undefined,
     unknown,
-    createPromoterI
+    createClientI
   >({
     mutationFn: async (body) => {
-      const response = await apiFranquia.post(`/promoter`, body, {
+      const response = await apiFranquia.post(`/client`, body, {
         headers: { ...headers },
       });
       await queryClient.refetchQueries({
@@ -25,25 +25,25 @@ export const useCreatePromoter = () => {
       });
       return response.data;
     },
-    mutationKey: QueryKeys.CREATE_PROMOTER,
+    mutationKey: QueryKeys.CREATE_CLIENT,
   });
 
   const { data, error, isLoading, mutate, reset, isSuccess } = mutation;
 
   if (isSuccess) {
-    notification.success({ message: "Promotor criado com sucesso!" });
+    notification.success({ message: "Cliente criado com sucesso!" });
     notification.info({
       message: "A sua senha de terminal.",
       description: `Armazene sua senha de terminal: ${data?.terminal_password}`,
       duration: 5000,
     });
     reset();
-    cookies.remove("create_promoter");
-    navigate("/promotores");
+    cookies.remove("create_client");
+    navigate("/clientes");
   }
   if (error) {
     notification.error({
-      message: "Não foi possível criar o promotor.",
+      message: "Não foi possível criar o cliente.",
       description: (error as any)?.response?.data?.message,
     });
     reset();
