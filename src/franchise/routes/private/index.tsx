@@ -18,6 +18,7 @@ import { UpdateProduct } from "./service_orders/products/update";
 import { Terminals } from "./terminals";
 import { CreateTerminals } from "./terminals/create";
 import { UpdateTerminals } from "./terminals/update";
+import { Menus } from "./service_orders/menus";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
@@ -51,6 +52,7 @@ export const PrivateRoutes = () => {
             <Route path="cadastro" element={<CreateProduct />} />
             <Route path="edição" element={<UpdateProduct />} />
           </Route>
+          <Route path="cardapio" element={<Menus />} />
         </Route>
         {getPermission("PROMOTOR_CADASTRO", "view") && (
           <Route path="promotores">
@@ -75,6 +77,7 @@ export const PrivateRoutes = () => {
             )}
           </Route>
         )}
+        
         <Route
           path="*"
           element={

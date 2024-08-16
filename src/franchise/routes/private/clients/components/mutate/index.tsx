@@ -84,7 +84,6 @@ export const MutateClient = ({
                   setIsDrafLoading(false);
                   formRef.current?.setFieldsValue(data);
                   api.destroy();
-                  cookies.remove("create_client_franchise");
                 }, 500);
                 setTimeout(() => {
                   formRef.current?.setFieldsValue(data);

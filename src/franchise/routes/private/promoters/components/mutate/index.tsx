@@ -87,7 +87,6 @@ export const MutatePromoter = ({
                   setIsDrafLoading(false);
                   formRef.current?.setFieldsValue(data);
                   api.destroy();
-                  cookies.remove("create_promoter_franchise");
                 }, 500);
                 setTimeout(() => {
                   formRef.current?.setFieldsValue(data);
@@ -281,9 +280,13 @@ export const MutatePromoter = ({
                     let form = {};
                     for (const step in info?.forms) {
                       form = { ...form, ...info?.forms[step].getFieldsValue() };
-                      cookies.set("create_promoter_franchise", JSON.stringify(form), {
-                        expires: 1,
-                      });
+                      cookies.set(
+                        "create_promoter_franchise",
+                        JSON.stringify(form),
+                        {
+                          expires: 1,
+                        }
+                      );
                     }
                   }}
                 >
@@ -322,9 +325,13 @@ export const MutatePromoter = ({
                   let form = {};
                   for (const step in info?.forms) {
                     form = { ...form, ...info?.forms[step].getFieldsValue() };
-                    cookies.set("create_promoter_franchise", JSON.stringify(form), {
-                      expires: 1,
-                    });
+                    cookies.set(
+                      "create_promoter_franchise",
+                      JSON.stringify(form),
+                      {
+                        expires: 1,
+                      }
+                    );
                   }
                 }}
               >
@@ -335,7 +342,11 @@ export const MutatePromoter = ({
                     initialFormValues?.physical ? "physical" : "juridic"
                   }
                 />
-                <StepTwo update={update} draft={draft} initialValues={initialValues} />
+                <StepTwo
+                  update={update}
+                  draft={draft}
+                  initialValues={initialValues}
+                />
               </StepsForm>
             )}
           </Col>
