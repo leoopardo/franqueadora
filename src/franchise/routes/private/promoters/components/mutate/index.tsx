@@ -1,6 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
+import { createFranchiseI } from "@franchisor/services/franchises/__interfaces/create_franchise.interface";
 import { createPromoterI } from "@franchisor/services/promoters/__interfaces/create_promoter.interface";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
@@ -20,7 +21,6 @@ import { motion } from "framer-motion";
 import cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createFranchiseI } from "@franchisor/services/franchises/__interfaces/create_franchise.interface";
 import { StepOne } from "./steps/stepOne";
 import { StepTwo } from "./steps/stepTwo";
 
@@ -53,10 +53,11 @@ export const MutatePromoter = ({
   const { isSm } = useBreakpoints();
   const [api, contextHolder] = notification.useNotification();
   const [isDrafLoading, setIsDrafLoading] = useState<boolean>(false);
+  const [draft, setDraft] = useState<any>(undefined);
 
   useEffect(() => {
-    if (cookies.get("create_promoter") && !update) {
-      const data = JSON.parse(`${cookies.get("create_promoter")}`);
+    if (cookies.get("create_promoter_franchise") && !update) {
+      const data = JSON.parse(`${cookies.get("create_promoter_franchise")}`);
 
       console.log(data);
 
@@ -70,7 +71,7 @@ export const MutatePromoter = ({
             <Button
               type="primary"
               onClick={() => {
-                cookies.remove("create_promoter");
+                cookies.remove("create_promoter_franchise");
                 api.destroy();
               }}
               danger
@@ -81,11 +82,12 @@ export const MutatePromoter = ({
               type="primary"
               onClick={() => {
                 setIsDrafLoading(true);
+                setDraft(data);
                 setTimeout(() => {
                   setIsDrafLoading(false);
                   formRef.current?.setFieldsValue(data);
                   api.destroy();
-                  cookies.remove("create_promoter");
+                  cookies.remove("create_promoter_franchise");
                 }, 500);
                 setTimeout(() => {
                   formRef.current?.setFieldsValue(data);
@@ -243,7 +245,7 @@ export const MutatePromoter = ({
           }}
         >
           <Col xs={{ span: 24 }} md={{ span: 16 }}>
-            {loading || isDrafLoading ? (
+            {isDrafLoading ? (
               <Spin
                 size="large"
                 indicator={<LoadingOutlined size={40} spin />}
@@ -260,7 +262,7 @@ export const MutatePromoter = ({
                           setStep(+key + 1);
                           setWidth((100 / 2) * (+key + 1));
                         }}
-                        items={steps.map((step) => ({
+                        items={steps?.map((step) => ({
                           label: step.title,
                           key: step.key,
                         }))}
@@ -279,17 +281,13 @@ export const MutatePromoter = ({
                     let form = {};
                     for (const step in info?.forms) {
                       form = { ...form, ...info?.forms[step].getFieldsValue() };
-                      cookies.set("create_promoter", JSON.stringify(form), {
+                      cookies.set("create_promoter_franchise", JSON.stringify(form), {
                         expires: 1,
                       });
                     }
                   }}
                 >
-                  <StepOne
-                    setModules={setModules}
-                    update={update}
-                    formRef={formRef}
-                  />
+                  <StepOne setModules={setModules} update={update} />
                   <StepTwo update={update} />
                 </StepsForm>
               </Spin>
@@ -305,7 +303,7 @@ export const MutatePromoter = ({
                         setStep(+key + 1);
                         setWidth((100 / 2) * (+key + 1));
                       }}
-                      items={steps.map((step) => ({
+                      items={steps?.map((step) => ({
                         label: step.title,
                         key: step.key,
                       }))}
@@ -324,7 +322,7 @@ export const MutatePromoter = ({
                   let form = {};
                   for (const step in info?.forms) {
                     form = { ...form, ...info?.forms[step].getFieldsValue() };
-                    cookies.set("create_promoter", JSON.stringify(form), {
+                    cookies.set("create_promoter_franchise", JSON.stringify(form), {
                       expires: 1,
                     });
                   }
@@ -333,12 +331,11 @@ export const MutatePromoter = ({
                 <StepOne
                   setModules={setModules}
                   update={update}
-                  formRef={formRef}
                   updatePersonType={
                     initialFormValues?.physical ? "physical" : "juridic"
                   }
                 />
-                <StepTwo update={update} />
+                <StepTwo update={update} draft={draft} initialValues={initialValues} />
               </StepsForm>
             )}
           </Col>

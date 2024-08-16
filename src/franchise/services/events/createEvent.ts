@@ -6,8 +6,10 @@ import { useFranchiseAuth } from "../../../contexts/franchiseAuthContext";
 import { queryClient } from "../../../services/queryClient";
 import { QueryKeys } from "../queryKeys";
 import { CreateEventType } from "./__interfaces/create_event.interface";
+import { getMeI } from "../auth/useGetMe";
 
 export const useCreateEvent = () => {
+  const user = queryClient.getQueryData("getMeFranchise") as getMeI;
   const { headers } = useFranchiseAuth();
   const navigate = useNavigate();
   const mutation = useMutation<
@@ -16,9 +18,17 @@ export const useCreateEvent = () => {
     CreateEventType
   >({
     mutationFn: async (body) => {
-      const response = await apiPortalEvent.post(`/event`, body, {
-        headers: { ...headers },
-      });
+      const response = await apiPortalEvent.post(
+        `/event`,
+        {
+          ...body,
+          promoter_id: user?.Promoter ? user?.Promoter?.id : undefined,
+          client_id: user?.Client ? user?.Client?.id : undefined,
+        },
+        {
+          headers: { ...headers },
+        }
+      );
       await queryClient.refetchQueries({
         queryKey: [QueryKeys.LIST_EVENTS],
       });

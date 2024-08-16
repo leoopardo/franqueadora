@@ -81,7 +81,7 @@ export const Localization = ({ formRef, hidden }: LocalizationI) => {
           zipcode: addressObj.zipcode || "",
           neighborhood: addressObj.neighborhood || "",
           number: addressObj.number || "",
-          // location: results[0].formatted_address,
+          location: results[0].formatted_address,
           latitude: lat,
           longitude: lng,
         });

@@ -59,8 +59,8 @@ export const MutateFranchise = ({
   const { isSm, isMd, isLg } = useBreakpoints();
   const [isTokenModalOpen, setIsTokenModalOpen] = useState<boolean>(false);
   const [api, contextHolder] = notification.useNotification();
-  const [isDrafLoading, setIsDrafLoading] = useState<boolean>(false);
-  const [draft, setDraft] = useState<any>(undefined);
+  const [, setIsDrafLoading] = useState<boolean>(false);
+  const [, setDraft] = useState<any>(undefined);
 
   useEffect(() => {
     if (cookies.get("create_event") && !update) {

@@ -18,6 +18,7 @@ interface SelectModelsI {
   label: string;
   placeholder?: string;
   mode?: "multiple" | "tags" | "single" | undefined;
+  isClient?: boolean;
 }
 
 export const ProFormSelectPromoters = ({
@@ -28,6 +29,7 @@ export const ProFormSelectPromoters = ({
   name,
   label,
   placeholder,
+  isClient,
   mode,
 }: SelectModelsI) => {
   const [params, setParams] = useState<PromotersParams>({
@@ -36,7 +38,8 @@ export const ProFormSelectPromoters = ({
     orderBy: undefined,
     orderDirection: undefined,
   });
-  const { data, isLoading } = useListPromoters(params);
+  
+  const { data, isLoading } = useListPromoters(params, isClient);
 
   useEffect(() => {
     if (query?.franchise_id) {

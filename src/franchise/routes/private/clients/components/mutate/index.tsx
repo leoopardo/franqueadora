@@ -1,6 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
+import { createFranchiseI } from "@franchisor/services/franchises/__interfaces/create_franchise.interface";
 import { createPromoterI } from "@franchisor/services/promoters/__interfaces/create_promoter.interface";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
@@ -20,7 +21,6 @@ import { motion } from "framer-motion";
 import cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { createFranchiseI } from "../../../../../services/franchises/__interfaces/create_franchise.interface";
 import { StepOne } from "./steps/stepOne";
 import { StepTwo } from "./steps/stepTwo";
 
@@ -53,10 +53,11 @@ export const MutateClient = ({
   const { isSm } = useBreakpoints();
   const [api, contextHolder] = notification.useNotification();
   const [isDrafLoading, setIsDrafLoading] = useState<boolean>(false);
+  const [draft, setDraft] = useState<any>(undefined);
 
   useEffect(() => {
-    if (cookies.get("create_client") && !update) {
-      const data = JSON.parse(`${cookies.get("create_client")}`);
+    if (cookies.get("create_client_franchise") && !update) {
+      const data = JSON.parse(`${cookies.get("create_client_franchise")}`);
 
       console.log(data);
 
@@ -70,7 +71,7 @@ export const MutateClient = ({
             <Button
               type="primary"
               onClick={() => {
-                cookies.remove("create_client");
+                cookies.remove("create_client_franchise");
                 api.destroy();
               }}
               danger
@@ -81,11 +82,12 @@ export const MutateClient = ({
               type="primary"
               onClick={() => {
                 setIsDrafLoading(true);
+                setDraft(data);
                 setTimeout(() => {
                   setIsDrafLoading(false);
                   formRef.current?.setFieldsValue(data);
                   api.destroy();
-                  cookies.remove("create_client");
+                  cookies.remove("create_client_franchise");
                 }, 500);
                 setTimeout(() => {
                   formRef.current?.setFieldsValue(data);
@@ -245,7 +247,7 @@ export const MutateClient = ({
           }}
         >
           <Col xs={{ span: 24 }} md={{ span: 16 }}>
-            {loading || isDrafLoading ? (
+            {isDrafLoading ? (
               <Spin
                 size="large"
                 indicator={<LoadingOutlined size={40} spin />}
@@ -254,45 +256,11 @@ export const MutateClient = ({
                 <StepsForm<createFranchiseI>
                   formRef={formRef}
                   onFinish={waitTime}
-                  stepsRender={(steps) =>
-                    update ? (
-                      <Tabs
-                        centered
-                        onChange={(key) => {
-                          setStep(+key + 1);
-                          setWidth((100 / 2) * (+key + 1));
-                        }}
-                        items={steps.map((step) => ({
-                          label: step.title,
-                          key: step.key,
-                        }))}
-                        style={{ position: "sticky", top: 500 }}
-                      />
-                    ) : null
-                  }
+                  stepsRender={() => null}
                   submitter={false}
                   current={step - 1}
-                  onCurrentChange={(current) => {
-                    setWidth((100 / 2) * (current + 1));
-                    setStep(current + 1);
-                  }}
-                  formProps={{ initialValues: initialFormValues }}
-                  onFormChange={(_name, info) => {
-                    if (update) return;
-                    let form = {};
-                    for (const step in info?.forms) {
-                      form = { ...form, ...info?.forms[step].getFieldsValue() };
-                      cookies.set("create_client", JSON.stringify(form), {
-                        expires: 1,
-                      });
-                    }
-                  }}
                 >
-                  <StepOne
-                    setModules={setModules}
-                    update={update}
-                    formRef={formRef}
-                  />
+                  <StepOne setModules={setModules} update={update} />
                   <StepTwo update={update} />
                 </StepsForm>
               </Spin>
@@ -312,7 +280,6 @@ export const MutateClient = ({
                         label: step.title,
                         key: step.key,
                       }))}
-                     
                     />
                   ) : null
                 }
@@ -328,21 +295,28 @@ export const MutateClient = ({
                   let form = {};
                   for (const step in info?.forms) {
                     form = { ...form, ...info?.forms[step].getFieldsValue() };
-                    cookies.set("create_client", JSON.stringify(form), {
-                      expires: 1,
-                    });
+                    cookies.set(
+                      "create_client_franchise",
+                      JSON.stringify(form),
+                      {
+                        expires: 1,
+                      }
+                    );
                   }
                 }}
               >
                 <StepOne
                   setModules={setModules}
                   update={update}
-                  formRef={formRef}
                   updatePersonType={
                     initialFormValues?.physical ? "physical" : "juridic"
                   }
                 />
-                <StepTwo update={update} />
+                <StepTwo
+                  update={update}
+                  draft={draft}
+                  initialValues={initialValues}
+                />
               </StepsForm>
             )}
           </Col>

@@ -18,11 +18,10 @@ import { PhysicalPerson } from "./stepOneTypes/physicalPerson";
 interface stepOneI {
   setModules: Dispatch<SetStateAction<string[]>>;
   update?: boolean;
-  formRef: React.RefObject<ProFormInstance>;
   updatePersonType?: "juridic" | "physical";
 }
 
-export const StepOne = ({ setModules, update, formRef, updatePersonType }: stepOneI) => {
+export const StepOne = ({ setModules, update, updatePersonType }: stepOneI) => {
   const [cep, setCep] = useState<string>("");
   const stepOneRef = useRef<ProFormInstance>(null);
   const cepRequest = useGetCEP(cep);
@@ -42,7 +41,7 @@ export const StepOne = ({ setModules, update, formRef, updatePersonType }: stepO
 
   useEffect(() => {
     if (cepRequest.data)
-      formRef?.current?.setFieldsValue({
+      stepOneRef?.current?.setFieldsValue({
         [personType]: {
           state: cepRequest?.data.state,
           city: cepRequest?.data.city,
@@ -71,9 +70,9 @@ export const StepOne = ({ setModules, update, formRef, updatePersonType }: stepO
     setModules(
       stepOneRef?.current
         ?.getFieldValue("module")
-        .map(
+        ?.map(
           (id: string) =>
-            (PosModulesData?.items as any)?.find(
+            (PosModulesData as any)?.find(
               (module: any) => module.id === id
             ).name
         )
@@ -184,7 +183,7 @@ export const StepOne = ({ setModules, update, formRef, updatePersonType }: stepO
           <PhysicalPerson
             stepOneRef={stepOneRef}
             update={update}
-            formRef={formRef}
+            formRef={stepOneRef}
           />
         )}
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
@@ -261,7 +260,7 @@ export const StepOne = ({ setModules, update, formRef, updatePersonType }: stepO
             label="Módulos"
             placeholder="Selecione os módulos utilizados"
             mode="multiple"
-            options={PosModulesData?.items.map((value) => ({
+            options={PosModulesData?.map((value) => ({
               kay: value.id,
               label: value.name,
               value: value.id,
@@ -272,7 +271,7 @@ export const StepOne = ({ setModules, update, formRef, updatePersonType }: stepO
               setModules(
                 (value as any)?.map(
                   (v: string) =>
-                    PosModulesData?.items.find((i) => i.id === v)?.name
+                    PosModulesData?.find((i) => i.id === v)?.name
                 )
               )
             }

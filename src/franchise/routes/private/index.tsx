@@ -5,12 +5,16 @@ import { Loading } from "./components/loading";
 import { Events } from "./events";
 import { CreateEvent } from "./events/create";
 import { UpdateEvent } from "./events/update";
-import { Products } from "./service_orders/products";
-import { Terminals } from "./terminals";
-import { CreateProduct } from "./service_orders/products/create";
-import { UpdateProduct } from "./service_orders/products/update";
 import { Promoters } from "./promoters";
 import { CreatePromoter } from "./promoters/create";
+import { UpdatePromoter } from "./promoters/update";
+import { Products } from "./service_orders/products";
+import { CreateProduct } from "./service_orders/products/create";
+import { UpdateProduct } from "./service_orders/products/update";
+import { Terminals } from "./terminals";
+import { Clients } from "./clients";
+import { CreateClient } from "./clients/create";
+import { UpdateClient } from "./clients/update";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
@@ -35,7 +39,13 @@ export const PrivateRoutes = () => {
         </Route>
         <Route path="promotores">
           <Route index element={<Promoters />} />
-          <Route path="cadastro" element={<CreatePromoter/>} />
+          <Route path="cadastro" element={<CreatePromoter />} />
+          <Route path="edição/:id" element={<UpdatePromoter />} />
+        </Route>
+        <Route path="clientes">
+          <Route index element={<Clients />} />
+          <Route path="cadastro" element={<CreateClient />} />
+          <Route path="edição/:id" element={<UpdateClient />} />
         </Route>
 
         <Route

@@ -6,12 +6,15 @@ import ResponseI from "../__interfaces/response.interface";
 import { QueryKeys } from "../queryKeys";
 import { Promoter, PromotersParams } from "./__interfaces/promoters.interface";
 
-export const useListPromoters = (params: PromotersParams) => {
+export const useListPromoters = (
+  params: PromotersParams,
+  isClient?: boolean
+) => {
   const { headers } = useFranchiseAuth();
   const { data, error, isLoading, refetch } = useQuery<
     ResponseI<Promoter> | null | undefined
   >(
-    [QueryKeys.LIST_PROMOTERS, params],
+    [QueryKeys.LIST_PROMOTERS, isClient ? undefined : params],
     async () => {
       const response = await apiFranquia.get(`/promoter`, {
         headers: {
@@ -25,8 +28,12 @@ export const useListPromoters = (params: PromotersParams) => {
       return response.data;
     },
     {
-      enabled: headers && headers["AuthToken"] ? true : false,
-      refetchOnWindowFocus: true,
+      enabled: isClient
+        ? false
+        : headers && headers["AuthToken"]
+          ? true
+          : false,
+      refetchOnWindowFocus: isClient ? false : true,
     }
   );
 

@@ -1,15 +1,17 @@
 import {
   ProFormDatePicker,
+  ProFormField,
   ProFormInstance,
   ProFormSwitch,
   ProFormText,
 } from "@ant-design/pro-components";
-import { ProFormSelectFrianchise } from "@components/proFormSelects/SelectFranchises";
+import { getMeI } from "@franchise/services/auth/useGetMe";
 import useDebounce from "@hooks/useDebounce";
 import { formatCellPhoneBR, formatCPF, formatRG } from "@utils/regexFormat";
 import { Col } from "antd";
 import ptbr from "antd/lib/date-picker/locale/pt_BR";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { queryClient } from "../../../../../../../../services/queryClient";
 interface PhysicalPersonI {
   stepOneRef: React.RefObject<ProFormInstance>;
   update?: boolean;
@@ -21,6 +23,7 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
     rg?: string;
     phone?: string;
   }>({});
+  const user = queryClient.getQueryData("getMeFranchise") as getMeI;
   // TODO - implementar o validate do step 1
   // const validate = usePromoterValidateStepOne({ body: bodyValidate });
   // console.log(validate.data);
@@ -28,6 +31,13 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
   const handleValidate = useDebounce((key, value) => {
     setBodyValidate((state) => ({ ...state, [key]: value }));
   }, 500);
+
+  useEffect(() => {
+    formRef?.current?.setFieldValue(
+      ["physical", "franchise_id"],
+      user?.Franchise ? user?.Franchise[0]?.id : undefined
+    );
+  }, []);
 
   return (
     <>
@@ -37,13 +47,11 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
           label="Gerencia clientes?"
         />
       </Col>
-      <Col md={{ span: 8 }} xs={{ span: 24 }}>
-        <ProFormSelectFrianchise
+      <Col md={{ span: 8 }} xs={{ span: 24 }} style={{ display: "none" }}>
+        <ProFormField
           name={["physical", "franchise_id"]}
           label="Franquia"
           placeholder="Selecione a franquia"
-          mode="single"
-          rules={[{ required: !update }]}
         />
       </Col>
       <Col md={{ span: 8 }} xs={{ span: 24 }}>

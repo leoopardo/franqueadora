@@ -38,7 +38,7 @@ export const useCreatePromoter = () => {
       duration: 5000,
     });
     reset();
-    cookies.remove("create_promoter");
+    cookies.remove("create_promoter_franchise");
     navigate("/promotores");
   }
   if (error) {

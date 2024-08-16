@@ -29,10 +29,10 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
     page: 0,
     size: 500,
   });
-  const [modulesParams, setModulesParams] = useState<any>({
+  const [, setModulesParams] = useState<any>({
     promoter_id: formRef?.getFieldValue("promoter_id"),
   });
-  const listPOSModules = useGetPosModules(modulesParams);
+  const listPOSModules = useGetPosModules();
   const selects = getSelectsData();
 
   const user = queryClient.getQueryData(QueryKeys.GET_ME) as getMeI;
@@ -91,7 +91,7 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
             <ProFormSelectPromoters
               name="promoter_id"
               label="Promotor"
-              rules={[{ required: true }]}
+              rules={[{ required: !user?.Promoter && !user?.Client }]}
               fieldProps={{
                 onChange(value) {
                   if (!value)
@@ -106,6 +106,7 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
                   }));
                 },
               }}
+              isClient={!!user?.Client}
             />
           </Col>
           <Col

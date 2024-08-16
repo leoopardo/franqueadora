@@ -1,5 +1,5 @@
 import { Services } from "@franchise/services";
-import { MutatePromoter } from "@franchisor/routes/private/promoters/components/mutate";
+import { MutatePromoter } from "@franchise/routes/private/promoters/components/mutate";
 import { Col, Row } from "antd";
 
 export const CreatePromoter = () => {

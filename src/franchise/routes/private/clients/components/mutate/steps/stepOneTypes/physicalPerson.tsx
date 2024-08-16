@@ -1,15 +1,17 @@
 import {
   ProFormDatePicker,
+  ProFormField,
   ProFormInstance,
   ProFormText,
 } from "@ant-design/pro-components";
-import { ProFormSelectFrianchise } from "@components/proFormSelects/SelectFranchises";
-import { ProFormSelectPromoters } from "@components/proFormSelects/SelectPromoters";
 import useDebounce from "@hooks/useDebounce";
 import { formatCellPhoneBR, formatCPF, formatRG } from "@utils/regexFormat";
 import { Col } from "antd";
 import ptbr from "antd/lib/date-picker/locale/pt_BR";
 import { useEffect, useState } from "react";
+import { queryClient } from "../../../../../../../../services/queryClient";
+import { getMeI } from "@franchise/services/auth/useGetMe";
+import { ProFormSelectPromoters } from "@franchise/components/proFormSelects/SelectPromoters";
 interface PhysicalPersonI {
   stepOneRef: React.RefObject<ProFormInstance>;
   update?: boolean;
@@ -22,7 +24,10 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
     phone?: string;
   }>({});
 
-  const [promoterQuery, setPromoterQuery] = useState<any>();
+  const user = queryClient.getQueryData("getMeFranchise") as getMeI;
+  const [promoterQuery, setPromoterQuery] = useState<any>({
+    franchise_id: user?.Franchise ? user?.Franchise[0]?.id : undefined,
+  });
   // TODO - implementar o validate do step 1
   // const validate = usePromoterValidateStepOne({ body: bodyValidate });
   // console.log(validate.data);
@@ -42,28 +47,26 @@ export const PhysicalPerson = ({ update, formRef }: PhysicalPersonI) => {
     }
   }, [formRef?.current?.getFieldValue(["physical", "franchise_id"])]);
 
+  useEffect(() => {
+    if (user?.Franchise && user?.Franchise[0]?.id)
+      formRef?.current?.setFieldValue(
+        ["physical", "franchise_id"],
+        user?.Franchise ? user?.Franchise[0]?.id : undefined
+      );
+    if (user?.Promoter && user?.Promoter.id)
+      formRef?.current?.setFieldValue(
+        ["physical", "promoter_id"],
+        user?.Promoter ? user?.Promoter.id : undefined
+      );
+  }, [user]);
+
   return (
     <>
-      <Col md={{ span: 8 }} xs={{ span: 24 }}>
-        <ProFormSelectFrianchise
+      <Col md={{ span: 8 }} xs={{ span: 24 }} style={{ display: "none" }}>
+        <ProFormField
           name={["physical", "franchise_id"]}
           label="Franquia"
           placeholder="Selecione a franquia"
-          mode="single"
-          rules={[{ required: !update }]}
-          fieldProps={{
-            onChange(value) {
-              formRef?.current?.setFieldValue(
-                ["physical", "promoter_id"],
-                null
-              );
-              if (!value) {
-                setPromoterQuery(undefined);
-                return;
-              }
-              setPromoterQuery({ franchise_id: value });
-            },
-          }}
         />
       </Col>
       <Col md={{ span: 8 }} xs={{ span: 24 }}>

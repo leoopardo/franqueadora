@@ -5,7 +5,7 @@ import {
   StepsForm,
 } from "@ant-design/pro-components";
 import { Col, Divider, Row, Typography } from "antd";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
 import useDebounce from "../../../../../../../hooks/useDebounce";
 import defaultTheme from "../../../../../../../styles/default";
@@ -17,9 +17,12 @@ import regexList from "../../../../../../../utils/regexList";
 
 export const StepTwo = ({
   update,
+  draft,
+  initialValues,
 }: {
   update?: boolean;
-  formRef?: React.RefObject<ProFormInstance>;
+  draft?: any;
+  initialValues?: any;
 }) => {
   const stepTwoRef = useRef<ProFormInstance>(null);
   const { isXs } = useBreakpoints();
@@ -48,6 +51,22 @@ export const StepTwo = ({
   const handleValidate = useDebounce((key, value) => {
     setBodyValidate((state) => ({ ...state, [key]: value }));
   }, 500);
+
+  useEffect(() => {
+    if (draft) {
+      stepTwoRef?.current?.setFieldsValue({
+        ...draft,
+      });
+    }
+  }, [draft]);
+
+  useEffect(() => {
+    if (initialValues) {
+      stepTwoRef?.current?.setFieldsValue({
+        ...initialValues,
+      });
+    }
+  }, [initialValues]);
 
   return (
     <StepsForm.StepForm<any>
