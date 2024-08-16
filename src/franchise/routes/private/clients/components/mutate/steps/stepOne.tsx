@@ -100,9 +100,7 @@ export const StepOne = ({ setModules, update, updatePersonType }: stepOneI) => {
     }>
       name="base"
       title="Informações da empresa"
-      onFinish={async (form) => {
-        console.log(form);
-
+      onFinish={async () => {
         await waitTime(500);
         return true;
       }}

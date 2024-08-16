@@ -62,9 +62,6 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
         <ProFormList
           style={{ display: "none" }}
           name={["pub", "sectors"]}
-          onAfterRemove={(index) => {
-            console.log("index", index);
-          }}
         ></ProFormList>
 
         <Col span={24}>
@@ -87,7 +84,6 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
                 label: "Editar",
                 onClick(RowItemI) {
                   setUpdateData(RowItemI);
-                  console.log("RowItemI", RowItemI);
                 },
               },
               {

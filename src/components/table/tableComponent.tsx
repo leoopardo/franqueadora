@@ -1,14 +1,6 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { EllipsisVerticalIcon, PlusIcon } from "@heroicons/react/24/outline";
-import {
-  Button,
-  Dropdown,
-  Empty,
-  Modal,
-  Spin,
-  Table,
-  Typography
-} from "antd";
+import { Button, Dropdown, Empty, Modal, Spin, Table, Typography } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 import { Dispatch, SetStateAction } from "react";
 import ParamsI from "../../franchisor/services/__interfaces/queryParams.interface";
@@ -132,93 +124,136 @@ function TableComponent<RowItemI>({
             }
           : undefined
       }
-      columns={[
-        ...(columns?.map((c: any) =>
-          c.custom
-            ? {
-                title: c.head ?? c.key,
-                key: c.key,
-                dataIndex: c.key,
-                render: (_value: any, row: RowItemI) => (
-                  <div style={{ color: "#919199", minWidth: c.width || 60 }}>
-                    {c.custom(row)}
+      columns={
+        actions
+          ? [
+              ...(columns?.map((c: any) =>
+                c.custom
+                  ? {
+                      title: c.head ?? c.key,
+                      key: c.key,
+                      dataIndex: c.key,
+                      render: (_value: any, row: RowItemI) => (
+                        <div
+                          style={{ color: "#919199", minWidth: c.width || 60 }}
+                        >
+                          {c.custom(row)}
+                        </div>
+                      ),
+                      width: c.width,
+                      ellipsis: {
+                        showTitle: false,
+                      },
+                      responsive: c.responsive,
+                    }
+                  : {
+                      title: c.head ?? c.key,
+                      key: c.key,
+                      dataIndex: c.key,
+                      render: (value: any) => (
+                        <div style={{ minWidth: c.width || 60 }}>
+                          <Typography.Text style={{ color: "#919199" }}>
+                            {value}
+                          </Typography.Text>
+                        </div>
+                      ),
+                      ellipsis: {
+                        showTitle: false,
+                      },
+                      responsive: c.responsive,
+                    }
+              ) as any),
+              {
+                key: "actions",
+                title: "Ações",
+                render: (_value: any, row: any) => (
+                  <div
+                    style={{
+                      minWidth: 80,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Dropdown
+                      menu={{
+                        items:
+                          actions &&
+                          actions.map(
+                            (a) =>
+                              ({
+                                key: a.label,
+                                label: a.label,
+                                icon: a.icon,
+                                onClick: a?.confimation
+                                  ? () =>
+                                      Modal.confirm({
+                                        title:
+                                          a?.confimation &&
+                                          a?.confimation(row)?.title,
+                                        content:
+                                          a?.confimation &&
+                                          a?.confimation(row)?.description,
+
+                                        onOk: () => a.onClick(row),
+                                      })
+                                  : () => a.onClick(row),
+                              }) as any
+                          ),
+                      }}
+                      align={{ offset: [-6, 8] }}
+                      arrow
+                      placement="bottomLeft"
+                    >
+                      <Typography.Link color="green">
+                        <EllipsisVerticalIcon style={{ width: 22 }} />
+                      </Typography.Link>
+                    </Dropdown>
                   </div>
                 ),
-                width: c.width,
-                ellipsis: {
-                  showTitle: false,
-                },
-                responsive: c.responsive,
-              }
-            : {
-                title: c.head ?? c.key,
-                key: c.key,
-                dataIndex: c.key,
-                render: (value: any) => (
-                  <div style={{ minWidth: c.width || 60 }}>
-                    <Typography.Text style={{ color: "#919199" }}>
-                      {value}
-                    </Typography.Text>
-                  </div>
-                ),
-                ellipsis: {
-                  showTitle: false,
-                },
-                responsive: c.responsive,
-              }
-        ) as any),
-        {
-          key: "actions",
-          title: "Ações",
-          render: (_value: any, row: any) => (
-            <div
-              style={{
-                minWidth: 80,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Dropdown
-                menu={{
-                  items:
-                    actions &&
-                    actions.map(
-                      (a) =>
-                        ({
-                          key: a.label,
-                          label: a.label,
-                          icon: a.icon,
-                          onClick: a?.confimation
-                            ? () =>
-                                Modal.confirm({
-                                  title:
-                                    a?.confimation &&
-                                    a?.confimation(row)?.title,
-                                  content:
-                                    a?.confimation &&
-                                    a?.confimation(row)?.description,
-                                 
-                                  onOk: () => a.onClick(row),
-                                })
-                            : () => a.onClick(row),
-                        }) as any
-                    ),
-                }}
-                align={{ offset: [-6, 8] }}
-                arrow
-                placement="bottomLeft"
-              >
-                <Typography.Link color="green">
-                  <EllipsisVerticalIcon style={{ width: 22 }} />
-                </Typography.Link>
-              </Dropdown>
-            </div>
-          ),
-          width: 80,
-          fixed: "right",
-        },
-      ]}
+                width: 80,
+                fixed: "right",
+              },
+            ]
+          : [
+              ...(columns?.map((c: any) =>
+                c.custom
+                  ? {
+                      title: c.head ?? c.key,
+                      key: c.key,
+                      dataIndex: c.key,
+                      render: (_value: any, row: RowItemI) => (
+                        <div
+                          style={{ color: "#919199", minWidth: c.width || 60 }}
+                        >
+                          {c.custom(row)}
+                        </div>
+                      ),
+                      width: c.width,
+                      ellipsis: {
+                        showTitle: false,
+                      },
+                      responsive: c.responsive,
+                    }
+                  : {
+                      title: c.head ?? c.key,
+                      key: c.key,
+                      dataIndex: c.key,
+                      render: (value: any) => (
+                        <div style={{ minWidth: c.width || 60 }}>
+                          <Typography.Text style={{ color: "#919199" }}>
+                            {value}
+                          </Typography.Text>
+                        </div>
+                      ),
+                      ellipsis: {
+                        showTitle: false,
+                      },
+                      responsive: c.responsive,
+                    }
+              ) as any),
+            ]
+      }
       dataSource={data ? (data.items as any) : []}
       scroll={{ x: "60%", y: "61vh" }}
       pagination={{

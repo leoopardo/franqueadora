@@ -56,8 +56,6 @@ export const UpdateEvent = () => {
           Modules: data?.modules,
         }}
         mutate={(body) => {
-          console.log(body);
-
           function parseAgreements(agreements: any) {
             const agreementsList = [];
 

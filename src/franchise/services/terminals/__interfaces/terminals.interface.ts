@@ -28,6 +28,9 @@ const terminalSchema = z.object({
   serial_number: z.string().optional(),
   situation: z.string().optional(),
   terminal_model: z.string().optional(),
+  terminal_model_id: z.string().optional().nullable(),
+  time_zone_id: z.string().optional().nullable(),
+  modules: z.array(z.any()).optional().nullable(),
 });
 
 export const terminalResponseSchema = createResponseSchema(terminalSchema);
@@ -37,5 +40,5 @@ export type Terminal = z.infer<typeof terminalSchema>;
 export interface terminalParams extends ParamsI {
   s?: string;
   f?: string[];
-  w?: string
+  w?: string;
 }

@@ -1,4 +1,3 @@
-
 import { SearchOutlined } from "@ant-design/icons";
 import { Services } from "@franchise/services";
 import {
@@ -21,6 +20,7 @@ import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
 import defaultTheme from "../../../../styles/default";
 import { formatCNPJ, formatCpfCnpj } from "../../../../utils/regexFormat";
+import { getPermission } from "@franchise/utils/getUserPermission";
 
 export const Clients = () => {
   const [params, setParams] = useState<ClientParams>({ page: 1, size: 15 });
@@ -55,7 +55,10 @@ export const Clients = () => {
       align="middle"
       gutter={[8, 8]}
     >
-      <Col xs={{ span: 24 }} md={{ span: 12 }}>
+      <Col
+        xs={{ span: 24 }}
+        md={{ span: getPermission("CLIENTE_CADASTRO", "create") ? 12 : 17 }}
+      >
         <PageHeader
           title="Clientes"
           subtitle="Visualize e gerencie todos os clientes cadastrados."
@@ -67,35 +70,41 @@ export const Clients = () => {
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
           placeholder="Pesquisar cliente"
-          style={{borderRadius: 32}}
-          suffix={<SearchOutlined style={{width: 16}} />}
+          style={{ borderRadius: 32 }}
+          suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 5 }}>
-        <Link to={"cadastro"}>
-          <Button
-            style={{ width: "100%" }}
-            size="large"
-            type="primary"
-            shape="round"
-          >
-            Cadastrar cliente
-          </Button>
-        </Link>
-      </Col>
+      {getPermission("CLIENTE_CADASTRO", "create") && (
+        <Col xs={{ span: 24 }} md={{ span: 5 }}>
+          <Link to={"cadastro"}>
+            <Button
+              style={{ width: "100%" }}
+              size="large"
+              type="primary"
+              shape="round"
+            >
+              Cadastrar cliente
+            </Button>
+          </Link>
+        </Col>
+      )}
       <Col span={24}>
         <TableComponent<ClientType>
           loading={isLoading}
           data={data}
           params={params}
           setParams={setParams}
-          actions={[
-            {
-              label: "Editar",
-              onClick: (row) => navigate(`/clientes/edição/${row?.id}`),
-              icon: <PencilIcon style={{ width: 16 }} />,
-            },
-          ]}
+          actions={
+            getPermission("CLIENTE_CADASTRO", "create")
+              ? [
+                  {
+                    label: "Editar",
+                    onClick: (row) => navigate(`/clientes/edição/${row?.id}`),
+                    icon: <PencilIcon style={{ width: 16 }} />,
+                  },
+                ]
+              : undefined
+          }
           columns={[
             {
               key: "active",

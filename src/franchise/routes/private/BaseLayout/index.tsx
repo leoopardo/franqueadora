@@ -28,9 +28,6 @@ export const BaseLayout = () => {
     }
   }, []);
 
-  console.log(user);
-  
-
   return (
     <SiderComponent
       isMenuOpen={isMenuOpen}

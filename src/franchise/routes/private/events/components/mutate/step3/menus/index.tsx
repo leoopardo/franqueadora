@@ -37,8 +37,6 @@ export const Menus = ({ formRef, hidden, stepperRef }: ConfigI) => {
       setCreateMenuModalIsOpen(true);
     }
   }, [updateData]);
-
-  console.log(formRef?.getFieldValue(["pub", "menus"]));
   
   return (
     <Card style={{ width: "100%", display: hidden ? "none" : undefined }}>
@@ -57,9 +55,6 @@ export const Menus = ({ formRef, hidden, stepperRef }: ConfigI) => {
         <ProFormList
           style={{ display: "none" }}
           name={["pub", "menus"]}
-          onAfterRemove={(index) => {
-            console.log("index", index);
-          }}
         ></ProFormList>
         <Col span={24}>
           <Space.Compact style={{ width: "100%" }} size="large">
@@ -76,8 +71,6 @@ export const Menus = ({ formRef, hidden, stepperRef }: ConfigI) => {
                 }))}
               showSearch
               onSelect={(_value, option) => {
-                console.log(option);
-                
                 setSelectedMenu({
                   name: option?.label,
                   id: option?.value,
@@ -135,7 +128,6 @@ export const Menus = ({ formRef, hidden, stepperRef }: ConfigI) => {
                 label: "Editar",
                 onClick(RowItemI) {
                   setUpdateData(RowItemI);
-                  console.log("RowItemI", RowItemI);
                 },
               },
               {

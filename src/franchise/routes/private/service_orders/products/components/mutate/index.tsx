@@ -72,8 +72,6 @@ const generateImage = async (prompt: string): Promise<string> => {
   if (contentType?.startsWith("image/")) {
     // Converter a resposta binária em URL de imagem
     const blob = await response.blob();
-    console.log(blob);
-
     const imageUrl = URL.createObjectURL(blob);
     return imageUrl;
   } else {
@@ -158,8 +156,6 @@ export const MutateProduct = ({
     });
   }, [data, initialValues]);
 
-  console.log(initialValues);
-
   const unitByType = {
     drink: ["Litros (l)", "Mililitros (ml)", "Unidade (un)"],
   };
@@ -168,7 +164,6 @@ export const MutateProduct = ({
     setGeneratingImage(true);
     try {
       const imageUrl = await generateImage(imagePrompt);
-      console.log(imageUrl);
 
       formRef.current?.setFieldValue("image", imageUrl);
       setFiles([{ url: imageUrl }]);
@@ -181,8 +176,6 @@ export const MutateProduct = ({
   const handleBeforeUpload = (file: any) => {
     const maxSizeMB = 0.5; // Tamanho máximo permitido em MB
     const maxSizeBytes = maxSizeMB * 1024 * 1024; // Converter MB para Bytes
-
-    console.log(file.size, maxSizeBytes);
 
     if (file.size > maxSizeBytes) {
       notification.error({
@@ -341,7 +334,6 @@ export const MutateProduct = ({
                         maxCount={1}
                         onChange={(file) => {
                           setFiles(file.fileList);
-                          console.log(file);
                         }}
                         beforeUpload={handleBeforeUpload}
                         showUploadList={{

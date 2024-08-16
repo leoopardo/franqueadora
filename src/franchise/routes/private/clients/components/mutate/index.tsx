@@ -58,9 +58,6 @@ export const MutateClient = ({
   useEffect(() => {
     if (cookies.get("create_client_franchise") && !update) {
       const data = JSON.parse(`${cookies.get("create_client_franchise")}`);
-
-      console.log(data);
-
       api.info({
         message: "Rascunho identificado!",
         description:

@@ -24,8 +24,6 @@ export const UpdateProduct = () => {
     return file;
   };
 
-  console.log("data", data);
-
   return (
     <div>
       <MutateProduct
@@ -46,7 +44,6 @@ export const UpdateProduct = () => {
               ? await parseImageDataFromFile(body?.image?.file?.originFileObj)
               : null;
           }
-          console.log(image);
 
           mutate({
             ...body,

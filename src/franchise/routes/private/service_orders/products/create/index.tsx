@@ -26,8 +26,6 @@ export const CreateProduct = () => {
         title="Cadastro de produtos"
         subtitle="Preencha todos os campos para adicionar um novo produto"
         mutate={async (body: CreateProductType) => {
-          console.log("body", body?.image?.file);
-
           let image: any;
           if (typeof body?.image === "string") {
             ("aqui");

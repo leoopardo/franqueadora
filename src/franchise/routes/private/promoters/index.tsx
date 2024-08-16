@@ -20,6 +20,7 @@ import {
   PromotersParams,
 } from "../../../services/promoters/__interfaces/promoters.interface";
 import { SearchOutlined } from "@ant-design/icons";
+import { getPermission } from "@franchise/utils/getUserPermission";
 
 export const Promoters = () => {
   const [params, setParams] = useState<PromotersParams>({ page: 1, size: 15 });
@@ -71,18 +72,20 @@ export const Promoters = () => {
           suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 5 }}>
-        <Link to={"cadastro"}>
-          <Button
-            style={{ width: "100%", boxShadow: "none" }}
-            size="large"
-            type="primary"
-            shape="round"
-          >
-            Cadastrar promotor
-          </Button>
-        </Link>
-      </Col>
+      {getPermission("PROMOTOR_CADASTRO", "create") && (
+        <Col xs={{ span: 24 }} md={{ span: 5 }}>
+          <Link to={"cadastro"}>
+            <Button
+              style={{ width: "100%", boxShadow: "none" }}
+              size="large"
+              type="primary"
+              shape="round"
+            >
+              Cadastrar promotor
+            </Button>
+          </Link>
+        </Col>
+      )}
       <Col span={24}>
         <TableComponent<Promoter>
           loading={isLoading}
@@ -90,13 +93,17 @@ export const Promoters = () => {
           params={params}
           setParams={setParams}
           total={data?.totalItems}
-          actions={[
-            {
-              label: "Editar",
-              onClick: (row) => navigate(`/promotores/edição/${row?.id}`),
-              icon: <PencilIcon style={{ width: 16 }} />,
-            },
-          ]}
+          actions={
+            getPermission("PROMOTOR_CADASTRO", "create")
+              ? [
+                  {
+                    label: "Editar",
+                    onClick: (row) => navigate(`/promotores/edição/${row?.id}`),
+                    icon: <PencilIcon style={{ width: 16 }} />,
+                  },
+                ]
+              : undefined
+          }
           columns={[
             {
               key: "active",

@@ -110,9 +110,6 @@ export const SectorPaymentsStep = () => {
       <ProFormList
         style={{ display: "none" }}
         name={"payment_methods"}
-        onAfterRemove={(index) => {
-          console.log("index", index);
-        }}
       ></ProFormList>
       <Row style={{ width: "100%", marginTop: -30 }} gutter={8}>
         <Col

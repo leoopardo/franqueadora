@@ -5,6 +5,7 @@ import secureLocalStorage from "react-secure-storage";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchiseAuth } from "../../../contexts/franchiseAuthContext";
 import { congnitoAuthService } from "./CognitoAuthService";
+import { PermissionEnum } from "@franchise/utils/getUserPermission";
 
 export interface getMeI {
   id: string;
@@ -52,7 +53,7 @@ export interface getMeI {
     updated_at: string;
     Feature: {
       name: string;
-      key: string;
+      key: PermissionEnum;
     };
   }[];
   AuthToken: string;

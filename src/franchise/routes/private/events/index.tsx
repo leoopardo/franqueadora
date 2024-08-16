@@ -30,6 +30,7 @@ import moment from "moment";
 import { formatCpfCnpj } from "@utils/regexFormat";
 import { CalendarProps } from "antd/lib";
 import { SearchOutlined } from "@ant-design/icons";
+import { getPermission } from "@franchise/utils/getUserPermission";
 
 const month = {
   1: "JAN",
@@ -136,7 +137,10 @@ export const Events = () => {
       align="middle"
       gutter={[8, 8]}
     >
-      <Col xs={{ span: 24 }} md={{ span: 12 }}>
+      <Col
+        xs={{ span: 24 }}
+        md={{ span: getPermission("EVENTOS_CADASTRO", "create") ? 12 : 17 }}
+      >
         <PageHeader
           title="Eventos"
           subtitle="Visualize e gerencie seus eventos."
@@ -152,32 +156,35 @@ export const Events = () => {
           suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 5 }}>
-        <Link to={"cadastro"}>
-          <Tooltip
-            title={
-              !localStorage.getItem("tenant") && localStorage.getItem("master")
-                ? "Você deve acessar uma franquia para realizar cadastros"
-                : undefined
-            }
-          >
-            <Button
-              style={{ width: "100%" }}
-              size="large"
-              type="primary"
-              shape="round"
-              disabled={
+      {getPermission("EVENTOS_CADASTRO", "create") && (
+        <Col xs={{ span: 24 }} md={{ span: 5 }}>
+          <Link to={"cadastro"}>
+            <Tooltip
+              title={
                 !localStorage.getItem("tenant") &&
                 localStorage.getItem("master")
-                  ? true
-                  : false
+                  ? "Você deve acessar uma franquia para realizar cadastros"
+                  : undefined
               }
             >
-              Cadastrar evento
-            </Button>
-          </Tooltip>
-        </Link>
-      </Col>
+              <Button
+                style={{ width: "100%" }}
+                size="large"
+                type="primary"
+                shape="round"
+                disabled={
+                  !localStorage.getItem("tenant") &&
+                  localStorage.getItem("master")
+                    ? true
+                    : false
+                }
+              >
+                Cadastrar evento
+              </Button>
+            </Tooltip>
+          </Link>
+        </Col>
+      )}
       <Col span={24} style={{ display: "flex", flexDirection: "row-reverse" }}>
         <Select
           options={[
@@ -200,13 +207,17 @@ export const Events = () => {
             data={data}
             params={params}
             setParams={setParams}
-            actions={[
-              {
-                label: "Editar",
-                onClick: (row) => navigate(`edição`, { state: row }),
-                icon: <PencilIcon style={{ width: 16 }} />,
-              },
-            ]}
+            actions={
+              getPermission("EVENTOS_CADASTRO", "create")
+                ? [
+                    {
+                      label: "Editar",
+                      onClick: (row) => navigate(`edição`, { state: row }),
+                      icon: <PencilIcon style={{ width: 16 }} />,
+                    },
+                  ]
+                : undefined
+            }
             columns={[
               {
                 key: "active",
