@@ -65,8 +65,6 @@ export const MutateFranchise = ({
   useEffect(() => {
     if (cookies.get("create_event") && !update) {
       const data = JSON.parse(`${cookies.get("create_event")}`);
-      console.log(data);
-
       api.info({
         message: "Rascunho identificado!",
         description:
@@ -267,8 +265,6 @@ export const MutateFranchise = ({
                 onFormChange={(_name, info) => {
                   if (update) return;
                   let form = {};
-                  console.log(form);
-
                   for (const step in info?.forms) {
                     form = { ...form, ...info?.forms[step].getFieldsValue() };
                     cookies.set("create_event", JSON.stringify(form), {

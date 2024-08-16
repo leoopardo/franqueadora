@@ -1,6 +1,10 @@
+import { getPermission } from "@franchise/utils/getUserPermission";
 import { Button, Result } from "antd";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { BaseLayout } from "./BaseLayout";
+import { Clients } from "./clients";
+import { CreateClient } from "./clients/create";
+import { UpdateClient } from "./clients/update";
 import { Loading } from "./components/loading";
 import { Events } from "./events";
 import { CreateEvent } from "./events/create";
@@ -12,23 +16,35 @@ import { Products } from "./service_orders/products";
 import { CreateProduct } from "./service_orders/products/create";
 import { UpdateProduct } from "./service_orders/products/update";
 import { Terminals } from "./terminals";
-import { Clients } from "./clients";
-import { CreateClient } from "./clients/create";
-import { UpdateClient } from "./clients/update";
+import { CreateTerminals } from "./terminals/create";
+import { UpdateTerminals } from "./terminals/update";
+import { Menus } from "./service_orders/menus";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
+
   return (
     <Routes>
       <Route path="/" element={<BaseLayout />}>
-        <Route path="franquias" element={<>Franquias</>} />
-        <Route path="eventos">
-          <Route index element={<Events />} />
-          <Route path="cadastro" element={<CreateEvent />} />
-          <Route path="edição" element={<UpdateEvent />} />
-        </Route>
+        {getPermission("EVENTOS_CADASTRO", "view") && (
+          <Route path="eventos">
+            <Route index element={<Events />} />
+            {getPermission("EVENTOS_CADASTRO", "create") && (
+              <>
+                <Route path="cadastro" element={<CreateEvent />} />
+                <Route path="edição" element={<UpdateEvent />} />
+              </>
+            )}
+          </Route>
+        )}
         <Route path="terminais">
           <Route index element={<Terminals />} />
+          {getPermission("TERMINAIS_GERENCIAMENTO", "create") && (
+            <>
+              <Route path="cadastro" element={<CreateTerminals />} />{" "}
+              <Route path="edição/:id" element={<UpdateTerminals />} />
+            </>
+          )}
         </Route>
         <Route path="/fichas">
           <Route path="produtos">
@@ -36,18 +52,32 @@ export const PrivateRoutes = () => {
             <Route path="cadastro" element={<CreateProduct />} />
             <Route path="edição" element={<UpdateProduct />} />
           </Route>
+          <Route path="cardapio" element={<Menus />} />
         </Route>
-        <Route path="promotores">
-          <Route index element={<Promoters />} />
-          <Route path="cadastro" element={<CreatePromoter />} />
-          <Route path="edição/:id" element={<UpdatePromoter />} />
-        </Route>
-        <Route path="clientes">
-          <Route index element={<Clients />} />
-          <Route path="cadastro" element={<CreateClient />} />
-          <Route path="edição/:id" element={<UpdateClient />} />
-        </Route>
-
+        {getPermission("PROMOTOR_CADASTRO", "view") && (
+          <Route path="promotores">
+            <Route index element={<Promoters />} />
+            {getPermission("PROMOTOR_CADASTRO", "create") && (
+              <>
+                <Route path="cadastro" element={<CreatePromoter />} />
+                <Route path="edição/:id" element={<UpdatePromoter />} />
+              </>
+            )}
+          </Route>
+        )}{" "}
+        {getPermission("CLIENTE_CADASTRO", "view") && (
+          <Route path="clientes">
+            <Route index element={<Clients />} />
+            {getPermission("CLIENTE_CADASTRO", "create") && (
+              <>
+                {" "}
+                <Route path="cadastro" element={<CreateClient />} />
+                <Route path="edição/:id" element={<UpdateClient />} />
+              </>
+            )}
+          </Route>
+        )}
+        
         <Route
           path="*"
           element={

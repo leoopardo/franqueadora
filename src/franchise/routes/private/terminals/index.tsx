@@ -1,8 +1,11 @@
+import { SearchOutlined } from "@ant-design/icons";
+import { getPermission } from "@franchise/utils/getUserPermission.ts";
 import {
   Bars3BottomLeftIcon,
   PencilIcon,
   PencilSquareIcon,
 } from "@heroicons/react/24/outline";
+import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 import { Button, Col, Input, Row, Switch, Typography } from "antd";
 import { useState } from "react";
 import { Link } from "react-router-dom";
@@ -19,8 +22,6 @@ import { useTerminalTotals } from "../../../services/terminals/getTerminalTotals
 import { useInactivateTerminal } from "../../../services/terminals/inactivateTerminals.ts";
 import { useListTerminals } from "../../../services/terminals/listTerminals.ts";
 import { Totalizer } from "./components/Totalizer.tsx";
-import { useBreakpoints } from "@hooks/useBreakpoints.ts";
-import { SearchOutlined } from "@ant-design/icons";
 
 export const Terminals = () => {
   const [params, setParams] = useState<terminalParams>({ page: 1, size: 15 });
@@ -60,7 +61,12 @@ export const Terminals = () => {
       align="middle"
       gutter={[8, 16]}
     >
-      <Col xs={{ span: 24 }} md={{ span: 10 }}>
+      <Col
+        xs={{ span: 24 }}
+        md={{
+          span: getPermission("TERMINAIS_GERENCIAMENTO", "create") ? 10 : 15,
+        }}
+      >
         <PageHeader
           title="Terminais"
           subtitle="Visualize e gerencie todas os terminais cadastrados."
@@ -91,18 +97,20 @@ export const Terminals = () => {
           Filtros
         </Button>
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 5 }}>
-        <Link to={"cadastro"}>
-          <Button
-            style={{ width: "100%" }}
-            size="large"
-            type="primary"
-            shape="round"
-          >
-            Cadastrar terminal
-          </Button>
-        </Link>
-      </Col>
+      {getPermission("TERMINAIS_GERENCIAMENTO", "create") && (
+        <Col xs={{ span: 24 }} md={{ span: 5 }}>
+          <Link to={"cadastro"}>
+            <Button
+              style={{ width: "100%" }}
+              size="large"
+              type="primary"
+              shape="round"
+            >
+              Cadastrar terminal
+            </Button>
+          </Link>
+        </Col>
+      )}
       <Col span={24}>
         <Totalizer
           content={totals?.data?.content}

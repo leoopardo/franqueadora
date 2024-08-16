@@ -72,9 +72,7 @@ export const StepTwo = ({
     <StepsForm.StepForm<any>
       name="master"
       title="Perfil principal"
-      onFinish={async (form) => {
-        console.log(form);
-
+      onFinish={async () => {
         await waitTime(500);
         return true;
       }}

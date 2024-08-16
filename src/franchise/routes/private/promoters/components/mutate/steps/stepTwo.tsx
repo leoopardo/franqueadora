@@ -18,7 +18,7 @@ import regexList from "../../../../../../../utils/regexList";
 export const StepTwo = ({
   update,
   draft,
-  initialValues
+  initialValues,
 }: {
   update?: boolean;
   formRef?: React.RefObject<ProFormInstance>;
@@ -60,23 +60,16 @@ export const StepTwo = ({
   }, [draft]);
 
   useEffect(() => {
-    console.log(initialValues);
-    
     if (initialValues) {
       stepTwoRef.current?.setFieldsValue({ ...initialValues });
     }
   }, [initialValues]);
 
-  console.log(initialValues);
-  
-
   return (
     <StepsForm.StepForm<any>
       name="base"
       title="Perfil principal"
-      onFinish={async (form) => {
-        console.log(form);
-
+      onFinish={async () => {
         await waitTime(500);
         return true;
       }}
