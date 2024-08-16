@@ -5,11 +5,11 @@ import {
   ProFormList,
   ProFormSelect,
 } from "@ant-design/pro-components";
+import { ProFormSelectClient } from "@franchise/components/proFormSelects/SelectClients";
+import { ProFormSelectPromoters } from "@franchise/components/proFormSelects/SelectPromoters";
 import { getMeI } from "@franchise/services/auth/useGetMe";
 import { ClientParams } from "@franchise/services/clients/__interfaces/clients.interface";
-import { useListClients } from "@franchise/services/clients/listClients";
 import { getSelectsData } from "@franchise/services/events/getSelectsData";
-import { useListPromoters } from "@franchise/services/promoters/listPromoters";
 import { QueryKeys } from "@franchise/services/queryKeys";
 import { useGetPosModules } from "@franchise/services/utils/getPosModules";
 import { CalendarDaysIcon, Cog6ToothIcon } from "@heroicons/react/24/outline";
@@ -29,15 +29,10 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
     page: 0,
     size: 500,
   });
-  const [modulesParams, setModulesParams] = useState<any>({
+  const [, setModulesParams] = useState<any>({
     promoter_id: formRef?.getFieldValue("promoter_id"),
   });
-  const listPromoter = useListPromoters({
-    page: 0,
-    size: 500,
-  });
-  const listClient = useListClients(ClientParams);
-  const listPOSModules = useGetPosModules(modulesParams);
+  const listPOSModules = useGetPosModules();
   const selects = getSelectsData();
 
   const user = queryClient.getQueryData(QueryKeys.GET_ME) as getMeI;
@@ -52,6 +47,21 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
       setModulesParams({ client_id: user?.Client?.id });
     }
   }, [user]);
+
+  useEffect(() => {
+    if (selects.data) {
+      formRef?.setFieldValue(
+        "timezone_id",
+        selects.data.timezones?.find((tz) => tz.label === "Brasília (GMT -3)")
+          ?.id
+      );
+
+      formRef?.setFieldValue(
+        "currency_type",
+        selects.data.currency_types?.[0]?.id
+      );
+    }
+  }, [selects]);
 
   return (
     <Row
@@ -78,36 +88,25 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
               display: !user?.Client && !user?.Promoter ? undefined : "none",
             }}
           >
-            <ProFormSelect
+            <ProFormSelectPromoters
               name="promoter_id"
               label="Promotor"
-              rules={[{ required: true }]}
-              options={listPromoter.data?.items.map((i) => ({
-                label: i.promoter_name,
-                value: i.id,
-              }))}
-              onChange={(value) => {
-                if (!value) {
-                  setModulesParams((state: any) => ({
-                    ...state,
-                    promoter_id: undefined,
-                  }));
+              rules={[{ required: !user?.Promoter && !user?.Client }]}
+              fieldProps={{
+                onChange(value) {
+                  if (!value)
+                    setClientParams((state) => ({
+                      ...state,
+                      promoter_id: undefined,
+                    }));
+
                   setClientParams((state) => ({
-                    ...state,
-                    w: undefined,
-                  }));
-                } else {
-                  setModulesParams((state: any) => ({
                     ...state,
                     promoter_id: value,
                   }));
-                  setClientParams((state) => ({
-                    ...state,
-                    w: `promoter_id=[${value}]`,
-                  }));
-                }
+                },
               }}
-              style={{ width: "100%" }}
+              isClient={!!user?.Client}
             />
           </Col>
           <Col
@@ -116,28 +115,11 @@ export const Config = ({ formRef, hidden }: ConfigI) => {
             lg={{ span: 8 }}
             style={{ display: !user?.Client ? undefined : "none" }}
           >
-            <ProFormSelect
+            <ProFormSelectClient
               name="client_id"
               label="Cliente"
-              disabled={!formRef?.getFieldValue("promoter_id")}
-              onChange={(value) => {
-                if (!value) {
-                  setModulesParams((state: any) => ({
-                    ...state,
-                    client_id: undefined,
-                  }));
-                } else {
-                  setModulesParams((state: any) => ({
-                    ...state,
-                    client_id: value,
-                  }));
-                }
-              }}
-              options={listClient.data?.items.map((i) => ({
-                label: i.name,
-                value: i.id,
-              }))}
-              style={{ width: "100%" }}
+              query={ClientParams}
+              fieldProps={{ disabled: !(ClientParams as any)?.promoter_id }}
             />
           </Col>
           <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>

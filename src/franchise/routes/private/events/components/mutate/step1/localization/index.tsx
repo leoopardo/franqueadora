@@ -69,16 +69,29 @@ export const Localization = ({ formRef, hidden }: LocalizationI) => {
       if (results[0]) {
         setAddress(results[0].formatted_address);
         setValue(results[0].formatted_address, false);
-        formRef?.setFieldValue("location", results[0].formatted_address);
+
+        // formRef?.setFieldValue("location", results[0].formatted_address);
         const addressObj = formatAddress(
           results[0].address_components.map((a: any) => a.long_name)
         );
-        formRef?.setFieldValue("address", addressObj.street || "");
-        formRef?.setFieldValue("city", addressObj.city || "");
-        formRef?.setFieldValue("state", addressObj.state || "");
-        formRef?.setFieldValue("zipcode", addressObj.zipcode || "");
-        formRef?.setFieldValue("neighborhood", addressObj.neighborhood || "");
-        formRef?.setFieldValue("number", addressObj.number || "");
+        formRef?.setFieldsValue({
+          address: addressObj.address || "",
+          city: addressObj.city || "",
+          state: addressObj.state || "",
+          zipcode: addressObj.zipcode || "",
+          neighborhood: addressObj.neighborhood || "",
+          number: addressObj.number || "",
+          location: results[0].formatted_address,
+          latitude: lat,
+          longitude: lng,
+        });
+
+        // formRef?.setFieldValue("address", addressObj.address || "");
+        // formRef?.setFieldValue("city", addressObj.city || "");
+        // formRef?.setFieldValue("state", addressObj.state || "");
+        // formRef?.setFieldValue("zipcode", addressObj.zipcode || "");
+        // formRef?.setFieldValue("neighborhood", addressObj.neighborhood || "");
+        // formRef?.setFieldValue("number", addressObj.number || "");
       }
     } catch (error) {
       console.error("Error getting address: ", error);

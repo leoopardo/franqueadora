@@ -2,25 +2,21 @@ import qs from "qs";
 import { useQuery } from "react-query";
 import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchiseAuth } from "../../../contexts/franchiseAuthContext";
-import ResponseI from "../__interfaces/response.interface";
 import { QueryKeys } from "../queryKeys";
-import { Promoter, PromotersParams } from "./__interfaces/promoters.interface";
+import { Terminal } from "./__interfaces/terminals.interface";
 
-export const useListPromoters = (
-  params: PromotersParams,
-  isClient?: boolean
-) => {
+export const useGetTerminalById = (id: string) => {
   const { headers } = useFranchiseAuth();
   const { data, error, isLoading, refetch } = useQuery<
-    ResponseI<Promoter> | null | undefined
+    Terminal | null | undefined
   >(
-    [QueryKeys.LIST_PROMOTERS, isClient ? undefined : params],
+    [QueryKeys.GET_TERMINAL_BY_ID, id],
     async () => {
-      const response = await apiFranquia.get(`/promoter`, {
+      const response = await apiFranquia.get(`/terminal/${id}`, {
         headers: {
           ...headers,
         },
-        params: { orderBy: "created_at", orderDirection: "desc", ...params },
+        params: { orderBy: "created_at", orderDirection: "desc" },
         paramsSerializer: (params) => {
           return qs.stringify(params, { encode: false });
         },
@@ -28,12 +24,8 @@ export const useListPromoters = (
       return response.data;
     },
     {
-      enabled: isClient
-        ? false
-        : headers && headers["AuthToken"]
-          ? true
-          : false,
-      refetchOnWindowFocus: isClient ? false : true,
+      enabled: headers && headers["AuthToken"] ? true : false,
+      refetchOnWindowFocus: false,
     }
   );
 

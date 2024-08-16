@@ -429,7 +429,6 @@ export const SiderComponent = ({
       stylish={{
         sider: () => ({
           borderRight: "1px solid rgb(113, 113, 122, 0.2)",
-          zIndex: 9999,
           backgroundColor: theme === "light" ? "#f0f2f5" : "#1f1f1f",
         }),
       }}

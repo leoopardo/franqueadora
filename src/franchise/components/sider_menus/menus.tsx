@@ -6,8 +6,13 @@ import {
   UserGroupIcon,
 } from "@heroicons/react/24/outline";
 
-export const MenuItens = (pending: number) => {
-  return [
+export const MenuItens: any = (
+  pending: number,
+  promoter?: boolean,
+  client?: boolean
+) => {
+  const items = [
+    ,
     // {
     //   key: "dashboard",
     //   name: "Dashboard",
@@ -15,18 +20,7 @@ export const MenuItens = (pending: number) => {
     //   icon: <Squares2X2Icon width={24} />,
     //   disabled: true,
     // },
-    {
-      key: "promotores",
-      name: "Promotores",
-      path: "/promotores",
-      icon: <MegaphoneIcon width={24} />,
-    },
-    {
-      key: "clientes",
-      name: "Clientes",
-      path: "/clientes",
-      icon: <UserGroupIcon width={24} />,
-    },
+
     {
       key: "eventos",
       name: "Eventos",
@@ -114,4 +108,22 @@ export const MenuItens = (pending: number) => {
     //   disabled: true,
     // },
   ];
+
+  if (!promoter && !client) {
+    items.splice(0, 0, {
+      key: "promotores",
+      name: "Promotores",
+      path: "/promotores",
+      icon: <MegaphoneIcon width={24} />,
+    });
+  }
+  if (!client) {
+    items.splice(1, 0, {
+      key: "clientes",
+      name: "Clientes",
+      path: "/clientes",
+      icon: <UserGroupIcon width={24} />,
+    });
+  }
+  return items;
 };

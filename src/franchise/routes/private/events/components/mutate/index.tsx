@@ -1,3 +1,4 @@
+import { LoadingOutlined } from "@ant-design/icons";
 import {
   ProCard,
   ProFormInstance,
@@ -8,14 +9,24 @@ import { AgreementType } from "@franchisor/services/franchises/__interfaces/agre
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
-import { Button, Col, Row, Spin, Steps, Tabs, Typography } from "antd";
+import {
+  Button,
+  Col,
+  notification,
+  Row,
+  Space,
+  Spin,
+  Steps,
+  Tabs,
+  Typography,
+} from "antd";
 import { motion } from "framer-motion";
+import cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StepOne } from "./step1";
 import { StepThree } from "./step3";
 import { StepFour } from "./step4";
-import { LoadingOutlined } from "@ant-design/icons";
 
 interface mutateI {
   mutate: (body: any) => void;
@@ -47,6 +58,60 @@ export const MutateFranchise = ({
   const navigate = useNavigate();
   const { isSm, isMd, isLg } = useBreakpoints();
   const [isTokenModalOpen, setIsTokenModalOpen] = useState<boolean>(false);
+  const [api, contextHolder] = notification.useNotification();
+  const [, setIsDrafLoading] = useState<boolean>(false);
+  const [, setDraft] = useState<any>(undefined);
+
+  useEffect(() => {
+    if (cookies.get("create_event") && !update) {
+      const data = JSON.parse(`${cookies.get("create_event")}`);
+      console.log(data);
+
+      api.info({
+        message: "Rascunho identificado!",
+        description:
+          "Você não concluiu o cadastro anteriormente. Deseja recupera-lo?",
+        duration: 30000,
+        btn: (
+          <Space>
+            <Button
+              type="primary"
+              onClick={() => {
+                cookies.remove("create_event");
+                api.destroy();
+              }}
+              danger
+            >
+              Não, descartar
+            </Button>{" "}
+            <Button
+              type="primary"
+              onClick={() => {
+                setIsDrafLoading(true);
+                setDraft(data);
+                // não sei pq ta funcionando, mas tá se tirar um dos dois timeout para
+                setTimeout(() => {
+                  setIsDrafLoading(false);
+                  formRef.current?.setFieldsValue(data);
+                  api.destroy();
+                  setLoadingStep(false);
+                }, 500);
+                setTimeout(() => {
+                  setDraft(undefined);
+                  setIsDrafLoading(false);
+                  formRef.current?.setFieldsValue(data);
+                  api.destroy();
+                  setLoadingStep(false);
+                }, 800);
+              }}
+            >
+              Sim, recuperar.
+            </Button>
+          </Space>
+        ),
+      });
+    }
+  }, []);
 
   const waitTime = (values: any) => {
     mutate(values);
@@ -58,8 +123,6 @@ export const MutateFranchise = ({
   const initialFormValues: any = initialValues ?? {};
 
   useEffect(() => {
-    console.log("initialFormValues", initialFormValues);
-    
     if (initialFormValues) {
       formRef.current?.setFieldsValue(initialFormValues);
     }
@@ -67,6 +130,7 @@ export const MutateFranchise = ({
 
   return (
     <Row justify="center" style={{ width: "100%" }}>
+      {contextHolder}
       <Col
         style={{
           width: "100%",
@@ -199,6 +263,18 @@ export const MutateFranchise = ({
                 containerStyle={{
                   width: isSm || isMd || isLg ? "100%" : "90%",
                   paddingBottom: 24,
+                }}
+                onFormChange={(_name, info) => {
+                  if (update) return;
+                  let form = {};
+                  console.log(form);
+
+                  for (const step in info?.forms) {
+                    form = { ...form, ...info?.forms[step].getFieldsValue() };
+                    cookies.set("create_event", JSON.stringify(form), {
+                      expires: 1,
+                    });
+                  }
                 }}
               >
                 <StepOne />

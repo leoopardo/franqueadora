@@ -18,7 +18,7 @@ export function useGetCEP(cep: string) {
       `https://brasilapi.com.br/api/cep/v2/${cep}`
     );
     return response.data;
-  });
+  }, {enabled: cep ? true : false});
 
   return {
     data,

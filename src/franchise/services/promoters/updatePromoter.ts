@@ -1,52 +1,47 @@
-import { apiPortalEvent } from "@config/apiPortalEvent";
 import { notification } from "antd";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { apiFranquia } from "../../../config/apiFranquia";
 import { useFranchiseAuth } from "../../../contexts/franchiseAuthContext";
 import { queryClient } from "../../../services/queryClient";
 import { QueryKeys } from "../queryKeys";
-import { CreateEventType } from "./__interfaces/create_event.interface";
-import { getMeI } from "../auth/useGetMe";
+import { updatePromoterI } from "@franchisor/services/promoters/__interfaces/update_promoter.interface";
 
-export const useCreateEvent = () => {
-  const user = queryClient.getQueryData("getMeFranchise") as getMeI;
+export const useUpdatePromoter = (id: string) => {
   const { headers } = useFranchiseAuth();
   const navigate = useNavigate();
   const mutation = useMutation<
     any | null | undefined,
     unknown,
-    CreateEventType
+    updatePromoterI
   >({
     mutationFn: async (body) => {
-      const response = await apiPortalEvent.post(
-        `/event`,
-        {
-          ...body,
-          promoter_id: user?.Promoter ? user?.Promoter?.id : undefined,
-          client_id: user?.Client ? user?.Client?.id : undefined,
-        },
-        {
-          headers: { ...headers },
-        }
-      );
+      const response = await apiFranquia.put(`/promoter/${id}`, body, {
+        headers: { ...headers },
+      });
       await queryClient.refetchQueries({
-        queryKey: [QueryKeys.LIST_EVENTS],
+        queryKey: [QueryKeys.LIST_PROMOTERS],
       });
       return response.data;
     },
-    mutationKey: QueryKeys.CREATE_EVENT,
+    mutationKey: QueryKeys.UPDATE_PROMOTER,
   });
 
   const { data, error, isLoading, mutate, reset, isSuccess } = mutation;
 
   if (isSuccess) {
-    notification.success({ message: "Evento cadastrado com sucesso!" });
+    notification.success({ message: "Promotor editado com sucesso!" });
+    // notification.info({
+    //   message: "A sua senha de terminal.",
+    //   description: `Armazene sua senha de terminal: ${data?.terminal_password}`,
+    //   duration: 5000,
+    // });
     reset();
-    navigate("/eventos");
+    navigate("/promotores");
   }
   if (error) {
     notification.error({
-      message: "Não foi possível cadastrar o evento.",
+      message: "Não foi possível editar o promotor.",
       description: (error as any)?.response?.data?.message,
     });
     reset();
