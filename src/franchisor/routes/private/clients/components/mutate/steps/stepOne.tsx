@@ -125,7 +125,7 @@ export const StepOne = ({ setModules, update, formRef, updatePersonType }: stepO
       }}
 
     >
-      <Row style={{ width: "100%", maxWidth: "100vw" }} gutter={8}>
+      <Row style={{ width: "100%", maxWidth: "90vw" }} gutter={8}>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
           <CheckCard.Group
             onChange={(value: any) => {

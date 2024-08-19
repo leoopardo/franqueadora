@@ -1,14 +1,14 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { getPermission } from "@franchise/utils/getUserPermission.ts";
 import {
-  Bars3BottomLeftIcon,
   PencilIcon,
   PencilSquareIcon,
+  PlusIcon,
 } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 import { Button, Col, Input, Row, Switch, Typography } from "antd";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PageHeader } from "../../../../components/header/pageHeader";
 import TableComponent from "../../../../components/table/tableComponent";
 import useDebounce from "../../../../hooks/useDebounce";
@@ -36,6 +36,7 @@ export const Terminals = () => {
   });
   const [selectedRows, setSelectedRows] = useState<Terminal[]>([]);
   const { isSm } = useBreakpoints();
+  const navigate = useNavigate();
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -64,7 +65,7 @@ export const Terminals = () => {
       <Col
         xs={{ span: 24 }}
         md={{
-          span: getPermission("TERMINAIS_GERENCIAMENTO", "create") ? 10 : 15,
+          span: getPermission("TERMINAIS_GERENCIAMENTO", "create") ? 13 : 18,
         }}
       >
         <PageHeader
@@ -82,7 +83,7 @@ export const Terminals = () => {
           suffix={<SearchOutlined style={{ width: 16 }} />}
         />
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 3 }}>
+      {/* <Col xs={{ span: 24 }} md={{ span: 3 }}>
         <Button
           style={{
             width: "100%",
@@ -96,15 +97,21 @@ export const Terminals = () => {
         >
           Filtros
         </Button>
-      </Col>
+      </Col> */}
       {getPermission("TERMINAIS_GERENCIAMENTO", "create") && (
         <Col xs={{ span: 24 }} md={{ span: 5 }}>
           <Link to={"cadastro"}>
             <Button
-              style={{ width: "100%" }}
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
               size="large"
               type="primary"
               shape="round"
+              icon={<PlusIcon style={{ width: 16 }} />}
             >
               Cadastrar terminal
             </Button>
@@ -153,7 +160,7 @@ export const Terminals = () => {
           actions={[
             {
               label: "Editar",
-              onClick: (row) => console.log(row),
+              onClick: (row) => navigate(`edição/${row?.id}`),
               icon: <PencilIcon style={{ width: 16 }} />,
             },
           ]}

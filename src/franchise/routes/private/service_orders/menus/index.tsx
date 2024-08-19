@@ -7,7 +7,7 @@ import { ProductParams } from "@franchise/services/service_orders/products/_inte
 import { useActivateProduct } from "@franchise/services/service_orders/products/activateProducts";
 import { useDeleteProduct } from "@franchise/services/service_orders/products/deleteProduct";
 import { useInactivateProduct } from "@franchise/services/service_orders/products/inactivateProduct";
-import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { MapIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import useDebounce from "@hooks/useDebounce";
 import { formatCpfCnpj } from "@utils/regexFormat";
@@ -109,6 +109,11 @@ export const Menus = () => {
               label: "Editar",
               onClick: (row) => navigate(`edição/${row?.id}`, { state: row }),
               icon: <PencilIcon style={{ width: 16 }} />,
+            },
+             {
+              label: "Produtos",
+              onClick: (row) => navigate(`${row?.id}/produtos`, { state: row }),
+              icon: <MapIcon style={{ width: 16 }} />,
             },
             {
               label: "Excluir",

@@ -1,15 +1,17 @@
+import { apiFranquia } from "@config/apiFranquia";
+import { getMeI } from "@franchise/services/auth/useGetMe";
+import { QueryKeys } from "@franchise/services/queryKeys";
+import { CreateTerminals } from "@franchisor/services/terminals/__interfaces/create_terminals.interface";
 import { notification } from "antd";
 import cookies from "js-cookie";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
-import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
-import { apiFranquia } from "@config/apiFranquia";
+import { useFranchiseAuth } from "../../../../contexts/franchiseAuthContext";
 import { queryClient } from "../../../../services/queryClient";
-import { CreateTerminals } from "@franchisor/services/terminals/__interfaces/create_terminals.interface";
-import { QueryKeys } from "@franchise/services/queryKeys";
 
 export const useCreateTerminals = () => {
-  const { headers } = useFranchisorAuth();
+  const user = queryClient.getQueryData(QueryKeys.GET_ME) as getMeI;
+  const { headers } = useFranchiseAuth();
   const navigate = useNavigate();
   const mutation = useMutation<
     any | null | undefined,
@@ -17,9 +19,26 @@ export const useCreateTerminals = () => {
     CreateTerminals
   >({
     mutationFn: async (body) => {
-      const response = await apiFranquia.post(`/terminal/batch`, body, {
-        headers: { ...headers },
-      });
+      const response = await apiFranquia.post(
+        `/terminal/batch`,
+        {
+          ...body,
+          franchise_id: user?.Franchise ? user?.Franchise[0]?.id : undefined,
+          promoter_id: body.promoter_id
+            ? body.promoter_id
+            : user?.Promoter
+              ? user?.Promoter?.id
+              : undefined,
+          client_id: body.client_id
+            ? body.client_id
+            : user?.Client
+              ? user?.Client?.id
+              : undefined,
+        },
+        {
+          headers: { ...headers },
+        }
+      );
       await queryClient.refetchQueries({
         queryKey: [QueryKeys.LIST_TERMINALS],
       });

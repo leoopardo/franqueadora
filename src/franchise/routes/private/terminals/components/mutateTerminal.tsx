@@ -6,10 +6,11 @@ import {
   ProFormInstance,
   ProFormSelect,
 } from "@ant-design/pro-components";
-import { ProFormSelectClient } from "@components/proFormSelects/SelectClients";
-import { ProFormSelectFrianchise } from "@components/proFormSelects/SelectFranchises";
-import { ProFormSelectPromoters } from "@components/proFormSelects/SelectPromoters";
-import { Services } from "@franchisor/services";
+import { ProFormSelectClient } from "@franchise/components/proFormSelects/SelectClients";
+import { ProFormSelectPromoters } from "@franchise/components/proFormSelects/SelectPromoters";
+import { getMeI } from "@franchise/services/auth/useGetMe";
+import { QueryKeys } from "@franchise/services/queryKeys";
+import { Services } from "@franchise/services";
 import { CreateTerminals } from "@franchisor/services/terminals/__interfaces/create_terminals.interface";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
@@ -29,6 +30,7 @@ import { motion } from "framer-motion";
 import cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { queryClient } from "../../../../../services/queryClient";
 
 interface MutateTerminalI {
   mutate: (body: CreateTerminals) => void;
@@ -49,10 +51,15 @@ export const MutateTerminal = ({
   loading,
 }: MutateTerminalI) => {
   const { isSm } = useBreakpoints();
+  const user = queryClient.getQueryData(QueryKeys.GET_ME) as getMeI;
   const [width] = useState<number>((100 / 1) * 1);
-  const [promoterQuery, setPromoterQuery] = useState<any>();
-  const [clientQuery, setClientQuery] = useState<any>();
-  const selects = Services.terminal.selectData();
+  const [promoterQuery, setPromoterQuery] = useState<any>({
+    franchise_id: user?.Franchise ? user?.Franchise[0].id : undefined,
+  });
+  const [clientQuery, setClientQuery] = useState<any>({
+    promoter_id: user?.Promoter ? user?.Promoter.id : undefined,
+  });
+  const selects = Services.terminal.selects();
   const formRef = useRef<ProFormInstance>();
   const [serials, setSerials] = useState<string[]>([]);
   const [serial, setSerial] = useState<string>("");
@@ -263,54 +270,40 @@ export const MutateTerminal = ({
               }}
             >
               <Row style={{ width: "100%" }} gutter={[8, 8]}>
-                <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
-                  <ProFormSelectFrianchise
-                    name={["franchise_id"]}
-                    label="Franquia"
-                    placeholder="Selecione uma franquia."
-                    rules={[{ required: !update }]}
-                    fieldProps={{
-                      onChange(value) {
-                        formRef.current?.setFieldValue(["promoter_id"], null);
-                        if (!value) {
-                          setPromoterQuery(undefined);
-                          return;
-                        }
-                        setPromoterQuery({ franchise_id: value });
-                      },
-                    }}
-                  />
-                </Col>
-                <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
-                  <ProFormSelectPromoters
-                    name={["promoter_id"]}
-                    label="Promotor"
-                    placeholder="Selecione um promotor."
-                    fieldProps={{
-                      disabled: !promoterQuery,
-                      onChange(value) {
-                        formRef.current?.setFieldValue(["client_id"], null);
-                        if (!value) {
-                          setClientQuery(undefined);
-                          return;
-                        }
-                        setClientQuery({ promoter_id: value });
-                      },
-                    }}
-                    query={promoterQuery}
-                  />
-                </Col>
-                <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
-                  <ProFormSelectClient
-                    name={["client_id"]}
-                    label="Cliente"
-                    placeholder="Selecione um cliente."
-                    fieldProps={{
-                      disabled: !clientQuery,
-                    }}
-                    query={clientQuery}
-                  />
-                </Col>
+                {!user.Promoter?.id && (
+                  <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
+                    <ProFormSelectPromoters
+                      name={["promoter_id"]}
+                      label="Promotor"
+                      placeholder="Selecione um promotor."
+                      fieldProps={{
+                        disabled: !promoterQuery,
+                        onChange(value) {
+                          formRef.current?.setFieldValue(["client_id"], null);
+                          if (!value) {
+                            setClientQuery(undefined);
+                            return;
+                          }
+                          setClientQuery({ promoter_id: value });
+                        },
+                      }}
+                      query={promoterQuery}
+                    />
+                  </Col>
+                )}
+                {!user.Client?.id && (
+                  <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
+                    <ProFormSelectClient
+                      name={["client_id"]}
+                      label="Cliente"
+                      placeholder="Selecione um cliente."
+                      fieldProps={{
+                        disabled: !clientQuery,
+                      }}
+                      query={clientQuery}
+                    />
+                  </Col>
+                )}
                 <Col xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
                   <ProFormSelect
                     label="Modelo"

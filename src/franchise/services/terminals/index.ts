@@ -1,5 +1,6 @@
 import { useActivateTerminal } from "./activateTerminals";
 import { useCreateTerminals } from "./create/createTerminals";
+import { useTerminalsSelects } from "./create/getSelectsData";
 import { useDeleteTerminal } from "./deleteTerminal";
 import { useGetTerminalById } from "./getTerminalById";
 import { useInactivateTerminal } from "./inactivateTerminals";
@@ -14,4 +15,5 @@ export const Terminal = {
   enable: useActivateTerminal,
   disable: useInactivateTerminal,
   delete: useDeleteTerminal,
+  selects: useTerminalsSelects,
 };

@@ -68,7 +68,7 @@ export const StepOne = ({ update }: stepOneI) => {
         }
       }}
     >
-      <Row style={{ width: "100%", maxWidth: "100vw" }} gutter={8}>
+      <Row style={{ width: "100%", maxWidth: "90vw" }} gutter={8}>
         <Col xs={{ span: 24 }}>
           <Divider orientation="left">1. Informações gerais</Divider>
         </Col>
