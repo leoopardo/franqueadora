@@ -12,6 +12,7 @@ export enum QueryKeys {
   CREATE_EVENT = "franchiseCreateEvent",
   CREATE_PRODUCT = "franchiseCreateProduct",
   CREATE_TERMINAL = "franchiseCreateTerminal",
+  CREATE_MENU = "franchiseCreateMenu",
 
   UPDATE_EVENT = "franchiseUpdateEvent",
   UPDATE_PRODUCT = "franchiseUpdateProduct",

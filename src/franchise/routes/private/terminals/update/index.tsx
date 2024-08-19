@@ -6,7 +6,7 @@ export const UpdateTerminals = () => {
   const { id } = useParams();
   const { byId, update } = Services.terminal;
   const terminal = byId(id || "");
-  const { mutate } = update(id || "");
+  const { mutate, isLoading } = update(id || "");
 
   return (
     <div>
@@ -34,6 +34,7 @@ export const UpdateTerminals = () => {
           serial_number: terminal?.data?.serial_number,
         }}
         update
+        loading={terminal.isLoading || isLoading}
       />
     </div>
   );

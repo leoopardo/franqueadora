@@ -1,14 +1,14 @@
+import { apiFranquia } from "@config/apiFranquia";
+import { QueryKeys } from "@franchisor/services/queryKeys";
 import { useQuery } from "react-query";
-import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
+import { useFranchiseAuth } from "../../../../contexts/franchiseAuthContext";
 import {
   TerminalsSelectSchema,
   TerminalsSelectType,
 } from "../__interfaces/selects.interface";
-import { QueryKeys } from "@franchisor/services/queryKeys";
-import { apiFranquia } from "@config/apiFranquia";
 
 export const useTerminalsSelects = () => {
-  const { headers } = useFranchisorAuth();
+  const { headers } = useFranchiseAuth();
   const { data, error, isLoading, refetch } = useQuery<
     TerminalsSelectType | null | undefined
   >(

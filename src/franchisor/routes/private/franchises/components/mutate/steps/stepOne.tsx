@@ -151,7 +151,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
         }
       }}
     >
-      <Row style={{ width: "100%", maxWidth: "100vw" }} gutter={8}>
+      <Row style={{ width: "100%", maxWidth: "90vw" }} gutter={8}>
         <Col md={{ span: 12 }} xs={{ span: 24 }}>
           <ProFormText
             name="cnpj"
