@@ -20,7 +20,7 @@ import { UpdateProduct } from "./service_orders/products/update";
 import { Terminals } from "./terminals";
 import { CreateTerminals } from "./terminals/create";
 import { UpdateTerminals } from "./terminals/update";
-import { AddProduct } from "./service_orders/menus/addProduct";
+import { AddProduct } from "./service_orders/menus/product/addProduct";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();

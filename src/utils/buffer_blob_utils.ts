@@ -43,3 +43,17 @@ export function readFileAsBase64(file: File) {
     reader.readAsBinaryString(file);
   });
 }
+
+export const blobUrlToFile = async (
+  blobUrl: string,
+  fileName: string
+): Promise<File> => {
+  // Fetch the blob data from the URL
+  const response = await fetch(blobUrl);
+  const blob = await response.blob();
+
+  // Create a File object from the blob
+  const file = new File([blob], fileName, { type: blob.type });
+
+  return file;
+};

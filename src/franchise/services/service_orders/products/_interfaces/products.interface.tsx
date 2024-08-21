@@ -29,4 +29,5 @@ export type ProductType = z.infer<typeof ProductSchema>;
 export interface ProductParams extends ParamsI {
   s?: string;
   f?: string[];
+  type?: string;
 }

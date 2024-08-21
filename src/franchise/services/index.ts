@@ -13,7 +13,7 @@ export const Services = {
   client: Client,
   event: Event,
   franchise: Franchise,
-  menu: Menu,
+   menu: Menu,
   promoter: Promoter,
   product: Product,
   terminal: Terminal,
