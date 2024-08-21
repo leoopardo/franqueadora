@@ -7,7 +7,7 @@ import { useFranchiseAuth } from "../../../contexts/franchiseAuthContext";
 import { CreateMenuI } from "./__interfaces/create.menu.interface";
 import { queryClient } from "../../../services/queryClient";
 
-export const useCreateMenu = () => {
+export const useCreateMenu = (modal?: boolean) => {
   const { headers } = useFranchiseAuth();
   const navigate = useNavigate();
   const mutation = useMutation<any | null | undefined, unknown, CreateMenuI>({
@@ -27,7 +27,7 @@ export const useCreateMenu = () => {
 
   if (isSuccess) {
     reset();
-    navigate(`/fichas/cardápio/${data.id}/produtos`);
+    if (!modal) navigate(`/fichas/cardápio/${data.id}/produtos`);
   }
   if (error) {
     notification.error({

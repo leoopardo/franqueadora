@@ -1,9 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import {
-  ProCard,
-  ProFormInstance,
-  StepsForm,
-} from "@ant-design/pro-components";
+import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import { TokenModal } from "@franchise/components/token";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
@@ -11,6 +7,7 @@ import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
 import {
   Button,
+  Card,
   Col,
   notification,
   Row,
@@ -183,7 +180,7 @@ export const MutateFranchise = ({
           />
         </div>
       </Col>
-      <ProCard
+      <Card
         style={{
           maxHeight: isSm ? undefined : "70vh",
           overflowY: "auto",
@@ -366,7 +363,7 @@ export const MutateFranchise = ({
             )}
           </Col>
         </Row>
-      </ProCard>
+      </Card>
 
       <Col
         style={{

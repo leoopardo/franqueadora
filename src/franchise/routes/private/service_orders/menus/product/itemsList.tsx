@@ -27,12 +27,13 @@ import { useParams } from "react-router-dom";
 
 interface ItemsListProps {
   data?: MenuById | null;
+  menu_id?: string;
 }
 
-export const ItemsList = ({ data }: ItemsListProps) => {
+export const ItemsList = ({ data, menu_id }: ItemsListProps) => {
   const { updateMenuItens, deleteMenuItem } = Services.menu;
   const { id } = useParams();
-  const { mutate } = updateMenuItens(`${id}`);
+  const { mutate } = updateMenuItens(`${menu_id || id}`);
   const Delete = deleteMenuItem();
   const [search, setSearch] = useState<string>("");
   const [items, setItems] = useState<any[]>([]);

@@ -1,19 +1,19 @@
+import { PlusOutlined } from "@ant-design/icons";
 import { ProFormInstance, ProFormList } from "@ant-design/pro-components";
 import TableComponent from "@components/table/tableComponent";
+import { CreateMenuModal } from "@franchise/routes/private/service_orders/menus/components/mutate/CreateMenuModal";
+import { useListMenus } from "@franchise/services/menus/listMenus";
 import { ViewColumnsIcon } from "@heroicons/react/24/outline";
 import defaultTheme from "@styles/default";
 import { Button, Card, Col, Divider, Row, Select, Space } from "antd";
 import { useEffect, useState } from "react";
-import { CreateMenuModal } from "./components/createMenuModal";
-import { PlusOutlined } from "@ant-design/icons";
-import { useListMenus } from "@franchise/services/menus/listMenus";
 interface ConfigI {
   formRef?: ProFormInstance;
   hidden?: boolean;
   stepperRef?: ProFormInstance;
 }
 
-export const Menus = ({ formRef, hidden, stepperRef }: ConfigI) => {
+export const Menus = ({ formRef, hidden }: ConfigI) => {
   const [createMenuModalIsOpen, setCreateMenuModalIsOpen] =
     useState<boolean>(false);
   const [tableParams, setTableParams] = useState<any>({
@@ -37,7 +37,7 @@ export const Menus = ({ formRef, hidden, stepperRef }: ConfigI) => {
       setCreateMenuModalIsOpen(true);
     }
   }, [updateData]);
-  
+
   return (
     <Card style={{ width: "100%", display: hidden ? "none" : undefined }}>
       <Row style={{ width: "100%" }} gutter={[8, 8]}>
@@ -95,7 +95,7 @@ export const Menus = ({ formRef, hidden, stepperRef }: ConfigI) => {
             <Button
               size="large"
               onClick={() => {
-                const menus = formRef?.getFieldValue(["pub", "menus"]) || []
+                const menus = formRef?.getFieldValue(["pub", "menus"]) || [];
                 formRef?.setFieldValue(
                   ["pub", "menus"],
                   [...menus, selectedMenu]
@@ -166,10 +166,7 @@ export const Menus = ({ formRef, hidden, stepperRef }: ConfigI) => {
       {createMenuModalIsOpen && (
         <CreateMenuModal
           open={createMenuModalIsOpen}
-          setDataSource={setData}
           setOpen={setCreateMenuModalIsOpen}
-          formRef={formRef}
-          stepperRef={stepperRef}
         />
       )}
     </Card>
