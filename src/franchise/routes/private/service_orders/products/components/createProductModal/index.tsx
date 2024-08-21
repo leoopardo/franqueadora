@@ -1,10 +1,20 @@
 import { CreateProductType } from "@franchise/services/service_orders/products/_interfaces/create_product.interface";
 import { useCreateProduct } from "@franchise/services/service_orders/products/createProduct";
 import { parseImageDataFromFile } from "@utils/buffer_blob_utils";
-import { MutateProduct } from "../components/mutate";
+import { Modal } from "antd";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import { MutateProduct } from "../mutate";
 
-export const CreateProduct = () => {
-  const { mutate } = useCreateProduct({});
+interface CreateProductModalProps {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export const CreateProductModal = ({
+  open,
+  setOpen,
+}: CreateProductModalProps) => {
+  const { mutate, isSuccess } = useCreateProduct({ modal: true });
 
   const blobUrlToFile = async (
     blobUrl: string,
@@ -20,8 +30,20 @@ export const CreateProduct = () => {
     return file;
   };
 
+  useEffect(() => {
+    if (isSuccess) {
+      setOpen(false);
+    }
+  }, [isSuccess]);
+
   return (
-    <div>
+    <Modal
+      open={open}
+      footer={null}
+      centered
+      width={"70vw"}
+      onCancel={() => setOpen(false)}
+    >
       <MutateProduct
         title="Cadastro de produtos"
         subtitle="Preencha todos os campos para adicionar um novo produto"
@@ -49,7 +71,9 @@ export const CreateProduct = () => {
             consumption_unit_id: body.consumption_unit_id,
           });
         }}
+        modal
+        setModalOpen={setOpen}
       />
-    </div>
+    </Modal>
   );
 };

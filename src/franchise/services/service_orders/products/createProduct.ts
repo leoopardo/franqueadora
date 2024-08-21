@@ -7,7 +7,11 @@ import { useFranchiseAuth } from "../../../../contexts/franchiseAuthContext";
 import { queryClient } from "../../../../services/queryClient";
 import { CreateProductType } from "./_interfaces/create_product.interface";
 
-export const useCreateProduct = () => {
+interface CreateProductProps {
+  modal?: boolean;
+}
+
+export const useCreateProduct = ({ modal }: CreateProductProps) => {
   const { headers } = useFranchiseAuth();
   const navigate = useNavigate();
   const mutation = useMutation<
@@ -32,7 +36,7 @@ export const useCreateProduct = () => {
   if (isSuccess) {
     notification.success({ message: "Produto cadastrado com sucesso!" });
     reset();
-    navigate("/fichas/produtos");
+    if (!modal) navigate("/fichas/produtos");
   }
   if (error) {
     notification.error({

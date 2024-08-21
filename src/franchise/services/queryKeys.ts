@@ -13,6 +13,7 @@ export enum QueryKeys {
   CREATE_PRODUCT = "franchiseCreateProduct",
   CREATE_TERMINAL = "franchiseCreateTerminal",
   CREATE_MENU = "franchiseCreateMenu",
+  CREATE_MENU_ITEM = "franchiseCreateMenuItem",
 
   UPDATE_EVENT = "franchiseUpdateEvent",
   UPDATE_PRODUCT = "franchiseUpdateProduct",
@@ -25,7 +26,7 @@ export enum QueryKeys {
   DELETE_CLIENT = "franchiseDeleteClient",
   DELETE_EVENT = "franchiseDeleteEvent",
   DELETE_TERMINAL = "franchiseDeleteTerminal",
-
+  DELETE_MENU_ITEM = "franchiseDeleteMenuItem",
 
   GET_TERMINAL_TOTALS = "franchiseGetTerminalTotals",
   GET_ME = "getMeFranchise",
@@ -39,6 +40,7 @@ export enum QueryKeys {
   GET_PROMOTER_BY_ID = "franchiseGetPromoterById",
   GET_PRODUCT_BY_ID = "franchiseGetProductById",
   GET_TERMINAL_BY_ID = "franchiseGetTerminalById",
+  GET_MENU_BY_ID = "franchiseGetMenuById",
 
   INACTIVATE_TERMINAL = "franchiseInactivateTerminal",
   INACTIVATE_EVENT = "franchiseInactivateEvent",

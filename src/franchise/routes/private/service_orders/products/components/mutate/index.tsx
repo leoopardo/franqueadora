@@ -32,7 +32,7 @@ import {
 } from "antd";
 import { UploadType } from "antd/es/upload/interface";
 import { motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface mutateI {
@@ -47,6 +47,8 @@ interface mutateI {
   initialValues?: any;
   update?: boolean;
   agreements?: AgreementType[];
+  modal?: boolean;
+  setModalOpen?: Dispatch<SetStateAction<boolean>>;
 }
 
 const generateImage = async (prompt: string): Promise<string> => {
@@ -112,6 +114,8 @@ export const MutateProduct = ({
   initialValues,
   update,
   mutate,
+  modal,
+  setModalOpen,
 }: mutateI) => {
   const uploadRef = useRef<UploadType>(null);
   const formRef = useRef<ProFormInstance>();
@@ -201,7 +205,7 @@ export const MutateProduct = ({
       <Col
         style={{
           width: "100%",
-          height: "20vh",
+          height: modal ? "12vh" : "20vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -251,7 +255,7 @@ export const MutateProduct = ({
       </Col>
       <ProCard
         style={{
-          maxHeight: isSm ? undefined : "70vh",
+          maxHeight: modal ? "55vh" : isSm ? undefined : "70vh",
           overflowY: "auto",
           overflowX: "hidden",
           minWidth: "100%",
@@ -265,7 +269,7 @@ export const MutateProduct = ({
             minHeight: "70vh",
           }}
         >
-          <Col xs={{ span: 24 }} md={{ span: 24 }} lg={{ span: 12 }}>
+          <Col xs={{ span: 24 }} md={{ span: 24 }} lg={{ span: modal ? 20 :12 }}>
             <ProForm
               formRef={formRef}
               onFinish={waitTime}
@@ -282,14 +286,14 @@ export const MutateProduct = ({
                 }}
                 gutter={[8, 8]}
               >
-                <Col span={15}>
+                <Col span={ 15}>
                   <ProFormRadio.Group
                     name="type"
                     label="Tipo do produto"
                     options={[
                       { label: "Alimentação", value: "FOOD" },
                       { label: "Bebida", value: "DRINK" },
-                      { label: "Diversos", value: "OTHER" },
+                      { label: "Diversos", value: "OTHERS" },
                     ]}
                     fieldProps={{
                       size: "large",
@@ -523,7 +527,7 @@ export const MutateProduct = ({
       <Col
         style={{
           width: "100%",
-          height: "10vh",
+          height: modal ? "2vh" : "10vh",
           borderTop: "2px solid rgb(207, 207, 207, 0.4)",
           display: "flex",
           justifyContent: "space-between",
@@ -543,6 +547,10 @@ export const MutateProduct = ({
           }}
           icon={<ChevronLeftIcon style={{ height: 20 }} />}
           onClick={() => {
+            if (modal) {
+              setModalOpen && setModalOpen(false);
+              return;
+            }
             if (step === 1) {
               navigate(-1);
               return;
