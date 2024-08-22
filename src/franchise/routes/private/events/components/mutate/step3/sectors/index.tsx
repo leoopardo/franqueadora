@@ -69,7 +69,7 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
             key: string;
             active: boolean;
             name: string;
-            "sub-sectors": any[];
+            sub_sectors: any[];
           }>
             data={{
               items: data,
@@ -113,10 +113,10 @@ export const Sectors = ({ formRef, hidden }: ConfigI) => {
               },
               { key: "name", head: "Setor" },
               {
-                key: "sub-sectors",
+                key: "sub_sectors",
                 head: "Sub-setores",
                 custom(row) {
-                  return row["sub-sectors"]?.length ?? "Não possui";
+                  return row["sub_sectors"]?.length;
                 },
               },
             ]}

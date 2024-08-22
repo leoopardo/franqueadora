@@ -2,16 +2,17 @@ import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
 import {
   CalculatorIcon,
   Cog6ToothIcon,
+  MapIcon,
   Squares2X2Icon,
   UsersIcon,
-  ViewColumnsIcon,
 } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import { Card, Col, Menu, Row } from "antd";
 import { useRef, useState } from "react";
 import { Config } from "./configs";
-import { Sectors } from "./sectors";
 import { Menus } from "./menus";
+import { Sectors } from "./sectors";
+import { Terminals } from "./terminals";
 
 interface StepThreeProps {
   stepperRef?: ProFormInstance;
@@ -89,7 +90,7 @@ export const StepThree = ({ stepperRef }: StepThreeProps) => {
               {
                 key: "menus",
                 label: "Cardápios",
-                icon: <ViewColumnsIcon style={{ height: 16 }} />,
+                icon: <MapIcon style={{ height: 16 }} />,
                 onClick() {
                   onMenuChange("menus");
                 },
@@ -160,6 +161,11 @@ export const StepThree = ({ stepperRef }: StepThreeProps) => {
             formRef={stepOneRef.current}
             stepperRef={stepperRef}
             hidden={activeKey !== "menus"}
+          />
+          <Terminals
+            formRef={stepOneRef.current}
+            stepperRef={stepperRef}
+            hidden={activeKey !== "terminals"}
           />
         </StepsForm.StepForm>
       </Col>

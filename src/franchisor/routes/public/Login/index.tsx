@@ -92,6 +92,7 @@ export const Login = () => {
               <Typography.Title
                 level={5}
                 style={{ color: "#fff", width: "100%", textAlign: "center" }}
+                data-testid="franchisor-title"
               >
                 Backoffice Franqueadora
               </Typography.Title>
@@ -145,6 +146,7 @@ export const Login = () => {
               >
                 <Form.Item label="Usuário" name="USERNAME">
                   <Input
+                    data-testid="username-input"
                     name="USERNAME"
                     size="large"
                     placeholder="Informe seu usuário"
@@ -160,6 +162,7 @@ export const Login = () => {
                   status={error ? "warning" : undefined}
                 >
                   <Input.Password
+                    data-testid="password-input"
                     name="PASSWORD"
                     size="large"
                     placeholder="Informe sua senha"
@@ -170,6 +173,7 @@ export const Login = () => {
                 </Form.Item>
                 <Form.Item label="" valuePropName="checked" name="remember">
                   <Checkbox
+                    data-testid="remember-checkbox"
                     name="remember"
                     value={credentials.remember}
                     onChange={handleCredentialsChange}
@@ -180,6 +184,7 @@ export const Login = () => {
                 </Form.Item>
                 <Form.Item label="">
                   <Button
+                    data-testid="login-button"
                     type="primary"
                     style={{
                       width: "100%",
@@ -231,6 +236,7 @@ export const Login = () => {
               <Typography.Title
                 level={3}
                 style={{ color: "#fff", display: "flex", gap: 8 }}
+                data-testid="franchisor-title"
               >
                 <Typography.Title level={3} style={{ color: "#fff" }} italic>
                   Backoffice

@@ -1,6 +1,5 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProFormInstance, StepsForm } from "@ant-design/pro-components";
-import { TokenModal } from "@franchise/components/token";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
@@ -54,7 +53,7 @@ export const MutateFranchise = ({
   const [loadingStep, setLoadingStep] = useState<boolean>(false);
   const navigate = useNavigate();
   const { isSm, isMd, isLg } = useBreakpoints();
-  const [isTokenModalOpen, setIsTokenModalOpen] = useState<boolean>(false);
+  // const [isTokenModalOpen, setIsTokenModalOpen] = useState<boolean>(false);
   const [api, contextHolder] = notification.useNotification();
   const [, setIsDrafLoading] = useState<boolean>(false);
   const [, setDraft] = useState<any>(undefined);
@@ -408,7 +407,9 @@ export const MutateFranchise = ({
               setLoadingStep(true);
               setTimeout(() => setLoadingStep(false), 2000);
             } else {
-              setIsTokenModalOpen(true);
+              formRef.current?.submit();
+              setLoadingStep(true);
+              setTimeout(() => setLoadingStep(false), 2000);
             }
           }}
           loading={loadingStep || loading}
@@ -417,7 +418,7 @@ export const MutateFranchise = ({
         </Button>
       </Col>
 
-      {isTokenModalOpen && (
+      {/* {isTokenModalOpen && (
         <TokenModal
           setOpen={setIsTokenModalOpen}
           open={isTokenModalOpen}
@@ -428,7 +429,7 @@ export const MutateFranchise = ({
             setTimeout(() => setLoadingStep(false), 2000);
           }}
         />
-      )}
+      )} */}
     </Row>
   );
 };
