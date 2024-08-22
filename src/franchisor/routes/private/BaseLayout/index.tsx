@@ -1,9 +1,9 @@
 // import { cognitoUserPoolsTokenProvider } from "@aws-amplify/auth/cognito";
 import { useGetPendingNumber } from "@franchisor/services/terminals/pending/getPendingNumber";
-import { Row } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 import { SiderComponent } from "../../../../components/sider";
 import { useFranchisorAuth } from "../../../../contexts/franchisorAuthContext";
 import { useTheme } from "../../../../contexts/themeContext";
@@ -11,7 +11,6 @@ import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import { MenuItens } from "../../../components/sider_menus/menus";
 import { congnitoAuthService } from "../../../services/auth/CognitoAuthService";
 import { useGetMe } from "../../../services/auth/useGetMe";
-import secureLocalStorage from "react-secure-storage";
 
 export const BaseLayout = () => {
   const { isMd } = useBreakpoints();
@@ -81,18 +80,7 @@ export const BaseLayout = () => {
       `,
         }}
       >
-        <Row
-          style={{
-            top: 0,
-            display: "flex",
-            flexDirection: "column",
-            gap: 8,
-            width: "100%",
-            overflow: "hidden",
-          }}
-        >
-          <Outlet />
-        </Row>
+        <Outlet />
       </Content>
     </SiderComponent>
   );

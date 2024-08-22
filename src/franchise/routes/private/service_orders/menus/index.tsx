@@ -51,7 +51,7 @@ export const Menus = () => {
 
   return (
     <Row
-      style={{ width: "100%", padding: isSm ? 12 : 40 }}
+      style={{ width: "100%", padding: isSm ? 12 : "20px 40px 20px 40px" }}
       align="middle"
       gutter={[8, 8]}
     >
@@ -98,121 +98,120 @@ export const Menus = () => {
         </Link>
       </Col>
 
-      <Col span={24}>
-        <TableComponent<MenuType>
-          loading={isLoading || deleteProduct.isLoading}
-          data={data}
-          params={params}
-          setParams={setParams}
-          actions={[
-            {
-              label: "Editar",
-              onClick: (row) => navigate(`edição/${row?.id}`, { state: row }),
-              icon: <PencilIcon style={{ width: 16 }} />,
+      <Col span={24}></Col>
+      <TableComponent<MenuType>
+        loading={isLoading || deleteProduct.isLoading}
+        data={data}
+        params={params}
+        setParams={setParams}
+        actions={[
+          {
+            label: "Editar",
+            onClick: (row) => navigate(`edição/${row?.id}`, { state: row }),
+            icon: <PencilIcon style={{ width: 16 }} />,
+          },
+          {
+            label: "Produtos",
+            onClick: (row) => navigate(`${row?.id}/produtos`, { state: row }),
+            icon: <MapIcon style={{ width: 16 }} />,
+          },
+          {
+            label: "Excluir",
+            onClick: (row) => {
+              deleteProduct.mutate({ id: row?.id || "" });
             },
-             {
-              label: "Produtos",
-              onClick: (row) => navigate(`${row?.id}/produtos`, { state: row }),
-              icon: <MapIcon style={{ width: 16 }} />,
-            },
-            {
-              label: "Excluir",
-              onClick: (row) => {
-                deleteProduct.mutate({ id: row?.id || "" });
-              },
-              icon: <TrashIcon style={{ width: 16 }} />,
-              confimation: (row) => ({
-                title: `Excluir o produto: ${row?.name}.`,
-                description: "Tem certeza que deseja excluir o produto?",
-              }),
-            },
-          ]}
-          columns={[
-            {
-              key: "active",
-              head: "Status",
-              custom: (row) => (
-                <Popconfirm
-                  placement="topLeft"
-                  title={`${row.active ? "Inativar" : "Ativar"} produto?`}
-                  description={`Tem certeza que deseja ${row.active ? "inativar" : "ativar"} o produto?`}
-                  okText={`Sim, ${row.active ? "inativar" : "ativar"}`}
-                  cancelText="Não, cancelar."
-                  onConfirm={() => {
-                    row.active
-                      ? inactivate.mutate({
-                          body: { active: false },
-                          id: row.id ?? "",
-                        })
-                      : activate.mutate({
-                          body: { active: true },
-                          id: row.id ?? "",
-                        });
-                  }}
-                >
-                  <Switch
-                    checked={row?.active || false}
-                    loading={inactivate.isLoading || activate.isLoading}
-                  />
-                </Popconfirm>
-              ),
-              width: 60,
-            },
+            icon: <TrashIcon style={{ width: 16 }} />,
+            confimation: (row) => ({
+              title: `Excluir o produto: ${row?.name}.`,
+              description: "Tem certeza que deseja excluir o produto?",
+            }),
+          },
+        ]}
+        columns={[
+          {
+            key: "active",
+            head: "Status",
+            custom: (row) => (
+              <Popconfirm
+                placement="topLeft"
+                title={`${row.active ? "Inativar" : "Ativar"} produto?`}
+                description={`Tem certeza que deseja ${row.active ? "inativar" : "ativar"} o produto?`}
+                okText={`Sim, ${row.active ? "inativar" : "ativar"}`}
+                cancelText="Não, cancelar."
+                onConfirm={() => {
+                  row.active
+                    ? inactivate.mutate({
+                        body: { active: false },
+                        id: row.id ?? "",
+                      })
+                    : activate.mutate({
+                        body: { active: true },
+                        id: row.id ?? "",
+                      });
+                }}
+              >
+                <Switch
+                  checked={row?.active || false}
+                  loading={inactivate.isLoading || activate.isLoading}
+                />
+              </Popconfirm>
+            ),
+            width: 60,
+          },
 
-            {
-              key: "name",
-              head: "Nome do cardápio",
-              custom: (row) => row.name,
-              width: 150,
-            },
-            {
-              key: "promoter_name",
-              head: "Promotor",
-              custom: (row) => (
+          {
+            key: "name",
+            head: "Nome do cardápio",
+            custom: (row) => row.name,
+            width: 150,
+          },
+          {
+            key: "promoter_name",
+            head: "Promotor",
+            custom: (row) => (
+              <Row gutter={[4, 4]}>
+                <Col span={24}>
+                  <Typography.Text>{row.promoter_name}</Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Typography.Text copyable style={{ color: "#71717A" }}>
+                    {formatCpfCnpj(row.promoter_document || "")}
+                  </Typography.Text>
+                </Col>
+              </Row>
+            ),
+            width: 180,
+          },
+          {
+            key: "client_name",
+            head: "Cliente",
+            custom: (row) =>
+              row.client_name ? (
                 <Row gutter={[4, 4]}>
                   <Col span={24}>
-                    <Typography.Text>{row.promoter_name}</Typography.Text>
+                    <Typography.Text>{row.client_name}</Typography.Text>
                   </Col>
                   <Col span={24}>
                     <Typography.Text copyable style={{ color: "#71717A" }}>
-                      {formatCpfCnpj(row.promoter_document || "")}
+                      {formatCpfCnpj(row.client_document || "")}
                     </Typography.Text>
                   </Col>
                 </Row>
+              ) : (
+                "-"
               ),
-              width: 180,
-            },
-            {
-              key: "client_name",
-              head: "Cliente",
-              custom: (row) =>
-                row.client_name ? (
-                  <Row gutter={[4, 4]}>
-                    <Col span={24}>
-                      <Typography.Text>{row.client_name}</Typography.Text>
-                    </Col>
-                    <Col span={24}>
-                      <Typography.Text copyable style={{ color: "#71717A" }}>
-                        {formatCpfCnpj(row.client_document || "")}
-                      </Typography.Text>
-                    </Col>
-                  </Row>
-                ) : (
-                  "-"
-                ),
-              width: 180,
-            },
-            {
-              key: "itens_quantity",
-              head: "Quantidade de produtos",
-            },
-            {
-              key: "event_name",
-              head: "Evento vinculado",
-            },
-          ]}
-        />
-      </Col>
+            width: 180,
+          },
+          {
+            key: "itens_quantity",
+            head: "Quantidade de produtos",
+          },
+          {
+            key: "event_name",
+            head: "Evento vinculado",
+          },
+        ]}
+      />
     </Row>
   );
 };
