@@ -3,7 +3,7 @@ import { ProFormInstance, ProFormList } from "@ant-design/pro-components";
 import TableComponent from "@components/table/tableComponent";
 import { CreateMenuModal } from "@franchise/routes/private/service_orders/menus/components/mutate/CreateMenuModal";
 import { useListMenus } from "@franchise/services/menus/listMenus";
-import { ViewColumnsIcon } from "@heroicons/react/24/outline";
+import { MapIcon } from "@heroicons/react/24/outline";
 import defaultTheme from "@styles/default";
 import { Button, Card, Col, Divider, Row, Select, Space } from "antd";
 import { useEffect, useState } from "react";
@@ -43,7 +43,7 @@ export const Menus = ({ formRef, hidden }: ConfigI) => {
       <Row style={{ width: "100%" }} gutter={[8, 8]}>
         <Col span={24}>
           <Divider orientation="left" style={{ marginTop: 0 }}>
-            <ViewColumnsIcon
+            <MapIcon
               height={20}
               style={{ marginRight: 8, marginBottom: -4 }}
               color={defaultTheme.primary}
@@ -100,6 +100,7 @@ export const Menus = ({ formRef, hidden }: ConfigI) => {
                   ["pub", "menus"],
                   [...menus, selectedMenu]
                 );
+                setData([...menus, selectedMenu]);
               }}
               disabled={!selectedMenu}
             >
@@ -137,18 +138,10 @@ export const Menus = ({ formRef, hidden }: ConfigI) => {
                     ["pub", "menus"],
                     formRef
                       ?.getFieldValue(["pub", "menus"])
-                      ?.filter(
-                        (item: any) =>
-                          item.key !== RowItemI?.key && item.id !== RowItemI?.id
-                      )
+                      ?.filter((item: any) => item.id !== RowItemI?.id)
                   );
                   setData(
-                    formRef
-                      ?.getFieldValue(["pub", "menus"])
-                      ?.filter(
-                        (item: any) =>
-                          item.key !== RowItemI?.key && item.id !== RowItemI?.id
-                      )
+                    data?.filter((item: any) => item?.id !== RowItemI?.id)
                   );
                 },
               },

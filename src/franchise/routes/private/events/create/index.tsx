@@ -52,6 +52,7 @@ export const CreateEvent = () => {
               add_waiter_comission: body.add_waiter_comission,
               accept_cashless: body.accept_cashless,
               menu_ids: body.pub.menus?.map((menu: any) => menu.id),
+              terminals: body.pub.terminals,
             },
           });
         }}
