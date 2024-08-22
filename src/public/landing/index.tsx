@@ -197,32 +197,34 @@ export const Landing = () => {
             na palma da sua mão
           </Typography.Title>
         </div>
-        <video
-          ref={videoRef}
-          loop={false} // Disable loop to control it manually
-          muted
-          autoPlay
+        <img 
+          // ref={videoRef}
+          // loop={false} // Disable loop to control it manually
+          // muted
+          // autoPlay
+          src="src/assets/img.jpeg"
           style={{
             position: "absolute",
             top: "65px",
             left: "0",
             height: "75vh",
-            width: "99.8%",
+            width: "100%",
             minWidth: "99vw",
             minHeight: "75vh",
             objectFit: "cover",
             zIndex: 0,
+            filter: "brightness(0.6)",
           }}
-        >
-          <source
+        />
+          {/* <source
             src={
               import.meta.env.VITE_ENV === "local"
-                ? "src/assets/banner2.mov"
+                ? "src/assets/img.jpeg"
                 : "https://v.ftcdn.net/02/98/00/57/700_F_298005744_YHTLirkrwEbE1ee2v4z5O5kRUL7YVsmt_ST.mp4"
             }
             type="video/mp4"
           />
-        </video>
+        </video> */}
         {/* <div style={{ minHeight: 1000, marginTop: 650 }}>ftyfytf</div> */}
       </Content>
     </Layout>
