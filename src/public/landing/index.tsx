@@ -46,7 +46,7 @@ export const Landing = () => {
   const [current, setCurrent] = useState("mail");
 
   const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e); 
+    console.log("click ", e);
     setCurrent(e.key);
   };
   const videoRef = useRef(null);
@@ -197,24 +197,22 @@ export const Landing = () => {
             na palma da sua mão
           </Typography.Title>
         </div>
-        <video
-          ref={videoRef}
-          loop={false} // Disable loop to control it manually
-          muted
-          autoPlay
+        <img
+          src="img.jpeg"
           style={{
             position: "absolute",
             top: "65px",
             left: "0",
             height: "75vh",
-            width: "99.8%",
+            width: "100%",
             minWidth: "99vw",
             minHeight: "75vh",
             objectFit: "cover",
             zIndex: 0,
+            filter: "brightness(0.6)",
           }}
-        >
-          <source
+        />
+        {/* <source
             src={
               "banner2.mov"
               // import.meta.env.VITE_ENV === "local"
@@ -223,7 +221,7 @@ export const Landing = () => {
             }
             type="video/mp4"
           />
-        </video>
+        </video> */}
         {/* <div style={{ minHeight: 1000, marginTop: 650 }}>ftyfytf</div> */}
       </Content>
     </Layout>
