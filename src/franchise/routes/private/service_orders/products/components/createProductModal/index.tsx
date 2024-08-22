@@ -4,6 +4,7 @@ import { parseImageDataFromFile } from "@utils/buffer_blob_utils";
 import { Modal } from "antd";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { MutateProduct } from "../mutate";
+import { useBreakpoints } from "@hooks/useBreakpoints";
 
 interface CreateProductModalProps {
   open: boolean;
@@ -15,6 +16,7 @@ export const CreateProductModal = ({
   setOpen,
 }: CreateProductModalProps) => {
   const { mutate, isSuccess } = useCreateProduct({ modal: true });
+  const {isSm} = useBreakpoints()
 
   const blobUrlToFile = async (
     blobUrl: string,
@@ -41,8 +43,9 @@ export const CreateProductModal = ({
       open={open}
       footer={null}
       centered
-      width={"70vw"}
+      width={isSm ? undefined: "70vw"}
       onCancel={() => setOpen(false)}
+      styles={{content: {padding: 0, margin: 0}}}
     >
       <MutateProduct
         title="Cadastro de produtos"

@@ -18,7 +18,7 @@ import {
 } from "antd";
 import { motion } from "framer-motion";
 import cookies from "js-cookie";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { StepOne } from "./steps/stepOne";
 import { StepTwo } from "./steps/stepTwo";
@@ -33,6 +33,8 @@ interface mutateI {
   initialValues?: any;
   update?: boolean;
   agreements?: AgreementType[];
+  modal?: boolean;
+  setCreatedMenuId?: Dispatch<SetStateAction<string | null>>;
 }
 
 export const MutateMenu = ({
@@ -42,6 +44,7 @@ export const MutateMenu = ({
   subtitle,
   initialValues,
   update,
+  modal,
 }: mutateI) => {
   const formRef = useRef<ProFormInstance>(null);
   const [width, setWidth] = useState<number>((100 / 2) * 1);
@@ -54,7 +57,7 @@ export const MutateMenu = ({
   const [draft, setDraft] = useState<any>(undefined);
 
   useEffect(() => {
-    if (cookies.get("create_menu") && !update) {
+    if (cookies.get("create_menu") && !update && !modal) {
       const data = JSON.parse(`${cookies.get("create_menu")}`);
       api.info({
         message: "Rascunho identificado!",
@@ -119,7 +122,7 @@ export const MutateMenu = ({
       <Col
         style={{
           width: "100%",
-          height: isSm ? "15vh" : "20vh",
+          height: modal ? "15vh" : isSm ? "15vh" : "20vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -172,8 +175,8 @@ export const MutateMenu = ({
       </Col>
       <Card
         style={{
-          maxHeight: isSm ? "65vh" : "70vh",
-          minHeight: isSm ? "65vh" : "70vh",
+          maxHeight: modal ? "60vh" : isSm ? "65vh" : "70vh",
+          minHeight: modal ? "50vh" : isSm ? "65vh" : "70vh",
           overflowY: "auto",
           overflowX: "hidden",
           minWidth: "100%",
@@ -185,7 +188,7 @@ export const MutateMenu = ({
             justifyContent: "center",
           }}
         >
-          <Col xs={{ span: 24 }} md={{ span: 16 }}>
+          <Col xs={{ span: 24 }} md={{ span: modal ? 20 : 16 }}>
             {isDrafLoading ? (
               <Spin
                 size="large"
@@ -241,10 +244,7 @@ export const MutateMenu = ({
                 }}
               >
                 <StepOne />
-                <StepTwo
-                  draft={draft}
-                  initialValues={initialValues}
-                />
+                <StepTwo draft={draft} initialValues={initialValues} />
               </StepsForm>
             )}
           </Col>

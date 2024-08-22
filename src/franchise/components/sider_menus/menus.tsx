@@ -1,3 +1,4 @@
+import { getPermission } from "@franchise/utils/getUserPermission";
 import {
   CalculatorIcon,
   CalendarDaysIcon,
@@ -11,7 +12,7 @@ export const MenuItens: any = (
   promoter?: boolean,
   client?: boolean
 ) => {
-  const items = [
+  const items: any = [
     ,
     // {
     //   key: "dashboard",
@@ -26,18 +27,21 @@ export const MenuItens: any = (
       name: "Eventos",
       path: "/eventos",
       icon: <CalendarDaysIcon width={24} />,
+      disabled: !getPermission("EVENTOS_CADASTRO", "view"),
     },
     {
       key: "terminais",
       name: "Terminais",
       path: "/terminais",
       icon: <CalculatorIcon width={pending ? 20 : 24} />,
+      disabled: !getPermission("TERMINAIS_GERENCIAMENTO", "view"),
     },
     {
       key: "login-backoffice",
       name: "Login Backoffice",
       path: "/login",
       icon: <UserGroupIcon width={24} />,
+      disabled: !getPermission("LOGIN_BACKOFFICE", "view"),
       children: [
         {
           key: "acesso-backoffice",
@@ -85,6 +89,7 @@ export const MenuItens: any = (
           key: "cardapio",
           name: "Cardápio",
           path: "/fichas/cardapio",
+          disabled: !getPermission("FICHAS_CARDARPIO", "view"),
         },
         {
           key: "usuarios-terminal",

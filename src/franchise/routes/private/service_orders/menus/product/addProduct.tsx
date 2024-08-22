@@ -79,7 +79,11 @@ const generateImage = async (prompt: string): Promise<string> => {
   }
 };
 
-export const AddProduct = () => {
+interface AddProductI {
+  menu_id?: string;
+}
+
+export const AddProduct = ({ menu_id }: AddProductI) => {
   const { id } = useParams();
   const formRef = useRef<ProFormInstance>();
   const uploadRef = useRef<UploadType>(null);
@@ -96,8 +100,10 @@ export const AddProduct = () => {
   const [comboFiles, setComboFiles] = useState<any[]>([]);
   const [multiplier, setMultiplier] = useState<number>(1);
   const [value, setValue] = useState<number>(0);
-  const { data } = menuItem(id);
-  const { mutate, isSuccess, reset, isLoading } = createMenuItem(`${id}`);
+  const { data } = menuItem(id || menu_id);
+  const { mutate, isSuccess, reset, isLoading } = createMenuItem(
+    `${id || menu_id}`
+  );
   const { isSm } = useBreakpoints();
   const navigate = useNavigate();
   const [serials, setSerials] = useState<string[]>([]);
@@ -173,7 +179,7 @@ export const AddProduct = () => {
       <Col
         style={{
           width: "100%",
-          height: isSm ? "15vh" : "20vh",
+          height: menu_id ? "13vh" : isSm ? "15vh" : "20vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -186,7 +192,17 @@ export const AddProduct = () => {
           justify="center"
           align="middle"
         >
-          <Col xs={{ span: 20 }} md={{ span: 10 }}>
+          <Col
+            xs={{ span: 20 }}
+            md={{ span: 24 }}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: 8,
+            }}
+          >
             <Typography.Title level={isSm ? 5 : 3} style={{ margin: 0 }}>
               Gerencie os produtos do cardápio
             </Typography.Title>
@@ -223,8 +239,8 @@ export const AddProduct = () => {
       </Col>
       <Card
         style={{
-          maxHeight: isSm ? "65vh" : "70vh",
-          minHeight: isSm ? "65vh" : "70vh",
+          maxHeight: menu_id ? "60vh" : isSm ? "65vh" : "70vh",
+          minHeight: menu_id ? "60vh" : isSm ? "65vh" : "70vh",
           overflowY: "auto",
           overflowX: "hidden",
           minWidth: "100%",
@@ -806,7 +822,7 @@ export const AddProduct = () => {
             lg={{ span: 10 }}
             xxl={{ span: 8 }}
           >
-            <ItemsList data={data} />
+            <ItemsList data={data} menu_id={menu_id} />
           </Col>
           <Col
             xs={{ span: 24 }}

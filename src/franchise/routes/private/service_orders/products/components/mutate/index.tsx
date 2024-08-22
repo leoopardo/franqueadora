@@ -1,5 +1,4 @@
 import {
-  ProCard,
   ProForm,
   ProFormField,
   ProFormInstance,
@@ -21,6 +20,7 @@ import defaultTheme from "@styles/default";
 import { getRelativeImagePath } from "@utils/gerRelativeImagePath";
 import {
   Button,
+  Card,
   Col,
   Input,
   notification,
@@ -205,7 +205,7 @@ export const MutateProduct = ({
       <Col
         style={{
           width: "100%",
-          height: modal ? "12vh" : "20vh",
+          height: modal ? "15vh" : "20vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -253,9 +253,9 @@ export const MutateProduct = ({
           />
         </div>
       </Col>
-      <ProCard
+      <Card
         style={{
-          maxHeight: modal ? "55vh" : isSm ? undefined : "70vh",
+          maxHeight: modal ? "65vh" : isSm ? undefined : "70vh",
           overflowY: "auto",
           overflowX: "hidden",
           minWidth: "100%",
@@ -269,7 +269,11 @@ export const MutateProduct = ({
             minHeight: "70vh",
           }}
         >
-          <Col xs={{ span: 24 }} md={{ span: 24 }} lg={{ span: modal ? 20 :12 }}>
+          <Col
+            xs={{ span: 24 }}
+            md={{ span: 24 }}
+            lg={{ span: modal ? 20 : 12 }}
+          >
             <ProForm
               formRef={formRef}
               onFinish={waitTime}
@@ -286,7 +290,7 @@ export const MutateProduct = ({
                 }}
                 gutter={[8, 8]}
               >
-                <Col span={ 15}>
+                <Col span={15}>
                   <ProFormRadio.Group
                     name="type"
                     label="Tipo do produto"
@@ -522,7 +526,7 @@ export const MutateProduct = ({
             </ProForm>
           </Col>
         </Row>
-      </ProCard>
+      </Card>
 
       <Col
         style={{
