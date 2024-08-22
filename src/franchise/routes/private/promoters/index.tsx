@@ -52,7 +52,7 @@ export const Promoters = () => {
 
   return (
     <Row
-      style={{ width: "100%", padding: isSm ? 12 : 40 }}
+      style={{ width: "100%", padding: isSm ? 12 : "20px 40px 20px 40px" }}
       align="middle"
       gutter={[8, 8]}
     >

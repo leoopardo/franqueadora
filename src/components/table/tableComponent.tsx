@@ -59,6 +59,9 @@ function TableComponent<RowItemI>({
         borderRadius: 8,
         border: "1px solid rgba(200, 200, 200, 0.3)",
       }}
+      scroll={{ x: "60%" }}
+      sticky={true}
+     showSorterTooltip
       locale={{
         emptyText: error ? (
           <div style={{ display: "flex", justifyContent: "center" }}>
@@ -255,7 +258,6 @@ function TableComponent<RowItemI>({
             ]
       }
       dataSource={data ? (data.items as any) : []}
-      scroll={{ x: "60%", y: "61vh" }}
       pagination={{
         pageSize: params?.size || data?.page,
         showSizeChanger: true,

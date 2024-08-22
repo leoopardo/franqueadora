@@ -1,5 +1,4 @@
 // import { cognitoUserPoolsTokenProvider } from "@aws-amplify/auth/cognito";
-import { Row } from "antd";
 import { Content } from "antd/es/layout/layout";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
@@ -83,18 +82,7 @@ export const BaseLayout = () => {
       `,
         }}
       >
-        <Row
-          style={{
-            top: 0,
-            display: "flex",
-            flexDirection: "column",
-            gap: 8,
-            width: "100%",
-            overflow: "hidden",
-          }}
-        >
-          <Outlet />
-        </Row>
+        <Outlet />
       </Content>
     </SiderComponent>
   );
