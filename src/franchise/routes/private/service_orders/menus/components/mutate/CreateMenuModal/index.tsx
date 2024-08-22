@@ -1,4 +1,5 @@
 import { Services } from "@franchise/services";
+import { useBreakpoints } from "@hooks/useBreakpoints";
 import { parseImageDataFromFile } from "@utils/buffer_blob_utils";
 import { Col, Modal } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
@@ -14,6 +15,7 @@ export const CreateMenuModal = ({ open, setOpen }: CreateMenuModalProps) => {
   const { mutate, isLoading, isSuccess, error, data, reset } =
     Services.menu.create(true);
   const [createdMenuId, setCreatedMenuId] = useState<string | null>(null);
+  const { isSm } = useBreakpoints();
 
   useEffect(() => {
     if (isSuccess) {
@@ -27,8 +29,9 @@ export const CreateMenuModal = ({ open, setOpen }: CreateMenuModalProps) => {
       open={open}
       footer={null}
       centered
-      width={"85vw"}
+      width={isSm ? undefined : "85vw"}
       onCancel={() => setOpen(false)}
+      styles={{ content: { padding: 0, margin: 0 } }}
     >
       <Col xs={{ span: 24 }} md={{ span: 24 }}>
         {createdMenuId && <AddProduct menu_id={createdMenuId} />}

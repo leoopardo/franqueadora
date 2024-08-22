@@ -57,7 +57,7 @@ export const MutateMenu = ({
   const [draft, setDraft] = useState<any>(undefined);
 
   useEffect(() => {
-    if (cookies.get("create_menu") && !update) {
+    if (cookies.get("create_menu") && !update && !modal) {
       const data = JSON.parse(`${cookies.get("create_menu")}`);
       api.info({
         message: "Rascunho identificado!",
@@ -122,7 +122,7 @@ export const MutateMenu = ({
       <Col
         style={{
           width: "100%",
-          height: modal ? "12vh" : isSm ? "15vh" : "20vh",
+          height: modal ? "15vh" : isSm ? "15vh" : "20vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -176,7 +176,7 @@ export const MutateMenu = ({
       <Card
         style={{
           maxHeight: modal ? "60vh" : isSm ? "65vh" : "70vh",
-          minHeight: modal ? "30vh" : isSm ? "65vh" : "70vh",
+          minHeight: modal ? "50vh" : isSm ? "65vh" : "70vh",
           overflowY: "auto",
           overflowX: "hidden",
           minWidth: "100%",

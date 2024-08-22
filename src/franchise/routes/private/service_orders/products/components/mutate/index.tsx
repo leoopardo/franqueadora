@@ -205,7 +205,7 @@ export const MutateProduct = ({
       <Col
         style={{
           width: "100%",
-          height: modal ? "12vh" : "20vh",
+          height: modal ? "15vh" : "20vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -255,7 +255,7 @@ export const MutateProduct = ({
       </Col>
       <Card
         style={{
-          maxHeight: modal ? "55vh" : isSm ? undefined : "70vh",
+          maxHeight: modal ? "65vh" : isSm ? undefined : "70vh",
           overflowY: "auto",
           overflowX: "hidden",
           minWidth: "100%",

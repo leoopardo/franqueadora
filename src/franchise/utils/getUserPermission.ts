@@ -44,6 +44,8 @@ export const getPermission = (
 ) => {
   const user = queryClient.getQueryData(QueryKeys.GET_ME) as getMeI;
 
+  if (user.role === "Master") return true;
+
   switch (action) {
     case "create":
       return user?.UserPermission?.find(
