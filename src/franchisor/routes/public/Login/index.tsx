@@ -146,7 +146,7 @@ export const Login = () => {
               >
                 <Form.Item label="Usuário" name="USERNAME">
                   <Input
-                    data-testid="username-input"
+                    data-testid="username"
                     name="USERNAME"
                     size="large"
                     placeholder="Informe seu usuário"
@@ -159,10 +159,11 @@ export const Login = () => {
                   label="Senha"
                   name="PASSWORD"
                   help={error ? "Usuário ou senha incorretos" : undefined}
+                  
                   status={error ? "warning" : undefined}
                 >
                   <Input.Password
-                    data-testid="password-input"
+                    data-testid="password"
                     name="PASSWORD"
                     size="large"
                     placeholder="Informe sua senha"
@@ -184,7 +185,7 @@ export const Login = () => {
                 </Form.Item>
                 <Form.Item label="">
                   <Button
-                    data-testid="login-button"
+                    data-testid="login"
                     type="primary"
                     style={{
                       width: "100%",

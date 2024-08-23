@@ -3,6 +3,7 @@ import {
   ProFormInstance,
   StepsForm,
 } from "@ant-design/pro-components";
+import { TokenModal } from "@components/token";
 import { AgreementType } from "@franchisor/services/franchises/__interfaces/agremeents.interface";
 import { useListFranchiseAgreements } from "@franchisor/services/franchises/agreements/listAgreements";
 import { ChevronLeftIcon } from "@heroicons/react/24/outline";
@@ -10,6 +11,7 @@ import { useBreakpoints } from "@hooks/useBreakpoints";
 import defaultTheme from "@styles/default";
 import { Button, Col, notification, Row, Space, Tabs, Typography } from "antd";
 import { motion } from "framer-motion";
+import cookies from "js-cookie";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,8 +21,6 @@ import {
 import { StepOne } from "./steps/stepOne";
 import { StepThree } from "./steps/stepThree";
 import { StepTwo } from "./steps/stepTwo";
-import { TokenModal } from "@components/token";
-import cookies from "js-cookie";
 
 interface mutateI {
   mutate: (body: createFranchiseI) => void;
@@ -359,6 +359,7 @@ export const MutateFranchise = ({
       >
         <Button
           shape="round"
+          data-testid="back"
           size="large"
           danger
           style={{
@@ -380,6 +381,7 @@ export const MutateFranchise = ({
         </Button>
         <Button
           shape="round"
+          data-testid="next"
           size="large"
           type="primary"
           onClick={() => {

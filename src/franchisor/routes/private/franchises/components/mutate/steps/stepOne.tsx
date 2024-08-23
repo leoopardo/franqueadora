@@ -2,7 +2,7 @@ import {
   ProFormInstance,
   ProFormSelect,
   ProFormText,
-  StepsForm
+  StepsForm,
 } from "@ant-design/pro-components";
 import { formatCNPJ } from "@utils/regexFormat";
 import { Col, Divider, Row } from "antd";
@@ -196,6 +196,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
                 handleValidate("cnpj", e?.target?.value?.replace(/\D/g, ""));
               },
               maxLength: 18,
+              "data-testid": "cnpj",
             }}
             getValueFromEvent={(e) => formatCNPJ(e.target.value)}
           />
@@ -230,6 +231,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
                 }
                 handleValidate("franchise_name", e?.target?.value);
               },
+              "data-testid": "franchise_name",
             }}
           />
         </Col>
@@ -239,6 +241,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             label="Razão social"
             placeholder="Digite a razão social"
             rules={[{ required: !update }]}
+            fieldProps={{ "data-testid": "company_name" }}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
@@ -247,6 +250,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             label="Nome fantasia"
             placeholder="Digite o nome fantasia"
             rules={[{ required: !update }]}
+            fieldProps={{ "data-testid": "commercial_name" }}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
@@ -255,6 +259,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             label="Inscrição estadual"
             placeholder="Digite a inscição estadual"
             rules={[{ required: !update }]}
+            fieldProps={{ "data-testid": "state_registration" }}
           />
         </Col>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
@@ -269,6 +274,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
               onChange: (e) => {
                 handleChangeCEP(e.target.value);
               },
+              "data-testid": "cep",
             }}
             getValueFromEvent={(e) => formatCEP(e.target.value)}
             rules={[{ required: !update }]}
@@ -280,6 +286,9 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             label="Endereço"
             placeholder="Digite o Endereço"
             rules={[{ required: !update }]}
+            fieldProps={{
+              "data-testid": "address",
+            }}
           />
         </Col>
         <Col md={{ span: 8 }}>
@@ -288,11 +297,13 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             label="Número"
             placeholder="000"
             rules={[{ required: !update }]}
+            fieldProps={{ "data-testid": "number" }}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
             name={["address", "state"]}
+            data-testid="state"
             label="Estado"
             placeholder="Digite o estado"
             rules={[{ required: !update }]}
@@ -301,6 +312,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
             name={["address", "city"]}
+            data-testid="city"
             label="Cidade"
             placeholder="Digite a cidade"
             rules={[{ required: !update }]}
@@ -309,6 +321,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormText
             name={["address", "district"]}
+            data-testid="district"
             label="Bairro"
             placeholder="Digite o bairro"
             rules={[{ required: !update }]}
@@ -319,6 +332,9 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             name={["address", "complement"]}
             label="Complemento"
             placeholder="Digite algum complemento"
+            fieldProps={{
+              "data-testid": "complement",
+            }}
           />
         </Col>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
@@ -328,6 +344,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
           <ProFormSelect
             name="area_codes"
             label="Código(s) de área(s)"
+            data-testid="area_codes"
             placeholder="Selecione o DDD"
             mode="multiple"
             options={AreaCodeData?.map((a) => ({
@@ -343,6 +360,7 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormSelect
             name="counties"
+            data-testid="counties"
             label="Município(s)"
             placeholder="Selecione o município"
             mode="multiple"
@@ -353,17 +371,21 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             }))}
             disabled={!data}
             rules={[{ required: !update }]}
-            fieldProps={{ maxTagCount: 1, disabled: !ddd.length }}
+            fieldProps={{
+              maxTagCount: 1,
+              disabled: !ddd.length,
+            }}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
           <ProFormSelect
             name="module"
+            data-testid="module"
             label="Módulos"
             placeholder="Selecione os módulos utilizados"
             mode="multiple"
             options={PosModulesData?.items.map((value) => ({
-              kay: value?.id,
+              key: value?.id,
               label: value?.name,
               value: value?.id,
             }))}

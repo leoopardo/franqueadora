@@ -106,8 +106,9 @@ export const Landing = () => {
               {
                 label: (
                   <Link
-                    to={`http://franqueadora${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
-                    target="_blank"
+                    to={`http://franqueadora.${window.location.host}`}
+                    // target="_blank"
+                    data-testid="franqueadora"
                   >
                     Franqueadora
                   </Link>
@@ -118,7 +119,8 @@ export const Landing = () => {
                 label: (
                   <Link
                     to={`http://franquia${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
-                    target="_blank"
+                    // target="_blank"
+                    data-testid="franquia"
                   >
                     Franquia
                   </Link>
@@ -129,7 +131,8 @@ export const Landing = () => {
                 label: (
                   <Link
                     to={`http://promotor${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
-                    target="_blank"
+                    // target="_blank"
+                    data-testid="promotor"
                   >
                     Promotor
                   </Link>
@@ -140,7 +143,8 @@ export const Landing = () => {
                 label: (
                   <Link
                     to={`http://cliente${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
-                    target="_blank"
+                    // target="_blank"
+                    data-testid="cliente"
                   >
                     Cliente
                   </Link>
@@ -151,6 +155,7 @@ export const Landing = () => {
           }}
         >
           <Button
+            data-testid="acessar-painel"
             type="link"
             style={{
               display: "flex",

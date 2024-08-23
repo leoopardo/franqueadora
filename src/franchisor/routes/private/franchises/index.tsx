@@ -60,6 +60,7 @@ export const Franchises = () => {
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 7 }}>
         <Input
+          data-testid="search"
           size="large"
           allowClear
           onChange={({ target }) => debounceSearch(target.value)}
@@ -75,6 +76,7 @@ export const Franchises = () => {
             size="large"
             type="primary"
             shape="round"
+            data-testid="create"
           >
             Cadastrar franquia
           </Button>

@@ -61,7 +61,7 @@ function TableComponent<RowItemI>({
       }}
       scroll={{ x: "60%" }}
       sticky={true}
-     showSorterTooltip
+      showSorterTooltip
       locale={{
         emptyText: error ? (
           <div style={{ display: "flex", justifyContent: "center" }}>
@@ -139,6 +139,7 @@ function TableComponent<RowItemI>({
                       render: (_value: any, row: RowItemI) => (
                         <div
                           style={{ color: "#919199", minWidth: c.width || 60 }}
+                          data-testid={c.head ?? c.key as string}
                         >
                           {c.custom(row)}
                         </div>
@@ -154,7 +155,10 @@ function TableComponent<RowItemI>({
                       key: c.key,
                       dataIndex: c.key,
                       render: (value: any) => (
-                        <div style={{ minWidth: c.width || 60 }}>
+                        <div
+                          style={{ minWidth: c.width || 60 }}
+                          data-testid={c.head ?? c.key as string}
+                        >
                           <Typography.Text style={{ color: "#919199" }}>
                             {value}
                           </Typography.Text>
