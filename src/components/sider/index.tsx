@@ -64,7 +64,7 @@ export const SiderComponent = ({
 }: SiderComponentI) => {
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
-  const { isSm, isXl, isLg } = useBreakpoints();
+  const { isSm, isXl, isMd, isLg } = useBreakpoints();
   const { headers } = useFranchisorAuth();
   const location = useLocation();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
@@ -110,6 +110,9 @@ export const SiderComponent = ({
   useEffect(() => {
     setOpenKeys([]);
     window.scroll({ top: 0, left: 0, behavior: "smooth" });
+    if (isMd) {
+      setIsMenuOpen(false);
+    }
   }, [location]);
 
   useEffect(() => {
@@ -217,7 +220,7 @@ export const SiderComponent = ({
       logo={
         <div
           style={{
-            width: isMenuOpen ? (!isXl ? 250 : 200) : 30,
+            width: isSm ? "100vw" : isMenuOpen ? (!isXl ? 250 : 200) : 30,
             display: "flex",
             flexWrap: "wrap",
             justifyContent: "space-between",
@@ -226,30 +229,34 @@ export const SiderComponent = ({
         >
           {theme === "light" ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <Link to="/dashboard">
+              {/* <Link to="/dashboard"> */}
                 {" "}
                 <img
                   src="/logoDef.svg"
                   style={
-                    isMenuOpen
-                      ? { height: "100%", width: data ? "70%" : "90%" }
-                      : { height: 15, width: 50, marginLeft: -8 }
+                    isSm
+                      ? { height: "100%", width: "70%" }
+                      : isMenuOpen
+                        ? { height: "100%", width: data ? "70%" : "90%" }
+                        : { height: 15, width: 50, marginLeft: -8 }
                   }
                 />{" "}
-              </Link>
+              {/* </Link> */}
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <Link to="/dashboard">
+              {/* <Link to="/dashboard"> */}
                 <img
                   src="/logoWhiteDef.svg"
                   style={
-                    isMenuOpen
-                      ? { height: "100%", width: data ? "70%" : "90%" }
-                      : { height: 15, width: 50, marginLeft: -8 }
+                    isSm
+                      ? { height: "100%", width: "70%" }
+                      : isMenuOpen
+                        ? { height: "100%", width: data ? "70%" : "90%" }
+                        : { height: 15, width: 50, marginLeft: -8 }
                   }
                 />
-              </Link>
+              {/* </Link> */}
             </div>
           )}
           <Button

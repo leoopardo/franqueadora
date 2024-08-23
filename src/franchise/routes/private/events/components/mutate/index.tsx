@@ -108,6 +108,7 @@ export const MutateFranchise = ({
   }, []);
 
   const waitTime = (values: any) => {
+    console.log(values);
     mutate(values);
     return new Promise<boolean>((resolve) => {
       return resolve(true);
