@@ -2,6 +2,7 @@ import { useActivateFranchise } from "./activateFranchise";
 import { useListFranchiseAgreements } from "./agreements/listAgreements";
 import { useUpdateAgreements } from "./agreements/updateAgreements";
 import { useCreateFranchise } from "./createFranchise";
+import { useDeleteFranchise } from "./deleteFranchise";
 import { useGetFranchiseById } from "./getFranchiseById";
 import { useInactivateFranchise } from "./inactivateFranchise";
 import { useListFranchises } from "./listFranchises";
@@ -11,6 +12,7 @@ import { useValidateStepTwo } from "./validation/validateStepTwo";
 
 export const FranchiseServices = {
   list: useListFranchises,
+  Delete: useDeleteFranchise,
   getById: useGetFranchiseById,
   disable: useInactivateFranchise,
   enable: useActivateFranchise,

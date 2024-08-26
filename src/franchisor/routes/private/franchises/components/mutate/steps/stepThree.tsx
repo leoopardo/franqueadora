@@ -1,4 +1,5 @@
 import {
+  CaptFieldRef,
   ProForm,
   ProFormField,
   ProFormInstance,
@@ -27,6 +28,7 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
   const [updateFees, setUpdateFees] = useState<boolean>(false);
   const { data } = useListFranchiseAgreements();
   const [licenses, setLicenses] = useState<any>();
+  const licensesRef = useRef<CaptFieldRef>();
 
   useEffect(() => {
     setLicenses(stepThreeForm.current?.getFieldValue(["licenses", "keys"]));
@@ -87,7 +89,6 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                           ["agreements", section, type],
                           event.target.value
                         );
-                       
                       }}
                       hideSymbol
                       max={100}
@@ -265,6 +266,7 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
         >
           <Button
             size="large"
+            data-testid="enable_fees"
             icon={
               updateFees ? (
                 <LockOpenIcon style={{ width: 26 }} />
@@ -285,6 +287,7 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
             <ProFormSelect
               name={["licenses", "keys"]}
               label="Licenças"
+              fieldRef={licensesRef}
               placeholder="Selecione as licenças utilizadas"
               mode="multiple"
               options={[
@@ -304,6 +307,32 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
               rules={[{ required: !update }]}
               onChange={(value) => setLicenses(value)}
               disabled={!updateFees}
+              fieldProps={
+                {
+                  "data-testid": "licenses_input",
+                  dropdownRender(menu: any) {
+                    return (
+                      <div data-testid="licenses_dropdown">
+                        {menu}
+                        <Divider style={{ margin: "4px 0" }} />
+                        <a
+                            data-testid="licenses_select_all"
+                            onClick={() => {
+                              stepThreeForm.current?.setFieldsValue({
+                                licenses: {
+                                  keys: ["LIVRE", "MENSAL", "AVULSO"],
+                                },
+                              });
+                              setLicenses(["LIVRE", "MENSAL", "AVULSO"]);
+                            }}
+                          >
+                            Selecionar todos
+                          </a>
+                      </div>
+                    );
+                  },
+                } as any
+              }
             />
           </Col>
           {licenses?.map((license: any) => (
@@ -322,6 +351,9 @@ export const StepThree = ({ modules, update, agreements }: stepThreeI) => {
                     required: !update,
                   },
                 ]}
+                fieldProps={{
+                  "data-testid": `licenses_${license}`,
+                }}
               />
             </Col>
           ))}

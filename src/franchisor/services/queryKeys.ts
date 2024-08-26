@@ -48,4 +48,5 @@ export enum QueryKeys {
   SEND_TOKEN = "sendToken",
 
   DELETE_TERMINAL = "deleteTerminal",
+  DELETE_FRANCHISE = "deleteFranchise",
 }

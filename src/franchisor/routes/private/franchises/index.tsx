@@ -4,6 +4,7 @@ import {
   DocumentTextIcon,
   PencilIcon,
   TicketIcon,
+  TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints.ts";
 import { Button, Col, Input, Row, Switch, Tooltip, Typography } from "antd";
@@ -23,12 +24,14 @@ import { SearchOutlined } from "@ant-design/icons";
 
 export const Franchises = () => {
   const [params, setParams] = useState<FranchiseParams>({ page: 1, size: 15 });
-  const { list, enable, disable } = Services.franchise;
+  const { list, enable, disable, Delete } = Services.franchise;
   const { data, isLoading } = list(params);
+  const { mutate } = Delete();
   const { isSm } = useBreakpoints();
   const activate = enable();
   const inactivate = disable();
   const navigate = useNavigate();
+  
 
   const debounceSearch = useDebounce((value) => {
     if (!value) {
@@ -93,6 +96,17 @@ export const Franchises = () => {
               label: "Editar",
               onClick: (row) => navigate(`edição/${row?.id}`, { state: row }),
               icon: <PencilIcon style={{ width: 16 }} />,
+            },
+            {
+              label: "Excluir",
+              onClick: (row) => mutate({ id: `${row?.id}` }),
+              confimation(RowItemI) {
+                return {
+                  title: "Deseja realmente excluir essa franquia?",
+                  description: `A franquia ${RowItemI?.franchise_name} será excluída permanentemente.`,
+                };
+              },
+              icon: <TrashIcon style={{ width: 16 }} />,
             },
           ]}
           columns={[

@@ -118,6 +118,7 @@ export const FranchiseSchema = z.object({
   state_registration: z.string().optional(),
   commercial_name: z.string().optional(),
   company_name: z.string().optional(),
+  terminal_password: z.string().optional().nullable(),
   master: MasterSchema,
   FranchisePOSModule: z
     .array(

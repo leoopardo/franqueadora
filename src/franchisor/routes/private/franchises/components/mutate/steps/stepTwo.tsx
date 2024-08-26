@@ -1,21 +1,20 @@
 import {
   CheckCircleFilled,
-  CloseCircleFilled,
-  ReloadOutlined,
+  CloseCircleFilled
 } from "@ant-design/icons";
 import { ProFormText, StepsForm } from "@ant-design/pro-components";
-import { Col, Divider, Row, Typography, message } from "antd";
+import { Col, Divider, Row, Typography } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useBreakpoints } from "../../../../../../../hooks/useBreakpoints";
 import useDebounce from "../../../../../../../hooks/useDebounce";
 import defaultTheme from "../../../../../../../styles/default";
 import {
   formatCPF,
-  formatCellPhoneBR
+  formatCellPhoneBR,
 } from "../../../../../../../utils/regexFormat";
 import regexList from "../../../../../../../utils/regexList";
 
-export const StepTwo = ({update}: {update?: boolean}) => {
+export const StepTwo = ({ update }: { update?: boolean }) => {
   const stepTwoRef = useRef<any>(null);
   const { isXs } = useBreakpoints();
   const [password, setPassWord] = useState<string>("");
@@ -119,6 +118,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               onChange(e) {
                 handleValidate("cpf", e.target.value);
               },
+              "data-testid": "cpf",
             }}
             getValueFromEvent={(e) => formatCPF(e.target.value)}
           />
@@ -129,6 +129,9 @@ export const StepTwo = ({update}: {update?: boolean}) => {
             label="Nome completo"
             placeholder="Digite o nome completo"
             rules={[{ required: !update }]}
+            fieldProps={{
+              "data-testid": "name",
+            }}
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
@@ -159,6 +162,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               onChange(e) {
                 handleValidate("email", e.target.value);
               },
+              "data-testid": "email",
             }}
           />
         </Col>
@@ -199,6 +203,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               onChange(e) {
                 handleValidate("phone", e.target.value.replace(/\D/g, ""));
               },
+              "data-testid": "phone",
             }}
             getValueFromEvent={(e) => formatCellPhoneBR(e.target.value)}
           />
@@ -209,6 +214,9 @@ export const StepTwo = ({update}: {update?: boolean}) => {
             label="Nome de usuário"
             placeholder="Digite o nome de usuário"
             rules={[{ required: !update }]}
+            fieldProps={{
+              "data-testid": "username",
+            }}
           />
         </Col>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
@@ -234,6 +242,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
             ]}
             fieldProps={{
               onChange: (e) => setPassWord(e.target.value),
+              "data-testid": "password",
             }}
           />
         </Col>
@@ -246,7 +255,10 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               { required: !update },
               ({ getFieldValue }) => ({
                 validator(_, value) {
-                  if (!value || getFieldValue(["master", "password"]) === value) {
+                  if (
+                    !value ||
+                    getFieldValue(["master", "password"]) === value
+                  ) {
                     return Promise.resolve();
                   }
                   return Promise.reject(new Error(""));
@@ -265,6 +277,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
             ]}
             fieldProps={{
               onChange: (e) => setConfirmPassWord(e.target.value),
+              "data-testid": "confirm_password",
             }}
           />
         </Col>
@@ -274,7 +287,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               case "confirm":
                 return (
                   <Col
-                  key={rule.title}
+                    key={rule.title}
                     md={{ span: 8 }}
                     style={{
                       display: "flex",
@@ -300,7 +313,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               case "minLength":
                 return (
                   <Col
-                  key={rule.title}
+                    key={rule.title}
                     md={{ span: 8 }}
                     style={{
                       display: "flex",
@@ -326,7 +339,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               default:
                 return (
                   <Col
-                  key={rule.title}
+                    key={rule.title}
                     md={{ span: 8 }}
                     style={{
                       display: "flex",
@@ -351,7 +364,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
             }
           })}
         </>
-        <Col md={{ span: 24 }} xs={{ span: 24 }}>
+        {/* <Col md={{ span: 24 }} xs={{ span: 24 }}>
           <Divider orientation="left">Senha do terminal</Divider>
         </Col>
         <Col md={{ span: 24 }} xs={{ span: 24 }}>
@@ -378,7 +391,7 @@ export const StepTwo = ({update}: {update?: boolean}) => {
               },
             }}
           />
-        </Col>
+        </Col> */}
       </Row>
     </StepsForm.StepForm>
   );

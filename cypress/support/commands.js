@@ -35,3 +35,10 @@
 //     }
 //   }
 // }
+
+Cypress.Commands.add("login", (username, password) => {
+  cy.visit("http://franqueadora.localhost:5173/")
+  cy.get("[data-testid=username]").type(username);
+  cy.get("[data-testid=password]").type(password);
+  cy.get("[data-testid=login]").click();
+});

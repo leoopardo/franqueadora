@@ -354,7 +354,33 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             }))}
             rules={[{ required: !update }]}
             onChange={(value: any) => setDDD(value)}
-            fieldProps={{ maxTagCount: 3 }}
+            fieldProps={
+              {
+                maxTagCount: 3,
+                getPopupContainer: (trigger: any) => trigger.parentElement,
+                dropdownRender(menu: any) {
+                  return (
+                    <div data-testid="area_codes_dropdown">
+                      {menu}
+                      <Divider style={{ margin: "4px 0" }} />
+                      <div style={{ padding: "8px", cursor: "pointer" }}>
+                        <a
+                          onClick={() => {
+                            stepOneRef.current?.setFieldsValue({
+                              area_codes: AreaCodeData?.map((a) => a.code),
+                            });
+                            setDDD(AreaCodeData?.map((a) => a.code) || []);
+                          }}
+                        >
+                          Selecionar todos
+                        </a>
+                      </div>
+                    </div>
+                  );
+                },
+                "data-testid": "area_codes_input",
+              } as any
+            }
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
@@ -371,10 +397,16 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
             }))}
             disabled={!data}
             rules={[{ required: !update }]}
-            fieldProps={{
-              maxTagCount: 1,
-              disabled: !ddd.length,
-            }}
+            fieldProps={
+              {
+                maxTagCount: 1,
+                disabled: !ddd.length,
+                dropdownRender(menu: any) {
+                  return <div data-testid="counties_dropdown">{menu}</div>;
+                },
+                "data-testid": "counties_input",
+              } as any
+            }
           />
         </Col>
         <Col md={{ span: 8 }} xs={{ span: 24 }}>
@@ -390,7 +422,35 @@ export const StepOne = ({ setModules, update }: stepOneI) => {
               value: value?.id,
             }))}
             rules={[{ required: !update }]}
-            fieldProps={{ maxTagCount: 1 }}
+            fieldProps={
+              {
+                maxTagCount: 1,
+                "data-testid": "module_input",
+                dropdownRender(menu: any) {
+                  return (
+                    <div data-testid="module_dropdown">
+                      {menu}
+                      <Divider style={{ margin: "4px 0" }} />
+                      <div style={{ padding: "8px", cursor: "pointer" }}>
+                        <a
+                          data-testid="module_select_all"
+                          onClick={() => {
+                            stepOneRef.current?.setFieldsValue({
+                              module: PosModulesData?.items.map((m) => m.id),
+                            });
+                            setModules(
+                              PosModulesData?.items?.map((m) => m.name) || []
+                            );
+                          }}
+                        >
+                          Selecionar todos
+                        </a>
+                      </div>
+                    </div>
+                  );
+                },
+              } as any
+            }
             onChange={(value) =>
               setModules(
                 (value as any)?.map(
