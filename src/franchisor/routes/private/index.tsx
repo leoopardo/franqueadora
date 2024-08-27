@@ -17,12 +17,14 @@ import { UpdateTerminals } from "./terminals/update";
 import { Users } from "./users";
 import { CreateUser } from "./users/create";
 import { Me } from "./users/me";
+import { Dashboard } from "./dashboard";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
   return (
     <Routes>
       <Route path="/" element={<BaseLayout />}>
+      <Route path="/dashboard" element={<Dashboard/>}/>
         <Route path="/franquias">
           <Route index element={<Franchises />} />
           <Route path="cadastro" element={<CreateFranchise />} />

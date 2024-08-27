@@ -7,7 +7,7 @@ import {
   Input,
   Layout,
   Row,
-  Typography
+  Typography,
 } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -124,6 +124,10 @@ export const Login = () => {
               marginRight: "-5%",
               zIndex: 99,
               backgroundColor: theme === "dark" ? "#18191B" : "#f1f1f1",
+              boxShadow:
+                theme === "dark"
+                  ? "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)"
+                  : "0px 4px 15.7px -3px rgba(0, 0, 0, 0.144)",
             }}
           >
             <Row

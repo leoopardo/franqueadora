@@ -242,21 +242,24 @@ export const Terminals = () => {
             {
               key: "client_name",
               head: "Cliente",
-              custom: (row) => (
-                <Row gutter={[4, 4]}>
-                  <Col span={24}>
-                    <Typography.Text>{row?.client_name}</Typography.Text>
-                  </Col>
-                  <Col span={24}>
-                    <Typography.Text
-                      copyable={row?.client_document ? true : false}
-                      style={{ color: "#71717A" }}
-                    >
-                      {formatCpfCnpj(row?.client_document || "")}
-                    </Typography.Text>
-                  </Col>
-                </Row>
-              ),
+              custom: (row) =>
+                row.client_name ? (
+                  <Row gutter={[4, 4]}>
+                    <Col span={24}>
+                      <Typography.Text>{row?.client_name}</Typography.Text>
+                    </Col>
+                    <Col span={24}>
+                      <Typography.Text
+                        copyable={row?.client_document ? true : false}
+                        style={{ color: "#71717A" }}
+                      >
+                        {formatCpfCnpj(row?.client_document || "")}
+                      </Typography.Text>
+                    </Col>
+                  </Row>
+                ) : (
+                  "-"
+                ),
             },
             { key: "terminal_model", head: "Modelo do terminal", width: 140 },
           ]}
