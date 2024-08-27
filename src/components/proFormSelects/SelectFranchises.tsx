@@ -1,7 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProFormSelect } from "@ant-design/pro-components";
-import { FranchiseParams } from "@franchisor/services/franchises/__interfaces/franchises.interface";
-import { useListFranchises } from "@franchisor/services/franchises/listFranchises";
+import { FranchiseParams } from "../../_franchisor/services/franchises/__interfaces/franchises.interface";
+import { useListFranchises } from "../../_franchisor/services/franchises/listFranchises";
 import useDebounce from "@hooks/useDebounce";
 import { Spin } from "antd";
 import { Rule } from "antd/es/form";

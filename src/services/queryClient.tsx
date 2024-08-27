@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { notification } from "antd";
 import { QueryCache, QueryClient } from "react-query";
-import { congnitoAuthService } from "../franchisor/services/auth/CognitoAuthService";
+import { congnitoAuthService } from "../_franchisor/services/auth/CognitoAuthService";
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -29,7 +29,7 @@ export const queryClient = new QueryClient({
           });
         }
         await congnitoAuthService.signOut();
-        location.reload();
+        // location.reload();
       }
     },
   }),

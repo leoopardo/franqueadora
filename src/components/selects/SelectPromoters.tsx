@@ -1,6 +1,6 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { PromotersParams } from "@franchisor/services/promoters/__interfaces/promoters.interface";
-import { useListPromoters } from "@franchisor/services/promoters/listPromoters";
+import { PromotersParams } from "../../_franchisor/services/promoters/__interfaces/promoters.interface";
+import { useListPromoters } from "../../_franchisor/services/promoters/listPromoters";
 import useDebounce from "@hooks/useDebounce";
 import { Select, Spin } from "antd";
 import { useEffect, useState } from "react";

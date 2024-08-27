@@ -1,7 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { ProFormSelect } from "@ant-design/pro-components";
-import { PromotersParams } from "@franchisor/services/promoters/__interfaces/promoters.interface";
-import { useListPromoters } from "@franchisor/services/promoters/listPromoters";
+import { PromotersParams } from "../../_franchisor/services/promoters/__interfaces/promoters.interface";
+import { useListPromoters } from "../../_franchisor/services/promoters/listPromoters";
 import useDebounce from "@hooks/useDebounce";
 import { Spin } from "antd";
 import { Rule } from "antd/es/form";

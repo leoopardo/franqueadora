@@ -9,12 +9,12 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { MenuDataItem, ProLayout } from "@ant-design/pro-components";
-import { useSetTenant } from "@franchise/services/Tenant/setTenant";
-import { useListFranchises } from "@franchise/services/franchises/listFranchises";
-import { useSearchFranchises } from "@franchise/services/franchises/searchFranchises";
-import { QueryKeys as qK } from "@franchise/services/queryKeys";
-import { FranchiseParams } from "@franchisor/services/franchises/__interfaces/franchises.interface";
-import { QueryKeys } from "@franchisor/services/queryKeys";
+import { useSetTenant } from "../../_franchise/services/Tenant/setTenant";
+import { useListFranchises } from "../../_franchise/services/franchises/listFranchises";
+import { useSearchFranchises } from "../../_franchise/services/franchises/searchFranchises";
+import { QueryKeys as qK } from "../../_franchise/services/queryKeys";
+import { FranchiseParams } from "../../_franchisor/services/franchises/__interfaces/franchises.interface";
+import { QueryKeys } from "../../_franchisor/services/queryKeys";
 import useDebounce from "@hooks/useDebounce";
 import defaultTheme from "@styles/default";
 import { formatCNPJ } from "@utils/regexFormat";

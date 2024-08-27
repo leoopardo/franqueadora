@@ -4,8 +4,9 @@
       "@components/*": ["./src/components/*"],
       "@assets/*": ["./src/assets/*"],
       "@context/*": ["./src/context/*"],
-      "@franchise/*": ["./src/franchise/*"],
-      "@franchisor/*": ["./src/franchisor/*"],
+      "@franchise/*": ["src/_franchise/*"],
+      "@franchisor/*": ["src/_franchisor/*"],
+      "@reports/*": ["src/_reports/*"],
       "@styles/*": ["./src/styles/*"],
       "@types/*": ["./src/types/*"],
       "@utils/*": ["./src/utils/*"],
@@ -30,7 +31,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
