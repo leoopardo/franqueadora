@@ -10,7 +10,6 @@ import { useReportsPage } from "../../../../contexts/ReportPageContext";
 import { congnitoAuthService } from "../../../../services/auth/CognitoAuthService";
 import { useGetMe } from "../../../../services/auth/useGetMe";
 import { Menus } from "./menus";
-
 export const ReportsBaseLayout = () => {
   const { breadcrumbs, setBreadcrumbs } = useReportsPage();
   const { refetch } = useGetMe();
@@ -110,15 +109,19 @@ export const ReportsBaseLayout = () => {
       title=""
     >
       {event_id && (
-        <Row style={{ padding: "0px 32px 0px 32px" }}>
+        <Row style={{}}>
           <Col span={24}>
             <Tabs
               size="large"
-              centered
+              tabBarStyle={{ padding: "16px 32px 0px 32px" }}
               onChange={(key) => {
+                if (key === "visao-geral") {
+                  navigate(`/evento/${event_id}`);
+                  return;
+                }
                 navigate(`/evento/${event_id}/${key}`);
               }}
-              defaultActiveKey={location.pathname.split("/")[3]}
+              defaultActiveKey={location.pathname.split("/")[3] || undefined}
               items={Menus}
             />
           </Col>

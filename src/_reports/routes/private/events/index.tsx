@@ -1,12 +1,12 @@
 import { PageHeader } from "@components/header/pageHeader";
 import TableComponent from "@components/table/tableComponent";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Event } from "@reports/services/events/__interfaces/event.interface";
 import { Button, Col, Input, Row, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useReportsPage } from "../../../contexts/ReportPageContext";
 import { Services } from "../../../services";
 import { useNavigate } from "react-router-dom";
+import { Event } from "../../../services/events/__interfaces/event.interface";
 
 export const Events = () => {
   const { setDebounceBreadcrumbs } = useReportsPage();

@@ -1,4 +1,5 @@
 export const Menus = [
+  { key: "visao-geral", label: "Visão Geral" },
   {
     key: "aportes",
     label: "Aportes",

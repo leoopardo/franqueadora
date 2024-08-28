@@ -115,12 +115,12 @@ export const Login = () => {
             style={{
               width: "100%",
               height: "100%",
-              borderTopRightRadius: 32,
-              borderBottomRightRadius: 32,
+              borderTopRightRadius:isSm ? undefined : 32,
+              borderBottomRightRadius:isSm ? undefined : 32,
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
-              marginRight: "-5%",
+              marginRight:isSm ? undefined : "-5%",
               zIndex: 99,
               backgroundImage:
               theme === "light"
