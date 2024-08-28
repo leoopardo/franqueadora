@@ -2,6 +2,7 @@ const envs = {
   API: {
     FRANCHISOR: import.meta.env.VITE_API_FRANCHISOR_URL,
     FRANCHISEE: import.meta.env.VITE_API_FRANCHISEE_URL,
+    REPORTS: import.meta.env.VITE_API_REPORTS_URL,
     TERMINAL_EVENT: import.meta.env.VITE_API_TERMINAL_EVENT_URL,
     PORTAL_EVENT: import.meta.env.VITE_API_PORTAL_EVENT_URL,
   },

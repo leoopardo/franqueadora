@@ -6,7 +6,7 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { congnitoAuthService } from "../franchise/services/auth/CognitoAuthService";
+import { congnitoAuthService } from "../_franchise/services/auth/CognitoAuthService";
 
 interface FranchiseAuthContextProps {
   setToken: Dispatch<SetStateAction<string | undefined | null>>;

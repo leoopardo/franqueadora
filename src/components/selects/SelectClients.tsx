@@ -1,6 +1,6 @@
 import { LoadingOutlined } from "@ant-design/icons";
-import { ClientParams } from "@franchisor/services/clients/__interfaces/clients.interface";
-import { useListClients } from "@franchisor/services/clients/listClients";
+import { ClientParams } from "../../_franchisor/services/clients/__interfaces/clients.interface";
+import { useListClients } from "../../_franchisor/services/clients/listClients";
 import useDebounce from "@hooks/useDebounce";
 import { Select, Spin } from "antd";
 import { useState } from "react";

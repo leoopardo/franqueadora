@@ -3,8 +3,8 @@ import { EllipsisVerticalIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { Button, Dropdown, Empty, Modal, Spin, Table, Typography } from "antd";
 import { TableRowSelection } from "antd/es/table/interface";
 import { Dispatch, SetStateAction } from "react";
-import ParamsI from "../../franchisor/services/__interfaces/queryParams.interface";
-import ResponseI from "../../franchisor/services/__interfaces/response.interface";
+import ParamsI from "../../_franchisor/services/__interfaces/queryParams.interface";
+import ResponseI from "../../_franchisor/services/__interfaces/response.interface";
 
 interface ActionsI<RowItemI> {
   label?: string;
@@ -17,13 +17,24 @@ interface ActionsI<RowItemI> {
     description: string;
   };
 }
+type NestedKeyOf<ObjectType> = {
+  [Key in keyof ObjectType & (string | number)]: NonNullable<
+    ObjectType[Key]
+  > extends Array<any>
+    ? `${Key}`
+    : NonNullable<ObjectType[Key]> extends object
+      ? `${Key}` | `${Key}.${NestedKeyOf<NonNullable<ObjectType[Key]>>}`
+      : `${Key}`;
+}[keyof ObjectType & (string | number)];
 
 interface columnI<RowItemI> {
-  key: keyof RowItemI;
+  key: NestedKeyOf<RowItemI>;
   head?: string;
+  sortKey?: string;
   custom?: (row: RowItemI) => any;
   width?: number;
   responsive?: "md"[] | "lg"[];
+  notSortable?: boolean;
 }
 
 interface TableComponentI<RowItemI> {
@@ -61,7 +72,7 @@ function TableComponent<RowItemI>({
       }}
       scroll={{ x: "60%" }}
       sticky={true}
-     showSorterTooltip
+      showSorterTooltip
       locale={{
         emptyText: error ? (
           <div style={{ display: "flex", justifyContent: "center" }}>
@@ -135,10 +146,11 @@ function TableComponent<RowItemI>({
                   ? {
                       title: c.head ?? c.key,
                       key: c.key,
-                      dataIndex: c.key,
+                      dataIndex: c?.key?.split("."),
                       render: (_value: any, row: RowItemI) => (
                         <div
                           style={{ color: "#919199", minWidth: c.width || 60 }}
+                          data-testid={c.head ?? (c.key as string)}
                         >
                           {c.custom(row)}
                         </div>
@@ -148,15 +160,31 @@ function TableComponent<RowItemI>({
                         showTitle: false,
                       },
                       responsive: c.responsive,
+                      sorter: c.notSortable
+                        ? undefined
+                        : () =>
+                            setParams &&
+                            setParams((state: any) => ({
+                              ...state,
+                              sort_order:
+                                params?.sort_order === "asc" ? "desc" : "asc",
+                              sort_by: c.sortKey || c.key,
+                              orderDirection:
+                                params?.sort_order === "asc" ? "desc" : "asc",
+                              orderBy: c.sortKey || c.key,
+                            })),
                     }
                   : {
                       title: c.head ?? c.key,
                       key: c.key,
-                      dataIndex: c.key,
+                      dataIndex: c?.key?.split("."),
                       render: (value: any) => (
-                        <div style={{ minWidth: c.width || 60 }}>
+                        <div
+                          style={{ minWidth: c.width || 60 }}
+                          data-testid={c.head ?? (c.key as string)}
+                        >
                           <Typography.Text style={{ color: "#919199" }}>
-                            {value}
+                            {value || "-"}
                           </Typography.Text>
                         </div>
                       ),
@@ -164,6 +192,20 @@ function TableComponent<RowItemI>({
                         showTitle: false,
                       },
                       responsive: c.responsive,
+                      sorter: c.notSortable
+                        ? undefined
+                        : () => {
+                            setParams &&
+                              setParams((state: any) => ({
+                                ...state,
+                                sort_order:
+                                  params?.sort_order === "asc" ? "desc" : "asc",
+                                sort_by: c.sortKey || c.key,
+                                orderDirection:
+                                  params?.sort_order === "asc" ? "desc" : "asc",
+                                orderBy: c.sortKey || c.key,
+                              }));
+                          },
                     }
               ) as any),
               {

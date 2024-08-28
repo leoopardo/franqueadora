@@ -9,12 +9,12 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { MenuDataItem, ProLayout } from "@ant-design/pro-components";
-import { useSetTenant } from "@franchise/services/Tenant/setTenant";
-import { useListFranchises } from "@franchise/services/franchises/listFranchises";
-import { useSearchFranchises } from "@franchise/services/franchises/searchFranchises";
-import { QueryKeys as qK } from "@franchise/services/queryKeys";
-import { FranchiseParams } from "@franchisor/services/franchises/__interfaces/franchises.interface";
-import { QueryKeys } from "@franchisor/services/queryKeys";
+import { useSetTenant } from "../../_franchise/services/Tenant/setTenant";
+import { useListFranchises } from "../../_franchise/services/franchises/listFranchises";
+import { useSearchFranchises } from "../../_franchise/services/franchises/searchFranchises";
+import { QueryKeys as qK } from "../../_franchise/services/queryKeys";
+import { FranchiseParams } from "../../_franchisor/services/franchises/__interfaces/franchises.interface";
+import { QueryKeys } from "../../_franchisor/services/queryKeys";
 import useDebounce from "@hooks/useDebounce";
 import defaultTheme from "@styles/default";
 import { formatCNPJ } from "@utils/regexFormat";
@@ -34,6 +34,7 @@ import { useFranchisorAuth } from "../../contexts/franchisorAuthContext";
 import { useTheme } from "../../contexts/themeContext";
 import { useBreakpoints } from "../../hooks/useBreakpoints";
 import { queryClient } from "../../services/queryClient";
+import { ChartBarIcon } from "@heroicons/react/24/outline";
 
 interface SiderComponentI {
   isMenuOpen: boolean;
@@ -229,33 +230,32 @@ export const SiderComponent = ({
         >
           {theme === "light" ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {/* <Link to="/dashboard"> */}
-                {" "}
-                <img
-                  src="/logoDef.svg"
-                  style={
-                    isSm
-                      ? { height: "100%", width: "70%" }
-                      : isMenuOpen
-                        ? { height: "100%", width: data ? "70%" : "90%" }
-                        : { height: 15, width: 50, marginLeft: -8 }
-                  }
-                />{" "}
+              {/* <Link to="/dashboard"> */}{" "}
+              <img
+                src="/logoDef.svg"
+                style={
+                  isSm
+                    ? { height: "100%", width: "70%" }
+                    : isMenuOpen
+                      ? { height: "100%", width: data ? "70%" : "90%" }
+                      : { height: 15, width: 50, marginLeft: -8 }
+                }
+              />{" "}
               {/* </Link> */}
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {/* <Link to="/dashboard"> */}
-                <img
-                  src="/logoWhiteDef.svg"
-                  style={
-                    isSm
-                      ? { height: "100%", width: "70%" }
-                      : isMenuOpen
-                        ? { height: "100%", width: data ? "70%" : "90%" }
-                        : { height: 15, width: 50, marginLeft: -8 }
-                  }
-                />
+              <img
+                src="/logoWhiteDef.svg"
+                style={
+                  isSm
+                    ? { height: "100%", width: "70%" }
+                    : isMenuOpen
+                      ? { height: "100%", width: data ? "70%" : "90%" }
+                      : { height: 15, width: 50, marginLeft: -8 }
+                }
+              />
               {/* </Link> */}
             </div>
           )}
@@ -353,6 +353,45 @@ export const SiderComponent = ({
               gap: 8,
             }}
           >
+            <Link
+              to={`http://relatorios${
+                import.meta.env.VITE_ENV === "local" ? "." : "-"
+              }${window.location.host
+                .split(import.meta.env.VITE_ENV === "local" ? "." : "-")
+                .slice(
+                  1,
+                  window.location.host.split(
+                    import.meta.env.VITE_ENV === "local" ? "." : "-"
+                  ).length
+                )
+                .join()}
+                
+                ${
+                  ""
+                  //   JSON.stringify({
+                  // ...headers,
+                  // master: true,
+                }
+            
+                `}
+              target="_blank"
+            >
+              <Button
+                size="middle"
+                type="default"
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "transparent",
+                  border: "none",
+                  fontSize: 15,
+                }}
+                icon={<ChartBarIcon width={20} />}
+              >
+                {!props?.collapsed && "Relatórios"}
+              </Button>
+            </Link>
             {!franquia && (
               <Link
                 to={`http://franquia${

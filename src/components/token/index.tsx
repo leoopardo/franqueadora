@@ -1,9 +1,9 @@
 import { MailOutlined, MessageOutlined } from "@ant-design/icons";
 import { CheckCard } from "@ant-design/pro-components";
-import { getMeI } from "@franchisor/services/auth/useGetMe";
-import { QueryKeys } from "@franchisor/services/queryKeys";
-import { useSendToken } from "@franchisor/services/token/sendToken";
-import { useValidateToken } from "@franchisor/services/token/validateToken";
+import { getMeI } from "../../_franchisor/services/auth/useGetMe";
+import { QueryKeys } from "../../_franchisor/services/queryKeys";
+import { useSendToken } from "../../_franchisor/services/token/sendToken";
+import { useValidateToken } from "../../_franchisor/services/token/validateToken";
 import { Button, Input, Modal, Typography } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { queryClient } from "../../services/queryClient";
