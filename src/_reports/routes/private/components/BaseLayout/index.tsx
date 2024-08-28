@@ -26,12 +26,7 @@ export const ReportsBaseLayout = () => {
   }, []);
 
   useEffect(() => {
-    if (!event_id) setBreadcrumbs([]);
-    if (event_id)
-      setBreadcrumbs([
-        { title: "Eventos", href: "/eventos" },
-        { title: "nome do evento", href: `/evento/${event_id}` },
-      ]);
+    setBreadcrumbs([]);
   }, [location]);
 
   return (

@@ -1,8 +1,9 @@
-import { Auth } from "aws-amplify";
+import envs from "@config/envs";
+import { Amplify, Auth } from "aws-amplify";
 import { useState } from "react";
 import { STORAGE_KEYS } from "../../../constants/storage_keys";
-import { congnitoAuthService } from "./CognitoAuthService";
 import { useReportsAuth } from "../../../contexts/reportsAuthContext";
+import { congnitoAuthService } from "./CognitoAuthService";
 
 export function useLogin(body: {
   AuthFlow: string;
@@ -16,6 +17,7 @@ export function useLogin(body: {
   const [loading, setLoading] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [isLoggedIn] = useState(false);
+  // const [franchiseError, setFranchiseError] = useState<any>(null);
 
   const { setToken, setHeader } = useReportsAuth();
 
@@ -33,6 +35,15 @@ export function useLogin(body: {
 
   async function mutate() {
     try {
+      Amplify.configure({
+        Auth: {
+          Cognito: {
+            identityPoolId: envs.COGNITO.FRANCHISOR.USER_POOL_ID,
+            userPoolId: envs.COGNITO.FRANCHISOR.USER_POOL_ID,
+            userPoolClientId: envs.COGNITO.FRANCHISOR.CLIENT_ID,
+          },
+        },
+      });
       setLoading(true);
       Auth.configure({
         storage: localStorage.setItem(
@@ -51,10 +62,39 @@ export function useLogin(body: {
     } catch (error) {
       setError(error);
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   }
+
+  // useEffect(() => {
+  //   if (!franchiseError) return;
+  //   async function loginFranchise() {
+  //     try {
+  //       Amplify.configure({
+  //         Auth: {
+  //           Cognito: {
+  //             identityPoolId: envs.COGNITO.FRANCHISE.USER_POOL_ID,
+  //             userPoolId: envs.COGNITO.FRANCHISE.USER_POOL_ID,
+  //             userPoolClientId: envs.COGNITO.FRANCHISE.CLIENT_ID,
+  //           },
+  //         },
+  //       });
+  //       const login = await congnitoAuthService.signIn(
+  //         body.AuthParameters.USERNAME,
+  //         body.AuthParameters.PASSWORD
+  //       );
+  //       await getHeaders();
+  //       setToken(login);
+  //       setData(login);
+  //       setIsSuccess(true);
+  //     } catch (error) {
+  //       setError(error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   }
+
+  //   loginFranchise();
+  // }, [franchiseError]);
 
   function reset() {
     setError(null);

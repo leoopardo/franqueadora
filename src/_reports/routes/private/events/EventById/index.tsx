@@ -38,17 +38,10 @@ export const EventById = () => {
 
   useEffect(() => {
     setDebounceBreadcrumbs([
-      {
-        title: "Eventos",
-        path: "/eventos",
-      },
-      {
-        title: "nome do evento",
-      },
+    
     ]);
   }, []);
 
-  console.log(data);
 
   return (
     <Row

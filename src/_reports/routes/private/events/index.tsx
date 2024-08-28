@@ -9,13 +9,13 @@ import { useNavigate } from "react-router-dom";
 import { Event } from "../../../services/events/__interfaces/event.interface";
 
 export const Events = () => {
-  const { setDebounceBreadcrumbs } = useReportsPage();
+  const { setBreadcrumbs } = useReportsPage();
   const [params, setParams] = useState({ page: 1, size: 15 });
   const { data, isLoading } = Services.event.list(params);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setDebounceBreadcrumbs([
+    setBreadcrumbs([
       {
         title: "Eventos",
       },

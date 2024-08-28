@@ -1,6 +1,6 @@
-import { Amplify, Auth } from "aws-amplify";
-import { CognitoUserModel, amplifyConfig } from "./login.config";
+import { Auth } from "aws-amplify";
 import { STORAGE_KEYS } from "../../../constants/storage_keys";
+import { CognitoUserModel } from "./login.config";
 
 export type FirstAccessData = {
   user: unknown;
@@ -15,8 +15,6 @@ export type RecoveryPasswordSubmitData = {
 
 class CognitoAuthService {
   configure() {
-    const config = this.createConfig();
-    Amplify.configure(config);
     Auth.configure({
       storage: localStorage.getItem(STORAGE_KEYS.local.remmemberMe)
         ? localStorage
@@ -30,15 +28,6 @@ class CognitoAuthService {
     );
   }
 
-  createConfig() {
-    const updatedAwsConfig = {
-      ...amplifyConfig,
-      oauth: {
-        ...amplifyConfig.oauth,
-      },
-    };
-    return updatedAwsConfig;
-  }
 
   signUp(userData: CognitoUserModel) {
     return Auth.signUp(userData);

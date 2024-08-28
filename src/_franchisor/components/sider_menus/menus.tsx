@@ -1,11 +1,10 @@
 import {
   BuildingStorefrontIcon,
   CalculatorIcon,
-  DocumentIcon,
   MegaphoneIcon,
   Squares2X2Icon,
   UserCircleIcon,
-  UserGroupIcon,
+  UserGroupIcon
 } from "@heroicons/react/24/outline";
 import { Badge } from "antd";
 
@@ -105,12 +104,6 @@ export const MenuItens = (pending: number) => {
         },
       ],
     },
-    {
-      key: "reports",
-      name: "Relatórios",
-      path: "/reports",
-      icon: <DocumentIcon width={24} />,
-      disabled: true,
-    },
+   
   ];
 };

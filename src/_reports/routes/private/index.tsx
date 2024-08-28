@@ -4,6 +4,7 @@ import { ReportsPageProvider } from "../../contexts/ReportPageContext";
 import { ReportsBaseLayout } from "./components/BaseLayout";
 import { Events } from "./events";
 import { EventById } from "./events/EventById";
+import { Aports } from "./aports";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
@@ -44,7 +45,7 @@ export const PrivateRoutes = () => {
           <Route path="/eventos" element={<Events />} />
           <Route path="evento/:event_id">
             <Route index element={<EventById/>} />
-            <Route path="aportes" element={<></>} />
+            <Route path="aportes" element={<Aports/>} />
             <Route path="caixas" element={<></>} />
             <Route
               path="*"
