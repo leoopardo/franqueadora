@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { Event } from "../../../services/events/__interfaces/event.interface";
 
 export const Events = () => {
-  const { setBreadcrumbs } = useReportsPage();
+  const { setBreadcrumbs, setEventName } = useReportsPage();
   const [params, setParams] = useState({ page: 1, size: 15 });
   const { data, isLoading } = Services.event.list(params);
   const navigate = useNavigate();
@@ -32,6 +32,7 @@ export const Events = () => {
         <PageHeader
           title="Eventos"
           subtitle="Visualize listagem de eventos cadastrados."
+          total={data?.totalItems}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 6 }}>
@@ -61,7 +62,10 @@ export const Events = () => {
           actions={[
             {
               label: "Detalhes",
-              onClick: (row) => navigate(`/evento/${row?.event_id}`),
+              onClick: (row) => {
+                setEventName(`${row?.name}`);
+                navigate(`/evento/${row?.event_id}`);
+              },
             },
           ]}
           columns={[

@@ -1,10 +1,12 @@
 import { Button, Result } from "antd";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { ReportsPageProvider } from "../../contexts/ReportPageContext";
+import { Aports } from "./aports";
+import { CashRegister } from "./cashRegister";
+import { CashRegisterDetails } from "./cashRegister/Details";
 import { ReportsBaseLayout } from "./components/BaseLayout";
 import { Events } from "./events";
 import { EventById } from "./events/EventById";
-import { Aports } from "./aports";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
@@ -44,9 +46,12 @@ export const PrivateRoutes = () => {
           />
           <Route path="/eventos" element={<Events />} />
           <Route path="evento/:event_id">
-            <Route index element={<EventById/>} />
-            <Route path="aportes" element={<Aports/>} />
-            <Route path="caixas" element={<></>} />
+            <Route index element={<EventById />} />
+            <Route path="aportes" element={<Aports />} />
+            <Route path="caixas">
+              <Route index element={<CashRegister />} />
+              <Route path=":id" element={<CashRegisterDetails />} />
+            </Route>
             <Route
               path="*"
               element={

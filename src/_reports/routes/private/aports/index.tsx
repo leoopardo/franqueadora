@@ -1,16 +1,16 @@
 import { PageHeader } from "@components/header/pageHeader";
 import TableComponent from "@components/table/tableComponent";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import { formatCurrency } from "@utils/regexFormat";
 import { Button, Col, Input, Row, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useReportsPage } from "../../../contexts/ReportPageContext";
 import { Services } from "../../../services";
 import {
-  contributionsInType,
   contributionsInParams,
+  contributionsInType,
 } from "../../../services/contributionsIn/_interfaces/contributionsIn.interface";
-import { formatCurrency } from "@utils/regexFormat";
 
 export const Aports = () => {
   const { setDebounceBreadcrumbs } = useReportsPage();
@@ -21,7 +21,6 @@ export const Aports = () => {
     event_id,
   });
   const { data, isLoading } = Services.contributionsIn.list(params);
-  const navigate = useNavigate();
 
   useEffect(() => {
     setDebounceBreadcrumbs([
@@ -41,6 +40,7 @@ export const Aports = () => {
         <PageHeader
           title="Aportes"
           subtitle="Visualize listagem de aportes realizados."
+          total={data?.totalItems}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 6 }}>
@@ -67,12 +67,6 @@ export const Aports = () => {
           data={data}
           params={params}
           setParams={setParams}
-          actions={[
-            {
-              label: "Detalhes",
-              onClick: (row) => navigate(`${row?.contribution_id}`),
-            },
-          ]}
           columns={[
             { key: "operator_name", head: "Autorizado por" },
             {

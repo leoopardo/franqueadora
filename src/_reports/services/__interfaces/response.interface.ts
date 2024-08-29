@@ -18,4 +18,5 @@ export default interface ResponseI<itemI> {
   page?: number;
   size?: number;
   sortableColumns?: { key: string; value: string }[] | null;
+  totalValue?: number;
 }

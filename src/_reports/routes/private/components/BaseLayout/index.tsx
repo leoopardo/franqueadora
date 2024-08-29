@@ -17,7 +17,7 @@ export const ReportsBaseLayout = () => {
   const { isSm } = useBreakpoints();
   const navigate = useNavigate();
   const location = useLocation();
-  const { event_id } = useParams();
+  const { event_id, id } = useParams();
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -103,7 +103,7 @@ export const ReportsBaseLayout = () => {
       }
       title=""
     >
-      {event_id && (
+      {event_id && !id && (
         <Row style={{}}>
           <Col span={24}>
             <Tabs

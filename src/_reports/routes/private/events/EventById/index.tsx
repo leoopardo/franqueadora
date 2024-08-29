@@ -37,11 +37,8 @@ export const EventById = () => {
   };
 
   useEffect(() => {
-    setDebounceBreadcrumbs([
-    
-    ]);
+    setDebounceBreadcrumbs([]);
   }, []);
-
 
   return (
     <Row
