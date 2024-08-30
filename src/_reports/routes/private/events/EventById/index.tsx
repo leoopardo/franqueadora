@@ -3,8 +3,10 @@ import {
   ArrowPathIcon,
   ArrowUturnLeftIcon,
   BanknotesIcon,
+  DocumentArrowDownIcon,
   DocumentMinusIcon,
   DocumentPlusIcon,
+  FunnelIcon,
   ReceiptPercentIcon,
   TicketIcon,
   UserIcon,
@@ -53,12 +55,30 @@ export const EventById = () => {
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 3 }}>
-        <Button size="large" style={{ width: "100%" }}>
+        <Button
+          size="large"
+          icon={<DocumentArrowDownIcon width={22} />}
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           Exportar
         </Button>
       </Col>{" "}
       <Col xs={{ span: 24 }} md={{ span: 3 }}>
-        <Button size="large" style={{ width: "100%" }}>
+        <Button
+          size="large"
+          icon={<FunnelIcon width={22} />}
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           Filtros
         </Button>
       </Col>

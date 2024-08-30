@@ -5,6 +5,7 @@ import { Aports } from "./aports";
 import { CashRegister } from "./cashRegister";
 import { CashRegisterDetails } from "./cashRegister/Details";
 import { ReportsBaseLayout } from "./components/BaseLayout";
+import { Courtesies } from "./courtesies";
 import { Events } from "./events";
 import { EventById } from "./events/EventById";
 
@@ -51,6 +52,10 @@ export const PrivateRoutes = () => {
             <Route path="caixas">
               <Route index element={<CashRegister />} />
               <Route path=":id" element={<CashRegisterDetails />} />
+            </Route>
+
+            <Route path="cortesias">
+              <Route index element={<Courtesies />} />
             </Route>
             <Route
               path="*"

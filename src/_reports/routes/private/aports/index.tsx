@@ -1,6 +1,10 @@
 import { PageHeader } from "@components/header/pageHeader";
 import TableComponent from "@components/table/tableComponent";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import {
+  DocumentArrowDownIcon,
+  FunnelIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import { formatCurrency } from "@utils/regexFormat";
 import { Button, Col, Input, Row, Typography } from "antd";
 import { useEffect, useState } from "react";
@@ -48,16 +52,34 @@ export const Aports = () => {
           size="large"
           style={{ borderRadius: 36 }}
           suffix={<MagnifyingGlassIcon width={16} />}
-          placeholder="Pesquisar evento"
+          placeholder="Pesquisar aporte"
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 3 }}>
-        <Button type="primary" size="large" style={{ width: "100%" }}>
+        <Button
+          size="large"
+          icon={<DocumentArrowDownIcon width={22} />}
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           Exportar
         </Button>
       </Col>{" "}
       <Col xs={{ span: 24 }} md={{ span: 3 }}>
-        <Button size="large" style={{ width: "100%" }}>
+        <Button
+          size="large"
+          icon={<FunnelIcon width={22} />}
+          style={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           Filtros
         </Button>
       </Col>
