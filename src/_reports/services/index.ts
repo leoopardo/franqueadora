@@ -1,6 +1,8 @@
 import { AuthServices } from "./auth";
 import { cashRegister } from "./cashRegister";
 import { ContributionsIn } from "./contributionsIn";
+import { Courtesie } from "./courtesies";
+import { Discounts } from "./discounts";
 import { Event } from "./events";
 
 export const Services = {
@@ -8,4 +10,6 @@ export const Services = {
   event: Event,
   contributionsIn: ContributionsIn,
   cashRegister,
+  Courtesie,
+  Discounts
 };

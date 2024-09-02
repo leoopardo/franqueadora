@@ -6,6 +6,8 @@ import { CashRegister } from "./cashRegister";
 import { CashRegisterDetails } from "./cashRegister/Details";
 import { ReportsBaseLayout } from "./components/BaseLayout";
 import { Courtesies } from "./courtesies";
+import { CoutersieDetails } from "./courtesies/Details";
+import { Discounts } from "./discounts";
 import { Events } from "./events";
 import { EventById } from "./events/EventById";
 
@@ -48,7 +50,9 @@ export const PrivateRoutes = () => {
           <Route path="/eventos" element={<Events />} />
           <Route path="evento/:event_id">
             <Route index element={<EventById />} />
+
             <Route path="aportes" element={<Aports />} />
+
             <Route path="caixas">
               <Route index element={<CashRegister />} />
               <Route path=":id" element={<CashRegisterDetails />} />
@@ -56,7 +60,11 @@ export const PrivateRoutes = () => {
 
             <Route path="cortesias">
               <Route index element={<Courtesies />} />
+              <Route path=":id" element={<CoutersieDetails />} />
             </Route>
+
+            <Route path="descontos" element={<Discounts />} />
+
             <Route
               path="*"
               element={

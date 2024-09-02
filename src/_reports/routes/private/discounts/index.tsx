@@ -5,31 +5,31 @@ import {
   FunnelIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import { formatCurrency } from "@utils/regexFormat";
 import { Button, Col, Input, Row } from "antd";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useReportsPage } from "../../../contexts/ReportPageContext";
 import { Services } from "../../../services";
 import {
-  courtesieParams,
-  courtesieType,
-} from "../../../services/courtesies/__interfaces/courtesies.interface";
+  discountParams,
+  DiscountType,
+} from "../../../services/discounts/__interfaces/discounts.interface";
 
-export const Courtesies = () => {
+export const Discounts = () => {
   const { event_id } = useParams();
-  const [params, setParams] = useState<courtesieParams>({
+  const [params, setParams] = useState<discountParams>({
     page: 1,
     size: 15,
     event_id,
   });
-  const { data, isLoading } = Services.Courtesie.list(params);
+  const { data, isLoading } = Services.Discounts.list(params);
   const { setDebounceBreadcrumbs } = useReportsPage();
-  const navigate = useNavigate();
 
   useEffect(() => {
     setDebounceBreadcrumbs([
       {
-        title: "Cortesias",
+        title: "Descontos",
       },
     ]);
   }, []);
@@ -42,8 +42,8 @@ export const Courtesies = () => {
     >
       <Col xs={{ span: 24 }} md={{ span: 12 }}>
         <PageHeader
-          title="Cortesias"
-          subtitle="Visualizar listagem de cortesias cedidas."
+          title="Descontos"
+          subtitle="Visualizar listagem de descontos realizados."
           total={data?.totalItems}
         />
       </Col>
@@ -52,7 +52,7 @@ export const Courtesies = () => {
           size="large"
           style={{ borderRadius: 36 }}
           suffix={<MagnifyingGlassIcon width={16} />}
-          placeholder="Pesquisar cortesia"
+          placeholder="Pesquisar desconto"
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 3 }}>
@@ -84,25 +84,37 @@ export const Courtesies = () => {
         </Button>
       </Col>
       <Col span={24}>
-        <TableComponent<courtesieType>
+        <TableComponent<DiscountType>
           loading={isLoading}
           data={data}
           params={params}
           setParams={setParams}
-          actions={[
+          columns={[
+            { key: "discount_id", head: "ID" },
+            { key: "terminal_serial", head: "Número do terminal" },
+            { key: "operator_name", head: "Operador" },
             {
-              label: "Detalhes",
-              onClick: (courtesie) => {
-                navigate(`${courtesie?.courtesy_id}`, { state: courtesie });
+              key: "date",
+              head: "Data e hora",
+              custom(row) {
+                return `${new Date(`${row.date}`).toLocaleDateString()} às ${new Date(`${row.date}`).toLocaleTimeString()}`;
               },
             },
-          ]}
-          columns={[
-            { key: "courtesy_id", head: "ID" },
-            { key: "operator_name", head: "Autorizado por" },
-            { key: "date", head: "Data" },
-            { key: "quantity", head: "Quantidade" },
-            { key: "value", head: "Valor" },
+            { key: "total_products", head: "Produtos totais" },
+            {
+              key: "discount_value",
+              head: "Desconto total",
+              custom(row) {
+                return formatCurrency(row?.discount_value || 0);
+              },
+            },
+            {
+              key: "total_value",
+              head: "Valor total",
+              custom(row) {
+                return formatCurrency(row?.total_value || 0);
+              },
+            },
           ]}
         />
       </Col>
