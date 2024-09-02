@@ -5,18 +5,13 @@ import {
   BanknotesIcon,
   ChevronLeftIcon,
   CurrencyDollarIcon,
-  DocumentArrowDownIcon,
-  DocumentMinusIcon,
-  DocumentPlusIcon,
-  FunnelIcon,
   ReceiptPercentIcon,
   TicketIcon,
-  UserIcon,
   UserMinusIcon,
 } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import { formatCurrency } from "@utils/regexFormat";
-import { Button, Card, Col, Row, Space, Tooltip, Typography } from "antd";
+import { Button, Card, Col, Row, Typography } from "antd";
 import ReactECharts from "echarts-for-react";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -30,16 +25,16 @@ import {
 import { BigNumber } from "../../components/bigNumber";
 
 const methodLegends: any = {
-  pix_payments: "PIX",
-  cash_payments: "Dinheiro",
-  credit_payments: "Cartão de crédito",
-  debit_payments: "Cartão de débito",
+  pix_value: "PIX",
+  money_value: "Dinheiro",
+  credit_card_value: "Cartão de crédito",
+  debit_card_value: "Cartão de débito",
   cashless_payments: "Cartão cashless",
-  others_payments: "Outros",
+  others_total: "Outros",
   total_value: "Total",
 };
 
-export const CashRegisterDetails = () => {
+export const WaiterDetails = () => {
   const { state } = useLocation();
   const { setDebounceBreadcrumbs } = useReportsPage();
   const [params, setParams] = useState<ParamsI>({
@@ -48,23 +43,22 @@ export const CashRegisterDetails = () => {
   });
   const { event_id, id } = useParams();
   const { isSm } = useBreakpoints();
-  const { data, isLoading } = Services.cashRegister.byId(
-    `${event_id}`,
-    `${id}`
-  );
+  const { data, isLoading } = Services.Waiters.byId(`${event_id}`, `${id}`);
 
   const navigate = useNavigate();
   useEffect(() => {
     setDebounceBreadcrumbs([
       {
-        title: "Caixas",
-        href: `/evento/${event_id}/caixas`,
+        title: "Garçons",
+        href: `/evento/${event_id}/garçons`,
       },
       {
-        title: state?.terminal_serial || "Detalhes do caixa",
+        title: `Garçom: ${state?.name}` || "Detalhes do caixa",
       },
     ]);
   }, []);
+
+  console.log(data);
 
   return (
     <Row style={{ padding: 24, maxWidth: "100%" }} align="top" gutter={[8, 8]}>
@@ -77,42 +71,18 @@ export const CashRegisterDetails = () => {
           onClick={() => navigate(-1)}
         />
       </Col>
-      <Col xs={{ span: 22 }} md={{ span: 21 }}>
-        <PageHeader
-          title={`${state?.terminal_serial} `}
-          subtitle={`${`${new Date(state.opening_date).toLocaleDateString()} ${new Date(state?.opening_date).toLocaleTimeString()}`} até ${`${new Date(state.closing_date).toLocaleDateString()} ${new Date(state?.closing_date).toLocaleTimeString()}`}`}
-        />
+      <Col xs={{ span: 22 }} md={{ span: 17 }}>
+        <PageHeader title={`${state?.name} `} subtitle={``} />
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 2 }}>
-        <Space.Compact size="large" block>
-          <Tooltip title="Filtrar">
-            <Button
-              size="large"
-              icon={<FunnelIcon width={22} />}
-              shape="round"
-              style={{
-                width: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            />
-          </Tooltip>
-          <Tooltip title="Exportar relatório">
-            <Button
-              size="large"
-              icon={<DocumentArrowDownIcon width={22} />}
-              shape="round"
-              type="primary"
-              style={{
-                width: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            ></Button>
-          </Tooltip>
-        </Space.Compact>
+      <Col xs={{ span: 24 }} md={{ span: 3 }}>
+        <Button size="large" style={{ width: "100%" }}>
+          Exportar
+        </Button>
+      </Col>{" "}
+      <Col xs={{ span: 24 }} md={{ span: 3 }}>
+        <Button size="large" style={{ width: "100%" }}>
+          Filtros
+        </Button>
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 24 }} xl={{ span: 10 }}>
         <Card>
@@ -144,7 +114,7 @@ export const CashRegisterDetails = () => {
                   fontSize: 16,
                 },
                 formatter: (name: any) => {
-                  const value = (data?.overview as any)[name];
+                  const value = (data?.paymentMethods as any)[name];
                   return `${methodLegends[name]} - ${formatCurrency(value)}`;
                 },
               },
@@ -163,7 +133,9 @@ export const CashRegisterDetails = () => {
                     color: "#fff",
 
                     formatter: () => {
-                      const totalValue = (data?.overview as any)["total_value"];
+                      const totalValue = (data?.paymentMethods as any)[
+                        "total_value"
+                      ];
                       return `${formatCurrency(totalValue || 0)}`;
                     },
                   },
@@ -174,7 +146,7 @@ export const CashRegisterDetails = () => {
                   data:
                     data &&
                     !isLoading &&
-                    Object.keys(data?.overview)
+                    Object.keys(data?.paymentMethods)
                       .filter(
                         (i) =>
                           !i.includes("percentage") &&
@@ -183,7 +155,7 @@ export const CashRegisterDetails = () => {
                       )
                       .map((i) => ({
                         name: i,
-                        value: (data?.overview as any)[i],
+                        value: (data?.paymentMethods as any)[i],
                       })),
                 },
               ],
@@ -195,74 +167,56 @@ export const CashRegisterDetails = () => {
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 24 }} xl={{ span: 14 }}>
         <Row style={{ width: "100%" }} align={"top"} gutter={[8, 8]}>
-          <Col xs={{ span: 24 }} md={{ span: 8 }}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
+            <BigNumber
+              icon={<CurrencyDollarIcon width={20} />}
+              title="Total de vendas"
+              value={data ? data?.totals.sold_total : 0}
+              money
+              loading={isLoading}
+            />
+          </Col>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <BigNumber
               icon={<BanknotesIcon width={20} />}
               title="Ticket médio"
-              value={data ? data?.overview?.average_ticket : 0}
-              money
-              loading={isLoading}
-            />
-          </Col>{" "}
-          <Col xs={{ span: 24 }} md={{ span: 8 }}>
-            <BigNumber
-              icon={<ArrowUturnLeftIcon width={20} />}
-              title="Discontos"
-              value={data ? data?.totals?.discounts : 0}
+              value={data ? data?.totals.median_ticket : 0}
               money
               loading={isLoading}
             />
           </Col>
-          <Col xs={{ span: 24 }} md={{ span: 8 }}>
-            <BigNumber
-              icon={<CurrencyDollarIcon width={20} />}
-              title="Estornos realizados"
-              value={data ? data?.totals?.refunds : 0}
-              money
-              loading={isLoading}
-            />
-          </Col>
-          <Col xs={{ span: 24 }} md={{ span: 8 }}>
-            <BigNumber
-              icon={<ReceiptPercentIcon width={20} />}
-              title="Comissão fixa"
-              value={data ? data?.totals?.waiter_fee : 0}
-              money
-              loading={isLoading}
-            />
-          </Col>{" "}
-          <Col xs={{ span: 24 }} md={{ span: 8 }}>
-            <BigNumber
-              icon={<UserIcon width={20} />}
-              title="Receita operador"
-              value={data ? data?.totals?.operator_sales : 0}
-              loading={isLoading}
-              money
-            />
-          </Col>{" "}
-          <Col xs={{ span: 24 }} md={{ span: 8 }}>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <BigNumber
               icon={<UserMinusIcon width={20} />}
-              title="Receita garçom"
-              value={data ? data?.totals?.waiter_sales : 0}
+              title="Comissão do garçom"
+              value={data ? data?.totals.waiter_fee : 0}
               money
               loading={isLoading}
             />
-          </Col>{" "}
+          </Col>
           <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <BigNumber
-              icon={<DocumentPlusIcon width={20} />}
-              title="Aportes"
-              value={data ? data?.totals?.contributions_in : 0}
+              icon={<ReceiptPercentIcon width={20} />}
+              title="Descontos"
+              value={data ? data?.totals.discount_total : 0}
               money
               loading={isLoading}
             />
-          </Col>{" "}
+          </Col>
           <Col xs={{ span: 24 }} md={{ span: 12 }}>
             <BigNumber
-              icon={<DocumentMinusIcon width={20} />}
-              title="Sangrias"
-              value={data ? data?.totals?.contributions_out : 0}
+              icon={<ArrowUturnLeftIcon width={20} />}
+              title="Estornos realizados"
+              value={data ? data?.totals.refund_total : 0}
+              money
+              loading={isLoading}
+            />
+          </Col>
+          <Col xs={{ span: 24 }} md={{ span: 12 }}>
+            <BigNumber
+              icon={<TicketIcon width={20} />}
+              title="Fichas de consumo"
+              value={data ? data?.totals.ticket_value : 0}
               money
               loading={isLoading}
             />
@@ -276,7 +230,7 @@ export const CashRegisterDetails = () => {
               <BigNumber
                 icon={<BanknotesIcon width={20} />}
                 title="Produtos vendidos"
-                value={data ? `${data?.productsSoldTotals?.totalValue}` : 0}
+                value={data ? `${data?.productSold?.totalValue}` : 0}
                 money
                 loading={isLoading}
                 card={false}
@@ -285,7 +239,7 @@ export const CashRegisterDetails = () => {
             <Col xs={{ span: 24 }}>
               <TableComponent<ProductsSoldData>
                 loading={isLoading}
-                data={data?.productsSoldTotals}
+                data={data?.productSold}
                 params={params}
                 setParams={setParams}
                 columns={[
@@ -342,7 +296,7 @@ export const CashRegisterDetails = () => {
               <BigNumber
                 icon={<BanknotesIcon width={20} />}
                 title="Produtos cortesia"
-                value={data ? `${data?.productsSoldCourtesies?.totalValue}` : 0}
+                value={data ? `${data?.productSoldCourtesies?.totalValue}` : 0}
                 money
                 loading={isLoading}
                 card={false}
@@ -351,7 +305,7 @@ export const CashRegisterDetails = () => {
             <Col xs={{ span: 24 }}>
               <TableComponent<ReturnsData>
                 loading={isLoading}
-                data={data?.productsSoldCourtesies}
+                data={data?.productSoldCourtesies}
                 params={params}
                 setParams={setParams}
                 columns={[

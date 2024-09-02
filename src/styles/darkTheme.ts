@@ -37,6 +37,9 @@ const Dark: ThemeConfig = {
       boxShadowSecondary: "none",
       primaryShadow: "none",
       dangerShadow: "none",
+      colorLink: defaultTheme.primary,
+      colorLinkHover: defaultTheme.primaryLight,
+      colorLinkActive: defaultTheme.primary,
     },
     Select: {
       controlItemBgActive: "#303030",

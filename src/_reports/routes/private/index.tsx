@@ -10,6 +10,8 @@ import { CoutersieDetails } from "./courtesies/Details";
 import { Discounts } from "./discounts";
 import { Events } from "./events";
 import { EventById } from "./events/EventById";
+import { Waiters } from "./waiters";
+import { WaiterDetails } from "./waiters/Details";
 
 export const PrivateRoutes = () => {
   const navigate = useNavigate();
@@ -64,6 +66,11 @@ export const PrivateRoutes = () => {
             </Route>
 
             <Route path="descontos" element={<Discounts />} />
+
+            <Route path="garçons">
+              <Route index element={<Waiters />} />
+              <Route path=":id" element={<WaiterDetails />} />
+            </Route>
 
             <Route
               path="*"

@@ -4,6 +4,7 @@ export enum QueryKeys {
   LIST_CASH_REGISTERS = "listCashRegistersReport",
   LIST_COURTESIES = "listCourtesiesReport",
   LIST_DISCOUNTS = "listDiscountsReport",
+  LIST_WAITERS = "listWaitersReport",
 
   GET_EVENT_TOTALIZER = "getEventTotalizer",
 

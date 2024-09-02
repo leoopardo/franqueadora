@@ -1,7 +1,11 @@
 import { PageHeader } from "@components/header/pageHeader";
 import TableComponent from "@components/table/tableComponent";
-import { DocumentArrowDownIcon, FunnelIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Button, Col, Input, Row, Typography } from "antd";
+import {
+  DocumentArrowDownIcon,
+  FunnelIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
+import { Button, Col, Input, Row, Space, Tooltip, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useReportsPage } from "../../../contexts/ReportPageContext";
 import { Services } from "../../../services";
@@ -28,7 +32,7 @@ export const Events = () => {
       align="middle"
       gutter={[8, 8]}
     >
-      <Col xs={{ span: 24 }} md={{ span: 12 }}>
+      <Col xs={{ span: 24 }} md={{ span: 16 }}>
         <PageHeader
           title="Eventos"
           subtitle="Visualize listagem de eventos cadastrados."
@@ -43,33 +47,36 @@ export const Events = () => {
           placeholder="Pesquisar evento"
         />
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 3 }}>
-        <Button
-          size="large"
-          icon={<DocumentArrowDownIcon width={22} />}
-          style={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          Exportar
-        </Button>
-      </Col>{" "}
-      <Col xs={{ span: 24 }} md={{ span: 3 }}>
-        <Button
-          size="large"
-          icon={<FunnelIcon width={22} />}
-          style={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          Filtros
-        </Button>
+      <Col xs={{ span: 24 }} md={{ span: 2 }}>
+        <Space.Compact size="large" block>
+          <Tooltip title="Filtrar">
+            <Button
+              size="large"
+              icon={<FunnelIcon width={22} />}
+              shape="round"
+              style={{
+                width: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Exportar relatório">
+            <Button
+              size="large"
+              icon={<DocumentArrowDownIcon width={22} />}
+              shape="round"
+              type="primary"
+              style={{
+                width: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            ></Button>
+          </Tooltip>
+        </Space.Compact>
       </Col>
       <Col span={24}>
         <TableComponent<Event>

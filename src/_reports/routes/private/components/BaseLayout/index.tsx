@@ -27,6 +27,7 @@ export const ReportsBaseLayout = () => {
 
   useEffect(() => {
     setBreadcrumbs([]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [location]);
 
   return (
