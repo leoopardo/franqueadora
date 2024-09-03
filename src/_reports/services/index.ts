@@ -4,6 +4,7 @@ import { ContributionsIn } from "./contributionsIn";
 import { Courtesie } from "./courtesies";
 import { Discounts } from "./discounts";
 import { Event } from "./events";
+import { Operators } from "./operators";
 import { Waiters } from "./waiters";
 
 export const Services = {
@@ -14,4 +15,5 @@ export const Services = {
   Courtesie,
   Discounts,
   Waiters,
+  Operators
 };

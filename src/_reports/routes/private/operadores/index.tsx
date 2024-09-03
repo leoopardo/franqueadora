@@ -7,33 +7,33 @@ import {
   FunnelIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
+import { formatCurrency } from "@utils/regexFormat";
 import { Button, Col, Input, Row, Space, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useReportsPage } from "../../../contexts/ReportPageContext";
 import { Services } from "../../../services";
 import {
-  waiterParams,
-  waiterType,
-} from "../../../services/waiters/__interfaces/waiter.interface";
-import { formatCurrency } from "@utils/regexFormat";
+  operatorParams,
+  operatorType,
+} from "../../../services/operators/__interfaces/operator.interface";
 
-export const Waiters = () => {
+export const Operators = () => {
   const { setDebounceBreadcrumbs } = useReportsPage();
   const { event_id } = useParams();
-  const [params, setParams] = useState<waiterParams>({
+  const [params, setParams] = useState<operatorParams>({
     page: 1,
     size: 15,
     event_id,
   });
-  const { data, isLoading } = Services.Waiters.list(params);
+  const { data, isLoading } = Services.Operators.list(params);
   const [copyRowCol, setCopyRowCol] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
     setDebounceBreadcrumbs([
       {
-        title: "Garçons",
+        title: "Operadores",
       },
     ]);
   }, []);
@@ -46,8 +46,8 @@ export const Waiters = () => {
     >
       <Col xs={{ span: 24 }} md={{ span: 16 }}>
         <PageHeader
-          title="Garçons"
-          subtitle="Visualizar listagem de garçons do evento."
+          title="Operadores"
+          subtitle="Visualizar listagem de operadores do evento."
           total={data?.totalItems}
         />
       </Col>
@@ -56,7 +56,7 @@ export const Waiters = () => {
           size="large"
           style={{ borderRadius: 36 }}
           suffix={<MagnifyingGlassIcon width={16} />}
-          placeholder="Pesquisar garçom"
+          placeholder="Pesquisar operador"
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 2 }}>
@@ -91,7 +91,7 @@ export const Waiters = () => {
         </Space.Compact>
       </Col>
       <Col span={24}>
-        <TableComponent<waiterType>
+        <TableComponent<operatorType>
           loading={isLoading}
           data={data}
           params={params}
@@ -147,17 +147,12 @@ export const Waiters = () => {
             },
             { key: "name", head: "Nome" },
             {
-              key: "waiter_sale",
+              key: "operator_sale",
               head: "Vendas",
-              custom(row) {
-                return formatCurrency(row?.waiter_sale ? +row?.waiter_sale : 0);
-              },
-            },
-            {
-              key: "waiter_fee",
-              head: "Comissão",
-              custom(row) {
-                return formatCurrency(row?.waiter_fee ? +row?.waiter_fee : 0);
+              custom: (row) => {
+                return formatCurrency(
+                  row?.operator_sale ? +row?.operator_sale : 0
+                );
               },
             },
           ]}

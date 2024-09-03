@@ -34,7 +34,7 @@ const methodLegends: any = {
   total_value: "Total",
 };
 
-export const WaiterDetails = () => {
+export const OperatorDetails = () => {
   const { state } = useLocation();
   const { setDebounceBreadcrumbs } = useReportsPage();
   const [params, setParams] = useState<ParamsI>({
@@ -43,17 +43,19 @@ export const WaiterDetails = () => {
   });
   const { event_id, id } = useParams();
   const { isSm } = useBreakpoints();
-  const { data, isLoading } = Services.Waiters.byId(`${event_id}`, `${id}`);
+  const { data, isLoading } = Services.Operators.byId(`${event_id}`, `${id}`);
 
   const navigate = useNavigate();
   useEffect(() => {
     setDebounceBreadcrumbs([
       {
-        title: "Garçons",
-        href: `/evento/${event_id}/garcons`,
+        title: "Operadores",
+        href: `/evento/${event_id}/operadores`,
       },
       {
-        title: `Garçom: ${state?.name}` || "Detalhes do caixa",
+        title: state?.name
+          ? `Operador: ${state?.name}`
+          : "Detalhes do operador",
       },
     ]);
   }, []);
@@ -72,7 +74,10 @@ export const WaiterDetails = () => {
         />
       </Col>
       <Col xs={{ span: 22 }} md={{ span: 17 }}>
-        <PageHeader title={`${state?.name} `} subtitle={`Visualize os principais dados do garçom no evento.`} />
+        <PageHeader
+          title={`${state?.name} `}
+          subtitle={`Visualize os principais dados do operador no evento.`}
+        />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 3 }}>
         <Button size="large" style={{ width: "100%" }}>

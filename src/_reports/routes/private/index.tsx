@@ -10,6 +10,8 @@ import { CoutersieDetails } from "./courtesies/Details";
 import { Discounts } from "./discounts";
 import { Events } from "./events";
 import { EventById } from "./events/EventById";
+import { Operators } from "./operadores";
+import { OperatorDetails } from "./operadores/Details";
 import { Waiters } from "./waiters";
 import { WaiterDetails } from "./waiters/Details";
 
@@ -67,9 +69,14 @@ export const PrivateRoutes = () => {
 
             <Route path="descontos" element={<Discounts />} />
 
-            <Route path="garçons">
+            <Route path="garcons">
               <Route index element={<Waiters />} />
               <Route path=":id" element={<WaiterDetails />} />
+            </Route>
+            
+            <Route path="operadores">
+              <Route index element={<Operators />} />
+              <Route path=":id" element={<OperatorDetails />} />
             </Route>
 
             <Route
