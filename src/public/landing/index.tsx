@@ -106,7 +106,7 @@ export const Landing = () => {
               {
                 label: (
                   <Link
-                    to={`http://franqueadora{import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
+                    to={`http://franqueadora${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
                     // target="_blank"
                     data-testid="franqueadora"
                   >
