@@ -293,6 +293,13 @@ export const AddProduct = ({ menu_id }: AddProductI) => {
                       combo_image: combo_image?.image || undefined,
                       combo_image_extension:
                         combo_image?.image_extension || undefined,
+                      description:
+                        values.description || values.combo_description,
+                      extra_products: [],
+                      group_id: values.group_id,
+                      ingredients: [],
+                      type: values.type,
+                      sale_price: values.sale_price,
                     },
                   ]);
                 }}

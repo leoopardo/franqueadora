@@ -30,4 +30,6 @@ export interface CreateMenuItemI {
   sale_limit: boolean;
   sale_price: number;
   type: string;
+  combo_image?: any;
+  combo_image_extension?: string;
 }

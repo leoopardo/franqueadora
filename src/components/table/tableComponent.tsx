@@ -65,7 +65,7 @@ function TableComponent<RowItemI>({
   return (
     <Table
       tableLayout="auto"
-      rowKey={"id" || "ref_id"}
+      rowKey={"id"}
       style={{
         borderRadius: 8,
         border: "1px solid rgba(200, 200, 200, 0.3)",
