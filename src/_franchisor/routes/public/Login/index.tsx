@@ -26,7 +26,7 @@ export const Login = () => {
     USERNAME: string;
     PASSWORD: string;
     remember: boolean;
-  }>({ USERNAME: "", PASSWORD: "", remember: true });
+  }>({ USERNAME: "leoaraujo", PASSWORD: "Abc123@@", remember: true });
   const { error, loading, reset, mutate, isSuccess } = useLogin({
     AuthFlow: "USER_PASSWORD_AUTH",
     AuthParameters: {
