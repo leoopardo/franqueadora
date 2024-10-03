@@ -150,6 +150,17 @@ export const Landing = () => {
                   </Link>
                 ),
                 key: "Cliente",
+              },{
+                label: (
+                  <Link
+                    to={`http://relatorios${import.meta.env.VITE_ENV === "local" ? "." : "-"}${window.location.host}`}
+                    // target="_blank"
+                    data-testid="reports"
+                  >
+                    Relatórios
+                  </Link>
+                ),
+                key: "Reports",
               },
             ],
           }}

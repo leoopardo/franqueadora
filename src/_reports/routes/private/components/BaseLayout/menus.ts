@@ -17,7 +17,7 @@ export const Menus = [
     label: "Descontos",
   },
   {
-    key: "garçons",
+    key: "garcons",
     label: "Garçons",
   },
   {

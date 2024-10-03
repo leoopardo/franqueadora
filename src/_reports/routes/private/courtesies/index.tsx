@@ -5,31 +5,31 @@ import {
   FunnelIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import { formatCurrency } from "@utils/regexFormat";
-import { Button, Col, Input, Row, Space, Tooltip, Typography } from "antd";
+import { Button, Col, Input, Row, Space, Tooltip } from "antd";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useReportsPage } from "../../../contexts/ReportPageContext";
 import { Services } from "../../../services";
 import {
-  contributionsInParams,
-  contributionsInType,
-} from "../../../services/contributionsIn/_interfaces/contributionsIn.interface";
+  courtesieParams,
+  courtesieType,
+} from "../../../services/courtesies/__interfaces/courtesies.interface";
 
-export const Aports = () => {
-  const { setDebounceBreadcrumbs } = useReportsPage();
+export const Courtesies = () => {
   const { event_id } = useParams();
-  const [params, setParams] = useState<contributionsInParams>({
+  const [params, setParams] = useState<courtesieParams>({
     page: 1,
     size: 15,
     event_id,
   });
-  const { data, isLoading } = Services.contributionsIn.list(params);
+  const { data, isLoading } = Services.Courtesie.list(params);
+  const { setDebounceBreadcrumbs } = useReportsPage();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setDebounceBreadcrumbs([
       {
-        title: "Aportes",
+        title: "Cortesias",
       },
     ]);
   }, []);
@@ -42,8 +42,8 @@ export const Aports = () => {
     >
       <Col xs={{ span: 24 }} md={{ span: 16 }}>
         <PageHeader
-          title="Aportes"
-          subtitle="Visualize listagem de aportes realizados."
+          title="Cortesias"
+          subtitle="Visualizar listagem de cortesias cedidas."
           total={data?.totalItems}
         />
       </Col>
@@ -52,7 +52,7 @@ export const Aports = () => {
           size="large"
           style={{ borderRadius: 36 }}
           suffix={<MagnifyingGlassIcon width={16} />}
-          placeholder="Pesquisar aporte"
+          placeholder="Pesquisar cortesia"
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 2 }}>
@@ -86,44 +86,26 @@ export const Aports = () => {
           </Tooltip>
         </Space.Compact>
       </Col>
-
       <Col span={24}>
-        <TableComponent<contributionsInType>
+        <TableComponent<courtesieType>
           loading={isLoading}
           data={data}
           params={params}
           setParams={setParams}
+          actions={[
+            {
+              label: "Detalhes",
+              onClick: (courtesie) => {
+                navigate(`${courtesie?.courtesy_id}`, { state: courtesie });
+              },
+            },
+          ]}
           columns={[
+            { key: "courtesy_id", head: "ID" },
             { key: "operator_name", head: "Autorizado por" },
-            {
-              key: "terminal_serial",
-              head: "Número do terminal",
-              custom(row) {
-                return (
-                  <Typography.Text copyable>
-                    {row.terminal_serial}
-                  </Typography.Text>
-                );
-              },
-            },
-            { key: "sector_name", head: "Setor" },
-
-            {
-              key: "date",
-              head: "Data",
-              custom(row) {
-                return row.date
-                  ? `${new Date(row.date).toLocaleDateString()} às ${new Date(row?.date).toLocaleTimeString()}`
-                  : "-";
-              },
-            },
-            {
-              key: "value",
-              head: "Valor",
-              custom(row) {
-                return formatCurrency(row.value || 0);
-              },
-            },
+            { key: "date", head: "Data" },
+            { key: "quantity", head: "Quantidade" },
+            { key: "value", head: "Valor" },
           ]}
         />
       </Col>

@@ -3,8 +3,10 @@ import {
   ArrowPathIcon,
   ArrowUturnLeftIcon,
   BanknotesIcon,
+  DocumentArrowDownIcon,
   DocumentMinusIcon,
   DocumentPlusIcon,
+  FunnelIcon,
   ReceiptPercentIcon,
   TicketIcon,
   UserIcon,
@@ -12,7 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useBreakpoints } from "@hooks/useBreakpoints";
 import { formatCurrency } from "@utils/regexFormat";
-import { Button, Card, Col, Row, Typography } from "antd";
+import { Button, Card, Col, Row, Space, Tooltip, Typography } from "antd";
 import ReactECharts from "echarts-for-react";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -37,11 +39,8 @@ export const EventById = () => {
   };
 
   useEffect(() => {
-    setDebounceBreadcrumbs([
-    
-    ]);
+    setDebounceBreadcrumbs([]);
   }, []);
-
 
   return (
     <Row
@@ -49,21 +48,42 @@ export const EventById = () => {
       align="middle"
       gutter={[8, 8]}
     >
-      <Col xs={{ span: 24 }} md={{ span: 18 }}>
+      <Col xs={{ span: 24 }} md={{ span: 22 }}>
         <PageHeader
           title="Módulo bar"
           subtitle="Visualize as informações gerais do módulo bar."
         />
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 3 }}>
-        <Button size="large" style={{ width: "100%" }}>
-          Exportar
-        </Button>
-      </Col>{" "}
-      <Col xs={{ span: 24 }} md={{ span: 3 }}>
-        <Button size="large" style={{ width: "100%" }}>
-          Filtros
-        </Button>
+      <Col xs={{ span: 24 }} md={{ span: 2 }}>
+        <Space.Compact size="large" block>
+          <Tooltip title="Filtrar">
+            <Button
+              size="large"
+              icon={<FunnelIcon width={22} />}
+              shape="round"
+              style={{
+                width: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Exportar relatório">
+            <Button
+              size="large"
+              icon={<DocumentArrowDownIcon width={22} />}
+              shape="round"
+              type="primary"
+              style={{
+                width: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            ></Button>
+          </Tooltip>
+        </Space.Compact>
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 24 }} xl={{ span: 10 }}>
         <Card>

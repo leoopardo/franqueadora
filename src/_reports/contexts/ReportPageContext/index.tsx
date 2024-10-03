@@ -6,12 +6,13 @@ import React, {
   useContext,
   useState,
 } from "react";
-import { useParams } from "react-router-dom";
 
 interface ReportsPageContextProps {
   breadcrumbs: BreadcrumbItemType[];
   setBreadcrumbs: Dispatch<SetStateAction<BreadcrumbItemType[]>>;
   setDebounceBreadcrumbs: (newBreadcrumbs: BreadcrumbItemType[]) => void;
+  setEventName: Dispatch<SetStateAction<string>>;
+  eventName: string;
 }
 
 const ReportsPageContext = createContext<ReportsPageContextProps | undefined>(
@@ -24,13 +25,15 @@ export const ReportsPageProvider = ({
   children: React.ReactNode;
 }) => {
   const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItemType[]>([]);
-  const { event_id } = useParams();
+  const [eventName, setEventName] = useState<string>("");
 
   const debounceSetBreadcrumbs = (newBreadcrumbs: BreadcrumbItemType[]) => {
     setTimeout(() => {
       setBreadcrumbs([
         { title: "Eventos", href: "/eventos" },
-        { title: "nome do evento", href: `/evento/${event_id}` },
+        {
+          title: eventName || "Detalhes do evento",
+        },
         ...newBreadcrumbs,
       ]);
     }, 100);
@@ -42,6 +45,8 @@ export const ReportsPageProvider = ({
         breadcrumbs,
         setBreadcrumbs,
         setDebounceBreadcrumbs: debounceSetBreadcrumbs,
+        setEventName,
+        eventName,
       }}
     >
       {children}

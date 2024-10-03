@@ -1,5 +1,5 @@
 import { formatCurrency } from "@utils/regexFormat";
-import { Avatar, Card, Col, Row, Statistic } from "antd";
+import { Avatar, Card, Statistic } from "antd";
 import React from "react";
 
 interface BigNumberProps {
@@ -8,6 +8,7 @@ interface BigNumberProps {
   value: string | number;
   money?: boolean;
   loading?: boolean;
+  card?: boolean;
 }
 
 export const BigNumber = ({
@@ -16,22 +17,45 @@ export const BigNumber = ({
   value,
   money,
   loading,
+  card = true,
 }: BigNumberProps) => {
-  return (
+  return card ? (
     <Card style={{ width: "100%", height: "100%" }}>
-      <Row gutter={[8, 8]} align="middle">
-        <Col sm={{ span: 8 }} md={{ span: 8 }}>
-          <Avatar size="large" shape="square" icon={icon} />
-        </Col>
-        <Col sm={{ span: 16 }} md={{ span: 16 }}>
-          <Statistic
-            title={title}
-            value={money ? formatCurrency(+value) : value}
-            valueStyle={{ fontSize: 22 }}
-            loading={loading}
-          />
-        </Col>
-      </Row>
+      <div
+        style={{
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+        }}
+      >
+        <Avatar size="large" shape="square" icon={icon} />
+        <Statistic
+          title={title}
+          value={money ? formatCurrency(+value) : value}
+          valueStyle={{ fontSize: 22 }}
+          loading={loading}
+        />
+      </div>
     </Card>
+  ) : (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        display: "flex",
+        alignItems: "center",
+        gap: 16,
+      }}
+    >
+      <Avatar size="large" shape="square" icon={icon} />
+      <Statistic
+        title={title}
+        value={money ? formatCurrency(+value) : value}
+        valueStyle={{ fontSize: 22 }}
+        loading={loading}
+      />
+    </div>
   );
 };

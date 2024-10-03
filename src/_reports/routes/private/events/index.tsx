@@ -1,7 +1,11 @@
 import { PageHeader } from "@components/header/pageHeader";
 import TableComponent from "@components/table/tableComponent";
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { Button, Col, Input, Row, Typography } from "antd";
+import {
+  DocumentArrowDownIcon,
+  FunnelIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
+import { Button, Col, Input, Row, Space, Tooltip, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { useReportsPage } from "../../../contexts/ReportPageContext";
 import { Services } from "../../../services";
@@ -9,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { Event } from "../../../services/events/__interfaces/event.interface";
 
 export const Events = () => {
-  const { setBreadcrumbs } = useReportsPage();
+  const { setBreadcrumbs, setEventName } = useReportsPage();
   const [params, setParams] = useState({ page: 1, size: 15 });
   const { data, isLoading } = Services.event.list(params);
   const navigate = useNavigate();
@@ -28,10 +32,11 @@ export const Events = () => {
       align="middle"
       gutter={[8, 8]}
     >
-      <Col xs={{ span: 24 }} md={{ span: 12 }}>
+      <Col xs={{ span: 24 }} md={{ span: 16 }}>
         <PageHeader
           title="Eventos"
           subtitle="Visualize listagem de eventos cadastrados."
+          total={data?.totalItems}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 6 }}>
@@ -42,15 +47,36 @@ export const Events = () => {
           placeholder="Pesquisar evento"
         />
       </Col>
-      <Col xs={{ span: 24 }} md={{ span: 3 }}>
-        <Button type="primary" size="large" style={{ width: "100%" }}>
-          Exportar
-        </Button>
-      </Col>{" "}
-      <Col xs={{ span: 24 }} md={{ span: 3 }}>
-        <Button size="large" style={{ width: "100%" }}>
-          Filtros
-        </Button>
+      <Col xs={{ span: 24 }} md={{ span: 2 }}>
+        <Space.Compact size="large" block>
+          <Tooltip title="Filtrar">
+            <Button
+              size="large"
+              icon={<FunnelIcon width={22} />}
+              shape="round"
+              style={{
+                width: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            />
+          </Tooltip>
+          <Tooltip title="Exportar relatório">
+            <Button
+              size="large"
+              icon={<DocumentArrowDownIcon width={22} />}
+              shape="round"
+              type="primary"
+              style={{
+                width: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            ></Button>
+          </Tooltip>
+        </Space.Compact>
       </Col>
       <Col span={24}>
         <TableComponent<Event>
@@ -61,7 +87,10 @@ export const Events = () => {
           actions={[
             {
               label: "Detalhes",
-              onClick: (row) => navigate(`/evento/${row?.event_id}`),
+              onClick: (row) => {
+                setEventName(`${row?.name}`);
+                navigate(`/evento/${row?.event_id}`);
+              },
             },
           ]}
           columns={[

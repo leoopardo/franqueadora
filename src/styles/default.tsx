@@ -1,4 +1,5 @@
 const defaultTheme = {
+    primaryLight: "#51db85",
     primary: "#12AB4B",
     strong: "#12552d",
     "primary-500": "rgba(18, 171, 75, 0.5)",

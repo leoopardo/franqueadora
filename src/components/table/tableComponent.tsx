@@ -31,7 +31,7 @@ interface columnI<RowItemI> {
   key: NestedKeyOf<RowItemI>;
   head?: string;
   sortKey?: string;
-  custom?: (row: RowItemI) => any;
+  custom?: (row: RowItemI, index?: number) => any;
   width?: number;
   responsive?: "md"[] | "lg"[];
   notSortable?: boolean;
@@ -141,7 +141,7 @@ function TableComponent<RowItemI>({
       columns={
         actions
           ? [
-              ...(columns?.map((c: any) =>
+              ...(columns?.map((c: any, index: number) =>
                 c.custom
                   ? {
                       title: c.head ?? c.key,
@@ -152,7 +152,7 @@ function TableComponent<RowItemI>({
                           style={{ color: "#919199", minWidth: c.width || 60 }}
                           data-testid={c.head ?? (c.key as string)}
                         >
-                          {c.custom(row)}
+                          {c.custom(row, index) || "-"}
                         </div>
                       ),
                       width: c.width,

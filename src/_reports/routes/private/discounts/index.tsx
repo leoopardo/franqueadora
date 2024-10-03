@@ -1,35 +1,38 @@
 import { PageHeader } from "@components/header/pageHeader";
 import TableComponent from "@components/table/tableComponent";
 import {
+  BanknotesIcon,
   DocumentArrowDownIcon,
   FunnelIcon,
+  GiftIcon,
   MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
 import { formatCurrency } from "@utils/regexFormat";
-import { Button, Col, Input, Row, Space, Tooltip, Typography } from "antd";
+import { Button, Col, Input, Row, Space, Tooltip } from "antd";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useReportsPage } from "../../../contexts/ReportPageContext";
 import { Services } from "../../../services";
 import {
-  contributionsInParams,
-  contributionsInType,
-} from "../../../services/contributionsIn/_interfaces/contributionsIn.interface";
+  discountParams,
+  DiscountType,
+} from "../../../services/discounts/__interfaces/discounts.interface";
+import { BigNumber } from "../components/bigNumber";
 
-export const Aports = () => {
-  const { setDebounceBreadcrumbs } = useReportsPage();
+export const Discounts = () => {
   const { event_id } = useParams();
-  const [params, setParams] = useState<contributionsInParams>({
+  const [params, setParams] = useState<discountParams>({
     page: 1,
     size: 15,
     event_id,
   });
-  const { data, isLoading } = Services.contributionsIn.list(params);
+  const { data, isLoading } = Services.Discounts.list(params);
+  const { setDebounceBreadcrumbs } = useReportsPage();
 
   useEffect(() => {
     setDebounceBreadcrumbs([
       {
-        title: "Aportes",
+        title: "Descontos",
       },
     ]);
   }, []);
@@ -42,8 +45,8 @@ export const Aports = () => {
     >
       <Col xs={{ span: 24 }} md={{ span: 16 }}>
         <PageHeader
-          title="Aportes"
-          subtitle="Visualize listagem de aportes realizados."
+          title="Descontos"
+          subtitle="Visualizar listagem de descontos realizados."
           total={data?.totalItems}
         />
       </Col>
@@ -52,7 +55,7 @@ export const Aports = () => {
           size="large"
           style={{ borderRadius: 36 }}
           suffix={<MagnifyingGlassIcon width={16} />}
-          placeholder="Pesquisar aporte"
+          placeholder="Pesquisar desconto"
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 2 }}>
@@ -86,42 +89,57 @@ export const Aports = () => {
           </Tooltip>
         </Space.Compact>
       </Col>
-
-      <Col span={24}>
-        <TableComponent<contributionsInType>
+      <Col xs={{ span: 24 }} md={{ span: 4 }}>
+        <Row gutter={[8, 8]} style={{ position: "sticky", top: "0px" }}>
+          <Col xs={{ span: 24 }} md={{ span: 24 }}>
+            <BigNumber
+              icon={<GiftIcon width={20} />}
+              title="Total de descontos"
+              value={data?.totalQuantity ? +data?.totalQuantity : 0}
+              loading={isLoading}
+            />
+          </Col>
+          <Col xs={{ span: 24 }} md={{ span: 24 }}>
+            <BigNumber
+              icon={<BanknotesIcon width={20} />}
+              title="Desconto total"
+              value={data?.totalValue ? +data?.totalValue : 0}
+              loading={isLoading}
+              money
+            />
+          </Col>
+        </Row>
+      </Col>
+      <Col span={20}>
+        <TableComponent<DiscountType>
           loading={isLoading}
           data={data}
           params={params}
           setParams={setParams}
           columns={[
-            { key: "operator_name", head: "Autorizado por" },
-            {
-              key: "terminal_serial",
-              head: "Número do terminal",
-              custom(row) {
-                return (
-                  <Typography.Text copyable>
-                    {row.terminal_serial}
-                  </Typography.Text>
-                );
-              },
-            },
-            { key: "sector_name", head: "Setor" },
-
+            { key: "discount_id", head: "ID" },
+            { key: "terminal_serial", head: "Número do terminal" },
+            { key: "operator_name", head: "Operador" },
             {
               key: "date",
-              head: "Data",
+              head: "Data e hora",
               custom(row) {
-                return row.date
-                  ? `${new Date(row.date).toLocaleDateString()} às ${new Date(row?.date).toLocaleTimeString()}`
-                  : "-";
+                return `${new Date(`${row.date}`).toLocaleDateString()} às ${new Date(`${row.date}`).toLocaleTimeString()}`;
+              },
+            },
+            { key: "total_products", head: "Produtos totais" },
+            {
+              key: "discount_value",
+              head: "Desconto total",
+              custom(row) {
+                return formatCurrency(row?.discount_value || 0);
               },
             },
             {
-              key: "value",
-              head: "Valor",
+              key: "total_value",
+              head: "Valor total",
               custom(row) {
-                return formatCurrency(row.value || 0);
+                return formatCurrency(row?.total_value || 0);
               },
             },
           ]}

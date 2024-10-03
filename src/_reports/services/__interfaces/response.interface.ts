@@ -5,7 +5,7 @@ const sortableColumnsSchema = z.object({ key: z.string(), value: z.string() });
 export const createResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) => {
   return z.object({
     items: z.array(itemSchema),
-    totalItems: z.number(),
+    totalItems: z.number().optional(),
     page: z.number(),
     size: z.number(),
     sortableColumns: z.array(sortableColumnsSchema).optional(),
@@ -18,4 +18,5 @@ export default interface ResponseI<itemI> {
   page?: number;
   size?: number;
   sortableColumns?: { key: string; value: string }[] | null;
+  totalValue?: number;
 }

@@ -16,6 +16,7 @@ import { useTheme } from "../../../../contexts/themeContext";
 import { useBreakpoints } from "../../../../hooks/useBreakpoints";
 import defaultTheme from "../../../../styles/default";
 import { useLogin } from "../../../services/auth/useLogin";
+import { motion } from "framer-motion";
 
 export const Login = () => {
   const { isSm } = useBreakpoints();
@@ -110,121 +111,134 @@ export const Login = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            backgroundColor: defaultTheme.primary,
           }}
         >
-          <Layout
-            style={{
-              width: "100%",
-              height: "100%",
-              borderTopRightRadius: isSm ? undefined :32,
-              borderBottomRightRadius:isSm ? undefined : 32,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              marginRight:isSm ? undefined : "-5%",
-              zIndex: 99,
-              backgroundColor: theme === "dark" ? "#18191B" : "#f1f1f1",
-              boxShadow:
-                theme === "dark"
-                  ? "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)"
-                  : "0px 4px 15.7px -3px rgba(0, 0, 0, 0.144)",
+          <motion.div
+            initial={{ position: "absolute", height: "100vh", left: "-300%" }}
+            animate={{ left: 0 }}
+            transition={{
+              duration: 0.6,
+              stiffness: 32,
             }}
           >
-            <Row
-              gutter={[8, 4]}
+            <Layout
               style={{
-                height: "50%",
-                maxHeight: "400px",
-                padding: "0 15%",
-                alignItems: "center",
                 width: "100%",
-                maxWidth: "850px",
-                marginTop: isSm ? 32 : 0,
+                height: "100vh",
+                borderTopRightRadius: isSm ? undefined : 32,
+                borderBottomRightRadius: isSm ? undefined : 32,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                marginRight: isSm ? undefined : "-5%",
+                zIndex: 99,
+                backgroundColor: theme === "dark" ? "#18191B" : "#f1f1f1",
+                boxShadow:
+                  theme === "dark"
+                    ? "0px 4px 15.7px -3px rgba(0, 0, 0, 0.25)"
+                    : "0px 4px 15.7px -3px rgba(0, 0, 0, 0.144)",
               }}
             >
-              <Col span={24}>
-                <Typography.Title
-                  level={isSm ? 3 : 1}
-                  style={{ fontWeight: 700, margin: 0, textAlign: "center" }}
-                >
-                  Bem-vindo
-                </Typography.Title>
-              </Col>
-              <Col span={24} style={{ textAlign: "center", marginBottom: 16 }}>
-                <Typography.Text strong style={{}}>
-                  Informe seus dados de acesso.
-                </Typography.Text>
-              </Col>
-              <Col span={24}>
-                <Form
-                  layout="vertical"
-                  style={{ width: "100%" }}
-                  initialValues={credentials}
-                  onFinish={() => {
-                    mutate();
-                  }}
-                >
-                  <Form.Item label="Usuário" name="USERNAME">
-                    <Input
-                      data-testid="username"
-                      name="USERNAME"
-                      size="large"
-                      placeholder="Informe seu usuário"
-                      style={{ width: "100%" }}
-                      onChange={handleCredentialsChange}
-                      status={error ? "error" : undefined}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label="Senha"
-                    name="PASSWORD"
-                    help={error ? "Usuário ou senha incorretos" : undefined}
-                    status={error ? "warning" : undefined}
+              <Row
+                gutter={[8, 4]}
+                style={{
+                  height: "50%",
+                  maxHeight: "400px",
+                  padding: "0 15%",
+                  alignItems: "center",
+                  width: "100%",
+                  maxWidth: "850px",
+                  marginTop: isSm ? 32 : 0,
+                }}
+              >
+                <Col span={24}>
+                  <Typography.Title
+                    level={isSm ? 3 : 1}
+                    style={{ fontWeight: 700, margin: 0, textAlign: "center" }}
                   >
-                    <Input.Password
-                      data-testid="password"
+                    Bem-vindo
+                  </Typography.Title>
+                </Col>
+                <Col
+                  span={24}
+                  style={{ textAlign: "center", marginBottom: 16 }}
+                >
+                  <Typography.Text strong style={{}}>
+                    Informe seus dados de acesso.
+                  </Typography.Text>
+                </Col>
+                <Col span={24}>
+                  <Form
+                    layout="vertical"
+                    style={{ width: "100%" }}
+                    initialValues={credentials}
+                    onFinish={() => {
+                      mutate();
+                    }}
+                  >
+                    <Form.Item label="Usuário" name="USERNAME">
+                      <Input
+                        data-testid="username"
+                        name="USERNAME"
+                        size="large"
+                        placeholder="Informe seu usuário"
+                        style={{ width: "100%" }}
+                        onChange={handleCredentialsChange}
+                        status={error ? "error" : undefined}
+                      />
+                    </Form.Item>
+                    <Form.Item
+                      label="Senha"
                       name="PASSWORD"
-                      size="large"
-                      placeholder="Informe sua senha"
-                      style={{ width: "100%" }}
-                      onChange={handleCredentialsChange}
-                      status={error ? "error" : undefined}
-                    />
-                  </Form.Item>
-                  <Form.Item label="" valuePropName="checked" name="remember">
-                    <Checkbox
-                      data-testid="remember-checkbox"
-                      name="remember"
-                      value={credentials.remember}
-                      onChange={handleCredentialsChange}
+                      help={error ? "Usuário ou senha incorretos" : undefined}
+                      status={error ? "warning" : undefined}
                     >
-                      {" "}
-                      Lembrar de mim
-                    </Checkbox>
-                  </Form.Item>
-                  <Form.Item label="">
-                    <Button
-                      data-testid="login"
-                      type="primary"
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                      size="large"
-                      shape="round"
-                      icon={<ArrowRightEndOnRectangleIcon width={24} />}
-                      htmlType="submit"
-                      loading={loading}
-                    >
-                      Acessar
-                    </Button>
-                  </Form.Item>
-                </Form>
-              </Col>
-            </Row>
-          </Layout>
+                      <Input.Password
+                        data-testid="password"
+                        name="PASSWORD"
+                        size="large"
+                        placeholder="Informe sua senha"
+                        style={{ width: "100%" }}
+                        onChange={handleCredentialsChange}
+                        status={error ? "error" : undefined}
+                      />
+                    </Form.Item>
+                    <Form.Item label="" valuePropName="checked" name="remember">
+                      <Checkbox
+                        data-testid="remember-checkbox"
+                        name="remember"
+                        value={credentials.remember}
+                        onChange={handleCredentialsChange}
+                      >
+                        {" "}
+                        Lembrar de mim
+                      </Checkbox>
+                    </Form.Item>
+                    <Form.Item label="">
+                      <Button
+                        data-testid="login"
+                        type="primary"
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        size="large"
+                        shape="round"
+                        icon={<ArrowRightEndOnRectangleIcon width={24} />}
+                        htmlType="submit"
+                        loading={loading}
+                      >
+                        Acessar
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Col>
+              </Row>
+            </Layout>
+          </motion.div>
         </Col>
         {!isSm && (
           <Col
